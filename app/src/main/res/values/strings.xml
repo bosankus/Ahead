@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">todo</string>
+    <string name="things_to_do__header_txt">Things to do</string>
+    <string name="add_task_layout_txt">+ Add task</string>
 </resources>
