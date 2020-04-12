@@ -1,10 +1,12 @@
 package tech.androidplay.sonali.todo.view
 
 import android.graphics.Color
+import android.graphics.Paint
 import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.view.animation.AnimationUtils
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.michalsvec.singlerowcalendar.calendar.CalendarViewManager
@@ -31,6 +33,7 @@ class MainActivity : AppCompatActivity() {
             window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
             window.statusBarColor = Color.WHITE
         }
+
 
         // load animations
         val btnAnimation = AnimationUtils.loadAnimation(this, R.anim.btn_animation)
@@ -79,6 +82,10 @@ class MainActivity : AppCompatActivity() {
         todo.add(TodoList("Call Air India BLR Airport branch", "Yesterday", "21:00"))
         val adapter = TodoListAdapter(todo)
         todoListRecyclerview.adapter = adapter
+    }
+
+    private fun strikeText(text: TextView) {
+
     }
 }
 

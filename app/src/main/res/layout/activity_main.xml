@@ -49,14 +49,19 @@
         android:id="@+id/todoListCount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="25dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginStart="10dp"
+        android:textAlignment="center"
+        android:padding="5dp"
+        android:backgroundTint="@color/colorPrimary"
+        android:background="@drawable/bg_fullrounded"
         android:alpha="0.6"
-        android:fontFamily="@font/jost"
-        android:textColor="@color/colorPrimary"
-        android:textSize="22sp"
+        android:text="2"
+        android:fontFamily="@font/mmedium"
+        android:textColor="@color/white"
+        android:textSize="14sp"
         app:layout_constraintStart_toEndOf="@+id/todoHeaderTxt"
-        app:layout_constraintTop_toBottomOf="@+id/mainCalenderView" />
+        app:layout_constraintTop_toTopOf="@+id/todoHeaderTxt"
+        app:layout_constraintBottom_toBottomOf="@+id/todoHeaderTxt"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/todoListRecyclerview"
@@ -72,7 +77,7 @@
         android:id="@+id/btnAddTodo"
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:background="@drawable/bg_rounded_btn"
+        android:background="@drawable/bg_halfrounded_btn"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
