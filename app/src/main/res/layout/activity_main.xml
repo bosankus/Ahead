@@ -4,17 +4,32 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@android:color/white"
     tools:context=".view.MainActivity">
 
-    <androidx.recyclerview.widget.RecyclerView
+    <com.michalsvec.singlerowcalendar.calendar.SingleRowCalendar
         android:id="@+id/mainCalenderView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="35dp"
-        android:orientation="horizontal"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        app:deselection="false"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:longPress="false"
+        app:multiSelection="false" />
+
+    <!--    <androidx.recyclerview.widget.RecyclerView-->
+    <!--        android:id="@+id/mainCalenderView"-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:layout_marginTop="35dp"-->
+    <!--        android:orientation="horizontal"-->
+    <!--        app:layout_constraintEnd_toEndOf="parent"-->
+    <!--        app:layout_constraintStart_toStartOf="parent"-->
+    <!--        app:layout_constraintTop_toTopOf="parent" />-->
 
     <TextView
         android:id="@+id/todoHeaderTxt"
@@ -23,10 +38,10 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="30dp"
         android:alpha="0.8"
-        android:fontFamily="@font/jost"
+        android:fontFamily="@font/msemibold"
         android:text="@string/things_to_do__header_txt"
         android:textColor="@android:color/black"
-        android:textSize="22sp"
+        android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/mainCalenderView" />
 
@@ -44,18 +59,19 @@
         app:layout_constraintTop_toBottomOf="@+id/mainCalenderView" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/todoList"
+        android:id="@+id/todoListRecyclerview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="8dp"
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/todoListCount" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/btnAddTodo"
         android:layout_width="match_parent"
-        android:layout_height="80dp"
+        android:layout_height="60dp"
         android:background="@drawable/bg_rounded_btn"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -64,8 +80,8 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:alpha="0.6"
-            android:fontFamily="@font/jost_bold"
+            android:alpha="0.8"
+            android:fontFamily="@font/msemibold"
             android:text="@string/add_task_layout_txt"
             android:textAlignment="center"
             android:textColor="@android:color/black"
