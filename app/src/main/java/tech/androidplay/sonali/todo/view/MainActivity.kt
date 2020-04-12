@@ -70,11 +70,13 @@ class MainActivity : AppCompatActivity() {
     }
 
     // TodoList recyclerview
-    fun showTodoList() {
+    private fun showTodoList() {
         todoListRecyclerview.layoutManager =
             LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         val todo = ArrayList<TodoList>()
-        todo.add(TodoList("Call Air India BLR Airport branch", "Yesterday"))
+        todo.add(TodoList("Get update from you broadband.", "Today", "11:09"))
+        todo.add(TodoList("Got to MORE for groceries", "Today", "10:00"))
+        todo.add(TodoList("Call Air India BLR Airport branch", "Yesterday", "21:00"))
         val adapter = TodoListAdapter(todo)
         todoListRecyclerview.adapter = adapter
     }
