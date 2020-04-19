@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import tech.androidplay.sonali.todo.R
-import tech.androidplay.sonali.todo.data.model.TodoList
+import tech.androidplay.sonali.todo.data.TodoList
 
 class TodoListAdapter(private val todoList: ArrayList<TodoList>) :
     RecyclerView.Adapter<TodoListAdapter.TodoListViewHolder>() {
@@ -29,13 +29,12 @@ class TodoListAdapter(private val todoList: ArrayList<TodoList>) :
     inner class TodoListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun binItems(todoList: TodoList) {
             val noteBody = itemView.findViewById<TextView>(R.id.todoItemBody)
-            val reminderDate = itemView.findViewById<TextView>(R.id.todoItemReminderDate)
-            val reminderTime = itemView.findViewById<TextView>(R.id.todoItemReminderTime)
-//            val noteStatus = itemView.findViewById<RadioButton>(R.id.todoItemStatus)
+            val creationDate = itemView.findViewById<TextView>(R.id.todoItemCreationDate)
+            val creationTime = itemView.findViewById<TextView>(R.id.todoItemCreationTime)
 
-            noteBody.text = todoList.noteBody
-            reminderDate.text = todoList.reminderDate
-            reminderTime.text = todoList.reminderTime
+            noteBody.text = todoList.todoBody
+            creationDate.text = todoList.todoCreationDate
+            creationTime.text = todoList.todoCreationTime
         }
     }
 }

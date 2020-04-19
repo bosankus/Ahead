@@ -7,29 +7,17 @@
     android:background="@android:color/white"
     tools:context=".view.MainActivity">
 
-    <com.michalsvec.singlerowcalendar.calendar.SingleRowCalendar
+
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/mainCalenderView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
-        app:deselection="false"
+        android:layout_marginTop="35dp"
+        android:orientation="horizontal"
+        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:longPress="false"
-        app:multiSelection="false" />
-
-    <!--    <androidx.recyclerview.widget.RecyclerView-->
-    <!--        android:id="@+id/mainCalenderView"-->
-    <!--        android:layout_width="match_parent"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        android:layout_marginTop="35dp"-->
-    <!--        android:orientation="horizontal"-->
-    <!--        app:layout_constraintEnd_toEndOf="parent"-->
-    <!--        app:layout_constraintStart_toStartOf="parent"-->
-    <!--        app:layout_constraintTop_toTopOf="parent" />-->
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/todoHeaderTxt"
@@ -50,18 +38,18 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
-        android:textAlignment="center"
-        android:padding="5dp"
-        android:backgroundTint="@color/colorPrimary"
-        android:background="@drawable/bg_fullrounded"
         android:alpha="0.6"
-        android:text="2"
+        android:background="@drawable/bg_fullrounded"
+        android:backgroundTint="@color/colorPrimary"
         android:fontFamily="@font/mmedium"
+        android:padding="5dp"
+        android:text="2"
+        android:textAlignment="center"
         android:textColor="@color/white"
         android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="@+id/todoHeaderTxt"
         app:layout_constraintStart_toEndOf="@+id/todoHeaderTxt"
-        app:layout_constraintTop_toTopOf="@+id/todoHeaderTxt"
-        app:layout_constraintBottom_toBottomOf="@+id/todoHeaderTxt"/>
+        app:layout_constraintTop_toTopOf="@+id/todoHeaderTxt" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/todoListRecyclerview"

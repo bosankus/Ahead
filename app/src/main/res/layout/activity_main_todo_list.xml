@@ -33,7 +33,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/todoItemReminderDate"
+            android:id="@+id/todoItemCreationDate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
@@ -52,7 +52,7 @@
             app:layout_constraintTop_toBottomOf="@+id/todoItemBody" />
 
         <TextView
-            android:id="@+id/todoItemReminderTime"
+            android:id="@+id/todoItemCreationTime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="5dp"
@@ -68,7 +68,7 @@
             android:textColor="@color/green"
             android:textSize="14sp"
             android:textStyle="bold"
-            app:layout_constraintStart_toEndOf="@+id/todoItemReminderDate"
+            app:layout_constraintStart_toEndOf="@+id/todoItemCreationDate"
             app:layout_constraintTop_toBottomOf="@+id/todoItemBody" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
