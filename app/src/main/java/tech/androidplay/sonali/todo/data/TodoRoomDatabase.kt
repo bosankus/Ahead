@@ -12,7 +12,7 @@ import androidx.room.RoomDatabase
  */
 
 @Database(
-    entities = [TodoList::class],
+    entities = [Todo::class],
     version = 1,
     exportSchema = false
 )

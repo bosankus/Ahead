@@ -2,4 +2,5 @@
     <string name="app_name">think Ahead</string>
     <string name="things_to_do__header_txt">Things to do</string>
     <string name="add_task_layout_txt">+ Add task🔥</string>
+    <string name="login_btn_txt">Get Inside</string>
 </resources>

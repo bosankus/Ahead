@@ -13,10 +13,13 @@ import androidx.room.*
 interface TodoDao {
 
     @Query("SELECT * from todo_table")
-    fun getTodoList(): LiveData<List<TodoList>>
+    fun getTodoList(): LiveData<List<Todo>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertTodoItem(todoList: TodoList)
+    suspend fun insertTodoItem(todo: Todo)
+
+    @Update
+    suspend fun updateTodoItem(todo: Todo)
 
     @Delete
     suspend fun deleteTodoItem(todoId: String)

@@ -11,7 +11,7 @@ import androidx.room.PrimaryKey
  */
 
 @Entity(tableName = "todo_table")
-data class TodoList(
+data class Todo(
 
     @PrimaryKey
     @ColumnInfo(name = "todoId")

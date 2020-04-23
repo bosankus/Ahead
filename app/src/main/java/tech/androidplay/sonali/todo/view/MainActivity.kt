@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.activity_main.*
 import tech.androidplay.sonali.todo.R
 import tech.androidplay.sonali.todo.adapter.TodoListAdapter
-import tech.androidplay.sonali.todo.data.TodoList
+import tech.androidplay.sonali.todo.data.Todo
 import tech.androidplay.sonali.todo.util.TimeStampUtil
 
 class MainActivity : AppCompatActivity() {
@@ -43,9 +43,9 @@ class MainActivity : AppCompatActivity() {
     private fun showTodoList() {
         todoListRecyclerview.layoutManager =
             LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
-        val todo = ArrayList<TodoList>()
-        todo.add(TodoList("1", "Get update from you broadband.", currentDate, currentTime))
-        todo.add(TodoList("2", "Get update from you Office", currentDate, currentTime))
+        val todo = ArrayList<Todo>()
+        todo.add(Todo("1", "Get update from you broadband.", currentDate, currentTime))
+        todo.add(Todo("2", "Get update from you Office", currentDate, currentTime))
         val adapter = TodoListAdapter(todo)
         todoListRecyclerview.adapter = adapter
     }

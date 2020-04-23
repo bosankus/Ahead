@@ -6,9 +6,9 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import tech.androidplay.sonali.todo.R
-import tech.androidplay.sonali.todo.data.TodoList
+import tech.androidplay.sonali.todo.data.Todo
 
-class TodoListAdapter(private val todoList: ArrayList<TodoList>) :
+class TodoListAdapter(private val todoList: ArrayList<Todo>) :
     RecyclerView.Adapter<TodoListAdapter.TodoListViewHolder>() {
 
     override fun onCreateViewHolder(
@@ -27,7 +27,7 @@ class TodoListAdapter(private val todoList: ArrayList<TodoList>) :
     override fun getItemCount(): Int = todoList.size
 
     inner class TodoListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        fun binItems(todoList: TodoList) {
+        fun binItems(todoList: Todo) {
             val noteBody = itemView.findViewById<TextView>(R.id.todoItemBody)
             val creationDate = itemView.findViewById<TextView>(R.id.todoItemCreationDate)
             val creationTime = itemView.findViewById<TextView>(R.id.todoItemCreationTime)
