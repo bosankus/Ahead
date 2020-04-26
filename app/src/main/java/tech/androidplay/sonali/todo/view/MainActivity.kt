@@ -7,22 +7,22 @@ import android.view.View
 import android.view.animation.AnimationUtils
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_main.*
 import tech.androidplay.sonali.todo.R
 import tech.androidplay.sonali.todo.adapter.TodoListAdapter
 import tech.androidplay.sonali.todo.data.Todo
-import tech.androidplay.sonali.todo.util.TimeStampUtil
+import tech.androidplay.sonali.todo.utils.TimeStampUtil
 
 class MainActivity : AppCompatActivity() {
 
     private val currentDate: String by lazy { TimeStampUtil().currentDate }
     private val currentTime: String by lazy { TimeStampUtil().currentTime }
-
+    private lateinit var firebaseAuth: FirebaseAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
 
         // enable white status bar with black icons
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -30,6 +30,7 @@ class MainActivity : AppCompatActivity() {
             window.statusBarColor = Color.WHITE
         }
 
+        firebaseAuth = FirebaseAuth.getInstance()
 
         // load animations
         val btnAnimation = AnimationUtils.loadAnimation(this, R.anim.btn_animation)
@@ -38,6 +39,7 @@ class MainActivity : AppCompatActivity() {
         showTodoList()
 
     }
+
 
     // TodoList recyclerview
     private fun showTodoList() {

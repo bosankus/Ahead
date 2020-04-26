@@ -1,4 +1,4 @@
-package tech.androidplay.sonali.todo.util
+package tech.androidplay.sonali.todo.utils
 
 import android.text.format.DateUtils
 import java.text.SimpleDateFormat
