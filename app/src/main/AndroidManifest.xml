@@ -14,7 +14,8 @@
         android:theme="@style/MaterialTheme">
         <activity android:name=".view.LoginActivity" />
         <activity android:name=".view.MainActivity" />
-        <activity android:name=".view.SplashActivity">
+        <activity android:name=".view.SplashActivity"
+            android:noHistory="false">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

@@ -50,9 +50,11 @@ class SplashActivity : AppCompatActivity() {
 
     private fun goToMainActivity() {
         startActivity(Intent(this@SplashActivity, MainActivity::class.java))
+        finish()
     }
 
     private fun goToLoginActivity() {
         startActivity(Intent(this@SplashActivity, LoginActivity::class.java))
+        finish()
     }
 }

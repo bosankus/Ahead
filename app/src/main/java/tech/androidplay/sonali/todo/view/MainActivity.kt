@@ -7,11 +7,14 @@ import android.view.View
 import android.view.animation.AnimationUtils
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.fxn.BubbleTabBar
+import com.fxn.OnBubbleClickListener
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_main.*
 import tech.androidplay.sonali.todo.R
 import tech.androidplay.sonali.todo.adapter.TodoListAdapter
 import tech.androidplay.sonali.todo.data.Todo
+import tech.androidplay.sonali.todo.utils.Helper
 import tech.androidplay.sonali.todo.utils.TimeStampUtil
 
 class MainActivity : AppCompatActivity() {
@@ -30,6 +33,7 @@ class MainActivity : AppCompatActivity() {
             window.statusBarColor = Color.WHITE
         }
 
+
         firebaseAuth = FirebaseAuth.getInstance()
 
         // load animations
@@ -38,7 +42,10 @@ class MainActivity : AppCompatActivity() {
 
         showTodoList()
 
+        Helper().showToast(this, firebaseAuth.currentUser?.email.toString())
+
     }
+
 
 
     // TodoList recyclerview
