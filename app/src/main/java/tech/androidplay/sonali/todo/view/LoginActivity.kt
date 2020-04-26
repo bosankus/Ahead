@@ -1,6 +1,7 @@
 package tech.androidplay.sonali.todo.view
 
-import android.content.Intent
+import android.graphics.Color
+import android.os.Build
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.View
@@ -26,6 +27,13 @@ class LoginActivity : AppCompatActivity(), Constants {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
+
+        // enable white status bar with black icons
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+            window.statusBarColor = Color.WHITE
+        }
+
         firebaseAuth = FirebaseAuth.getInstance()
         helper = Helper()
         initAuthViewModel()
@@ -68,10 +76,6 @@ class LoginActivity : AppCompatActivity(), Constants {
                 helper.logErrorMessage(authenticatedUser.userId)
             }
         })
-    }
-
-    private fun goToMainActivity() {
-        startActivity(Intent(this@LoginActivity, MainActivity::class.java))
     }
 
     private fun validateInput(): Boolean {
