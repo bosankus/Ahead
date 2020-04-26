@@ -37,7 +37,7 @@ class SplashActivity : AppCompatActivity() {
     }
 
     private fun checkAuth() {
-        val timer = object : CountDownTimer(2000, 1000) {
+        val timer = object : CountDownTimer(1000, 1000) {
             override fun onTick(millisUntilFinished: Long) {}
             override fun onFinish() {
                 if (firebaseAuth.currentUser != null) {

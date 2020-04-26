@@ -28,15 +28,22 @@ class LoginActivity : AppCompatActivity(), Constants {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
+        // initiating firebase auth instance
+        firebaseAuth = FirebaseAuth.getInstance()
+
         // enable white status bar with black icons
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
             window.statusBarColor = Color.WHITE
         }
 
-        firebaseAuth = FirebaseAuth.getInstance()
+        // initiating custom helper class
         helper = Helper()
+
+        // initiating auth viewodel
         initAuthViewModel()
+
+        // turning listeners on
         clickListeners()
     }
 
@@ -47,7 +54,6 @@ class LoginActivity : AppCompatActivity(), Constants {
     }
 
     private fun clickListeners() {
-
         loginBtnEmailPassword.setOnClickListener {
             if (validateInput()) {
                 authViewModel.createAccountWithEmailPassword(
@@ -65,10 +71,12 @@ class LoginActivity : AppCompatActivity(), Constants {
         }
     }
 
+    // auth viewmodel initiating function
     private fun initAuthViewModel() {
         authViewModel = ViewModelProvider(this).get(AuthViewModel::class.java)
     }
 
+    // stores only new user details in firestore
     private fun createNewUser(authenticatedUser: User) {
         authViewModel.createUser(authenticatedUser)
         authViewModel.createdUserLiveData.observe(this, Observer {
@@ -78,6 +86,7 @@ class LoginActivity : AppCompatActivity(), Constants {
         })
     }
 
+    // validate user input in text fields
     private fun validateInput(): Boolean {
         var valid = true
 
@@ -94,6 +103,7 @@ class LoginActivity : AppCompatActivity(), Constants {
         return valid
     }
 
+    // updates the UI as necessary
     private fun updateUI(user: FirebaseUser?) {
         if (user != null) {
             loginTxt.text = user.email
