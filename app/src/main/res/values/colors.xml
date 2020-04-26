@@ -14,4 +14,9 @@
     <color name="grey1">#E0E0E0</color>
     <color name="grey2">#9E9E9E</color>
     <color name="black">#424242</color>
+
+    <!--    Gradient Colors-->
+    <color name="nelsonOne">#f2709c</color>
+    <color name="nelsonTwo">#ff9472</color>
+    
 </resources>
