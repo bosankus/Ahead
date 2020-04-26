@@ -26,11 +26,8 @@ class LoginActivity : AppCompatActivity(), Constants {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
-
-        helper = Helper()
-
         firebaseAuth = FirebaseAuth.getInstance()
-
+        helper = Helper()
         initAuthViewModel()
         clickListeners()
     }
@@ -39,10 +36,6 @@ class LoginActivity : AppCompatActivity(), Constants {
         super.onStart()
         val currentUser = firebaseAuth.currentUser
         updateUI(currentUser)
-    }
-
-    override fun onBackPressed() {
-        this.finish()
     }
 
     private fun clickListeners() {
