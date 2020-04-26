@@ -66,6 +66,7 @@
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:background="@drawable/bg_halfrounded_btn"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
@@ -85,5 +86,31 @@
             app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white" />
+
+    <com.fxn.BubbleTabBar
+        android:id="@+id/mainBottomBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:background="@drawable/bg_fullrounded"
+        android:elevation="10dp"
+        android:padding="16dp"
+        app:bubbletab_custom_font="@font/msemibold"
+        app:bubbletab_disabled_icon_color="@color/grey2"
+        app:bubbletab_horizontal_padding="20dp"
+        app:bubbletab_icon_padding="7sp"
+        app:bubbletab_icon_size="16dp"
+        app:bubbletab_menuResource="@menu/list"
+        app:bubbletab_title_size="12sp"
+        app:bubbletab_vertical_padding="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

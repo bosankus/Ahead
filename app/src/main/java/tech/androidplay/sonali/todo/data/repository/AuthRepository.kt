@@ -109,9 +109,4 @@ class AuthRepository {
         return newUserMutableLiveData
     }
 
-    // Logout User
-    fun signOut() {
-        firebaseAuth.signOut()
-    }
-
 }

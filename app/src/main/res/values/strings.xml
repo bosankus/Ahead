@@ -3,4 +3,7 @@
     <string name="things_to_do__header_txt">Things to do</string>
     <string name="add_task_layout_txt">+ Add task🔥</string>
     <string name="login_btn_txt">Get Inside</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
