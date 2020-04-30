@@ -8,19 +8,13 @@ import android.view.animation.AnimationUtils
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.fxn.OnBubbleClickListener
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_main.*
 import tech.androidplay.sonali.todo.R
-import tech.androidplay.sonali.todo.adapter.TodoListAdapter
-import tech.androidplay.sonali.todo.data.Todo
-import tech.androidplay.sonali.todo.utils.TimeStampUtil
 
 class MainActivity : AppCompatActivity() {
 
-    private val currentDate: String by lazy { TimeStampUtil().currentDate }
-    private val currentTime: String by lazy { TimeStampUtil().currentTime }
     private lateinit var firebaseAuth: FirebaseAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -48,9 +42,6 @@ class MainActivity : AppCompatActivity() {
         // turning listeners on
         clickListeners()
 
-        // showing list of todo items
-        showTodoList()
-
     }
 
     private fun clickListeners() {
@@ -58,40 +49,42 @@ class MainActivity : AppCompatActivity() {
             override fun onBubbleClick(id: Int) {
                 when (id) {
                     R.id.main -> supportFragmentManager.inTransaction {
-                        replace(R.id.container, HomeFragment())
+                        this.addToBackStack(null)
+                        hide(HomeFragment())
+                        add(R.id.container, HomeFragment(), "MAIN")
                     }
                     R.id.alarm -> supportFragmentManager.inTransaction {
                         this.addToBackStack(null)
-                        replace(R.id.container, AlarmFragment())
+                        hide(AlarmFragment())
+                        add(R.id.container, AlarmFragment(), "ALARM_FRAGMENT")
                     }
                     R.id.event -> supportFragmentManager.inTransaction {
                         this.addToBackStack(null)
-                        add(R.id.container, EventFragment())
+                        hide(EventFragment())
+                        add(R.id.container, EventFragment(), "EVENT")
                     }
                     R.id.profile -> supportFragmentManager.inTransaction {
                         this.addToBackStack(null)
-                        replace(R.id.container, ProfileFragment())
+                        hide(ProfileFragment())
+                        add(R.id.container, ProfileFragment(), "PROFILE")
                     }
                 }
             }
         })
     }
 
+    override fun onBackPressed() {
+        if (supportFragmentManager.backStackEntryCount == 0) {
+            super.onBackPressed()
+        } else {
+            supportFragmentManager.popBackStack()
+        }
+    }
+
     // Fragment Manager Transaction function
     inline fun FragmentManager.inTransaction(func: FragmentTransaction.() -> FragmentTransaction) {
         val fragmentTransaction = beginTransaction()
         fragmentTransaction.func().commit()
-    }
-
-    // TodoList recyclerview
-    private fun showTodoList() {
-        todoListRecyclerview.layoutManager =
-            LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
-        val todo = ArrayList<Todo>()
-        todo.add(Todo("1", "Get update from you broadband.", currentDate, currentTime))
-        todo.add(Todo("2", "Get update from you Office", currentDate, currentTime))
-        val adapter = TodoListAdapter(todo)
-        todoListRecyclerview.adapter = adapter
     }
 }
 

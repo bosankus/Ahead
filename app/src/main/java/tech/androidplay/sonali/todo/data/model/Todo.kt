@@ -1,4 +1,4 @@
-package tech.androidplay.sonali.todo.data
+package tech.androidplay.sonali.todo.data.model
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity

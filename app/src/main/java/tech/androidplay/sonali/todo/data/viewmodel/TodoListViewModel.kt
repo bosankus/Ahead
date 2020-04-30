@@ -3,7 +3,7 @@ package tech.androidplay.sonali.todo.data.viewmodel
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
-import tech.androidplay.sonali.todo.data.Todo
+import tech.androidplay.sonali.todo.data.model.Todo
 import tech.androidplay.sonali.todo.data.repository.TodoRepository
 import tech.androidplay.sonali.todo.data.TodoRoomDatabase
 

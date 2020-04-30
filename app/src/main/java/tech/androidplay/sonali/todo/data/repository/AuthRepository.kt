@@ -9,7 +9,7 @@ import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
-import tech.androidplay.sonali.todo.data.User
+import tech.androidplay.sonali.todo.data.model.User
 import tech.androidplay.sonali.todo.utils.Helper
 
 /**
@@ -46,7 +46,11 @@ class AuthRepository {
                         userId = firebaseUser.uid
                         userEmail = firebaseUser.email.toString()
                         userName = firebaseUser.displayName.toString()
-                        user = User(userEmail, userName, userId)
+                        user = User(
+                            userEmail,
+                            userName,
+                            userId
+                        )
                         user.isNewUser = isNewUser
                         authenticatedUserMutableLiveData.postValue(user)
                     }
@@ -63,7 +67,11 @@ class AuthRepository {
             if (it.isSuccessful) {
                 userId = firebaseAuth.uid.toString()
                 userEmail = firebaseAuth.currentUser?.email.toString()
-                user = User(userEmail, "", userId)
+                user = User(
+                    userEmail,
+                    "",
+                    userId
+                )
                 authenticatedUserMutableLiveData.postValue(user)
             }
         }
@@ -77,7 +85,11 @@ class AuthRepository {
             if (task.isSuccessful) {
                 userId = firebaseUser?.uid.toString()
                 userEmail = firebaseUser?.email.toString()
-                user = User(userEmail, "", userId)
+                user = User(
+                    userEmail,
+                    "",
+                    userId
+                )
             }
         }
     }

@@ -12,7 +12,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import kotlinx.android.synthetic.main.activity_login.*
 import tech.androidplay.sonali.todo.R
-import tech.androidplay.sonali.todo.data.User
+import tech.androidplay.sonali.todo.data.model.User
 import tech.androidplay.sonali.todo.data.viewmodel.AuthViewModel
 import tech.androidplay.sonali.todo.utils.Constants
 import tech.androidplay.sonali.todo.utils.Helper

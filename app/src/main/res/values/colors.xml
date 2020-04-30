@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3D03A4</color>
-    <color name="colorPrimaryDark">#3D03A4</color>
+    <color name="colorPrimary">#BE1451</color>
+    <color name="colorPrimaryDark">#7C092B</color>
     <color name="colorAccent">#F8F9FB</color>
 
     <!--    Custom Calender Colors-->
@@ -11,6 +11,7 @@
     <color name="yellow">#FFEB3B</color>
     <color name="orange">#FFC107</color>
     <color name="green">#49D295</color>
+    <color name="greenLight">#9949D295</color>
     <color name="grey1">#E0E0E0</color>
     <color name="grey2">#9E9E9E</color>
     <color name="black">#424242</color>
@@ -18,5 +19,11 @@
     <!--    Gradient Colors-->
     <color name="nelsonOne">#f2709c</color>
     <color name="nelsonTwo">#ff9472</color>
+
+    <color name="calenderGreenDark">#216353</color>
+    <color name="calenderGreenLight">#75daad</color>
+
+    <color name="calenderYellowLight">#fdd365</color>
+    <color name="calenderYellowDark">#fb8d62</color>
     
 </resources>

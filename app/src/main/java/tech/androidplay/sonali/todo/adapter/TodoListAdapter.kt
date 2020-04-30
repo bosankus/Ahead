@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import tech.androidplay.sonali.todo.R
-import tech.androidplay.sonali.todo.data.Todo
+import tech.androidplay.sonali.todo.data.model.Todo
 
 class TodoListAdapter(private val todoList: ArrayList<Todo>) :
     RecyclerView.Adapter<TodoListAdapter.TodoListViewHolder>() {

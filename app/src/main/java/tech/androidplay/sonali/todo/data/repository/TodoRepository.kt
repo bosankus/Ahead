@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import tech.androidplay.sonali.todo.data.Todo
+import tech.androidplay.sonali.todo.data.model.Todo
 import tech.androidplay.sonali.todo.data.TodoDao
 
 /**

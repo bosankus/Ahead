@@ -7,97 +7,19 @@
     android:background="@android:color/white"
     tools:context=".view.MainActivity">
 
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/mainCalenderView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="35dp"
-        android:orientation="horizontal"
-        android:visibility="gone"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/todoHeaderTxt"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="30dp"
-        android:alpha="0.8"
-        android:fontFamily="@font/msemibold"
-        android:text="@string/things_to_do__header_txt"
-        android:textColor="@android:color/black"
-        android:textSize="18sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/mainCalenderView" />
-
-    <TextView
-        android:id="@+id/todoListCount"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:alpha="0.6"
-        android:background="@drawable/bg_fullrounded"
-        android:backgroundTint="@color/colorPrimary"
-        android:fontFamily="@font/mmedium"
-        android:padding="5dp"
-        android:text="2"
-        android:textAlignment="center"
-        android:textColor="@color/white"
-        android:textSize="14sp"
-        app:layout_constraintBottom_toBottomOf="@+id/todoHeaderTxt"
-        app:layout_constraintStart_toEndOf="@+id/todoHeaderTxt"
-        app:layout_constraintTop_toTopOf="@+id/todoHeaderTxt" />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/todoListRecyclerview"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:orientation="vertical"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/todoListCount" />
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/btnAddTodo"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:background="@drawable/bg_halfrounded_btn"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:alpha="0.8"
-            android:fontFamily="@font/msemibold"
-            android:text="@string/add_task_layout_txt"
-            android:textAlignment="center"
-            android:textColor="@android:color/black"
-            android:textSize="18sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/white" />
+        android:background="@color/white"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="0dp" />
 
     <com.fxn.BubbleTabBar
         android:id="@+id/mainBottomBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="8dp"
+        android:layout_margin="16dp"
         android:background="@drawable/bg_fullrounded"
         android:elevation="10dp"
         android:padding="16dp"

@@ -1,25 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/fragment_home_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/fragment_home_container"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".view.HomeFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/white">
+        android:layout_height="match_parent">
 
         <TextView
+            android:id="@+id/tvHomeHeader"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Home Fragment"
+            android:layout_marginStart="16sp"
+            android:layout_marginTop="16dp"
+            android:alpha="0.9"
+            android:fontFamily="@font/jost"
+            android:text="@string/tvHomeHeader"
+            android:textColor="@color/black"
+            android:textSize="22sp"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvPlanList"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="10dp"
+            android:clipToPadding="false"
+            android:orientation="horizontal"
+            android:paddingEnd="16dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"/>
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvHomeHeader"
+            tools:ignore="RtlSymmetry" />
+
+        <TextView
+            android:id="@+id/tvTodoListHeader"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="25dp"
+            android:fontFamily="@font/jost"
+            android:text="Upcomming Todo's"
+            android:textColor="@color/black"
+            android:alpha="0.9"
+            android:textSize="16sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/rvPlanList" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvTodoList"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:orientation="vertical"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvTodoListHeader" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
