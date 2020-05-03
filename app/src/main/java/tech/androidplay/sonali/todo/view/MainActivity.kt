@@ -2,14 +2,13 @@ package tech.androidplay.sonali.todo.view
 
 import android.annotation.SuppressLint
 import android.graphics.Color
-import android.os.Build
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.fragment_add_task_bottom_sheet.*
+import kotlinx.android.synthetic.main.frame_today_todo_header.*
 import tech.androidplay.sonali.todo.R
 import tech.androidplay.sonali.todo.adapter.TodoListAdapter
 import tech.androidplay.sonali.todo.data.model.Todo
@@ -29,14 +28,13 @@ class MainActivity : AppCompatActivity() {
         firebaseAuth = FirebaseAuth.getInstance()
 
         // enable white status bar with black icons
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
-            window.statusBarColor = Color.WHITE
-        }
+        window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+        window.statusBarColor = Color.WHITE
 
         // load bottom navigation bar animations
 //        val animation = AnimationUtils.loadAnimation(this, R.anim.btn_animation)
 //        floatingButton.startAnimation(animation)
+        tvTodayDate.text = currentDate
 
         // loading all task list
         loadToDoList()
