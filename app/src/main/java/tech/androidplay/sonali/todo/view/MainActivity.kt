@@ -1,20 +1,24 @@
 package tech.androidplay.sonali.todo.view
 
+import android.annotation.SuppressLint
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.view.View
-import android.view.animation.AnimationUtils
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentTransaction
-import com.fxn.OnBubbleClickListener
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.fragment_add_task_bottom_sheet.*
 import tech.androidplay.sonali.todo.R
+import tech.androidplay.sonali.todo.adapter.TodoListAdapter
+import tech.androidplay.sonali.todo.data.model.Todo
+import tech.androidplay.sonali.todo.utils.TimeStampUtil
 
 class MainActivity : AppCompatActivity() {
 
+    private val currentDate: String by lazy { TimeStampUtil().currentDate }
+    private val currentTime: String by lazy { TimeStampUtil().currentTime }
     private lateinit var firebaseAuth: FirebaseAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,61 +34,54 @@ class MainActivity : AppCompatActivity() {
             window.statusBarColor = Color.WHITE
         }
 
-        // Setting default fragment
-        supportFragmentManager.inTransaction {
-            replace(R.id.container, HomeFragment())
-        }
-
         // load bottom navigation bar animations
-        val animation = AnimationUtils.loadAnimation(this, R.anim.btn_animation)
-        mainBottomBar.startAnimation(animation)
+//        val animation = AnimationUtils.loadAnimation(this, R.anim.btn_animation)
+//        floatingButton.startAnimation(animation)
+
+        // loading all task list
+        loadToDoList()
 
         // turning listeners on
         clickListeners()
 
     }
 
+    @SuppressLint("InflateParams")
     private fun clickListeners() {
-        mainBottomBar.addBubbleListener(object : OnBubbleClickListener {
-            override fun onBubbleClick(id: Int) {
-                when (id) {
-                    R.id.main -> supportFragmentManager.inTransaction {
-                        this.addToBackStack(null)
-                        hide(HomeFragment())
-                        add(R.id.container, HomeFragment(), "MAIN")
-                    }
-                    R.id.alarm -> supportFragmentManager.inTransaction {
-                        this.addToBackStack(null)
-                        hide(AlarmFragment())
-                        add(R.id.container, AlarmFragment(), "ALARM_FRAGMENT")
-                    }
-                    R.id.event -> supportFragmentManager.inTransaction {
-                        this.addToBackStack(null)
-                        hide(EventFragment())
-                        add(R.id.container, EventFragment(), "EVENT")
-                    }
-                    R.id.profile -> supportFragmentManager.inTransaction {
-                        this.addToBackStack(null)
-                        hide(ProfileFragment())
-                        add(R.id.container, ProfileFragment(), "PROFILE")
-                    }
-                }
-            }
-        })
-    }
-
-    override fun onBackPressed() {
-        if (supportFragmentManager.backStackEntryCount == 0) {
-            super.onBackPressed()
-        } else {
-            supportFragmentManager.popBackStack()
+        efabAddTask.setOnClickListener {
+            val bottomSheetFragment = BottomSheetFragment()
+            bottomSheetFragment.show(supportFragmentManager, bottomSheetFragment.tag)
         }
+
+
     }
 
-    // Fragment Manager Transaction function
-    inline fun FragmentManager.inTransaction(func: FragmentTransaction.() -> FragmentTransaction) {
-        val fragmentTransaction = beginTransaction()
-        fragmentTransaction.func().commit()
+    private fun loadToDoList() {
+        rvTodoList.layoutManager =
+            LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+        val todo = ArrayList<Todo>()
+        todo.add(
+            Todo(
+                "1",
+                "Get update from you broadband.",
+                "Design stuff",
+                false,
+                null,
+                null
+            )
+        )
+        todo.add(
+            Todo(
+                "1",
+                "UI found from Dribbble",
+                "Self stuff",
+                true,
+                null,
+                null
+            )
+        )
+        val adapter = TodoListAdapter(todo)
+        rvTodoList.adapter = adapter
     }
 }
 

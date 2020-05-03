@@ -17,6 +17,10 @@
         <item name="colorAccent">@color/colorAccent</item>
         <item name="radioButtonStyle">@style/Widget.MaterialComponents.CompoundButton.RadioButton
         </item>
+        <item name="colorControlActivated">@color/dribblePink</item>
+        <item name="colorSwitchThumbNormal">@color/grey1</item>
+        <item name="android:colorForeground">@color/grey1</item>
     </style>
+
 
 </resources>

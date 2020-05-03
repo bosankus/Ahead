@@ -84,9 +84,5 @@ dependencies {
     implementation 'com.github.bumptech.glide:glide:4.11.0'
     kapt 'com.github.bumptech.glide:compiler:4.11.0'
 
-    // Bottom Navigation bar
-    implementation 'com.fxn769:bubbletabbar:1.0.5'
-
-    implementation 'com.github.shrikanth7698:Collapsible-Calendar-View-Android:v1.0.3'
 
 }
