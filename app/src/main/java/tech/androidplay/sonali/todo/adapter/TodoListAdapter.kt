@@ -3,10 +3,11 @@ package tech.androidplay.sonali.todo.adapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.RadioButton
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import tech.androidplay.sonali.todo.R
-import tech.androidplay.sonali.todo.data.Todo
+import tech.androidplay.sonali.todo.data.model.Todo
 
 class TodoListAdapter(private val todoList: ArrayList<Todo>) :
     RecyclerView.Adapter<TodoListAdapter.TodoListViewHolder>() {
@@ -28,13 +29,18 @@ class TodoListAdapter(private val todoList: ArrayList<Todo>) :
 
     inner class TodoListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun binItems(todoList: Todo) {
-            val noteBody = itemView.findViewById<TextView>(R.id.todoItemBody)
-            val creationDate = itemView.findViewById<TextView>(R.id.todoItemCreationDate)
-            val creationTime = itemView.findViewById<TextView>(R.id.todoItemCreationTime)
+            // initializing view elements
+            val todoStatus: Boolean? = todoList.todoStatus
+            val rbTodoItemStatus = itemView.findViewById<RadioButton>(R.id.rbTodoItemStatus)
+            val tvTodoListItem = itemView.findViewById<TextView>(R.id.tvTodoListItem)
+            val tvTodoListItemDesc = itemView.findViewById<TextView>(R.id.tvTodoListItemDesc)
 
-            noteBody.text = todoList.todoBody
-            creationDate.text = todoList.todoCreationDate
-            creationTime.text = todoList.todoCreationTime
+            // setting views
+            if (todoStatus!!) {
+                rbTodoItemStatus.isChecked
+            } else rbTodoItemStatus.isChecked = false
+            tvTodoListItem.text = todoList.todoBody
+            tvTodoListItemDesc.text = todoList.todoDesc
         }
     }
 }

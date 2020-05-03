@@ -11,65 +11,49 @@
         android:id="@+id/todoItemListContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="10dp"
+        android:layout_marginBottom="20sp"
         tools:ignore="UselessParent">
 
         <RadioButton
-            android:id="@+id/todoItemStatus"
+            android:id="@+id/rbTodoItemStatus"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:buttonTint="@color/colorPrimary"
+            android:buttonTint="@color/dribblePink"
+            android:fontFamily="@font/jost"
+            android:minWidth="0dp"
+            android:minHeight="0dp"
+            android:scaleX="0.6"
+            android:scaleY="0.6"
+            android:textColor="@color/grey3"
+            android:textSize="15sp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="RtlSymmetry" />
 
         <TextView
-            android:id="@+id/todoItemBody"
+            android:id="@+id/tvTodoListItem"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/msemibold"
-            android:textColor="@color/black"
-            android:textSize="14sp"
-            app:layout_constraintStart_toEndOf="@+id/todoItemStatus"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:layout_marginStart="16dp"
+            android:ellipsize="end"
+            android:fontFamily="@font/jost"
+            android:text="Upload first shot on Dribbble"
+            android:textColor="@color/grey3"
+            android:textSize="13sp"
+            app:layout_constraintStart_toEndOf="@+id/rbTodoItemStatus"
+            app:layout_constraintTop_toTopOf="@+id/rbTodoItemStatus" />
 
         <TextView
-            android:id="@+id/todoItemCreationDate"
+            android:id="@+id/tvTodoListItemDesc"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:alpha="0.7"
-            android:background="@drawable/bg_fullrounded"
-            android:drawableStart="@drawable/ic_event"
-            android:drawablePadding="10dp"
-            android:drawableTint="@color/colorPrimary"
-            android:fontFamily="@font/mregular"
-            android:padding="8dp"
-            android:textAllCaps="false"
-            android:textColor="@color/colorPrimary"
+            android:fontFamily="@font/jost"
+            android:text="Design Stuff"
+            android:textColor="@color/grey2"
             android:textSize="14sp"
-            android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="@+id/todoItemBody"
-            app:layout_constraintTop_toBottomOf="@+id/todoItemBody" />
+            app:layout_constraintStart_toStartOf="@+id/tvTodoListItem"
+            app:layout_constraintTop_toBottomOf="@+id/tvTodoListItem" />
 
-        <TextView
-            android:id="@+id/todoItemCreationTime"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="5dp"
-            android:layout_marginTop="5dp"
-            android:alpha="0.7"
-            android:background="@drawable/bg_fullrounded"
-            android:drawableStart="@drawable/ic_alarm"
-            android:drawablePadding="10dp"
-            android:drawableTint="@color/green"
-            android:fontFamily="@font/mregular"
-            android:padding="8dp"
-            android:textAllCaps="false"
-            android:textColor="@color/green"
-            android:textSize="14sp"
-            android:textStyle="bold"
-            app:layout_constraintStart_toEndOf="@+id/todoItemCreationDate"
-            app:layout_constraintTop_toBottomOf="@+id/todoItemBody" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

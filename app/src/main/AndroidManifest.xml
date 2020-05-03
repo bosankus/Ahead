@@ -17,6 +17,7 @@
             android:screenOrientation="fullSensor" />
         <activity
             android:name=".view.MainActivity"
+            android:launchMode="singleTop"
             android:screenOrientation="fullSensor" />
         <activity
             android:name=".view.SplashActivity"

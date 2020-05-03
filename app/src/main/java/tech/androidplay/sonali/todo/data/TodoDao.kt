@@ -2,6 +2,7 @@ package tech.androidplay.sonali.todo.data
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
+import tech.androidplay.sonali.todo.data.model.Todo
 
 /**
  * Created by Androidplay

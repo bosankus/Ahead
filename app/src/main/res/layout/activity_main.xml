@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,110 +7,96 @@
     android:background="@android:color/white"
     tools:context=".view.MainActivity">
 
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/mainCalenderView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="35dp"
-        android:orientation="horizontal"
-        android:visibility="gone"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/todoHeaderTxt"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="30dp"
-        android:alpha="0.8"
-        android:fontFamily="@font/msemibold"
-        android:text="@string/things_to_do__header_txt"
-        android:textColor="@android:color/black"
-        android:textSize="18sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/mainCalenderView" />
-
-    <TextView
-        android:id="@+id/todoListCount"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:alpha="0.6"
-        android:background="@drawable/bg_fullrounded"
-        android:backgroundTint="@color/colorPrimary"
-        android:fontFamily="@font/mmedium"
-        android:padding="5dp"
-        android:text="2"
-        android:textAlignment="center"
-        android:textColor="@color/white"
-        android:textSize="14sp"
-        app:layout_constraintBottom_toBottomOf="@+id/todoHeaderTxt"
-        app:layout_constraintStart_toEndOf="@+id/todoHeaderTxt"
-        app:layout_constraintTop_toTopOf="@+id/todoHeaderTxt" />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/todoListRecyclerview"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:orientation="vertical"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/todoListCount" />
-
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/btnAddTodo"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:background="@drawable/bg_halfrounded_btn"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        android:layout_height="match_parent">
 
         <TextView
+            android:id="@+id/tvUserGreet"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:alpha="0.8"
-            android:fontFamily="@font/msemibold"
-            android:text="@string/add_task_layout_txt"
-            android:textAlignment="center"
-            android:textColor="@android:color/black"
-            android:textSize="18sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="25dp"
+            android:fontFamily="@font/jost"
+            android:padding="5sp"
+            android:text="Hi Ankush"
+            android:textColor="@color/grey2"
+            android:textSize="16sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <ImageView
+            android:id="@+id/imgMenu"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginTop="25dp"
+            android:layout_marginEnd="16dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="?attr/selectableItemBackground"
+            android:padding="5dp"
+            android:src="@drawable/ic_horizontal_dot_menu"
+            android:tint="@color/grey2"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="ContentDescription" />
+
+        <TextView
+            android:id="@+id/tvAllTasksHeader"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="5dp"
+            android:fontFamily="@font/jost_bold"
+            android:text="All tasks"
+            android:textColor="@color/grey3"
+            android:textSize="32sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvUserGreet" />
+
+        <include
+            android:id="@+id/frameTodayHeader"
+            layout="@layout/frame_today_todo_header"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvAllTasksHeader" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvTodoList"
+            android:layout_width="match_parent"
+            android:layout_height="250dp"
+            android:layout_marginTop="16sp"
+            android:clipToPadding="true"
+            android:orientation="vertical"
+            android:overScrollMode="never"
+            android:paddingStart="12sp"
+            android:paddingEnd="16dp"
+            android:scrollbars="none"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/frameTodayHeader" />
+
+        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+            android:id="@+id/efabAddTask"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="25dp"
+            android:backgroundTint="@color/dribblePink"
+            android:fontFamily="@font/jost"
+            android:text="Add Task"
+            android:textColor="@color/white"
+            app:icon="@android:drawable/ic_input_add"
+            app:iconPadding="5sp"
+            app:iconTint="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:rippleColor="@color/white" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/container"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/white" />
 
-    <com.fxn.BubbleTabBar
-        android:id="@+id/mainBottomBar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="8dp"
-        android:background="@drawable/bg_fullrounded"
-        android:elevation="10dp"
-        android:padding="16dp"
-        app:bubbletab_custom_font="@font/msemibold"
-        app:bubbletab_disabled_icon_color="@color/grey2"
-        app:bubbletab_horizontal_padding="20dp"
-        app:bubbletab_icon_padding="7sp"
-        app:bubbletab_icon_size="16dp"
-        app:bubbletab_menuResource="@menu/list"
-        app:bubbletab_title_size="12sp"
-        app:bubbletab_vertical_padding="10dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

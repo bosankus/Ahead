@@ -4,7 +4,7 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
-import tech.androidplay.sonali.todo.data.User
+import tech.androidplay.sonali.todo.data.model.User
 import tech.androidplay.sonali.todo.data.repository.AuthRepository
 
 /**

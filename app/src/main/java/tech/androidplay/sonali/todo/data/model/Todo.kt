@@ -1,4 +1,4 @@
-package tech.androidplay.sonali.todo.data
+package tech.androidplay.sonali.todo.data.model
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
@@ -15,14 +15,20 @@ data class Todo(
 
     @PrimaryKey
     @ColumnInfo(name = "todoId")
-    val todoId: String,
+    val todoId: String?,
 
     @ColumnInfo(name = "todoBody")
-    val todoBody: String,
+    val todoBody: String?,
+
+    @ColumnInfo(name = "todoDesc")
+    val todoDesc: String?,
+
+    @ColumnInfo(name = "todoStatus")
+    var todoStatus: Boolean?,
 
     @ColumnInfo(name = "todoCreationDate")
-    val todoCreationDate: String,
+    val todoCreationDate: String?,
 
     @ColumnInfo(name = "todoCreationTime")
-    val todoCreationTime: String
+    val todoCreationTime: String?
 )

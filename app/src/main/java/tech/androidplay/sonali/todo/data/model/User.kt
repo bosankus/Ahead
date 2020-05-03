@@ -1,4 +1,4 @@
-package tech.androidplay.sonali.todo.data
+package tech.androidplay.sonali.todo.data.model
 
 import java.io.Serializable
 
