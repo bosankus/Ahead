@@ -12,7 +12,7 @@ interface Constants {
     val GOOGLE_SIGN_IN: Int
         get() = 9001
     val TAG: String
-        get() = "AndroidplayErrorGlobalTag"
+        get() = "AndroidplayGlobalTag"
     val USER: String
         get() = "users"
 

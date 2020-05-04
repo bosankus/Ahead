@@ -17,10 +17,10 @@ interface TodoDao {
     fun getTodoList(): LiveData<List<Todo>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertTodoItem(todo: Todo)
+    suspend fun insertTodoItem(todo: ArrayList<Todo>)
 
     @Update
-    suspend fun updateTodoItem(todo: Todo)
+    suspend fun updateTodoItem(todo: ArrayList<Todo>)
 
     @Delete
     suspend fun deleteTodoItem(todoId: String)

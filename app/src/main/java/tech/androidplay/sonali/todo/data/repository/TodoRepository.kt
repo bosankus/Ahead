@@ -1,9 +1,6 @@
 package tech.androidplay.sonali.todo.data.repository
 
 import androidx.lifecycle.LiveData
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import tech.androidplay.sonali.todo.data.model.Todo
 import tech.androidplay.sonali.todo.data.TodoDao
 
@@ -17,21 +14,15 @@ class TodoRepository(private val todoDao: TodoDao) {
 
     val allTodo: LiveData<List<Todo>> = todoDao.getTodoList()
 
-    suspend fun insertTodoItem(todo: Todo) {
-        CoroutineScope(Dispatchers.IO).launch {
-            todoDao.insertTodoItem(todo)
-        }
+    suspend fun insertTodoItem(todo: ArrayList<Todo>) {
+        todoDao.insertTodoItem(todo)
     }
 
-    suspend fun updateTodoItem(todo: Todo) {
-        CoroutineScope(Dispatchers.IO).launch {
-            todoDao.updateTodoItem(todo)
-        }
+    suspend fun updateTodoItem(todo: ArrayList<Todo>) {
+        todoDao.updateTodoItem(todo)
     }
 
     suspend fun deleteTodoItemById(todoId: String) {
-        CoroutineScope(Dispatchers.IO).launch {
-            todoDao.deleteTodoItem(todoId)
-        }
+        todoDao.deleteTodoItem(todoId)
     }
 }

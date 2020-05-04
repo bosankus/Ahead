@@ -9,9 +9,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.frame_today_todo_header.*
+import kotlinx.coroutines.*
 import tech.androidplay.sonali.todo.R
 import tech.androidplay.sonali.todo.adapter.TodoListAdapter
 import tech.androidplay.sonali.todo.data.model.Todo
+import tech.androidplay.sonali.todo.utils.Helper
 import tech.androidplay.sonali.todo.utils.TimeStampUtil
 
 class MainActivity : AppCompatActivity() {
@@ -47,7 +49,11 @@ class MainActivity : AppCompatActivity() {
     @SuppressLint("InflateParams")
     private fun clickListeners() {
         efabAddTask.setOnClickListener {
+            val arguments = Bundle()
+            arguments.putString("userId", firebaseAuth.currentUser?.uid.toString())
+
             val bottomSheetFragment = BottomSheetFragment()
+            bottomSheetFragment.arguments = arguments
             bottomSheetFragment.show(supportFragmentManager, bottomSheetFragment.tag)
         }
 
@@ -70,7 +76,7 @@ class MainActivity : AppCompatActivity() {
         )
         todo.add(
             Todo(
-                "1",
+                "2",
                 "UI found from Dribbble",
                 "Self stuff",
                 true,
@@ -80,6 +86,7 @@ class MainActivity : AppCompatActivity() {
         )
         val adapter = TodoListAdapter(todo)
         rvTodoList.adapter = adapter
+
     }
 }
 
