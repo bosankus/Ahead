@@ -16,7 +16,6 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
 
     private val authRepository: AuthRepository by lazy { AuthRepository() }
     lateinit var authenticatedUserLiveData: LiveData<User>
-    lateinit var createdUserLiveData: LiveData<User>
 
 
     fun createAccountWithEmailPassword(email: String, password: String) {
@@ -31,7 +30,4 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
         authenticatedUserLiveData = authRepository.firebaseSignInWithGoogle(account)
     }
 
-    fun createUser(authenticatedUser: User) {
-        createdUserLiveData = authRepository.createUserInFirestoreIfNotExists(authenticatedUser)
-    }
 }

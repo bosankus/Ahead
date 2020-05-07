@@ -14,7 +14,7 @@ class Helper : Constants {
         Log.d(TAG, errorMessage)
     }
 
-    fun showToast(context: Context, toastMessage: String) {
+    fun showToast(context: Context?, toastMessage: String) {
         Toast.makeText(context, toastMessage, Toast.LENGTH_SHORT).show()
     }
 }

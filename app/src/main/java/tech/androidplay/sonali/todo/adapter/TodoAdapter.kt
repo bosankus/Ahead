@@ -6,37 +6,38 @@ import android.view.ViewGroup
 import android.widget.RadioButton
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.firebase.ui.firestore.FirestoreRecyclerAdapter
+import com.firebase.ui.firestore.FirestoreRecyclerOptions
 import tech.androidplay.sonali.todo.R
 import tech.androidplay.sonali.todo.data.model.Todo
 
-class TodoListAdapter(private val todoList: ArrayList<Todo>) :
-    RecyclerView.Adapter<TodoListAdapter.TodoListViewHolder>() {
+/**
+ * Created by Androidplay
+ * Author: Ankush
+ * On: 5/8/2020, 2:08 AM
+ */
 
-    override fun onCreateViewHolder(
-        parent: ViewGroup,
-        viewType: Int
-    ): TodoListAdapter.TodoListViewHolder {
+class TodoAdapter(private val todoList: ArrayList<Todo>, options: FirestoreRecyclerOptions<Todo>) :
+    FirestoreRecyclerAdapter<Todo, TodoAdapter.TodoViewHolder>(options) {
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TodoViewHolder {
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.activity_main_todo_list, parent, false)
-        return TodoListViewHolder(view)
+        return TodoViewHolder(view)
     }
 
-    override fun onBindViewHolder(holder: TodoListAdapter.TodoListViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: TodoViewHolder, position: Int, model: Todo) {
         holder.binItems(todoList[position])
         notifyDataSetChanged()
     }
 
-    override fun getItemCount(): Int = todoList.size
-
-    inner class TodoListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class TodoViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun binItems(todoList: Todo) {
             // initializing view elements
-            val rbTodoItemStatus = itemView.findViewById<RadioButton>(R.id.rbTodoItemStatus)
             val tvTodoListItem = itemView.findViewById<TextView>(R.id.tvTodoListItem)
             val tvTodoListItemDesc = itemView.findViewById<TextView>(R.id.tvTodoListItemDesc)
 
             // setting views
-            val todoId: String = todoList.todoId
             tvTodoListItem.text = todoList.todoBody
             tvTodoListItemDesc.text = todoList.todoDesc
         }

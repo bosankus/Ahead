@@ -9,6 +9,8 @@ import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import tech.androidplay.sonali.todo.data.model.User
 import tech.androidplay.sonali.todo.utils.Helper
 
@@ -25,6 +27,7 @@ class AuthRepository {
     private lateinit var authenticatedUserMutableLiveData: MutableLiveData<User>
 
     private val firebaseUser: FirebaseUser? = firebaseAuth.currentUser
+    private val firestoreDb = Firebase.firestore
     private lateinit var user: User
 
     private lateinit var userId: String
@@ -32,7 +35,7 @@ class AuthRepository {
     private lateinit var userEmail: String
     private lateinit var userPassword: String
 
-    private lateinit var helper: Helper
+    private val helper: Helper by lazy { Helper() }
 
     // Google Authentication
     fun firebaseSignInWithGoogle(account: GoogleSignInAccount): MutableLiveData<User> {

@@ -10,16 +10,18 @@
 
     <style name="MaterialTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
         <!-- Customize Material theme -->
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorPrimary">@color/dribblePink</item>
+        <item name="colorPrimaryDark">@color/dribblePink</item>
         <item name="android:windowDisablePreview">true</item>
         <item name="android:windowIsTranslucent">true</item>
-        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorAccent">@color/dribblePink</item>
         <item name="radioButtonStyle">@style/Widget.MaterialComponents.CompoundButton.RadioButton
         </item>
         <item name="colorControlActivated">@color/dribblePink</item>
         <item name="colorSwitchThumbNormal">@color/grey1</item>
         <item name="android:colorForeground">@color/grey1</item>
+        <item name="android:textColorPrimary">@color/grey3</item>
+        <item name="android:textColorSecondary">@color/grey2</item>
     </style>
 
 
