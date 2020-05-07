@@ -11,14 +11,19 @@ import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.*
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.lifecycle.ViewModelProvider
 import com.airbnb.lottie.LottieAnimationView
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.datepicker.MaterialDatePicker
+import kotlinx.android.synthetic.main.fragment_add_task_bottom_sheet.*
+import kotlinx.android.synthetic.main.frame_date_time_picker.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import tech.androidplay.sonali.todo.R
+import tech.androidplay.sonali.todo.data.viewmodel.TaskViewModel
+import tech.androidplay.sonali.todo.utils.Helper
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -28,6 +33,8 @@ import java.util.*
  * On: 5/3/2020, 12:22 PM
  */
 class BottomSheetFragment : BottomSheetDialogFragment() {
+
+    private lateinit var taskViewModel: TaskViewModel
 
     private lateinit var clCreateTask: ConstraintLayout
     private lateinit var swAlarm: Switch
@@ -39,7 +46,7 @@ class BottomSheetFragment : BottomSheetDialogFragment() {
 
     private lateinit var userId: String
 
-    lateinit var job: Job
+    private lateinit var job: Job
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -61,9 +68,15 @@ class BottomSheetFragment : BottomSheetDialogFragment() {
         lottieCreateTask = view.findViewById(R.id.lottiCreateTaskLoading)
         btnCreateTask = view.findViewById(R.id.btCreateTask)
         job = Job()
+
         // UI visibility
         frameDateTimePicker.visibility = View.GONE
         pbOpenCalender.visibility = View.GONE
+
+        // initializing viewmodel class
+        taskViewModel = activity?.run {
+            ViewModelProvider(this)[TaskViewModel::class.java]
+        }!!
 
         // setting click listeners
         clickListeners()
@@ -111,6 +124,8 @@ class BottomSheetFragment : BottomSheetDialogFragment() {
             clCreateTask.visibility = View.INVISIBLE
             lottieCreateTask.visibility = View.VISIBLE
             lottieCreateTask.playAnimation()
+
+            createTask()
         }
     }
 
@@ -156,8 +171,24 @@ class BottomSheetFragment : BottomSheetDialogFragment() {
         ).show()
     }
 
+    private fun createTask() {
+        taskViewModel.createTaskInFirestore(
+            tvTaskInput.text.toString(),
+            tvSelectDateTimeDesc.text.toString()
+        )
+        taskViewModel.createdTaskLiveData.observe(
+            this,
+            androidx.lifecycle.Observer {
+                if (it.isEntered) {
+                    // TODO: Add Toast that task is created.
+                    dismiss()
+                }
+            })
+    }
+
     override fun onDetach() {
         super.onDetach()
+        // Cancelling all running coroutines
         job.cancel()
     }
 }

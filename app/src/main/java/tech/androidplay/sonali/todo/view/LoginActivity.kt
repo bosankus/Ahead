@@ -1,7 +1,6 @@
 package tech.androidplay.sonali.todo.view
 
 import android.graphics.Color
-import android.os.Build
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.View
@@ -12,7 +11,6 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import kotlinx.android.synthetic.main.activity_login.*
 import tech.androidplay.sonali.todo.R
-import tech.androidplay.sonali.todo.data.model.User
 import tech.androidplay.sonali.todo.data.viewmodel.AuthViewModel
 import tech.androidplay.sonali.todo.utils.Constants
 import tech.androidplay.sonali.todo.utils.Helper
@@ -32,10 +30,8 @@ class LoginActivity : AppCompatActivity(), Constants {
         firebaseAuth = FirebaseAuth.getInstance()
 
         // enable white status bar with black icons
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
-            window.statusBarColor = Color.WHITE
-        }
+        window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+        window.statusBarColor = Color.WHITE
 
         // initiating custom helper class
         helper = Helper()
@@ -74,16 +70,6 @@ class LoginActivity : AppCompatActivity(), Constants {
     // auth viewmodel initiating function
     private fun initAuthViewModel() {
         authViewModel = ViewModelProvider(this).get(AuthViewModel::class.java)
-    }
-
-    // stores only new user details in firestore
-    private fun createNewUser(authenticatedUser: User) {
-        authViewModel.createUser(authenticatedUser)
-        authViewModel.createdUserLiveData.observe(this, Observer {
-            if (it.isCreated) {
-                helper.logErrorMessage(authenticatedUser.userId)
-            }
-        })
     }
 
     // validate user input in text fields

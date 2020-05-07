@@ -1,34 +1,20 @@
 package tech.androidplay.sonali.todo.data.model
 
-import androidx.room.ColumnInfo
-import androidx.room.Entity
-import androidx.room.PrimaryKey
-
 /**
  * Created by Androidplay
  * Author: Ankush
- * On: 4/19/2020, 11:02 PM
+ * On: 5/6/2020, 5:30 AM
  */
 
-@Entity(tableName = "todo_table")
-data class Todo(
+class Todo(todoId: String, todoBody: String, todoDesc: String) {
 
-    @PrimaryKey
-    @ColumnInfo(name = "todoId")
-    val todoId: String?,
+    val todoId: String by lazy { todoId }
 
-    @ColumnInfo(name = "todoBody")
-    val todoBody: String?,
+    val todoBody: String by lazy { todoBody }
 
-    @ColumnInfo(name = "todoDesc")
-    val todoDesc: String?,
+    val todoDesc: String by lazy { todoDesc }
 
-    @ColumnInfo(name = "todoStatus")
-    var todoStatus: Boolean?,
+    val isCompleted: Boolean = false
 
-    @ColumnInfo(name = "todoCreationDate")
-    val todoCreationDate: String?,
-
-    @ColumnInfo(name = "todoCreationTime")
-    val todoCreationTime: String?
-)
+    var isEntered: Boolean = false
+}
