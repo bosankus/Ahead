@@ -13,6 +13,7 @@ import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.frame_today_todo_header.*
+import kotlinx.android.synthetic.main.shimmer_layout.*
 import tech.androidplay.sonali.todo.R
 import tech.androidplay.sonali.todo.adapter.TodoListAdapter
 import tech.androidplay.sonali.todo.data.model.Todo
@@ -23,11 +24,11 @@ class MainActivity : AppCompatActivity() {
 
     // Current timestamp
     private val currentDate: String by lazy { TimeStampUtil().currentDate }
-    private val currentTime: String by lazy { TimeStampUtil().currentTime }
+//    private val currentTime: String by lazy { TimeStampUtil().currentTime }
 
     // Firebase Auth
     private val firebaseAuth: FirebaseAuth = FirebaseAuth.getInstance()
-    private val firebaseUser: String = firebaseAuth.currentUser?.uid.toString()
+//    private val firebaseUser: String = firebaseAuth.currentUser?.uid.toString()
 
     // Firebase Firestore
     private var firestoreDb = FirebaseFirestore.getInstance()
@@ -54,6 +55,21 @@ class MainActivity : AppCompatActivity() {
         // loading all task list
         initializeRecyclerView()
 
+    }
+
+    override fun onStart() {
+        super.onStart()
+        shimmerFrameLayout.startShimmer()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        shimmerFrameLayout.startShimmer()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        shimmerFrameLayout.stopShimmer()
     }
 
     private fun setScreenUI() {
@@ -89,17 +105,23 @@ class MainActivity : AppCompatActivity() {
     private fun initTodoListFirestore() {
         taskListRef
             .addSnapshotListener { querySnapshot, firebaseFirestoreException ->
-                if (firebaseFirestoreException != null) return@addSnapshotListener
+                if (firebaseFirestoreException != null) {
+                    // Continue shimmering
+                    clParentLayout.visibility = View.GONE
+                    clParentErrorLayout.visibility = View.VISIBLE
+                }
                 if (querySnapshot != null) {
                     taskList.clear()
                     // fetches the all documents on any change
-                    Helper().logErrorMessage("called")
                     val snapshotList = querySnapshot.documents
                     for (documentSnapshot in snapshotList) {
                         todo = documentSnapshot.toObject(Todo::class.java)
                         todo?.isCompleted = true
                         todo?.let { taskList.add(it) }
                     }
+                    // Shimmer and show list
+                    shimmerFrameLayout.visibility = View.GONE
+                    rvTodoList.visibility = View.VISIBLE
                     rvTodoList.adapter = todoListAdapter
                 } else Helper().logErrorMessage("Firestore: No value")
             }

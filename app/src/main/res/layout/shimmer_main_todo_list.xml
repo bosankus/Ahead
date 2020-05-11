@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/shimmerItemList"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/todoItemListContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20sp"
+        tools:ignore="UselessParent">
+
+        <RadioButton
+            android:id="@+id/rbTodoItemStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/shimmerColor"
+            android:buttonTint="@android:color/transparent"
+            android:fontFamily="@font/jost"
+            android:minWidth="0dp"
+            android:minHeight="0dp"
+            android:scaleX="0.6"
+            android:scaleY="0.6"
+            android:textColor="@color/grey3"
+            android:textSize="15sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="RtlSymmetry" />
+
+        <TextView
+            android:id="@+id/tvTodoListItem"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:background="@color/shimmerColor"
+            android:ellipsize="end"
+            android:fontFamily="@font/jost"
+            android:textColor="@color/grey3"
+            android:textSize="13sp"
+            app:layout_constraintStart_toEndOf="@+id/rbTodoItemStatus"
+            app:layout_constraintTop_toTopOf="@+id/rbTodoItemStatus" />
+
+        <TextView
+            android:id="@+id/tvTodoListItemDesc"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:background="@color/shimmerColor"
+            android:layout_marginTop="8dp"
+            android:fontFamily="@font/jost"
+            android:textColor="@color/grey2"
+            android:textSize="14sp"
+            app:layout_constraintStart_toStartOf="@+id/tvTodoListItem"
+            app:layout_constraintTop_toBottomOf="@+id/tvTodoListItem" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</LinearLayout>
