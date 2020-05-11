@@ -4,51 +4,67 @@ import android.annotation.SuppressLint
 import android.graphics.Color
 import android.os.Bundle
 import android.view.View
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.firebase.ui.firestore.FirestoreRecyclerOptions
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.CollectionReference
+import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.frame_today_todo_header.*
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import tech.androidplay.sonali.todo.R
 import tech.androidplay.sonali.todo.adapter.TodoListAdapter
 import tech.androidplay.sonali.todo.data.model.Todo
-import tech.androidplay.sonali.todo.data.viewmodel.TaskViewModel
+import tech.androidplay.sonali.todo.utils.Helper
 import tech.androidplay.sonali.todo.utils.TimeStampUtil
 
 class MainActivity : AppCompatActivity() {
 
+    // Current timestamp
     private val currentDate: String by lazy { TimeStampUtil().currentDate }
     private val currentTime: String by lazy { TimeStampUtil().currentTime }
-    private lateinit var firebaseAuth: FirebaseAuth
 
-    private lateinit var taskViewModel: TaskViewModel
+    // Firebase Auth
+    private val firebaseAuth: FirebaseAuth = FirebaseAuth.getInstance()
+    private val firebaseUser: String = firebaseAuth.currentUser?.uid.toString()
+
+    // Firebase Firestore
+    private var firestoreDb = FirebaseFirestore.getInstance()
+    private var taskListRef: CollectionReference = firestoreDb.collection("Tasks")
+
+    private lateinit var animation: Animation
+    private var todo: Todo? = Todo()
+    private val taskList: MutableList<Todo> = mutableListOf()
+    private val todoListAdapter: TodoListAdapter = TodoListAdapter(taskList)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        // initiating firebase auth instance
-        firebaseAuth = FirebaseAuth.getInstance()
-
         // enable white status bar with black icons
-        window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
-        window.statusBarColor = Color.WHITE
+        setScreenUI()
 
-        // load bottom navigation bar animations
-//        val animation = AnimationUtils.loadAnimation(this, R.anim.btn_animation)
-//        floatingButton.startAnimation(animation)
-        tvTodayDate.text = currentDate
-
-        // loading all task list
-        loadToDoList()
+        // load create task button animations
+        initiateFABAnimation()
 
         // turning listeners on
         clickListeners()
 
+        // loading all task list
+        initializeRecyclerView()
+
+    }
+
+    private fun setScreenUI() {
+        window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+        window.statusBarColor = Color.WHITE
+    }
+
+    private fun initiateFABAnimation() {
+        animation = AnimationUtils.loadAnimation(this, R.anim.btn_animation)
+        efabAddTask.startAnimation(animation)
+        tvTodayDate.text = currentDate
     }
 
     @SuppressLint("InflateParams")
@@ -60,14 +76,36 @@ class MainActivity : AppCompatActivity() {
             bottomSheetFragment.arguments = arguments
             bottomSheetFragment.show(supportFragmentManager, bottomSheetFragment.tag)
         }
-
-
     }
 
-    private fun loadToDoList() {
-        taskViewModel = ViewModelProvider(this)[TaskViewModel::class.java]
-        taskViewModel.readTaskFromFirestore()
+    private fun initializeRecyclerView() {
+        rvTodoList.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, true)
+        rvTodoList.setHasFixedSize(true)
+        initTodoListFirestore()
+    }
+
+    // DATA PART
+    // TODO: To be shifted in correct way to TaskRepo
+    private fun initTodoListFirestore() {
+        taskListRef
+            .addSnapshotListener { querySnapshot, firebaseFirestoreException ->
+                if (firebaseFirestoreException != null) return@addSnapshotListener
+                if (querySnapshot != null) {
+                    taskList.clear()
+                    // fetches the all documents on any change
+                    Helper().logErrorMessage("called")
+                    val snapshotList = querySnapshot.documents
+                    for (documentSnapshot in snapshotList) {
+                        todo = documentSnapshot.toObject(Todo::class.java)
+                        todo?.isCompleted = true
+                        todo?.let { taskList.add(it) }
+                    }
+                    rvTodoList.adapter = todoListAdapter
+                } else Helper().logErrorMessage("Firestore: No value")
+            }
     }
 
 }
+
+
 
