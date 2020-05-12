@@ -1,7 +1,11 @@
 package tech.androidplay.sonali.todo.utils
 
+import android.os.Build
 import android.text.format.DateUtils
 import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import java.time.format.FormatStyle
 import java.util.*
 
 /**
@@ -18,8 +22,18 @@ class TimeStampUtil {
             Locale.getDefault()
         ).format(Date())
     }
+
+    val currentLocalDate: String by lazy { showDateMonthYear() }
+
     val currentDate: String by lazy { currentDate() }
 
+    private fun showDateMonthYear(): String {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            LocalDate.now().format(DateTimeFormatter.ofLocalizedDate(FormatStyle.FULL))
+        } else {
+            TODO("VERSION.SDK_INT < O")
+        }
+    }
 
     private fun currentDate(): String {
         return when {

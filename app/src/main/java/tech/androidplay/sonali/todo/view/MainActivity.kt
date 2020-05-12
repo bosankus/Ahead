@@ -23,7 +23,7 @@ import tech.androidplay.sonali.todo.utils.TimeStampUtil
 class MainActivity : AppCompatActivity() {
 
     // Current timestamp
-    private val currentDate: String by lazy { TimeStampUtil().currentDate }
+    private val currentDate: String by lazy { TimeStampUtil().currentLocalDate }
 //    private val currentTime: String by lazy { TimeStampUtil().currentTime }
 
     // Firebase Auth
@@ -102,6 +102,7 @@ class MainActivity : AppCompatActivity() {
 
     // DATA PART
     // TODO: To be shifted in correct way to TaskRepo
+    @SuppressLint("SetTextI18n")
     private fun initTodoListFirestore() {
         taskListRef
             .addSnapshotListener { querySnapshot, firebaseFirestoreException ->
@@ -123,6 +124,8 @@ class MainActivity : AppCompatActivity() {
                     shimmerFrameLayout.visibility = View.GONE
                     rvTodoList.visibility = View.VISIBLE
                     rvTodoList.adapter = todoListAdapter
+                    // Setting number of list items
+                    tvTodayCount.text = todoListAdapter.itemCount.toString() + " items"
                 } else Helper().logErrorMessage("Firestore: No value")
             }
     }

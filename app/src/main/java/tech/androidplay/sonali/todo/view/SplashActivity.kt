@@ -48,11 +48,11 @@ class SplashActivity : AppCompatActivity() {
 
     private fun goToMainActivity() {
         startActivity(Intent(this@SplashActivity, MainActivity::class.java))
-        finish()
+        overridePendingTransition(R.anim.fade_out_animation, R.anim.fade_in_animation)
     }
 
     private fun goToLoginActivity() {
         startActivity(Intent(this@SplashActivity, LoginActivity::class.java))
-        finish()
+        overridePendingTransition(R.anim.fade_out_animation, R.anim.fade_in_animation)
     }
 }

@@ -29,7 +29,6 @@
         android:layout_height="wrap_content"
         android:layout_gravity="end"
         android:fontFamily="@font/jost"
-        android:text="2 of 3 done"
         android:textColor="@color/grey2" />
 
 </FrameLayout>

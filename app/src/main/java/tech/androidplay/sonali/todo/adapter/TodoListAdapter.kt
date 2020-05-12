@@ -40,4 +40,16 @@ class TodoListAdapter(private val todoList: MutableList<Todo>) :
 
         }
     }
+
+    fun addTask(todo: Todo) {
+        todoList.add(todo)
+        notifyDataSetChanged()
+    }
+//
+//    fun clear() {
+//        todoList.clear()
+//        notifyDataSetChanged()
+//
+//    }
+
 }
