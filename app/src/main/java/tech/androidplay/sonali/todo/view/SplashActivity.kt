@@ -2,7 +2,6 @@ package tech.androidplay.sonali.todo.view
 
 import android.content.Intent
 import android.graphics.Color
-import android.os.Build
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.view.View
@@ -21,6 +20,7 @@ class SplashActivity : AppCompatActivity() {
         // enable white status bar with black icons
         window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
         window.statusBarColor = Color.WHITE
+        window.navigationBarColor = Color.WHITE
 
         firebaseAuth = FirebaseAuth.getInstance()
 
@@ -35,7 +35,8 @@ class SplashActivity : AppCompatActivity() {
     }
 
     private fun checkAuth() {
-        val timer = object : CountDownTimer(1000, 1000) {
+        // TODO: Uncomment during release
+        val timer = object : CountDownTimer(1000, 500) {
             override fun onTick(millisUntilFinished: Long) {}
             override fun onFinish() {
                 if (firebaseAuth.currentUser != null) {
@@ -44,6 +45,11 @@ class SplashActivity : AppCompatActivity() {
             }
         }
         timer.start()
+
+//        // TODO: Comment during release
+//        if (firebaseAuth.currentUser != null) {
+//            goToMainActivity()
+//        } else goToLoginActivity()
     }
 
     private fun goToMainActivity() {

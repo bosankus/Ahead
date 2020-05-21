@@ -2,9 +2,10 @@ package tech.androidplay.sonali.todo.data.viewmodel
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount
-import tech.androidplay.sonali.todo.data.model.User
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.launch
 import tech.androidplay.sonali.todo.data.repository.AuthRepository
 
 /**
@@ -15,19 +16,36 @@ import tech.androidplay.sonali.todo.data.repository.AuthRepository
 class AuthViewModel(application: Application) : AndroidViewModel(application) {
 
     private val authRepository: AuthRepository by lazy { AuthRepository() }
-    lateinit var authenticatedUserLiveData: LiveData<User>
+    lateinit var createAccountMutableLiveData: MutableLiveData<Int>
+    lateinit var loginLiveData: MutableLiveData<Int>
+    lateinit var passwordResetLiveData: MutableLiveData<String>
 
 
     fun createAccountWithEmailPassword(email: String, password: String) {
-        authenticatedUserLiveData = authRepository.createAccountWithEmailPassword(email, password)
+        viewModelScope.launch {
+            createAccountMutableLiveData =
+                authRepository.createAccountWithEmailPassword(email, password)
+        }
     }
 
-    fun signInWithEmailPassword(email: String, password: String) {
-        authRepository.firebaseSignInWithEmailPassword(email, password)
+    fun loginWithEmailPassword(email: String, password: String) {
+        viewModelScope.launch {
+            loginLiveData = authRepository.loginWithEmailPassword(email, password)
+        }
     }
 
-    fun signInWithGoogle(account: GoogleSignInAccount) {
-        authenticatedUserLiveData = authRepository.firebaseSignInWithGoogle(account)
+    fun sendPasswordResetEmail(email: String) {
+        viewModelScope.launch {
+            passwordResetLiveData = authRepository.sendPasswordResetEmail(email)
+        }
     }
 
+//    fun signInWithGoogle(account: GoogleSignInAccount) {
+//        authenticatedUserLiveData = authRepository.firebaseSignInWithGoogle(account)
+//    }
+
+    override fun onCleared() {
+        super.onCleared()
+        viewModelScope.cancel()
+    }
 }

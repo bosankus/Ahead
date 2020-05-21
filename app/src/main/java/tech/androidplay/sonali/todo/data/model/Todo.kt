@@ -1,5 +1,7 @@
 package tech.androidplay.sonali.todo.data.model
 
+import java.io.Serializable
+
 /**
  * Created by Androidplay
  * Author: Ankush
@@ -10,6 +12,8 @@ data class Todo(
     var todoId: String = "",
     var todoBody: String = "",
     var todoDesc: String = "",
+    var todoCreationTimeStamp: String = "",
     var isEntered: Boolean = false,
-    var isCompleted: Boolean = false
-)
+    var isCompleted: Boolean = false,
+    var isfetched: Boolean = false
+) : Serializable

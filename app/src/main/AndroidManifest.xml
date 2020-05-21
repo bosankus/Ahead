@@ -14,8 +14,13 @@
         android:supportsRtl="true"
         android:theme="@style/MaterialTheme">
         <activity
+            android:name=".view.TaskItemActivity"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity" />
+        <activity
             android:name=".view.LoginActivity"
-            android:screenOrientation="fullSensor" />
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".view.MainActivity"
             android:launchMode="singleTop"
@@ -31,7 +36,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
     </application>
 
 </manifest>

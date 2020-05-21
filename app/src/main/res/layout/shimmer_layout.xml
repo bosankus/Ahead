@@ -22,6 +22,10 @@
 
             <include layout="@layout/shimmer_main_todo_list" />
 
+            <include layout="@layout/shimmer_main_todo_list" />
+
+            <include layout="@layout/shimmer_main_todo_list" />
+
         </LinearLayout>
 
     </com.facebook.shimmer.ShimmerFrameLayout>

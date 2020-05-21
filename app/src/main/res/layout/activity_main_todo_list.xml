@@ -22,8 +22,8 @@
             android:fontFamily="@font/jost"
             android:minWidth="0dp"
             android:minHeight="0dp"
-            android:scaleX="0.6"
-            android:scaleY="0.6"
+            android:scaleX="0.8"
+            android:scaleY="0.8"
             android:textColor="@color/grey3"
             android:textSize="15sp"
             app:layout_constraintStart_toStartOf="parent"
@@ -39,7 +39,7 @@
             android:fontFamily="@font/jost"
             android:text="Upload first shot on Dribbble"
             android:textColor="@color/grey3"
-            android:textSize="13sp"
+            android:textSize="15sp"
             app:layout_constraintStart_toEndOf="@+id/rbTodoItemStatus"
             app:layout_constraintTop_toTopOf="@+id/rbTodoItemStatus" />
 

@@ -8,8 +8,14 @@ import androidx.recyclerview.widget.RecyclerView
 import tech.androidplay.sonali.todo.R
 import tech.androidplay.sonali.todo.data.model.Todo
 
-class TodoListAdapter(private val todoList: MutableList<Todo>) :
+class TodoListAdapter :
     RecyclerView.Adapter<TodoListAdapter.TodoListViewHolder>() {
+
+    private var todoList = mutableListOf<Todo>()
+
+    fun setListData(data: MutableList<Todo>) {
+        todoList = data
+    }
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -25,7 +31,11 @@ class TodoListAdapter(private val todoList: MutableList<Todo>) :
         holder.binItems(todoList[position])
     }
 
-    override fun getItemCount(): Int = todoList.size
+    override fun getItemCount(): Int {
+        return if (todoList.size > 0) {
+            todoList.size
+        } else 0
+    }
 
     inner class TodoListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun binItems(todoList: Todo) {
@@ -37,19 +47,6 @@ class TodoListAdapter(private val todoList: MutableList<Todo>) :
             val todoId: String = todoList.todoId
             tvTodoListItem.text = todoList.todoBody
             tvTodoListItemDesc.text = todoList.todoDesc
-
         }
     }
-
-    fun addTask(todo: Todo) {
-        todoList.add(todo)
-        notifyDataSetChanged()
-    }
-//
-//    fun clear() {
-//        todoList.clear()
-//        notifyDataSetChanged()
-//
-//    }
-
 }

@@ -66,6 +66,11 @@
             app:layout_constraintTop_toBottomOf="@+id/tvAllTasksHeader" />
 
         <include
+            android:id="@+id/frameNoTodo"
+            layout="@layout/frame_no_todo"
+            android:visibility="gone"/>
+
+        <include
             android:id="@+id/shimmerLayout"
             layout="@layout/shimmer_layout"
             android:layout_width="match_parent"
@@ -74,6 +79,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/frameTodayHeader" />
+
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvTodoList"
@@ -92,6 +98,7 @@
             app:layout_constraintTop_toBottomOf="@+id/frameTodayHeader" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/bg_white_gradient"
             android:layout_width="match_parent"
             android:layout_height="90dp"
             android:background="@drawable/bg_white_gradient"
@@ -103,7 +110,7 @@
             android:id="@+id/efabAddTask"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="25dp"
+            android:layout_marginBottom="20dp"
             android:backgroundTint="@color/dribblePink"
             android:fontFamily="@font/jost"
             android:text="Add Task"
