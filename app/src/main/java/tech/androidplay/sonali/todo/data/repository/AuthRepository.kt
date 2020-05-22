@@ -4,6 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import tech.androidplay.sonali.todo.data.model.User
+import tech.androidplay.sonali.todo.utils.Helper.logMessage
 
 /**
  * Created by Androidplay
@@ -42,11 +43,16 @@ class AuthRepository {
     // Login User
     fun loginWithEmailPassword(email: String, password: String): MutableLiveData<Int> {
         loginLiveData = MutableLiveData()
-        firebaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener {
-            if (it.isSuccessful) {
-                loginLiveData.value = 1
-            } else loginLiveData.value = 0
-        }
+        firebaseAuth.signInWithEmailAndPassword(email, password)
+            .addOnCompleteListener {
+                if (it.isSuccessful) {
+                    loginLiveData.value = 1
+                    logMessage("Success")
+                } else {
+                    loginLiveData.value = 0
+                    logMessage("False ${it.exception}")
+                }
+            }
         return loginLiveData
     }
 
@@ -63,25 +69,4 @@ class AuthRepository {
         return passwordResetLiveData
     }
 
-    // Google Authentication
-//    fun firebaseSignInWithGoogle(account: GoogleSignInAccount): MutableLiveData<Int> {
-//        createAccountMutableLiveData = MutableLiveData()
-//        val authCredential = GoogleAuthProvider.getCredential(account.idToken, null)
-//        firebaseAuth.signInWithCredential(authCredential).addOnCompleteListener { authTask ->
-//            run {
-//                if (authTask.isSuccessful) {
-//                    val isNewUser: Boolean = authTask.result?.additionalUserInfo?.isNewUser!!
-//                    if (firebaseUser != null) {
-//                        user.userId = firebaseUser.uid
-//                        user.userEmail = firebaseUser.email.toString()
-//                        user.userName = firebaseUser.displayName.toString()
-//                        user.isCreated = true
-//                        user.isNewUser = isNewUser
-//                        createAccountMutableLiveData.value = 1
-//                    } else createAccountMutableLiveData.value = 0
-//                }
-//            }
-//        }
-//        return createAccountMutableLiveData
-//    }
 }

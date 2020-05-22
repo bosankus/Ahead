@@ -5,8 +5,8 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.cancel
-import kotlinx.coroutines.launch
 import tech.androidplay.sonali.todo.data.repository.AuthRepository
+import tech.androidplay.sonali.todo.utils.Helper.logMessage
 
 /**
  * Created by Androidplay
@@ -16,33 +16,30 @@ import tech.androidplay.sonali.todo.data.repository.AuthRepository
 class AuthViewModel(application: Application) : AndroidViewModel(application) {
 
     private val authRepository: AuthRepository by lazy { AuthRepository() }
+    private val _email = MutableLiveData<String>()
+    private val _password = MutableLiveData<String>()
+
+    val email = _email
+    val password = _password
+
     lateinit var createAccountMutableLiveData: MutableLiveData<Int>
     lateinit var loginLiveData: MutableLiveData<Int>
     lateinit var passwordResetLiveData: MutableLiveData<String>
 
 
-    fun createAccountWithEmailPassword(email: String, password: String) {
-        viewModelScope.launch {
-            createAccountMutableLiveData =
-                authRepository.createAccountWithEmailPassword(email, password)
-        }
+    fun createAccountWithEmailPassword() {
+        createAccountMutableLiveData =
+            authRepository.createAccountWithEmailPassword(email.value.toString(), password.value.toString())
     }
 
-    fun loginWithEmailPassword(email: String, password: String) {
-        viewModelScope.launch {
-            loginLiveData = authRepository.loginWithEmailPassword(email, password)
-        }
+    fun loginWithEmailPassword() {
+        logMessage("From AuthViewModel: " + email.value.toString() + " " + password.value.toString())
+        loginLiveData = authRepository.loginWithEmailPassword(email.value.toString(), password.value.toString())
     }
 
-    fun sendPasswordResetEmail(email: String) {
-        viewModelScope.launch {
-            passwordResetLiveData = authRepository.sendPasswordResetEmail(email)
-        }
+    fun sendPasswordResetEmail() {
+        passwordResetLiveData = authRepository.sendPasswordResetEmail(email.value.toString())
     }
-
-//    fun signInWithGoogle(account: GoogleSignInAccount) {
-//        authenticatedUserLiveData = authRepository.firebaseSignInWithGoogle(account)
-//    }
 
     override fun onCleared() {
         super.onCleared()

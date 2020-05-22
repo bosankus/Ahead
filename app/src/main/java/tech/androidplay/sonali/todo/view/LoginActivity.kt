@@ -8,18 +8,23 @@ import android.view.View
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import androidx.appcompat.app.AppCompatActivity
+import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_login.*
 import tech.androidplay.sonali.todo.R
 import tech.androidplay.sonali.todo.data.viewmodel.AuthViewModel
+import tech.androidplay.sonali.todo.databinding.ActivityLoginBinding
 import tech.androidplay.sonali.todo.utils.Constants
 import tech.androidplay.sonali.todo.utils.Helper.showToast
 
 class LoginActivity : AppCompatActivity(), Constants {
 
-    private lateinit var authViewModel: AuthViewModel
+    private val authViewModel: AuthViewModel by lazy {
+        ViewModelProvider(this).get(AuthViewModel::class.java)
+    }
+    private lateinit var binding: ActivityLoginBinding
 
     // Firebase
     private val firebaseAuth: FirebaseAuth = FirebaseAuth.getInstance()
@@ -31,16 +36,18 @@ class LoginActivity : AppCompatActivity(), Constants {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_login)
+        binding = DataBindingUtil.inflate(layoutInflater, R.layout.activity_login, null, false)
+        setContentView(binding.root)
+        binding.lifecycleOwner = this
+        binding.viewmodel = authViewModel
 
         // enable white status bar with black icons
         setScreenUI()
 
-        // initiating viewodel
-        initAuthViewModel()
-
         // turning listeners on
         clickListeners()
+
+        loginUser()
 
     }
 
@@ -51,18 +58,7 @@ class LoginActivity : AppCompatActivity(), Constants {
         window.navigationBarColor = Color.WHITE
     }
 
-    private fun initAuthViewModel() {
-        authViewModel = ViewModelProvider(this).get(AuthViewModel::class.java)
-    }
-
     private fun clickListeners() {
-        btnSignUpEmailPassword.setOnClickListener { signUpUser() }
-
-        btnloginEmailPassword.setOnClickListener { loginUser() }
-
-        btnGoogleSignIn.setOnClickListener {
-            showToast(this, "Not yet implemented")
-        }
 
         tvSignUpOption.setOnClickListener { setSignUpUI() }
 
@@ -105,10 +101,7 @@ class LoginActivity : AppCompatActivity(), Constants {
             btnSignUpEmailPassword.startAnimation(animFadeIn)
             btnSignUpEmailPassword.visibility = View.INVISIBLE
             lottieAuthLoading.visibility = View.VISIBLE
-            authViewModel.createAccountWithEmailPassword(
-                loginInputEmailTxt.text.toString(),
-                loginInputEmailTxt.text.toString()
-            )
+            authViewModel.createAccountWithEmailPassword()
             authViewModel.createAccountMutableLiveData.observe(
                 this,
                 Observer {
@@ -121,9 +114,7 @@ class LoginActivity : AppCompatActivity(), Constants {
     }
 
     private fun sendPasswordResetEmail(email: String) {
-        authViewModel.sendPasswordResetEmail(
-            loginInputEmailTxt.text.toString()
-        )
+        authViewModel.sendPasswordResetEmail()
         authViewModel.passwordResetLiveData.observe(
             this,
             Observer {
@@ -140,10 +131,6 @@ class LoginActivity : AppCompatActivity(), Constants {
             btnloginEmailPassword.startAnimation(animFadeIn)
             btnloginEmailPassword.visibility = View.INVISIBLE
             lottieAuthLoading.visibility = View.VISIBLE
-            authViewModel.loginWithEmailPassword(
-                loginInputEmailTxt.text.toString(),
-                loginInputEmailTxt.text.toString()
-            )
             authViewModel.loginLiveData.observe(
                 this,
                 Observer {

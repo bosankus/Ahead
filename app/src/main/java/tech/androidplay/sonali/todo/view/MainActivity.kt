@@ -126,8 +126,14 @@ class MainActivity : AppCompatActivity() {
         taskViewModel.fetchTask()
         taskViewModel.fetchedTaskLiveData.reObserver(
             this, Observer {
-                todoListAdapter.setListData(it)
-                showRecyclerView()
+                if (it.size > 0) {
+                    todoListAdapter.setListData(it)
+                    showRecyclerView()
+                } else if (it.size == 0) {
+                    rvTodoList.visibility = View.GONE
+                    shimmerFrameLayout.visibility = View.GONE
+                    frameNoTodo.visibility = View.VISIBLE
+                }
             }
         )
     }
