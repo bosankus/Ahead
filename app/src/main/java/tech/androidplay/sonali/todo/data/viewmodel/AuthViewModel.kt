@@ -1,7 +1,9 @@
 package tech.androidplay.sonali.todo.data.viewmodel
 
 import android.app.Application
+import android.view.View
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.cancel
@@ -16,33 +18,59 @@ import tech.androidplay.sonali.todo.utils.Helper.logMessage
 class AuthViewModel(application: Application) : AndroidViewModel(application) {
 
     private val authRepository: AuthRepository by lazy { AuthRepository() }
+
     private val _email = MutableLiveData<String>()
     private val _password = MutableLiveData<String>()
+    private val _loginBtn = MutableLiveData(View.VISIBLE)
+    private var _isBusy = MutableLiveData(View.INVISIBLE)
 
     val email = _email
     val password = _password
-
-    lateinit var createAccountMutableLiveData: MutableLiveData<Int>
-    lateinit var loginLiveData: MutableLiveData<Int>
-    lateinit var passwordResetLiveData: MutableLiveData<String>
-
+    val loginBtn = _loginBtn
+    val isBusy = _isBusy
 
     fun createAccountWithEmailPassword() {
-        createAccountMutableLiveData =
-            authRepository.createAccountWithEmailPassword(email.value.toString(), password.value.toString())
+        loginBtn.value = View.INVISIBLE
+        isBusy.value = View.VISIBLE
+        authRepository.createWithEmailPassword(email.value.toString(), password.value.toString())
+        authRepository.authLiveData.observeForever {
+            if (it == 1) {
+                isBusy.value = View.INVISIBLE
+            } else {
+                isBusy.value = View.INVISIBLE
+                loginBtn.value = View.VISIBLE
+            }
+        }
     }
 
     fun loginWithEmailPassword() {
-        logMessage("From AuthViewModel: " + email.value.toString() + " " + password.value.toString())
-        loginLiveData = authRepository.loginWithEmailPassword(email.value.toString(), password.value.toString())
+        loginBtn.value = View.INVISIBLE
+        isBusy.value = View.VISIBLE
+        authRepository.loginWithEmailPassword(email.value.toString(), password.value.toString())
+        authRepository.authLiveData.observeForever {
+            if (it == 1) {
+                isBusy.value = View.INVISIBLE
+            } else {
+                isBusy.value = View.INVISIBLE
+                loginBtn.value = View.VISIBLE
+            }
+        }
     }
 
     fun sendPasswordResetEmail() {
-        passwordResetLiveData = authRepository.sendPasswordResetEmail(email.value.toString())
+        authRepository.sendPasswordResetEmail(email.value.toString())
+        authRepository.authLiveData.observeForever {
+            if (it == 1) {
+                logMessage("Email send to ${email.value}")
+            } else logMessage("Provide correct email ID")
+        }
     }
 
     override fun onCleared() {
         super.onCleared()
+        authRepository.authLiveData.removeObserver {
+            logMessage("$it")
+        }
         viewModelScope.cancel()
     }
 }

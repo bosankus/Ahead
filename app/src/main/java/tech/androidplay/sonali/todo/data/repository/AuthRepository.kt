@@ -4,7 +4,6 @@ import androidx.lifecycle.MutableLiveData
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import tech.androidplay.sonali.todo.data.model.User
-import tech.androidplay.sonali.todo.utils.Helper.logMessage
 
 /**
  * Created by Androidplay
@@ -14,16 +13,14 @@ import tech.androidplay.sonali.todo.utils.Helper.logMessage
 class AuthRepository {
 
     private val firebaseAuth = FirebaseAuth.getInstance()
-    private lateinit var createAccountMutableLiveData: MutableLiveData<Int>
-    private lateinit var loginLiveData: MutableLiveData<Int>
-    private lateinit var passwordResetLiveData: MutableLiveData<String>
-
     private val firebaseUser: FirebaseUser? = firebaseAuth.currentUser
     private var user: User = User()
 
+    val authLiveData: MutableLiveData<Int> = MutableLiveData()
+
+
     // Creates Account
-    fun createAccountWithEmailPassword(email: String, password: String): MutableLiveData<Int> {
-        createAccountMutableLiveData = MutableLiveData()
+    fun createWithEmailPassword(email: String, password: String): MutableLiveData<Int> {
         firebaseAuth.createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener { authTask ->
                 val isNewUser: Boolean = authTask.result?.additionalUserInfo?.isNewUser!!
@@ -33,40 +30,36 @@ class AuthRepository {
                     user.userName = firebaseUser?.displayName.toString()
                     user.isCreated = true
                     user.isNewUser = isNewUser
-                    createAccountMutableLiveData.value = 1
-                } else createAccountMutableLiveData.value = 0
+                    authLiveData.value = 1
+                } else authLiveData.value = 0
             }
-        return createAccountMutableLiveData
+        return authLiveData
     }
 
 
     // Login User
     fun loginWithEmailPassword(email: String, password: String): MutableLiveData<Int> {
-        loginLiveData = MutableLiveData()
         firebaseAuth.signInWithEmailAndPassword(email, password)
             .addOnCompleteListener {
                 if (it.isSuccessful) {
-                    loginLiveData.value = 1
-                    logMessage("Success")
+                    authLiveData.value = 1
                 } else {
-                    loginLiveData.value = 0
-                    logMessage("False ${it.exception}")
+                    authLiveData.value = 0
                 }
             }
-        return loginLiveData
+        return authLiveData
     }
 
 
     // Sending Password reset email
-    fun sendPasswordResetEmail(email: String): MutableLiveData<String> {
-        passwordResetLiveData = MutableLiveData()
+    fun sendPasswordResetEmail(email: String): MutableLiveData<Int> {
         firebaseAuth.sendPasswordResetEmail(email)
             .addOnCompleteListener {
                 if (it.isSuccessful) {
-                    passwordResetLiveData.value = email
-                } else passwordResetLiveData.value = null
+                    authLiveData.value = 1
+                } else authLiveData.value = 0
             }
-        return passwordResetLiveData
+        return authLiveData
     }
 
 }

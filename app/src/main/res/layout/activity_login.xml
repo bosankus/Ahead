@@ -82,6 +82,7 @@
             android:focusable="true"
             android:fontFamily="@font/jost"
             android:foreground="?attr/selectableItemBackground"
+            android:onClick="@{() -> viewmodel.sendPasswordResetEmail()}"
             android:padding="8dp"
             android:text="Forgot Password ?"
             android:textColor="@color/dribblePink"
@@ -106,6 +107,7 @@
             android:textColor="@color/white"
             android:textSize="16sp"
             android:visibility="invisible"
+            app:button_visibility="@{viewmodel.loginBtn}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tvForgotPassword" />
@@ -126,28 +128,16 @@
             android:text="login"
             android:textColor="@color/white"
             android:textSize="16sp"
+            app:button_visibility="@{viewmodel.loginBtn}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tvForgotPassword" />
-
-        <com.airbnb.lottie.LottieAnimationView
-            android:id="@+id/lottieAuthLoading"
-            android:layout_width="90dp"
-            android:layout_height="90dp"
-            android:layout_marginTop="16dp"
-            android:visibility="gone"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvForgotPassword"
-            app:lottie_autoPlay="true"
-            app:lottie_fileName="lottie_auth.json"
-            app:lottie_loop="true" />
 
         <TextView
             android:id="@+id/tvSignUpOption"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="16dp"
             android:clickable="true"
             android:focusable="true"
             android:fontFamily="@font/jost"
@@ -163,7 +153,7 @@
             android:id="@+id/tvLoginOption"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="16dp"
             android:clickable="true"
             android:focusable="true"
             android:fontFamily="@font/jost"
@@ -175,6 +165,19 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/btnloginEmailPassword" />
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/lottieAuthLoading"
+            android:layout_width="90dp"
+            android:layout_height="90dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/btnloginEmailPassword"
+            app:layout_constraintBottom_toBottomOf="@+id/btnloginEmailPassword"
+            app:lottie_autoPlay="true"
+            app:lottie_fileName="lottie_auth.json"
+            app:lottie_loop="true"
+            app:lottie_visibility="@{viewmodel.isBusy}" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
