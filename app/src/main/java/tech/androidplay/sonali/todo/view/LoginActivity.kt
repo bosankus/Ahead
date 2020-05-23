@@ -2,101 +2,132 @@ package tech.androidplay.sonali.todo.view
 
 import android.graphics.Color
 import android.os.Bundle
-import android.text.TextUtils
 import android.view.View
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.Observer
+import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
 import kotlinx.android.synthetic.main.activity_login.*
 import tech.androidplay.sonali.todo.R
 import tech.androidplay.sonali.todo.data.viewmodel.AuthViewModel
+import tech.androidplay.sonali.todo.databinding.ActivityLoginBinding
 import tech.androidplay.sonali.todo.utils.Constants
-import tech.androidplay.sonali.todo.utils.Helper
 
 class LoginActivity : AppCompatActivity(), Constants {
 
     private lateinit var authViewModel: AuthViewModel
-    private lateinit var firebaseAuth: FirebaseAuth
+    private lateinit var binding: ActivityLoginBinding
 
-    private lateinit var helper: Helper
+    // Animation
+    private lateinit var animFadeIn: Animation
+    private lateinit var animFadeOut: Animation
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_login)
+        binding = DataBindingUtil.inflate(layoutInflater, R.layout.activity_login, null, false)
+        setContentView(binding.root)
+        authViewModel = ViewModelProvider(this)[AuthViewModel::class.java]
+        binding.viewmodel = authViewModel
+        binding.lifecycleOwner = this
 
-        // initiating firebase auth instance
-        firebaseAuth = FirebaseAuth.getInstance()
 
         // enable white status bar with black icons
-        window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
-        window.statusBarColor = Color.WHITE
-
-        // initiating custom helper class
-        helper = Helper()
-
-        // initiating auth viewodel
-        initAuthViewModel()
+        setScreenUI()
 
         // turning listeners on
         clickListeners()
+
     }
 
-    override fun onStart() {
-        super.onStart()
-        val currentUser = firebaseAuth.currentUser
-        updateUI(currentUser)
+
+    private fun setScreenUI() {
+        window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+        window.statusBarColor = Color.WHITE
+        window.navigationBarColor = Color.WHITE
     }
 
     private fun clickListeners() {
-        loginBtnEmailPassword.setOnClickListener {
-            if (validateInput()) {
-                authViewModel.createAccountWithEmailPassword(
-                    loginInputEmailTxt.text.toString(),
-                    loginInputEmailTxt.text.toString()
-                )
-                authViewModel.authenticatedUserLiveData.observe(
-                    this,
-                    Observer { authenticatedUser ->
-                        if (authenticatedUser.isCreated) {
-                            helper.logErrorMessage("Done")
-                        }
-                    })
-            }
-        }
+
+        tvSignUpOption.setOnClickListener { setSignUpUI() }
+
+        tvLoginOption.setOnClickListener { setLoginUi() }
     }
 
-    // auth viewmodel initiating function
-    private fun initAuthViewModel() {
-        authViewModel = ViewModelProvider(this).get(AuthViewModel::class.java)
+    private fun setSignUpUI() {
+        animFadeIn = AnimationUtils.loadAnimation(this, R.anim.fade_in_animation)
+        animFadeOut = AnimationUtils.loadAnimation(this, R.anim.fade_out_animation)
+
+        btnloginEmailPassword.startAnimation(animFadeIn)
+        btnloginEmailPassword.visibility = View.INVISIBLE
+        tvSignUpOption.startAnimation(animFadeIn)
+        tvSignUpOption.visibility = View.INVISIBLE
+
+        btnSignUpEmailPassword.startAnimation(animFadeOut)
+        btnSignUpEmailPassword.visibility = View.VISIBLE
+        tvLoginOption.startAnimation(animFadeOut)
+        tvLoginOption.visibility = View.VISIBLE
     }
+
+    private fun setLoginUi() {
+        animFadeIn = AnimationUtils.loadAnimation(this, R.anim.fade_in_animation)
+        animFadeOut = AnimationUtils.loadAnimation(this, R.anim.fade_out_animation)
+
+        btnSignUpEmailPassword.startAnimation(animFadeIn)
+        btnSignUpEmailPassword.visibility = View.INVISIBLE
+        tvLoginOption.startAnimation(animFadeIn)
+        tvLoginOption.visibility = View.INVISIBLE
+
+        btnloginEmailPassword.startAnimation(animFadeOut)
+        btnloginEmailPassword.visibility = View.VISIBLE
+        tvSignUpOption.startAnimation(animFadeOut)
+        tvSignUpOption.visibility = View.VISIBLE
+    }
+
+
+//    private fun loginUser() {
+//        if (validateInput()) {
+//            animFadeIn = AnimationUtils.loadAnimation(this, R.anim.fade_in_animation)
+//            btnloginEmailPassword.startAnimation(animFadeIn)
+//            btnloginEmailPassword.visibility = View.INVISIBLE
+//            lottieAuthLoading.visibility = View.VISIBLE
+//            authViewModel.loginLiveData.observe(
+//                this,
+//                Observer {
+//                    if (it == 1) {
+//                        // Successfully Logged in
+//                        goToMainActivity()
+//                    } else if (it == 0) showToast(this, "Something went wrong. Please retry.")
+//                })
+//        }
+//    }
+
+
+//    private fun goToMainActivity() {
+//        startActivity(Intent(this@LoginActivity, MainActivity::class.java))
+//        overridePendingTransition(
+//            R.anim.fade_out_animation,
+//            R.anim.fade_in_animation
+//        )
+//    }
+
 
     // validate user input in text fields
-    private fun validateInput(): Boolean {
-        var valid = true
-
-        if (TextUtils.isEmpty(loginInputEmailTxt.text.toString())) {
-            loginInputEmailTxt.error = "Required"
-            valid = false
-        } else loginEmailTxtLayout.error = null
-
-        if (TextUtils.isEmpty(loginInputPasswordTxt.text.toString())) {
-            loginInputPasswordTxt.error = "Required"
-            valid = false
-        } else loginInputPasswordTxt.error = null
-
-        return valid
-    }
-
-    // updates the UI as necessary
-    private fun updateUI(user: FirebaseUser?) {
-        if (user != null) {
-            loginTxt.text = user.email
-            loginBtnEmailPassword.visibility = View.GONE
-        } else {
-            loginBtnEmailPassword.visibility = View.VISIBLE
-        }
-    }
+//    private fun validateInput(): Boolean {
+//        var valid = true
+//
+//        if (TextUtils.isEmpty(loginInputEmailTxt.text.toString())) {
+//            loginInputEmailTxt.error = "Required"
+//            valid = false
+//        } else loginEmailTxtLayout.error = null
+//
+//        if (TextUtils.isEmpty(loginInputPasswordTxt.text.toString())) {
+//            loginInputPasswordTxt.error = "Required"
+//            valid = false
+//        } else loginInputPasswordTxt.error = null
+//
+//        return valid
+//    }
 
 }

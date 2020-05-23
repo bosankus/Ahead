@@ -8,6 +8,7 @@
     tools:context=".view.MainActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/clParentLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -64,10 +65,26 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tvAllTasksHeader" />
 
+        <include
+            android:id="@+id/frameNoTodo"
+            layout="@layout/frame_no_todo"
+            android:visibility="gone"/>
+
+        <include
+            android:id="@+id/shimmerLayout"
+            layout="@layout/shimmer_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/frameTodayHeader" />
+
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvTodoList"
             android:layout_width="match_parent"
-            android:layout_height="250dp"
+            android:layout_height="wrap_content"
             android:layout_marginTop="16sp"
             android:clipToPadding="true"
             android:orientation="vertical"
@@ -75,15 +92,25 @@
             android:paddingStart="12sp"
             android:paddingEnd="16dp"
             android:scrollbars="none"
+            android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/frameTodayHeader" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/bg_white_gradient"
+            android:layout_width="match_parent"
+            android:layout_height="90dp"
+            android:background="@drawable/bg_white_gradient"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
         <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
             android:id="@+id/efabAddTask"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="25dp"
+            android:layout_marginBottom="20dp"
             android:backgroundTint="@color/dribblePink"
             android:fontFamily="@font/jost"
             android:text="Add Task"
@@ -98,5 +125,37 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/clParentErrorLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:visibility="gone">
+
+        <ImageView
+            android:id="@+id/clParentErrorLayoutImg"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:src="@drawable/ic_firebase_error"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/clParentErrorLayoutTxt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginTop="16dp"
+            android:fontFamily="@font/jost"
+            android:text="Whoops! Something seems wrong!"
+            android:textColor="@color/grey3"
+            android:textSize="18sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/clParentErrorLayoutImg" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

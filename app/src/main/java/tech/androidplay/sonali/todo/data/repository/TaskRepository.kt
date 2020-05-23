@@ -1,23 +1,24 @@
 package tech.androidplay.sonali.todo.data.repository
 
+import android.annotation.SuppressLint
 import androidx.lifecycle.MutableLiveData
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.CollectionReference
-import com.google.firebase.firestore.DocumentChange
-import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
 import tech.androidplay.sonali.todo.data.model.Todo
-import tech.androidplay.sonali.todo.utils.Helper
+import tech.androidplay.sonali.todo.utils.Helper.getCurrentTimestamp
+import tech.androidplay.sonali.todo.utils.Helper.logMessage
 
 /**
  * Created by Androidplay
  * Author: Ankush
  * On: 5/6/2020, 4:54 AM
  */
-class TaskRepository {
+object TaskRepository {
 
     // accessing registered userid
-    private var firebaseUser: String = FirebaseAuth.getInstance().currentUser?.uid.toString()
+    private var firebaseUserId: String = FirebaseAuth.getInstance().currentUser?.uid.toString()
 
     // accessing firestore
     private var firestoreDb = FirebaseFirestore.getInstance()
@@ -25,56 +26,65 @@ class TaskRepository {
     // reference to task collection
     private var taskListRef: CollectionReference = firestoreDb.collection("Tasks")
 
-    // reference to documents in a collection
-    private var taskRef: DocumentReference = firestoreDb.document("Tasks/tasId")
+    private var todo: Todo = Todo()
 
-    private lateinit var taskLiveData: MutableLiveData<Todo>
-    private lateinit var todo: Todo
+    /**
+     * Firestore Database
+     * -------------------------------------------------------------------------------------
+     */
 
-    // Creates Task in Firestore
+    @SuppressLint("SimpleDateFormat")
     fun createNewTask(todoBody: String, todoDesc: String): MutableLiveData<Todo> {
-        taskLiveData = MutableLiveData()
+        val createTaskLiveData: MutableLiveData<Todo> = MutableLiveData()
         val user = hashMapOf(
-            "id" to firebaseUser,
+            "id" to firebaseUserId,
             "todoBody" to todoBody,
-            "todoDesc" to todoDesc
+            "todoDesc" to todoDesc,
+            "todoCreationTimeStamp" to getCurrentTimestamp(),
+            "isEntered" to true,
+            "isCompleted" to false
         )
 
         taskListRef.add(user)
             .addOnSuccessListener {
-                todo = Todo(firebaseUser, todoBody, todoDesc)
+                todo = Todo(firebaseUserId, todoBody, todoDesc)
                 todo.isEntered = true
-                taskLiveData.postValue(todo)
+                createTaskLiveData.postValue(todo)
             }.addOnFailureListener {
-                Helper().logErrorMessage("Fail")
+                logMessage("Fail")
             }
-
-        return taskLiveData
+        return createTaskLiveData
     }
 
 
-    // Firestore Realtime Data
-    fun readRealtimeTask() {
-        taskListRef
-            .addSnapshotListener { querySnapshot, firebaseFirestoreException ->
-                if (firebaseFirestoreException != null) return@addSnapshotListener
-                if (querySnapshot != null) {
+    fun fetchTasks(): MutableLiveData<MutableList<Todo>> {
+        val fetchedTodoLiveData = MutableLiveData<MutableList<Todo>>()
+        val todoList = mutableListOf<Todo>()
+        val query: Query = taskListRef
+            .whereEqualTo("id", firebaseUserId)
+            .orderBy("todoCreationTimeStamp", Query.Direction.DESCENDING)
 
-                    // fetches the whole document on any change
-//                    val snapshotList: List<DocumentSnapshot> = querySnapshot.documents
-//                    for (documentSnapshot in snapshotList) {
-//                        Helper().logErrorMessage(documentSnapshot.data.toString())
-//                    }
-
-                    // fetches only the document whihc was changed
-                    val documentChangeList: List<DocumentChange> = querySnapshot.documentChanges
-                    for (documentChangeSnapshot in documentChangeList) {
-                        Helper().logErrorMessage(documentChangeSnapshot.document.data.toString())
-                    }
-
-                } else Helper().logErrorMessage("Firestore: No Data")
+        query.addSnapshotListener { snapshot, exception ->
+            if (exception != null) {
+                logMessage(exception.message.toString())
             }
+            if (snapshot != null) {
+                val snapshotList = snapshot.documents
+                for (documentSnapshot in snapshotList) {
+                    val todoId = documentSnapshot["id"].toString()
+                    val todoBody = documentSnapshot["todoBody"].toString()
+                    val todoDesc = documentSnapshot["todoDesc"].toString()
+                    val todoItems = Todo(todoId, todoBody, todoDesc)
+                    todoList.add(0, todoItems)
+                }
+                fetchedTodoLiveData.value = todoList
+            } else {
+                logMessage("No Internet")
+            }
+        }
+        return fetchedTodoLiveData
     }
+
 }
 
 

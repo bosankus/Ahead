@@ -14,9 +14,11 @@
         <item name="colorPrimaryDark">@color/dribblePink</item>
         <item name="android:windowDisablePreview">true</item>
         <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowContentTransitions">true</item>
         <item name="colorAccent">@color/dribblePink</item>
         <item name="radioButtonStyle">@style/Widget.MaterialComponents.CompoundButton.RadioButton
         </item>
+        <item name="textInputStyle">@style/Widget.Design.TextInputLayout</item>
         <item name="colorControlActivated">@color/dribblePink</item>
         <item name="colorSwitchThumbNormal">@color/grey1</item>
         <item name="android:colorForeground">@color/grey1</item>

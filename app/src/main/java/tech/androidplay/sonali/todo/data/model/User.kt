@@ -5,20 +5,13 @@ import java.io.Serializable
 /**
  * Created by Androidplay
  * Author: Ankush
- * On: 4/22/2020, 5:40 AM
+ * On: 5/19/2020, 12:37 AM
  */
-class User(userEmail: String, userName: String, userId: String) : Serializable {
-
-    private val userEmail: String by lazy { userEmail }
-
-    val userName: String by lazy { userName }
-
-    val userId: String by lazy { userId }
-
-    val isAuthenticated by lazy { }
-
-    var isNewUser = false
-
-    var isCreated: Boolean = false
-
-}
+data class User(
+    var userId: String = "",
+    var userEmail: String = "",
+    var userName: String = "",
+    var isNewUser: Boolean = false,
+    var isCreated: Boolean = false,
+    var isAuthenticated: Boolean = false
+) : Serializable

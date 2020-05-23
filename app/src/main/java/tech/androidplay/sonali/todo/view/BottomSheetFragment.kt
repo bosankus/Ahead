@@ -23,7 +23,6 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import tech.androidplay.sonali.todo.R
 import tech.androidplay.sonali.todo.data.viewmodel.TaskViewModel
-import tech.androidplay.sonali.todo.utils.Helper
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -72,11 +71,6 @@ class BottomSheetFragment : BottomSheetDialogFragment() {
         // UI visibility
         frameDateTimePicker.visibility = View.GONE
         pbOpenCalender.visibility = View.GONE
-
-        // initializing viewmodel class
-        taskViewModel = activity?.run {
-            ViewModelProvider(this)[TaskViewModel::class.java]
-        }!!
 
         // setting click listeners
         clickListeners()
@@ -172,6 +166,9 @@ class BottomSheetFragment : BottomSheetDialogFragment() {
     }
 
     private fun createTask() {
+        taskViewModel = activity?.run {
+            ViewModelProvider(this)[TaskViewModel::class.java]
+        }!!
         taskViewModel.createTaskInFirestore(
             tvTaskInput.text.toString(),
             tvSelectDateTimeDesc.text.toString()
