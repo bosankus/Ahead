@@ -1,9 +1,7 @@
 package tech.androidplay.sonali.todo.data.viewmodel
 
 import android.app.Application
-import android.view.View
 import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.cancel
@@ -17,42 +15,43 @@ import tech.androidplay.sonali.todo.utils.Helper.logMessage
  */
 class AuthViewModel(application: Application) : AndroidViewModel(application) {
 
-    private val authRepository: AuthRepository by lazy { AuthRepository() }
+    private val authRepository: AuthRepository by lazy { AuthRepository }
 
     private val _email = MutableLiveData<String>()
     private val _password = MutableLiveData<String>()
-    private val _loginBtn = MutableLiveData(View.VISIBLE)
-    private var _isBusy = MutableLiveData(View.INVISIBLE)
+    private val _loginBtn = MutableLiveData(1)
+    private var _isBusy = MutableLiveData(0)
 
     val email = _email
     val password = _password
+
     val loginBtn = _loginBtn
     val isBusy = _isBusy
 
     fun createAccountWithEmailPassword() {
-        loginBtn.value = View.INVISIBLE
-        isBusy.value = View.VISIBLE
+        loginBtn.value = 0
+        isBusy.value = 1
         authRepository.createWithEmailPassword(email.value.toString(), password.value.toString())
         authRepository.authLiveData.observeForever {
             if (it == 1) {
-                isBusy.value = View.INVISIBLE
+                isBusy.value = 0
             } else {
-                isBusy.value = View.INVISIBLE
-                loginBtn.value = View.VISIBLE
+                isBusy.value = 0
+                loginBtn.value = 1
             }
         }
     }
 
     fun loginWithEmailPassword() {
-        loginBtn.value = View.INVISIBLE
-        isBusy.value = View.VISIBLE
+        loginBtn.value = 0
+        isBusy.value = 1
         authRepository.loginWithEmailPassword(email.value.toString(), password.value.toString())
         authRepository.authLiveData.observeForever {
             if (it == 1) {
-                isBusy.value = View.INVISIBLE
+                isBusy.value = 0
             } else {
-                isBusy.value = View.INVISIBLE
-                loginBtn.value = View.VISIBLE
+                isBusy.value = 0
+                loginBtn.value = 1
             }
         }
     }
@@ -69,7 +68,7 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
     override fun onCleared() {
         super.onCleared()
         authRepository.authLiveData.removeObserver {
-            logMessage("$it")
+            logMessage("Observer cleared $it")
         }
         viewModelScope.cancel()
     }

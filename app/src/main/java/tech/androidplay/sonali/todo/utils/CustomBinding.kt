@@ -1,5 +1,6 @@
 package tech.androidplay.sonali.todo.utils
 
+import android.view.View
 import androidx.appcompat.widget.AppCompatButton
 import androidx.databinding.BindingAdapter
 import com.airbnb.lottie.LottieAnimationView
@@ -11,11 +12,11 @@ import com.airbnb.lottie.LottieAnimationView
  */
 
 @BindingAdapter("lottie_visibility")
-fun setVisibility(lottieAnimationView: LottieAnimationView, visibility: Int) {
-    lottieAnimationView.visibility = visibility
+fun setVisibility(lottieAnimationView: LottieAnimationView, number: Int) {
+    lottieAnimationView.visibility = if (number == 0) View.INVISIBLE else View.VISIBLE
 }
 
 @BindingAdapter("button_visibility")
-fun setVisibility(appCompatButton: AppCompatButton, visibility: Int) {
-    appCompatButton.visibility = visibility
+fun setVisibility(appCompatButton: AppCompatButton, number: Int) {
+    appCompatButton.visibility = if (number == 0) View.INVISIBLE else View.VISIBLE
 }

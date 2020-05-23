@@ -20,10 +20,6 @@ class LoginActivity : AppCompatActivity(), Constants {
     private lateinit var authViewModel: AuthViewModel
     private lateinit var binding: ActivityLoginBinding
 
-    // Firebase
-    private val firebaseAuth: FirebaseAuth = FirebaseAuth.getInstance()
-//    private val currentUser = firebaseAuth.currentUser
-
     // Animation
     private lateinit var animFadeIn: Animation
     private lateinit var animFadeOut: Animation
@@ -42,8 +38,6 @@ class LoginActivity : AppCompatActivity(), Constants {
 
         // turning listeners on
         clickListeners()
-
-//        loginUser()
 
     }
 
@@ -91,23 +85,6 @@ class LoginActivity : AppCompatActivity(), Constants {
         tvSignUpOption.visibility = View.VISIBLE
     }
 
-//    private fun signUpUser() {
-//        if (validateInput()) {
-//            animFadeIn = AnimationUtils.loadAnimation(this, R.anim.fade_in_animation)
-//            btnSignUpEmailPassword.startAnimation(animFadeIn)
-//            btnSignUpEmailPassword.visibility = View.INVISIBLE
-//            lottieAuthLoading.visibility = View.VISIBLE
-//            authViewModel.createAccountWithEmailPassword()
-//            authViewModel.createAccountMutableLiveData.observe(
-//                this,
-//                Observer {
-//                    if (it == 1) {
-//                        // Account successfully created
-//                        goToMainActivity()
-//                    } else if (it == 0) showToast(this, "Something went wrong. Please retry.")
-//                })
-//        }
-//    }
 
 //    private fun loginUser() {
 //        if (validateInput()) {

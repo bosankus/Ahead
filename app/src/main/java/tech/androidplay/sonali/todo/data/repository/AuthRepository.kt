@@ -10,7 +10,7 @@ import tech.androidplay.sonali.todo.data.model.User
  * Author: Ankush
  * On: 4/22/2020, 5:52 AM
  */
-class AuthRepository {
+object AuthRepository {
 
     private val firebaseAuth = FirebaseAuth.getInstance()
     private val firebaseUser: FirebaseUser? = firebaseAuth.currentUser
