@@ -1,51 +1,38 @@
 package tech.androidplay.sonali.todo.data.viewmodel
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import tech.androidplay.sonali.todo.data.repository.AuthRepository
+import tech.androidplay.sonali.todo.utils.Helper.logMessage
 
 /**
  * Created by Androidplay
  * Author: Ankush
  * On: 4/22/2020, 5:51 AM
  */
-class AuthViewModel(application: Application) : AndroidViewModel(application) {
+class AuthViewModel(private val authRepository: AuthRepository) : ViewModel() {
 
-    private val authRepository: AuthRepository by lazy { AuthRepository() }
-    lateinit var createAccountMutableLiveData: MutableLiveData<Int>
-    lateinit var loginLiveData: MutableLiveData<Int>
-    lateinit var passwordResetLiveData: MutableLiveData<String>
-
+    lateinit var authLiveData: MutableLiveData<Int>
 
     fun createAccountWithEmailPassword(email: String, password: String) {
         viewModelScope.launch {
-            createAccountMutableLiveData =
+            authLiveData =
                 authRepository.createAccountWithEmailPassword(email, password)
+            logMessage("$authLiveData")
         }
     }
 
     fun loginWithEmailPassword(email: String, password: String) {
         viewModelScope.launch {
-            loginLiveData = authRepository.loginWithEmailPassword(email, password)
+            authLiveData = authRepository.loginWithEmailPassword(email, password)
         }
     }
 
     fun sendPasswordResetEmail(email: String) {
         viewModelScope.launch {
-            passwordResetLiveData = authRepository.sendPasswordResetEmail(email)
+            authLiveData = authRepository.sendPasswordResetEmail(email)
         }
-    }
-
-//    fun signInWithGoogle(account: GoogleSignInAccount) {
-//        authenticatedUserLiveData = authRepository.firebaseSignInWithGoogle(account)
-//    }
-
-    override fun onCleared() {
-        super.onCleared()
-        viewModelScope.cancel()
     }
 }

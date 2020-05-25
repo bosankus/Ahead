@@ -9,29 +9,23 @@ import android.view.View
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_main_todo_list.*
 import kotlinx.android.synthetic.main.frame_today_todo_header.*
 import kotlinx.android.synthetic.main.shimmer_layout.*
+import org.koin.android.ext.android.inject
 import tech.androidplay.sonali.todo.R
 import tech.androidplay.sonali.todo.adapter.TodoListAdapter
 import tech.androidplay.sonali.todo.data.viewmodel.TaskViewModel
 import tech.androidplay.sonali.todo.utils.Helper.getCurrentDate
-import tech.androidplay.sonali.todo.utils.Helper.logMessage
 
 class MainActivity : AppCompatActivity() {
 
     // Task View Model
-    private val taskViewModel: TaskViewModel by lazy {
-        ViewModelProvider(this)
-            .get(TaskViewModel::class.java)
-    }
+    private val taskViewModel by inject<TaskViewModel>()
 
     // Firebase Auth
     private val firebaseAuth: FirebaseAuth = FirebaseAuth.getInstance()
@@ -39,7 +33,6 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var animation: Animation
 
-    private val position: Int = 0
     private val todoListAdapter: TodoListAdapter by lazy { TodoListAdapter() }
 
     @SuppressLint("SimpleDateFormat")
@@ -124,10 +117,16 @@ class MainActivity : AppCompatActivity() {
 
     private fun loadData() {
         taskViewModel.fetchTask()
-        taskViewModel.fetchedTaskLiveData.reObserver(
+        taskViewModel.fetchedTaskLiveData.observe(
             this, Observer {
-                todoListAdapter.setListData(it)
-                showRecyclerView()
+                if (it.isNotEmpty()) {
+                    todoListAdapter.setListData(it)
+                    showRecyclerView()
+                } else {
+                    frameNoTodo.visibility = View.VISIBLE
+                    shimmerFrameLayout.visibility = View.GONE
+                    rvTodoList.visibility = View.GONE
+                }
             }
         )
     }
@@ -147,14 +146,5 @@ class MainActivity : AppCompatActivity() {
         // Setting number of adapter item count
         tvTodayCount.text = todoListAdapter.itemCount.toString() + " items"
     }
-
-
-    private fun <T> MutableLiveData<T>.reObserver(owner: LifecycleOwner, observer: Observer<T>) {
-        removeObserver(observer)
-        logMessage("Observer Removed")
-        observe(owner, observer)
-        logMessage("Observer is observing again")
-    }
-
 }
 

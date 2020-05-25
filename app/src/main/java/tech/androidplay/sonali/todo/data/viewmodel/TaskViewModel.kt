@@ -14,9 +14,8 @@ import tech.androidplay.sonali.todo.data.repository.TaskRepository
  * Author: Ankush
  * On: 5/6/2020, 1:39 AM
  */
-class TaskViewModel : ViewModel() {
+class TaskViewModel(private val taskRepository: TaskRepository) : ViewModel() {
 
-    private val taskRepository: TaskRepository by lazy { TaskRepository }
     lateinit var createdTaskLiveData: LiveData<Todo>
     lateinit var fetchedTaskLiveData: MutableLiveData<MutableList<Todo>>
 

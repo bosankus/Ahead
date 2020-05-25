@@ -15,7 +15,7 @@ import tech.androidplay.sonali.todo.utils.Helper.logMessage
  * Author: Ankush
  * On: 5/6/2020, 4:54 AM
  */
-object TaskRepository {
+class TaskRepository {
 
     // accessing registered userid
     private var firebaseUserId: String = FirebaseAuth.getInstance().currentUser?.uid.toString()
