@@ -10,14 +10,14 @@ import android.view.animation.AnimationUtils
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import kotlinx.android.synthetic.main.activity_login.*
-import org.koin.android.ext.android.get
+import org.koin.android.ext.android.inject
 import tech.androidplay.sonali.todo.R
 import tech.androidplay.sonali.todo.data.viewmodel.AuthViewModel
 import tech.androidplay.sonali.todo.utils.Helper.showToast
 
 class LoginActivity : AppCompatActivity() {
 
-    private val authViewModel: AuthViewModel = get()
+    private val authViewModel by inject<AuthViewModel>()
 
     // Animation
     private lateinit var animFadeIn: Animation
