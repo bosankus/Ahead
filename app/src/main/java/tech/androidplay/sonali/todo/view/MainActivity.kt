@@ -20,7 +20,7 @@ import org.koin.android.ext.android.inject
 import tech.androidplay.sonali.todo.R
 import tech.androidplay.sonali.todo.adapter.TodoListAdapter
 import tech.androidplay.sonali.todo.data.viewmodel.TaskViewModel
-import tech.androidplay.sonali.todo.utils.Helper.getCurrentDate
+import tech.androidplay.sonali.todo.utils.UIHelper.getCurrentDate
 
 class MainActivity : AppCompatActivity() {
 
@@ -29,7 +29,6 @@ class MainActivity : AppCompatActivity() {
 
     // Firebase Auth
     private val firebaseAuth: FirebaseAuth = FirebaseAuth.getInstance()
-    private val firebaseUserId = firebaseAuth.currentUser?.uid.toString()
 
     private lateinit var animation: Animation
 
@@ -69,6 +68,11 @@ class MainActivity : AppCompatActivity() {
         shimmerFrameLayout.stopShimmer()
     }
 
+    override fun onBackPressed() {
+        super.onBackPressed()
+        finishAffinity()
+    }
+
     private fun setScreenUI() {
         window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
         window.statusBarColor = Color.WHITE
@@ -94,10 +98,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         efabAddTask.setOnClickListener {
-            val arguments = Bundle()
-            arguments.putString("userId", firebaseUserId)
             val bottomSheetFragment = BottomSheetFragment()
-            bottomSheetFragment.arguments = arguments
             bottomSheetFragment.show(supportFragmentManager, bottomSheetFragment.tag)
         }
 

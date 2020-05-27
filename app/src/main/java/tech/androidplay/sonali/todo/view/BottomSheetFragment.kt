@@ -11,7 +11,6 @@ import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.*
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.lifecycle.ViewModelProvider
 import com.airbnb.lottie.LottieAnimationView
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.datepicker.MaterialDatePicker
@@ -21,6 +20,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import org.koin.android.ext.android.inject
 import tech.androidplay.sonali.todo.R
 import tech.androidplay.sonali.todo.data.viewmodel.TaskViewModel
 import java.text.SimpleDateFormat
@@ -33,7 +33,7 @@ import java.util.*
  */
 class BottomSheetFragment : BottomSheetDialogFragment() {
 
-    private lateinit var taskViewModel: TaskViewModel
+    private val taskViewModel by inject<TaskViewModel>()
 
     private lateinit var clCreateTask: ConstraintLayout
     private lateinit var swAlarm: Switch
@@ -42,8 +42,6 @@ class BottomSheetFragment : BottomSheetDialogFragment() {
     private lateinit var pbOpenCalender: ProgressBar
     private lateinit var lottieCreateTask: LottieAnimationView
     private lateinit var btnCreateTask: Button
-
-    private lateinit var userId: String
 
     private lateinit var job: Job
 
@@ -54,9 +52,6 @@ class BottomSheetFragment : BottomSheetDialogFragment() {
     ): View {
         val view = inflater.inflate(R.layout.fragment_add_task_bottom_sheet, container, false)
         dialog?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_MODE_CHANGED)
-
-        // fetching user id from MainActivity
-        userId = arguments?.getString("userId")!!
 
         // initializing variables
         clCreateTask = view.findViewById(R.id.clCreateTask)
@@ -166,15 +161,12 @@ class BottomSheetFragment : BottomSheetDialogFragment() {
     }
 
     private fun createTask() {
-        taskViewModel = activity?.run {
-            ViewModelProvider(this)[TaskViewModel::class.java]
-        }!!
         taskViewModel.createTaskInFirestore(
             tvTaskInput.text.toString(),
             tvSelectDateTimeDesc.text.toString()
         )
         taskViewModel.createdTaskLiveData.observe(
-            this,
+            viewLifecycleOwner,
             androidx.lifecycle.Observer {
                 if (it.isEntered) {
                     // TODO: Add Toast that task is created.

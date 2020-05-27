@@ -7,8 +7,9 @@ import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import tech.androidplay.sonali.todo.data.model.Todo
-import tech.androidplay.sonali.todo.utils.Helper.getCurrentTimestamp
-import tech.androidplay.sonali.todo.utils.Helper.logMessage
+import tech.androidplay.sonali.todo.data.model.User
+import tech.androidplay.sonali.todo.utils.UIHelper.getCurrentTimestamp
+import tech.androidplay.sonali.todo.utils.UIHelper.logMessage
 
 /**
  * Created by Androidplay
@@ -17,11 +18,9 @@ import tech.androidplay.sonali.todo.utils.Helper.logMessage
  */
 class TaskRepository {
 
-    // accessing registered userid
-    private var firebaseUserId: String = FirebaseAuth.getInstance().currentUser?.uid.toString()
-
     // accessing firestore
     private var firestoreDb = FirebaseFirestore.getInstance()
+    private var userId: String = FirebaseAuth.getInstance().currentUser?.uid.toString()
 
     // reference to task collection
     private var taskListRef: CollectionReference = firestoreDb.collection("Tasks")
@@ -36,8 +35,8 @@ class TaskRepository {
     @SuppressLint("SimpleDateFormat")
     fun createNewTask(todoBody: String, todoDesc: String): MutableLiveData<Todo> {
         val createTaskLiveData: MutableLiveData<Todo> = MutableLiveData()
-        val user = hashMapOf(
-            "id" to firebaseUserId,
+        val task = hashMapOf(
+            "id" to userId,
             "todoBody" to todoBody,
             "todoDesc" to todoDesc,
             "todoCreationTimeStamp" to getCurrentTimestamp(),
@@ -45,9 +44,9 @@ class TaskRepository {
             "isCompleted" to false
         )
 
-        taskListRef.add(user)
+        taskListRef.add(task)
             .addOnSuccessListener {
-                todo = Todo(firebaseUserId, todoBody, todoDesc)
+                todo = Todo(userId, todoBody, todoDesc)
                 todo.isEntered = true
                 createTaskLiveData.postValue(todo)
             }.addOnFailureListener {
@@ -57,11 +56,20 @@ class TaskRepository {
     }
 
 
+    fun completeTask(taskId: String): MutableLiveData<Boolean> {
+        val completeTaskLiveData: MutableLiveData<Boolean> = MutableLiveData()
+        val task = hashMapOf("isCompleted" to true)
+        taskListRef.add(task)
+
+        return completeTaskLiveData
+    }
+
+
     fun fetchTasks(): MutableLiveData<MutableList<Todo>> {
         val fetchedTodoLiveData = MutableLiveData<MutableList<Todo>>()
         val todoList = mutableListOf<Todo>()
         val query: Query = taskListRef
-            .whereEqualTo("id", firebaseUserId)
+            .whereEqualTo("id", userId)
             .orderBy("todoCreationTimeStamp", Query.Direction.DESCENDING)
 
         query.addSnapshotListener { snapshot, exception ->
@@ -71,7 +79,7 @@ class TaskRepository {
             if (snapshot != null) {
                 val snapshotList = snapshot.documents
                 for (documentSnapshot in snapshotList) {
-                    val todoId = documentSnapshot["id"].toString()
+                    val todoId = documentSnapshot.id
                     val todoBody = documentSnapshot["todoBody"].toString()
                     val todoDesc = documentSnapshot["todoDesc"].toString()
                     val todoItems = Todo(todoId, todoBody, todoDesc)

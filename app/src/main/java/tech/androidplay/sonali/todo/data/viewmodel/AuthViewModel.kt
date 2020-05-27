@@ -5,7 +5,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import tech.androidplay.sonali.todo.data.repository.AuthRepository
-import tech.androidplay.sonali.todo.utils.Helper.logMessage
 
 /**
  * Created by Androidplay
@@ -14,25 +13,26 @@ import tech.androidplay.sonali.todo.utils.Helper.logMessage
  */
 class AuthViewModel(private val authRepository: AuthRepository) : ViewModel() {
 
-    lateinit var authLiveData: MutableLiveData<Int>
+    var createAccountLiveData: MutableLiveData<Int> = MutableLiveData()
+    var loginLiveData: MutableLiveData<Int> = MutableLiveData()
+    var passwordResetLiveData: MutableLiveData<Int> = MutableLiveData()
 
     fun createAccountWithEmailPassword(email: String, password: String) {
         viewModelScope.launch {
-            authLiveData =
+            createAccountLiveData =
                 authRepository.createAccountWithEmailPassword(email, password)
-            logMessage("$authLiveData")
         }
     }
 
     fun loginWithEmailPassword(email: String, password: String) {
         viewModelScope.launch {
-            authLiveData = authRepository.loginWithEmailPassword(email, password)
+            loginLiveData = authRepository.loginWithEmailPassword(email, password)
         }
     }
 
     fun sendPasswordResetEmail(email: String) {
         viewModelScope.launch {
-            authLiveData = authRepository.sendPasswordResetEmail(email)
+            passwordResetLiveData = authRepository.sendPasswordResetEmail(email)
         }
     }
 }

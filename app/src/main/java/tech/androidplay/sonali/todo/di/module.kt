@@ -6,6 +6,7 @@ import tech.androidplay.sonali.todo.data.repository.AuthRepository
 import tech.androidplay.sonali.todo.data.repository.TaskRepository
 import tech.androidplay.sonali.todo.data.viewmodel.AuthViewModel
 import tech.androidplay.sonali.todo.data.viewmodel.TaskViewModel
+import tech.androidplay.sonali.todo.utils.CacheManager
 
 /**
  * Created by Androidplay
@@ -16,6 +17,8 @@ import tech.androidplay.sonali.todo.data.viewmodel.TaskViewModel
 val appModule = module {
     factory { AuthRepository() }
     viewModel { AuthViewModel(get()) }
-    single { TaskRepository() }
+    factory { TaskRepository() }
     viewModel { TaskViewModel(get()) }
+
+    factory { CacheManager() }
 }

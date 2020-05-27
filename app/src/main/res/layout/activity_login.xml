@@ -50,6 +50,8 @@
         android:layout_marginTop="20dp"
         android:layout_marginEnd="16sp"
         android:hint="Password"
+        app:passwordToggleEnabled="true"
+        app:passwordToggleTint="@color/dribblePink"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/loginEmailTxtLayout">

@@ -8,10 +8,8 @@ import java.io.Serializable
  * On: 5/19/2020, 12:37 AM
  */
 data class User(
-    var userId: String = "",
-    var userEmail: String = "",
-    var userName: String = "",
-    var isNewUser: Boolean = false,
-    var isCreated: Boolean = false,
-    var isAuthenticated: Boolean = false
+    var userId: String? = "",
+    var userEmail: String? = "",
+    var userName: String? = "",
+    var isNewUser: Boolean = false
 ) : Serializable

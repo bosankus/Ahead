@@ -8,7 +8,7 @@
     android:orientation="vertical">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/todoItemListContainer"
+        android:id="@+id/clItemListContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="20sp"
@@ -19,6 +19,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:buttonTint="@color/dribblePink"
+            android:clickable="false"
             android:fontFamily="@font/jost"
             android:minWidth="0dp"
             android:minHeight="0dp"

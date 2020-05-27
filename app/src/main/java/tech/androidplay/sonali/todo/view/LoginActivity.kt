@@ -5,7 +5,6 @@ import android.graphics.Color
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.View
-import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
@@ -13,15 +12,28 @@ import kotlinx.android.synthetic.main.activity_login.*
 import org.koin.android.ext.android.inject
 import tech.androidplay.sonali.todo.R
 import tech.androidplay.sonali.todo.data.viewmodel.AuthViewModel
-import tech.androidplay.sonali.todo.utils.Helper.showToast
+import tech.androidplay.sonali.todo.utils.CacheManager
+import tech.androidplay.sonali.todo.utils.UIHelper.networkFlag
+import tech.androidplay.sonali.todo.utils.UIHelper.showToast
+import tech.androidplay.sonali.todo.utils.UIHelper.viewAnimation
 
 class LoginActivity : AppCompatActivity() {
 
     private val authViewModel by inject<AuthViewModel>()
+    private val cache by inject<CacheManager>()
 
     // Animation
-    private lateinit var animFadeIn: Animation
-    private lateinit var animFadeOut: Animation
+    private val animFadeIn by lazy {
+        AnimationUtils.loadAnimation(this, R.anim.fade_in_animation)
+    }
+    private val animFadeOut by lazy {
+        AnimationUtils.loadAnimation(
+            this,
+            R.anim.fade_out_animation
+        )
+    }
+    private val userEmail by lazy { loginInputEmailTxt.text.toString() }
+    private val userPassword by lazy { loginInputPasswordTxt.text.toString() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,15 +45,6 @@ class LoginActivity : AppCompatActivity() {
         // turning listeners on
         clickListeners()
 
-    }
-
-
-    private fun setScreenUI() {
-        window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
-        window.statusBarColor = Color.WHITE
-        window.navigationBarColor = Color.WHITE
-        animFadeIn = AnimationUtils.loadAnimation(this, R.anim.fade_in_animation)
-        animFadeOut = AnimationUtils.loadAnimation(this, R.anim.fade_out_animation)
     }
 
     private fun clickListeners() {
@@ -56,48 +59,21 @@ class LoginActivity : AppCompatActivity() {
         tvLoginOption.setOnClickListener { setLoginUi() }
     }
 
-    private fun setSignUpUI() {
-
-        btnloginEmailPassword.startAnimation(animFadeIn)
-        btnloginEmailPassword.visibility = View.INVISIBLE
-        tvSignUpOption.startAnimation(animFadeIn)
-        tvSignUpOption.visibility = View.INVISIBLE
-
-        btnSignUpEmailPassword.startAnimation(animFadeOut)
-        btnSignUpEmailPassword.visibility = View.VISIBLE
-        tvLoginOption.startAnimation(animFadeOut)
-        tvLoginOption.visibility = View.VISIBLE
-    }
-
-    private fun setLoginUi() {
-
-        btnSignUpEmailPassword.startAnimation(animFadeIn)
-        btnSignUpEmailPassword.visibility = View.INVISIBLE
-        tvLoginOption.startAnimation(animFadeIn)
-        tvLoginOption.visibility = View.INVISIBLE
-
-        btnloginEmailPassword.startAnimation(animFadeOut)
-        btnloginEmailPassword.visibility = View.VISIBLE
-        tvSignUpOption.startAnimation(animFadeOut)
-        tvSignUpOption.visibility = View.VISIBLE
-    }
-
     private fun signUpUser() {
         if (validateInput()) {
-            btnSignUpEmailPassword.startAnimation(animFadeIn)
-            btnSignUpEmailPassword.visibility = View.INVISIBLE
-            lottieAuthLoading.visibility = View.VISIBLE
-            authViewModel.createAccountWithEmailPassword(
-                loginInputEmailTxt.text.toString(),
-                loginInputEmailTxt.text.toString()
-            )
-            authViewModel.authLiveData.observe(
+            viewAnimation(btnSignUpEmailPassword, animFadeIn, false)
+            viewAnimation(lottieAuthLoading, null, true)
+            authViewModel.createAccountWithEmailPassword(userEmail, userPassword)
+            authViewModel.createAccountLiveData.observe(
                 this,
                 Observer {
                     when (it) {
                         1 -> goToMainActivity()
-                        2 -> showToast(this, "User already signed up")
-                        0 -> showToast(this, "Something went wrong. Check Network.")
+                        0 -> {
+                            showToast(this, "User already signed up")
+                            viewAnimation(btnSignUpEmailPassword, animFadeOut, true)
+                            viewAnimation(lottieAuthLoading, null, false)
+                        }
                     }
                 })
         }
@@ -105,18 +81,21 @@ class LoginActivity : AppCompatActivity() {
 
     private fun sendPasswordResetEmail() {
         if (validateInput()) {
-            authViewModel.sendPasswordResetEmail(
-                loginInputEmailTxt.text.toString()
-            )
-            authViewModel.authLiveData.observe(
+            networkFlag = true
+            authViewModel.sendPasswordResetEmail(userEmail)
+            authViewModel.passwordResetLiveData.observe(
                 this,
                 Observer {
                     if (it == 1) {
+                        networkFlag = false
                         showToast(
                             this,
                             "Password reset email is sent to ${loginInputEmailTxt.text.toString()}"
                         )
-                    } else showToast(this, "Invalid email id")
+                    } else {
+                        networkFlag = false
+                        showToast(this, "Invalid email id")
+                    }
                 }
             )
         } else showToast(this, "Email is Empty")
@@ -124,29 +103,26 @@ class LoginActivity : AppCompatActivity() {
 
     private fun loginUser() {
         if (validateInput()) {
-            btnloginEmailPassword.startAnimation(animFadeIn)
-            btnloginEmailPassword.visibility = View.INVISIBLE
-            lottieAuthLoading.visibility = View.VISIBLE
-            authViewModel.loginWithEmailPassword(
-                loginInputEmailTxt.text.toString(),
-                loginInputEmailTxt.text.toString()
-            )
-            authViewModel.authLiveData.observe(
+            networkFlag = true
+            viewAnimation(btnloginEmailPassword, animFadeIn, false)
+            viewAnimation(lottieAuthLoading, null, true)
+            authViewModel.loginWithEmailPassword(userEmail, userPassword)
+            authViewModel.loginLiveData.observe(
                 this,
                 Observer {
                     if (it == 1) {
                         // Successfully Logged in
+                        networkFlag = false
                         goToMainActivity()
                     } else if (it == 0) {
+                        networkFlag = false
                         showToast(this, "Something went wrong. Please retry.")
-                        btnloginEmailPassword.startAnimation(animFadeOut)
-                        btnloginEmailPassword.visibility = View.VISIBLE
-                        lottieAuthLoading.visibility = View.INVISIBLE
+                        viewAnimation(btnloginEmailPassword, animFadeOut, true)
+                        viewAnimation(lottieAuthLoading, null, false)
                     }
                 })
         }
     }
-
 
     private fun goToMainActivity() {
         startActivity(Intent(this@LoginActivity, MainActivity::class.java))
@@ -156,8 +132,6 @@ class LoginActivity : AppCompatActivity() {
         )
     }
 
-
-    // validate user input in text fields
     private fun validateInput(): Boolean {
         var valid = true
 
@@ -174,4 +148,41 @@ class LoginActivity : AppCompatActivity() {
         return valid
     }
 
+    private fun setScreenUI() {
+        window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+        window.statusBarColor = Color.WHITE
+        window.navigationBarColor = Color.WHITE
+    }
+
+    private fun setSignUpUI() {
+        if (networkFlag) {
+            showToast(this, "Have Patience")
+        } else {
+            viewAnimation(btnloginEmailPassword, animFadeIn, false)
+            viewAnimation(tvSignUpOption, animFadeIn, false)
+            viewAnimation(btnSignUpEmailPassword, animFadeOut, true)
+            viewAnimation(tvLoginOption, animFadeOut, true)
+        }
+    }
+
+    private fun setLoginUi() {
+        if (networkFlag) {
+            showToast(this, "Have Patience")
+        } else {
+            viewAnimation(btnSignUpEmailPassword, animFadeIn, false)
+            viewAnimation(tvLoginOption, animFadeIn, false)
+            viewAnimation(btnloginEmailPassword, animFadeOut, true)
+            viewAnimation(tvSignUpOption, animFadeOut, true)
+        }
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        finishAffinity()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        cache.clearCache(this)
+    }
 }
