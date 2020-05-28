@@ -59,10 +59,12 @@ class TodoListAdapter :
             // Onclick item
             clItemListContainer.setOnClickListener {
                 if (rbTodoItemStatus.isChecked) {
+                    clItemListContainer.alpha = 1F
                     rbTodoItemStatus.isChecked = false
                     removeStrikeText(tvTodoListItem)
                     removeStrikeText(tvTodoListItemDesc)
                 } else if (!rbTodoItemStatus.isChecked) {
+                    clItemListContainer.alpha = 0.5F
                     rbTodoItemStatus.isChecked = true
                     strikeText(tvTodoListItem)
                     strikeText(tvTodoListItemDesc)
