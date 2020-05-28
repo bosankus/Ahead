@@ -11,6 +11,8 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import tech.androidplay.sonali.todo.R
 import tech.androidplay.sonali.todo.data.model.Todo
+import tech.androidplay.sonali.todo.utils.UIHelper.removeStrikeText
+import tech.androidplay.sonali.todo.utils.UIHelper.strikeText
 
 class TodoListAdapter :
     RecyclerView.Adapter<TodoListAdapter.TodoListViewHolder>() {
@@ -69,17 +71,4 @@ class TodoListAdapter :
         }
     }
 
-    fun strikeText(textView: TextView) {
-        val text = textView.text.toString()
-        val spannable = SpannableString(text)
-        spannable.setSpan(StrikethroughSpan(), 0, text.length, 0)
-        textView.text = spannable
-    }
-
-    fun removeStrikeText(textView: TextView) {
-        val text = textView.text.toString()
-        val spannable = SpannableString(text)
-        spannable.removeSpan(StrikethroughSpan())
-        textView.text = spannable
-    }
 }

@@ -2,9 +2,12 @@ package tech.androidplay.sonali.todo.utils
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.text.SpannableString
+import android.text.style.StrikethroughSpan
 import android.util.Log
 import android.view.View
 import android.view.animation.Animation
+import android.widget.TextView
 import android.widget.Toast
 import java.text.SimpleDateFormat
 import java.util.*
@@ -39,6 +42,20 @@ object UIHelper {
         if (animation != null) view.startAnimation(animation)
         if (visibility) view.visibility = View.VISIBLE
         else view.visibility = View.INVISIBLE
+    }
+
+    fun strikeText(textView: TextView) {
+        val text = textView.text.toString()
+        val spannable = SpannableString(text)
+        spannable.setSpan(StrikethroughSpan(), 0, text.length, 0)
+        textView.text = spannable
+    }
+
+    fun removeStrikeText(textView: TextView) {
+        val text = textView.text.toString()
+        val spannable = SpannableString(text)
+        spannable.removeSpan(StrikethroughSpan())
+        textView.text = spannable
     }
 
 }
