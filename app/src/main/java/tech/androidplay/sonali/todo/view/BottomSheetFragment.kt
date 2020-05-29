@@ -161,7 +161,7 @@ class BottomSheetFragment : BottomSheetDialogFragment() {
     }
 
     private fun createTask() {
-        taskViewModel.createTaskInFirestore(
+        taskViewModel.createTask(
             tvTaskInput.text.toString(),
             tvSelectDateTimeDesc.text.toString()
         )

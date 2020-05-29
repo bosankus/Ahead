@@ -4,10 +4,10 @@ import android.annotation.SuppressLint
 import androidx.lifecycle.MutableLiveData
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.CollectionReference
+import com.google.firebase.firestore.DocumentChange
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import tech.androidplay.sonali.todo.data.model.Todo
-import tech.androidplay.sonali.todo.data.model.User
 import tech.androidplay.sonali.todo.utils.UIHelper.getCurrentTimestamp
 import tech.androidplay.sonali.todo.utils.UIHelper.logMessage
 
@@ -18,14 +18,13 @@ import tech.androidplay.sonali.todo.utils.UIHelper.logMessage
  */
 class TaskRepository {
 
-    // accessing firestore
     private var firestoreDb = FirebaseFirestore.getInstance()
     private var userId: String = FirebaseAuth.getInstance().currentUser?.uid.toString()
-
-    // reference to task collection
     private var taskListRef: CollectionReference = firestoreDb.collection("Tasks")
-
+    private var taskStatusLiveData: MutableLiveData<Todo> = MutableLiveData()
+    private val todoList = mutableListOf<Todo>()
     private var todo: Todo = Todo()
+    var fetchedTodoLiveData = MutableLiveData<MutableList<Todo>>()
 
     /**
      * Firestore Database
@@ -44,30 +43,18 @@ class TaskRepository {
             "isCompleted" to false
         )
 
-        taskListRef.add(task)
-            .addOnSuccessListener {
-                todo = Todo(userId, todoBody, todoDesc)
-                todo.isEntered = true
-                createTaskLiveData.postValue(todo)
-            }.addOnFailureListener {
-                logMessage("Fail")
-            }
+        taskListRef.add(task).addOnSuccessListener {
+            todo = Todo(userId, todoBody, todoDesc)
+            todo.isEntered = true
+            createTaskLiveData.postValue(todo)
+        }.addOnFailureListener {
+            logMessage("Task creation failed: ${it.message}")
+        }
         return createTaskLiveData
     }
 
 
-    fun completeTask(taskId: String): MutableLiveData<Boolean> {
-        val completeTaskLiveData: MutableLiveData<Boolean> = MutableLiveData()
-        val task = hashMapOf("isCompleted" to true)
-        taskListRef.add(task)
-
-        return completeTaskLiveData
-    }
-
-
     fun fetchTasks(): MutableLiveData<MutableList<Todo>> {
-        val fetchedTodoLiveData = MutableLiveData<MutableList<Todo>>()
-        val todoList = mutableListOf<Todo>()
         val query: Query = taskListRef
             .whereEqualTo("id", userId)
             .orderBy("todoCreationTimeStamp", Query.Direction.DESCENDING)
@@ -79,10 +66,15 @@ class TaskRepository {
             if (snapshot != null) {
                 val snapshotList = snapshot.documents
                 for (documentSnapshot in snapshotList) {
-                    val todoId = documentSnapshot.id
-                    val todoBody = documentSnapshot["todoBody"].toString()
-                    val todoDesc = documentSnapshot["todoDesc"].toString()
-                    val todoItems = Todo(todoId, todoBody, todoDesc)
+                    val todoItems =
+                        Todo(
+                            documentSnapshot.id,
+                            documentSnapshot["todoBody"].toString(),
+                            documentSnapshot["todoDesc"].toString(),
+                            documentSnapshot["todoCreationTimeStamp"].toString(),
+                            documentSnapshot["isEntered"] as Boolean,
+                            documentSnapshot["isCompleted"] as Boolean
+                        )
                     todoList.add(0, todoItems)
                 }
                 fetchedTodoLiveData.value = todoList
@@ -91,6 +83,37 @@ class TaskRepository {
             }
         }
         return fetchedTodoLiveData
+    }
+
+
+    fun fetchTaskStatus(): MutableLiveData<Todo> {
+        taskListRef
+            .addSnapshotListener { querySnapshot, exception ->
+                if (exception != null) {
+                    logMessage(exception.message.toString())
+                }
+                if (querySnapshot != null) {
+                    for (documentChangeSnapshot in querySnapshot.documentChanges) {
+                        val todoItemChange =
+                            documentChangeSnapshot.document
+                        todoList.clear()
+                        if (documentChangeSnapshot.type == DocumentChange.Type.MODIFIED) {
+                            val todoItems =
+                                Todo(
+                                    todoItemChange.id,
+                                    todoItemChange["todoBody"].toString(),
+                                    todoItemChange["todoDesc"].toString(),
+                                    todoItemChange["todoCreationTimeStamp"] as String,
+                                    todoItemChange["isEntered"] as Boolean,
+                                    todoItemChange["isCompleted"] as Boolean
+                                )
+                            todoList.add(todoItems)
+                            taskStatusLiveData.value = todoItems
+                        }
+                    }
+                }
+            }
+        return taskStatusLiveData
     }
 
 }

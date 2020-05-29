@@ -4,7 +4,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import tech.androidplay.sonali.todo.data.model.Todo
 import tech.androidplay.sonali.todo.data.repository.TaskRepository
@@ -17,9 +16,10 @@ import tech.androidplay.sonali.todo.data.repository.TaskRepository
 class TaskViewModel(private val taskRepository: TaskRepository) : ViewModel() {
 
     lateinit var createdTaskLiveData: LiveData<Todo>
-    lateinit var fetchedTaskLiveData: MutableLiveData<MutableList<Todo>>
+    var fetchedTaskLiveData: MutableLiveData<MutableList<Todo>> = MutableLiveData()
+    var fetchTaskStatusLiveData: MutableLiveData<Todo> = MutableLiveData()
 
-    fun createTaskInFirestore(todoName: String, todoDesc: String) {
+    fun createTask(todoName: String, todoDesc: String) {
         viewModelScope.launch {
             createdTaskLiveData = taskRepository.createNewTask(todoName, todoDesc)
         }
@@ -30,9 +30,9 @@ class TaskViewModel(private val taskRepository: TaskRepository) : ViewModel() {
         return fetchedTaskLiveData
     }
 
-    override fun onCleared() {
-        super.onCleared()
-        viewModelScope.cancel()
+    fun fetchTaskStatus(): MutableLiveData<Todo> {
+        fetchTaskStatusLiveData = taskRepository.fetchTaskStatus()
+        return fetchTaskStatusLiveData
     }
 
 }
