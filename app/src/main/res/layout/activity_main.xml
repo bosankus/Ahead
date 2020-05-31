@@ -69,7 +69,7 @@
         <include
             android:id="@+id/frameNoTodo"
             layout="@layout/frame_no_todo"
-            android:visibility="gone"/>
+            android:visibility="invisible" />
 
         <include
             android:id="@+id/shimmerLayout"

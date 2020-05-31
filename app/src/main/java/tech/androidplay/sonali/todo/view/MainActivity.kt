@@ -118,24 +118,14 @@ class MainActivity : AppCompatActivity() {
         )
     }
 
-//    private fun loadChangedData() {
-//        taskViewModel.fetchTaskStatus()
-//        taskViewModel.fetchTaskStatusLiveData.observe(this, Observer {
-//            if (it != null) {
-//                todoListAdapter.setListItemToPosition(it, 0)
-//            }
-//        })
-//    }
-
     @SuppressLint("SetTextI18n")
     private fun showRecyclerView() {
 
         // Recyclerview settings
-        rvTodoList.isNestedScrollingEnabled = false
         rvTodoList.adapter = todoListAdapter
 
         // Shimmer effect untill data loads
-        frameNoTodo.visibility = View.GONE
+        frameNoTodo.visibility = View.INVISIBLE
         shimmerFrameLayout.visibility = View.GONE
         rvTodoList.visibility = View.VISIBLE
 

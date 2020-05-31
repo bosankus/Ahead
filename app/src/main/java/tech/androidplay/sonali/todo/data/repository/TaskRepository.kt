@@ -44,6 +44,15 @@ class TaskRepository {
         return createTaskLiveData
     }
 
+    fun completeTask(taskId: String): MutableLiveData<Boolean> {
+        val completeTaskLiveData: MutableLiveData<Boolean> = MutableLiveData()
+        taskListRef.document(taskId)
+            .update("isCompleted", true)
+            .addOnSuccessListener { completeTaskLiveData.value = true }
+            .addOnCanceledListener { completeTaskLiveData.value = false }
+        return completeTaskLiveData
+    }
+
 
     fun fetchTasks(): MutableLiveData<MutableList<Todo>> {
         val fetchedTodoLiveData = MutableLiveData<MutableList<Todo>>()

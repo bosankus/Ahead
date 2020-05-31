@@ -2,7 +2,9 @@ package tech.androidplay.sonali.todo.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
+import tech.androidplay.sonali.todo.R
 import tech.androidplay.sonali.todo.data.model.Todo
 import tech.androidplay.sonali.todo.databinding.ActivityMainTodoListBinding
 
@@ -16,9 +18,8 @@ class TodoListAdapter :
         notifyDataSetChanged()
     }
 
-    fun setListItemToPosition(todoList: Todo, position: Int) {
-        this.todoList.add(position, todoList)
-        notifyItemChanged(position)
+    fun getTodoForPosition(position: Int): Todo {
+        return todoList[position]
     }
 
 
@@ -27,7 +28,8 @@ class TodoListAdapter :
         viewType: Int
     ): TodoListAdapter.TodoListViewHolder {
         val inflater = LayoutInflater.from(parent.context)
-        val binding = ActivityMainTodoListBinding.inflate(inflater)
+        val binding: ActivityMainTodoListBinding =
+            DataBindingUtil.inflate(inflater, R.layout.activity_main_todo_list, parent, false)
         return TodoListViewHolder(binding)
     }
 

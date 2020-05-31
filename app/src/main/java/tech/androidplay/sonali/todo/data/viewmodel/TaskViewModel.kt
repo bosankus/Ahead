@@ -13,10 +13,16 @@ import tech.androidplay.sonali.todo.data.repository.TaskRepository
 class TaskViewModel(private val taskRepository: TaskRepository) : ViewModel() {
 
     var createdTaskLiveData: MutableLiveData<Todo> = MutableLiveData()
+    var completeTaskLiveData: MutableLiveData<Boolean> = MutableLiveData()
     var fetchedTaskLiveData: MutableLiveData<MutableList<Todo>> = MutableLiveData()
 
     fun createTask(todoName: String, todoDesc: String) {
         createdTaskLiveData = taskRepository.createNewTask(todoName, todoDesc)
+    }
+
+    fun completeTask(taskId: String): MutableLiveData<Boolean> {
+        completeTaskLiveData = taskRepository.completeTask(taskId)
+        return completeTaskLiveData
     }
 
     fun fetchTask(): MutableLiveData<MutableList<Todo>> {
