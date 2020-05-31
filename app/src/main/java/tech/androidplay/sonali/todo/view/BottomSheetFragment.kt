@@ -161,7 +161,7 @@ class BottomSheetFragment : BottomSheetDialogFragment() {
     }
 
     private fun createTask() {
-        taskViewModel.createTaskInFirestore(
+        taskViewModel.createTask(
             tvTaskInput.text.toString(),
             tvSelectDateTimeDesc.text.toString()
         )
@@ -177,7 +177,6 @@ class BottomSheetFragment : BottomSheetDialogFragment() {
 
     override fun onDetach() {
         super.onDetach()
-        // Cancelling all running coroutines
         job.cancel()
     }
 }

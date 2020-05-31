@@ -9,11 +9,10 @@ import java.io.Serializable
  */
 
 data class Todo(
-    var todoId: String = "",
+    var id: String = "",
     var todoBody: String = "",
     var todoDesc: String = "",
     var todoCreationTimeStamp: String = "",
-    var isEntered: Boolean = false,
-    var isCompleted: Boolean = false,
-    var isfetched: Boolean = false
+    @JvmField var isEntered: Boolean = false,
+    @JvmField var isCompleted: Boolean = false
 ) : Serializable

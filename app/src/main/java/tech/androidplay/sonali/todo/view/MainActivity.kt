@@ -3,7 +3,6 @@ package tech.androidplay.sonali.todo.view
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.Color
-import android.graphics.Paint
 import android.os.Bundle
 import android.view.View
 import android.view.animation.Animation
@@ -13,7 +12,6 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.activity_main_todo_list.*
 import kotlinx.android.synthetic.main.frame_today_todo_header.*
 import kotlinx.android.synthetic.main.shimmer_layout.*
 import org.koin.android.ext.android.inject
@@ -48,14 +46,14 @@ class MainActivity : AppCompatActivity() {
         // load create task button animations
         initiateFABAnimation()
 
-        // loading all task list
-        loadData()
-
+//        loadChangedData()
     }
 
     override fun onStart() {
         super.onStart()
         shimmerFrameLayout.startShimmer()
+        // loading all task list
+        loadData()
     }
 
     override fun onResume() {
@@ -79,7 +77,7 @@ class MainActivity : AppCompatActivity() {
         window.navigationBarColor = Color.WHITE
         tvTodayDate.text = getCurrentDate()
         rvTodoList.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, true)
-        rvTodoList.setHasFixedSize(true)
+        rvTodoList.setHasFixedSize(false)
         rvTodoList.isNestedScrollingEnabled = false
     }
 
@@ -101,18 +99,6 @@ class MainActivity : AppCompatActivity() {
             val bottomSheetFragment = BottomSheetFragment()
             bottomSheetFragment.show(supportFragmentManager, bottomSheetFragment.tag)
         }
-
-        // TODO: Not working
-        rbTodoItemStatus.setOnCheckedChangeListener { buttonView, isChecked ->
-            if (isChecked) {
-                tvTodoListItem.paintFlags = Paint.STRIKE_THRU_TEXT_FLAG
-                tvTodoListItemDesc.paintFlags = Paint.STRIKE_THRU_TEXT_FLAG
-            }
-            if (!isChecked) {
-                tvTodoListItem.paintFlags = 0
-                tvTodoListItemDesc.paintFlags = 0
-            }
-        }
     }
 
 
@@ -120,7 +106,7 @@ class MainActivity : AppCompatActivity() {
         taskViewModel.fetchTask()
         taskViewModel.fetchedTaskLiveData.observe(
             this, Observer {
-                if (it.isNotEmpty()) {
+                if (it != null) {
                     todoListAdapter.setListData(it)
                     showRecyclerView()
                 } else {
@@ -132,12 +118,21 @@ class MainActivity : AppCompatActivity() {
         )
     }
 
+//    private fun loadChangedData() {
+//        taskViewModel.fetchTaskStatus()
+//        taskViewModel.fetchTaskStatusLiveData.observe(this, Observer {
+//            if (it != null) {
+//                todoListAdapter.setListItemToPosition(it, 0)
+//            }
+//        })
+//    }
+
     @SuppressLint("SetTextI18n")
     private fun showRecyclerView() {
 
         // Recyclerview settings
+        rvTodoList.isNestedScrollingEnabled = false
         rvTodoList.adapter = todoListAdapter
-        todoListAdapter.notifyDataSetChanged()
 
         // Shimmer effect untill data loads
         frameNoTodo.visibility = View.GONE
@@ -147,5 +142,7 @@ class MainActivity : AppCompatActivity() {
         // Setting number of adapter item count
         tvTodayCount.text = todoListAdapter.itemCount.toString() + " items"
     }
+
+
 }
 
