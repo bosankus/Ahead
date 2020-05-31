@@ -1,10 +1,7 @@
 package tech.androidplay.sonali.todo.data.viewmodel
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.launch
 import tech.androidplay.sonali.todo.data.model.Todo
 import tech.androidplay.sonali.todo.data.repository.TaskRepository
 
@@ -15,24 +12,15 @@ import tech.androidplay.sonali.todo.data.repository.TaskRepository
  */
 class TaskViewModel(private val taskRepository: TaskRepository) : ViewModel() {
 
-    lateinit var createdTaskLiveData: LiveData<Todo>
+    var createdTaskLiveData: MutableLiveData<Todo> = MutableLiveData()
     var fetchedTaskLiveData: MutableLiveData<MutableList<Todo>> = MutableLiveData()
-    var fetchTaskStatusLiveData: MutableLiveData<Todo> = MutableLiveData()
 
     fun createTask(todoName: String, todoDesc: String) {
-        viewModelScope.launch {
-            createdTaskLiveData = taskRepository.createNewTask(todoName, todoDesc)
-        }
+        createdTaskLiveData = taskRepository.createNewTask(todoName, todoDesc)
     }
 
     fun fetchTask(): MutableLiveData<MutableList<Todo>> {
         fetchedTaskLiveData = taskRepository.fetchTasks()
         return fetchedTaskLiveData
     }
-
-    fun fetchTaskStatus(): MutableLiveData<Todo> {
-        fetchTaskStatusLiveData = taskRepository.fetchTaskStatus()
-        return fetchTaskStatusLiveData
-    }
-
 }

@@ -12,7 +12,7 @@ class TodoListAdapter :
     private var todoList = mutableListOf<Todo>()
 
     fun setListData(data: MutableList<Todo>) {
-        todoList = ArrayList(data)
+        todoList = data
         notifyDataSetChanged()
     }
 
@@ -20,6 +20,7 @@ class TodoListAdapter :
         this.todoList.add(position, todoList)
         notifyItemChanged(position)
     }
+
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -31,6 +32,7 @@ class TodoListAdapter :
     }
 
     override fun onBindViewHolder(holder: TodoListAdapter.TodoListViewHolder, position: Int) {
+
         holder.binItems(todoList[position])
     }
 

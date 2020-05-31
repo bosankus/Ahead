@@ -46,15 +46,14 @@ class MainActivity : AppCompatActivity() {
         // load create task button animations
         initiateFABAnimation()
 
-        // loading all task list
-        loadData()
-
 //        loadChangedData()
     }
 
     override fun onStart() {
         super.onStart()
         shimmerFrameLayout.startShimmer()
+        // loading all task list
+        loadData()
     }
 
     override fun onResume() {

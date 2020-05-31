@@ -13,6 +13,6 @@ data class Todo(
     var todoBody: String = "",
     var todoDesc: String = "",
     var todoCreationTimeStamp: String = "",
-    var isEntered: Boolean = false,
-    var isCompleted: Boolean = false
+    @JvmField var isEntered: Boolean = false,
+    @JvmField var isCompleted: Boolean = false
 ) : Serializable

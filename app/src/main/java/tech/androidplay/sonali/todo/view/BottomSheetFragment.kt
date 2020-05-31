@@ -177,7 +177,6 @@ class BottomSheetFragment : BottomSheetDialogFragment() {
 
     override fun onDetach() {
         super.onDetach()
-        // Cancelling all running coroutines
         job.cancel()
     }
 }
