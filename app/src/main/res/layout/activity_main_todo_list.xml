@@ -6,6 +6,10 @@
     <data>
 
         <variable
+            name="taskviewmodel"
+            type="tech.androidplay.sonali.todo.data.viewmodel.TaskViewModel" />
+
+        <variable
             name="todo"
             type="tech.androidplay.sonali.todo.data.model.Todo" />
     </data>
@@ -21,6 +25,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="20sp"
+            android:clickable="true"
+            android:focusable="true"
             app:set_alpha="@{todo.isCompleted}"
             tools:ignore="UselessParent">
 

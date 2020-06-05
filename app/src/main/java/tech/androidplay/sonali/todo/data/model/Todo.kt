@@ -1,5 +1,6 @@
 package tech.androidplay.sonali.todo.data.model
 
+import com.google.firebase.firestore.DocumentId
 import java.io.Serializable
 
 /**
@@ -10,6 +11,7 @@ import java.io.Serializable
 
 data class Todo(
     var id: String = "",
+    @DocumentId var docId: String = "",
     var todoBody: String = "",
     var todoDesc: String = "",
     var todoCreationTimeStamp: String = "",

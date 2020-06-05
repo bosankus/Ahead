@@ -24,13 +24,13 @@ class MainActivity : AppCompatActivity() {
 
     // Task View Model
     private val taskViewModel by inject<TaskViewModel>()
+    private val todoListAdapter by inject<TodoListAdapter>()
 
     // Firebase Auth
     private val firebaseAuth: FirebaseAuth = FirebaseAuth.getInstance()
 
     private lateinit var animation: Animation
 
-    private val todoListAdapter: TodoListAdapter by lazy { TodoListAdapter() }
 
     @SuppressLint("SimpleDateFormat")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -78,7 +78,6 @@ class MainActivity : AppCompatActivity() {
         tvTodayDate.text = getCurrentDate()
         rvTodoList.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, true)
         rvTodoList.setHasFixedSize(false)
-        rvTodoList.isNestedScrollingEnabled = false
     }
 
     private fun initiateFABAnimation() {
@@ -118,24 +117,14 @@ class MainActivity : AppCompatActivity() {
         )
     }
 
-//    private fun loadChangedData() {
-//        taskViewModel.fetchTaskStatus()
-//        taskViewModel.fetchTaskStatusLiveData.observe(this, Observer {
-//            if (it != null) {
-//                todoListAdapter.setListItemToPosition(it, 0)
-//            }
-//        })
-//    }
-
     @SuppressLint("SetTextI18n")
     private fun showRecyclerView() {
 
         // Recyclerview settings
-        rvTodoList.isNestedScrollingEnabled = false
         rvTodoList.adapter = todoListAdapter
 
-        // Shimmer effect untill data loads
-        frameNoTodo.visibility = View.GONE
+        // Shimmer effect until data loads
+        frameNoTodo.visibility = View.INVISIBLE
         shimmerFrameLayout.visibility = View.GONE
         rvTodoList.visibility = View.VISIBLE
 

@@ -2,6 +2,7 @@ package tech.androidplay.sonali.todo.di
 
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
+import tech.androidplay.sonali.todo.adapter.TodoListAdapter
 import tech.androidplay.sonali.todo.data.repository.AuthRepository
 import tech.androidplay.sonali.todo.data.repository.TaskRepository
 import tech.androidplay.sonali.todo.data.viewmodel.AuthViewModel
@@ -19,6 +20,6 @@ val appModule = module {
     viewModel { AuthViewModel(get()) }
     factory { TaskRepository() }
     viewModel { TaskViewModel(get()) }
-
+    factory { TodoListAdapter(get()) }
     factory { CacheManager() }
 }
