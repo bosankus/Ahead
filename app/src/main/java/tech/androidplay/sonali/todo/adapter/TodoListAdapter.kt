@@ -6,9 +6,10 @@ import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import tech.androidplay.sonali.todo.R
 import tech.androidplay.sonali.todo.data.model.Todo
+import tech.androidplay.sonali.todo.data.viewmodel.TaskViewModel
 import tech.androidplay.sonali.todo.databinding.ActivityMainTodoListBinding
 
-class TodoListAdapter :
+class TodoListAdapter(val viewModel: TaskViewModel) :
     RecyclerView.Adapter<TodoListAdapter.TodoListViewHolder>() {
 
     private var todoList = mutableListOf<Todo>()
@@ -17,11 +18,6 @@ class TodoListAdapter :
         todoList = data
         notifyDataSetChanged()
     }
-
-    fun getTodoForPosition(position: Int): Todo {
-        return todoList[position]
-    }
-
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -34,7 +30,6 @@ class TodoListAdapter :
     }
 
     override fun onBindViewHolder(holder: TodoListAdapter.TodoListViewHolder, position: Int) {
-
         holder.binItems(todoList[position])
     }
 
@@ -44,14 +39,22 @@ class TodoListAdapter :
         } else 0
     }
 
-    inner class TodoListViewHolder(val binding: ActivityMainTodoListBinding) :
+    inner class TodoListViewHolder(private val binding: ActivityMainTodoListBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
         fun binItems(todoList: Todo) {
             binding.todo = todoList
+            binding.clItemListContainer.setOnClickListener {
+                if (todoList.isCompleted)
+                    completeTask(todoList.docId, false)
+                else completeTask(todoList.docId, true)
+            }
             binding.executePendingBindings()
         }
+    }
 
+    fun completeTask(docId: String, status: Boolean) {
+        viewModel.completeTask(docId, status)
     }
 }
 

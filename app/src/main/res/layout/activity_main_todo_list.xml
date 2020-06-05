@@ -25,7 +25,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="20sp"
-            android:onClick="@{() -> taskviewmodel.completeTask(todo.docId)}"
+            android:clickable="true"
+            android:focusable="true"
             app:set_alpha="@{todo.isCompleted}"
             tools:ignore="UselessParent">
 

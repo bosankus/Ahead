@@ -3,6 +3,7 @@ package tech.androidplay.sonali.todo.data.viewmodel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.launch
 import tech.androidplay.sonali.todo.data.repository.AuthRepository
 
@@ -13,9 +14,12 @@ import tech.androidplay.sonali.todo.data.repository.AuthRepository
  */
 class AuthViewModel(private val authRepository: AuthRepository) : ViewModel() {
 
+    private val firebaseAuth: FirebaseAuth = FirebaseAuth.getInstance()
     var createAccountLiveData: MutableLiveData<Int> = MutableLiveData()
     var loginLiveData: MutableLiveData<Int> = MutableLiveData()
     var passwordResetLiveData: MutableLiveData<Int> = MutableLiveData()
+    var state: Int = 0
+
 
     fun createAccountWithEmailPassword(email: String, password: String) {
         viewModelScope.launch {
@@ -34,5 +38,10 @@ class AuthViewModel(private val authRepository: AuthRepository) : ViewModel() {
         viewModelScope.launch {
             passwordResetLiveData = authRepository.sendPasswordResetEmail(email)
         }
+    }
+
+    fun signOut() {
+        firebaseAuth.signOut()
+        state = 1
     }
 }

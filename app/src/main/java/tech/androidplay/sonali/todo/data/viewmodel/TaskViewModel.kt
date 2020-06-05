@@ -20,8 +20,8 @@ class TaskViewModel(private val taskRepository: TaskRepository) : ViewModel() {
         createdTaskLiveData = taskRepository.createNewTask(todoName, todoDesc)
     }
 
-    fun completeTask(taskId: String): MutableLiveData<Boolean> {
-        completeTaskLiveData = taskRepository.completeTask(taskId)
+    fun completeTask(taskId: String, status: Boolean): MutableLiveData<Boolean> {
+        completeTaskLiveData = taskRepository.completeTask(taskId, status)
         return completeTaskLiveData
     }
 
