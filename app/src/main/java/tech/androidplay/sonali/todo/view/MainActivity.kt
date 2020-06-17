@@ -1,6 +1,7 @@
 package tech.androidplay.sonali.todo.view
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
@@ -18,13 +19,18 @@ import org.koin.android.ext.android.inject
 import tech.androidplay.sonali.todo.R
 import tech.androidplay.sonali.todo.adapter.TodoListAdapter
 import tech.androidplay.sonali.todo.data.viewmodel.TaskViewModel
+import tech.androidplay.sonali.todo.network.ImageManager.parseData
+import tech.androidplay.sonali.todo.network.ImageManager.selectImage
+import tech.androidplay.sonali.todo.utils.PermissionManager
 import tech.androidplay.sonali.todo.utils.UIHelper.getCurrentDate
+import tech.androidplay.sonali.todo.utils.UIHelper.logMessage
 
 class MainActivity : AppCompatActivity() {
 
     // Task View Model
     private val taskViewModel by inject<TaskViewModel>()
     private val todoListAdapter by inject<TodoListAdapter>()
+    private val permissionManager by inject<PermissionManager>()
 
     // Firebase Auth
     private val firebaseAuth: FirebaseAuth = FirebaseAuth.getInstance()
@@ -72,7 +78,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setScreenUI() {
-        window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
         window.statusBarColor = Color.WHITE
         window.navigationBarColor = Color.WHITE
         tvTodayDate.text = getCurrentDate()
@@ -88,16 +93,19 @@ class MainActivity : AppCompatActivity() {
     @SuppressLint("InflateParams")
     private fun clickListeners() {
 
-        imgMenu.setOnClickListener {
+        /*imgMenu.setOnClickListener {
             firebaseAuth.signOut()
             startActivity(Intent(this@MainActivity, SplashActivity::class.java))
             overridePendingTransition(R.anim.fade_out_animation, R.anim.fade_in_animation)
-        }
+        }*/
+
+        imgMenu.setOnClickListener { selectImage(this) }
 
         efabAddTask.setOnClickListener {
             val bottomSheetFragment = BottomSheetFragment()
             bottomSheetFragment.show(supportFragmentManager, bottomSheetFragment.tag)
         }
+
     }
 
 
@@ -133,5 +141,23 @@ class MainActivity : AppCompatActivity() {
     }
 
 
+    @SuppressLint("Recycle")
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (resultCode == Activity.RESULT_OK) {
+            imgMenu.setImageURI(data?.data)
+            taskViewModel.uploadImage("36294", "DLback", parseData(data))//36294
+            observe(taskViewModel)
+        } else if (resultCode != Activity.RESULT_CANCELED)
+            logMessage("Image picking cancelled")
+        super.onActivityResult(requestCode, resultCode, data)
+    }
+
+    private fun observe(taskViewModel: TaskViewModel) {
+        taskViewModel.uploadImageLiveData.observe(this, Observer {
+            if (it != null) {
+                logMessage("Retrofit Response: $it")
+            }
+        })
+    }
 }
 

@@ -7,6 +7,10 @@ import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import tech.androidplay.sonali.todo.data.model.Todo
+import tech.androidplay.sonali.todo.network.ApiClient.retrofit
+import tech.androidplay.sonali.todo.network.model.Model
+import tech.androidplay.sonali.todo.utils.RequestBodyParser.parseImage
+import tech.androidplay.sonali.todo.utils.RequestBodyParser.parseText
 import tech.androidplay.sonali.todo.utils.UIHelper.getCurrentTimestamp
 import tech.androidplay.sonali.todo.utils.UIHelper.logMessage
 
@@ -15,7 +19,8 @@ import tech.androidplay.sonali.todo.utils.UIHelper.logMessage
  * Author: Ankush
  * On: 5/6/2020, 4:54 AM
  */
-class TaskRepository {
+
+class TaskRepository() {
 
     private var userId: String = FirebaseAuth.getInstance().currentUser?.uid.toString()
     private var taskListRef: CollectionReference =
@@ -78,6 +83,15 @@ class TaskRepository {
             }
         }
         return fetchedTodoLiveData
+    }
+
+    suspend fun uploadImage(userId: String, key: String, uri: String): Model {
+        return retrofit.uploadImage(
+            parseText(userId),
+            parseText(key),
+            parseText(""),
+            parseImage(uri)
+        )
     }
 }
 
