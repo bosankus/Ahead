@@ -23,8 +23,3 @@ fun strikeTask(textView: TextView, status: Boolean) {
     if (status) strikeText(textView)
     else removeStrikeText(textView)
 }
-
-//@BindingAdapter("sign_out")
-//fun logoutTask(view: ImageView) {
-//    view.context.startActivity(Intent(view.context, SplashActivity::class.java))
-//}

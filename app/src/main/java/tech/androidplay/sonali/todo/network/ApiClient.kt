@@ -27,3 +27,7 @@ object ApiClient {
         .client(okHttp.build())
         .build().create(ApiNetwork::class.java)
 }
+
+enum class JsonParser {
+    MOCHI, GSON
+}

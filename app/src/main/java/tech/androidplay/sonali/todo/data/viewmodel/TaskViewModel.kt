@@ -5,10 +5,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.runBlocking
 import tech.androidplay.sonali.todo.data.model.Todo
 import tech.androidplay.sonali.todo.data.repository.TaskRepository
-import tech.androidplay.sonali.todo.network.model.Model
 
 /**
  * Created by Androidplay
@@ -21,14 +20,9 @@ class TaskViewModel(private val taskRepository: TaskRepository) : ViewModel() {
     var completeTaskLiveData: MutableLiveData<Boolean> = MutableLiveData()
     var fetchedTaskLiveData: MutableLiveData<MutableList<Todo>> = MutableLiveData()
 
-    var uploadImageLiveData: MutableLiveData<Model> = MutableLiveData()
-
     fun uploadImage(userId: String, key: String, uri: String) {
         viewModelScope.launch(Dispatchers.Default) {
-            val result = taskRepository.uploadImage(userId, key, uri)
-            withContext(Dispatchers.Main) {
-                uploadImageLiveData.value = result
-            }
+            taskRepository.uploadImage(userId, key, uri)
         }
     }
 

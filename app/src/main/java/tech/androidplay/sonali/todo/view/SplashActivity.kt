@@ -5,6 +5,7 @@ import android.graphics.Color
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.view.View
+import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
 import tech.androidplay.sonali.todo.R
@@ -17,13 +18,18 @@ class SplashActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)
 
+        firebaseAuth = FirebaseAuth.getInstance()
+
+        // Setting screen UI elements
+        setScreenUI()
+
+    }
+
+    private fun setScreenUI() {
         // enable white status bar with black icons
         window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
         window.statusBarColor = Color.WHITE
         window.navigationBarColor = Color.WHITE
-
-        firebaseAuth = FirebaseAuth.getInstance()
-
     }
 
     override fun onWindowFocusChanged(hasFocus: Boolean) {
@@ -45,11 +51,6 @@ class SplashActivity : AppCompatActivity() {
             }
         }
         timer.start()
-
-//        // TODO: Comment during release
-//        if (firebaseAuth.currentUser != null) {
-//            goToMainActivity()
-//        } else goToLoginActivity()
     }
 
     private fun goToMainActivity() {

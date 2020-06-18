@@ -68,6 +68,7 @@ class TaskRepository() {
         query.addSnapshotListener { snapshot, exception ->
             if (exception != null) {
                 logMessage(exception.message.toString())
+                fetchedTodoLiveData.value = null
                 return@addSnapshotListener
             }
             if (snapshot != null) {
@@ -79,6 +80,7 @@ class TaskRepository() {
                 }
                 fetchedTodoLiveData.value = todoList
             } else {
+                fetchedTodoLiveData.value = null
                 logMessage("No Internet") // not finalised
             }
         }

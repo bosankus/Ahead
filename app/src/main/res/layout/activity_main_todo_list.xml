@@ -24,7 +24,7 @@
             android:id="@+id/clItemListContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="20sp"
+            android:layout_marginBottom="15sp"
             android:clickable="true"
             android:focusable="true"
             app:set_alpha="@{todo.isCompleted}"

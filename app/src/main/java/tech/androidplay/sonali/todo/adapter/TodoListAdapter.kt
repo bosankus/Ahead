@@ -9,14 +9,15 @@ import tech.androidplay.sonali.todo.data.model.Todo
 import tech.androidplay.sonali.todo.data.viewmodel.TaskViewModel
 import tech.androidplay.sonali.todo.databinding.ActivityMainTodoListBinding
 
-class TodoListAdapter(val viewModel: TaskViewModel) :
+class TodoListAdapter(private val viewModel: TaskViewModel) :
     RecyclerView.Adapter<TodoListAdapter.TodoListViewHolder>() {
 
     private var todoList = mutableListOf<Todo>()
 
     fun setListData(data: MutableList<Todo>) {
         todoList = data
-        notifyDataSetChanged()
+        notifyItemInserted(0)
+//        notifyDataSetChanged()
     }
 
     override fun onCreateViewHolder(
@@ -30,7 +31,7 @@ class TodoListAdapter(val viewModel: TaskViewModel) :
     }
 
     override fun onBindViewHolder(holder: TodoListAdapter.TodoListViewHolder, position: Int) {
-        holder.binItems(todoList[position])
+        holder.bindItems(todoList[position])
     }
 
     override fun getItemCount(): Int {
@@ -42,7 +43,7 @@ class TodoListAdapter(val viewModel: TaskViewModel) :
     inner class TodoListViewHolder(private val binding: ActivityMainTodoListBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun binItems(todoList: Todo) {
+        fun bindItems(todoList: Todo) {
             binding.todo = todoList
             binding.clItemListContainer.setOnClickListener {
                 if (todoList.isCompleted)
