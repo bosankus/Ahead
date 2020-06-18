@@ -63,7 +63,7 @@ class TaskRepository() {
         val fetchedTodoLiveData = MutableLiveData<MutableList<Todo>>()
         val query: Query = taskListRef
             .whereEqualTo("id", userId)
-            .orderBy("todoCreationTimeStamp", Query.Direction.DESCENDING)
+            .orderBy("todoCreationTimeStamp", Query.Direction.ASCENDING)
 
         query.addSnapshotListener { snapshot, exception ->
             if (exception != null) {

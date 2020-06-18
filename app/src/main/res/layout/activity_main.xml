@@ -133,6 +133,7 @@
                 android:id="@+id/bg_white_gradient"
                 android:layout_width="match_parent"
                 android:layout_height="90dp"
+                android:visibility="gone"
                 android:background="@drawable/bg_white_gradient"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"

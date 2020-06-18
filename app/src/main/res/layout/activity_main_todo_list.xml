@@ -40,10 +40,11 @@
                 android:fontFamily="@font/jost"
                 android:minWidth="0dp"
                 android:minHeight="0dp"
-                android:scaleX="0.8"
-                android:scaleY="0.8"
+                android:scaleX="0.7"
+                android:scaleY="0.7"
                 android:textColor="@color/grey3"
                 android:textSize="15sp"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:ignore="RtlSymmetry" />
@@ -58,22 +59,10 @@
                 android:text="@{todo.todoBody}"
                 android:textColor="@color/grey3"
                 android:textSize="15sp"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/rbTodoItemStatus"
                 app:layout_constraintTop_toTopOf="@+id/rbTodoItemStatus"
                 app:strike_task="@{todo.isCompleted}" />
-
-            <TextView
-                android:id="@+id/tvTodoListItemDesc"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/jost"
-                android:text="@{todo.todoDesc}"
-                android:textColor="@color/grey2"
-                android:textSize="14sp"
-                app:layout_constraintStart_toStartOf="@+id/tvTodoListItem"
-                app:layout_constraintTop_toBottomOf="@+id/tvTodoListItem"
-                app:strike_task="@{todo.isCompleted}" />
-
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
