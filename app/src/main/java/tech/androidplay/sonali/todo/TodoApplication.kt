@@ -1,6 +1,8 @@
 package tech.androidplay.sonali.todo
 
 import android.app.Application
+import android.content.Context
+import androidx.multidex.MultiDex
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 import tech.androidplay.sonali.todo.di.appModule
@@ -19,5 +21,10 @@ class TodoApplication : Application() {
             androidContext(this@TodoApplication)
             modules(listOf(appModule))
         }
+    }
+
+    override fun attachBaseContext(base: Context?) {
+        super.attachBaseContext(base)
+        MultiDex.install(this)
     }
 }

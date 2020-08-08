@@ -1,5 +1,6 @@
 package tech.androidplay.sonali.todo.data.viewmodel
 
+import android.net.Uri
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import tech.androidplay.sonali.todo.data.model.Todo
@@ -16,17 +17,31 @@ class TaskViewModel(private val taskRepository: TaskRepository) : ViewModel() {
     var completeTaskLiveData: MutableLiveData<Boolean> = MutableLiveData()
     var fetchedTaskLiveData: MutableLiveData<MutableList<Todo>> = MutableLiveData()
 
+
+    val todo = Todo()
+    var taskStatus: Boolean = todo.isCompleted
+
+    init {
+        fetchTask()
+    }
+
+    private fun fetchTask(): MutableLiveData<MutableList<Todo>> {
+        fetchedTaskLiveData = taskRepository.fetchTasks()
+        return fetchedTaskLiveData
+    }
+
     fun createTask(todoName: String, todoDesc: String) {
         createdTaskLiveData = taskRepository.createNewTask(todoName, todoDesc)
     }
 
     fun completeTask(taskId: String, status: Boolean): MutableLiveData<Boolean> {
+        taskStatus = status
         completeTaskLiveData = taskRepository.completeTask(taskId, status)
         return completeTaskLiveData
     }
 
-    fun fetchTask(): MutableLiveData<MutableList<Todo>> {
-        fetchedTaskLiveData = taskRepository.fetchTasks()
-        return fetchedTaskLiveData
+    fun uploadImage(uri: Uri) {
+        taskRepository.uploadImage(uri)
     }
+
 }

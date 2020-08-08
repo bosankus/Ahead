@@ -1,162 +1,200 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:id="@+id/cdlMainActivityParentLayout"
-    android:background="@android:color/white"
-    tools:context=".view.MainActivity">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/clParentLayout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+    <data>
 
-        <TextView
-            android:id="@+id/tvUserGreet"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="25dp"
-            android:fontFamily="@font/jost"
-            android:padding="5sp"
-            android:text="Hi Ankush"
-            android:textColor="@color/grey2"
-            android:textSize="16sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+        <variable
+            name="user"
+            type="tech.androidplay.sonali.todo.data.model.User" />
 
-        <ImageView
-            android:id="@+id/imgMenu"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_marginTop="25dp"
-            android:layout_marginEnd="16dp"
-            android:clickable="true"
-            android:focusable="true"
-            android:foreground="?attr/selectableItemBackground"
-            android:padding="5dp"
-            android:src="@drawable/ic_horizontal_dot_menu"
-            android:tint="@color/grey2"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:ignore="ContentDescription" />
+    </data>
 
-        <TextView
-            android:id="@+id/tvAllTasksHeader"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="5dp"
-            android:fontFamily="@font/jost_bold"
-            android:text="All tasks"
-            android:textColor="@color/grey3"
-            android:textSize="32sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvUserGreet" />
-
-        <include
-            android:id="@+id/frameTodayHeader"
-            layout="@layout/frame_today_todo_header"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="20dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvAllTasksHeader" />
-
-        <include
-            android:id="@+id/frameNoTodo"
-            layout="@layout/frame_no_todo"
-            android:visibility="invisible" />
-
-        <include
-            android:id="@+id/shimmerLayout"
-            layout="@layout/shimmer_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/frameTodayHeader" />
-
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvTodoList"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_marginTop="16sp"
-            android:clipToPadding="true"
-            android:orientation="vertical"
-            android:overScrollMode="never"
-            android:paddingStart="12sp"
-            android:paddingEnd="16dp"
-            android:scrollbars="none"
-            android:visibility="gone"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/frameTodayHeader" />
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/bg_white_gradient"
-            android:layout_width="match_parent"
-            android:layout_height="90dp"
-            android:background="@drawable/bg_white_gradient"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
-
-        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-            android:id="@+id/efabAddTask"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="20dp"
-            android:backgroundTint="@color/dribblePink"
-            android:fontFamily="@font/jost"
-            android:text="Add Task"
-            android:textColor="@color/white"
-            app:icon="@android:drawable/ic_input_add"
-            app:iconPadding="5sp"
-            app:iconTint="@color/white"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:rippleColor="@color/white" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/clParentErrorLayout"
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:id="@+id/cdlMainActivityParentLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/white"
-        android:visibility="gone">
+        android:background="@android:color/white"
+        tools:context=".view.MainActivity">
 
-        <ImageView
-            android:id="@+id/clParentErrorLayoutImg"
-            android:layout_width="120dp"
-            android:layout_height="120dp"
-            android:src="@drawable/ic_firebase_error"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/clParentLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/clParentErrorLayoutTxt"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            android:layout_marginTop="16dp"
-            android:fontFamily="@font/jost"
-            android:text="Whoops! Something seems wrong!"
-            android:textColor="@color/grey3"
-            android:textSize="18sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/clParentErrorLayoutImg" />
+            <ImageView
+                android:id="@+id/imgUserDp"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="25dp"
+                android:elevation="1dp"
+                android:tint="@color/dribblePink"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:set_dp="@{user.userDp}" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            <TextView
+                android:id="@+id/tvUserGreet"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="25dp"
+                android:fontFamily="@font/jost"
+                android:padding="5sp"
+                android:text="Hi Ankush"
+                android:textColor="@color/grey2"
+                android:textSize="16sp"
+                app:layout_constraintStart_toEndOf="@id/imgUserDp"
+                app:layout_constraintTop_toTopOf="parent" />
 
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+            <TextView
+                android:id="@+id/tvAllTasksHeader"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="5dp"
+                android:fontFamily="@font/jost_bold"
+                android:text="All tasks"
+                android:textColor="@color/grey3"
+                android:textSize="32sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvUserGreet" />
+
+            <include
+                android:id="@+id/frameTodayHeader"
+                layout="@layout/frame_today_todo_header"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="20dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvAllTasksHeader" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/frameNoTodo"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="gone">
+
+                <ImageView
+                    android:id="@+id/imgNoTodo"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:src="@drawable/ic_note"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/tvNoTodo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start"
+                    android:layout_marginTop="16sp"
+                    android:fontFamily="@font/jost_semi"
+                    android:text="All tasks Completed. Add more"
+                    android:textColor="@color/grey3"
+                    android:textSize="16sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/imgNoTodo" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <include
+                android:id="@+id/shimmerLayout"
+                layout="@layout/shimmer_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/frameTodayHeader" />
+
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvTodoList"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:background="@android:color/transparent"
+                android:clipToPadding="false"
+                android:orientation="vertical"
+                android:overScrollMode="never"
+                android:padding="16dp"
+                android:scrollbars="none"
+                android:visibility="gone"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/frameTodayHeader" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/bg_white_gradient"
+                android:layout_width="match_parent"
+                android:layout_height="90dp"
+                android:background="@drawable/bg_white_gradient"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+                android:id="@+id/efabAddTask"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                android:backgroundTint="@color/dribblePink"
+                android:fontFamily="@font/jost_bold"
+                android:minHeight="1dp"
+                android:text="Add Task"
+                android:textColor="@color/white"
+                android:textSize="13dp"
+                app:icon="@android:drawable/ic_input_add"
+                app:iconPadding="0sp"
+                app:iconTint="@color/white"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:rippleColor="@color/white" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/clParentErrorLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/white"
+            android:visibility="gone">
+
+            <ImageView
+                android:id="@+id/clParentErrorLayoutImg"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:src="@drawable/ic_firebase_error"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/clParentErrorLayoutTxt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:layout_marginTop="16dp"
+                android:fontFamily="@font/jost"
+                android:text="Whoops! Something seems wrong!"
+                android:textColor="@color/grey3"
+                android:textSize="18sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/clParentErrorLayoutImg" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+</layout>

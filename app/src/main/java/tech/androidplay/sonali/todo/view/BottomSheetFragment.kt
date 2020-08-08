@@ -110,11 +110,15 @@ class BottomSheetFragment : BottomSheetDialogFragment() {
 
 
         btnCreateTask.setOnClickListener {
-            clCreateTask.visibility = View.INVISIBLE
-            lottieCreateTask.visibility = View.VISIBLE
-            lottieCreateTask.playAnimation()
 
-            createTask()
+            if ((tvTaskInput.text.length) <= 0) tvTaskInput.error = "Cant't be empty mama!"
+            else {
+                clCreateTask.visibility = View.INVISIBLE
+                lottieCreateTask.visibility = View.VISIBLE
+                lottieCreateTask.playAnimation()
+
+                createTask()
+            }
         }
     }
 

@@ -1,12 +1,19 @@
 package tech.androidplay.sonali.todo.data.repository
 
 import android.annotation.SuppressLint
+import android.net.Uri
 import androidx.lifecycle.MutableLiveData
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
+import com.google.firebase.storage.FirebaseStorage
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 import tech.androidplay.sonali.todo.data.model.Todo
+import tech.androidplay.sonali.todo.data.model.User
 import tech.androidplay.sonali.todo.utils.UIHelper.getCurrentTimestamp
 import tech.androidplay.sonali.todo.utils.UIHelper.logMessage
 
@@ -15,13 +22,21 @@ import tech.androidplay.sonali.todo.utils.UIHelper.logMessage
  * Author: Ankush
  * On: 5/6/2020, 4:54 AM
  */
-class TaskRepository {
+
+// Glide not loading dp . Upoload working with download url fetch
+
+
+class TaskRepository() {
 
     private var userId: String = FirebaseAuth.getInstance().currentUser?.uid.toString()
+
     private var taskListRef: CollectionReference =
         FirebaseFirestore.getInstance().collection("Tasks")
+    private var storageReference = FirebaseStorage.getInstance().reference
+
     private val todoList = arrayListOf<Todo>()
     private var todo: Todo = Todo()
+    private var user: User = User()
 
     @SuppressLint("SimpleDateFormat")
     fun createNewTask(todoBody: String, todoDesc: String): MutableLiveData<Todo> {
@@ -34,6 +49,8 @@ class TaskRepository {
             "isEntered" to true,
             "isCompleted" to false
         )
+
+
         taskListRef.add(task).addOnSuccessListener {
             todo = Todo(userId, todoBody, todoDesc)
             todo.isEntered = true
@@ -46,38 +63,70 @@ class TaskRepository {
 
     fun completeTask(taskId: String, status: Boolean): MutableLiveData<Boolean> {
         val completeTaskLiveData: MutableLiveData<Boolean> = MutableLiveData()
-        taskListRef.document(taskId)
+
+        GlobalScope.launch(Dispatchers.IO) {
+            taskListRef.document(taskId)
+                .update("isCompleted", status)
+                .await()
+            completeTaskLiveData.postValue(true)
+        }
+
+        // Deprecated
+        /*taskListRef.document(taskId)
             .update("isCompleted", status)
-            .addOnSuccessListener { completeTaskLiveData.value = true }
-            .addOnCanceledListener { completeTaskLiveData.value = false }
+            .addOnSuccessListener { completeTaskLiveData.value = true }*/
+
         return completeTaskLiveData
     }
 
-
     fun fetchTasks(): MutableLiveData<MutableList<Todo>> {
         val fetchedTodoLiveData = MutableLiveData<MutableList<Todo>>()
+
         val query: Query = taskListRef
             .whereEqualTo("id", userId)
-            .orderBy("todoCreationTimeStamp", Query.Direction.DESCENDING)
+            .orderBy("todoCreationTimeStamp", Query.Direction.ASCENDING)
 
-        query.addSnapshotListener { snapshot, exception ->
-            if (exception != null) {
-                logMessage(exception.message.toString())
-                return@addSnapshotListener
-            }
-            if (snapshot != null) {
-                val snapshotList = snapshot.documents
+        GlobalScope.launch(Dispatchers.IO) {
+            val result = query.get().await().documents
+            if (result.isNotEmpty()) {
                 todoList.clear()
-                snapshotList.forEach {
+                result.forEach {
                     val todoItems = it.toObject(Todo::class.java)
                     todoList.add(0, todoItems!!)
                 }
-                fetchedTodoLiveData.value = todoList
-            } else {
-                logMessage("No Internet") // not finalised
+                fetchedTodoLiveData.postValue(todoList)
             }
         }
+
+        // Deprecated
+        /*query.get()
+            .addOnSuccessListener { querySnapshot ->
+                if (querySnapshot != null) {
+                    val snapShotList = querySnapshot.documents
+                    todoList.clear()
+                    snapShotList.forEach {
+                        val todoItems = it.toObject(Todo::class.java)
+                        todoList.add(0, todoItems!!)
+                    }
+                    fetchedTodoLiveData.value = todoList
+                }
+            }*/
+
         return fetchedTodoLiveData
+    }
+
+
+    fun uploadImage(uri: Uri) {
+        val ref = storageReference.child("profilePicture/$userId")
+        val uploadTask = ref.putFile(uri)
+        uploadTask.addOnCompleteListener {
+            if (it.isSuccessful) {
+                ref.downloadUrl.addOnSuccessListener { uri ->
+                    logMessage("Repo: $uri")
+                    user.userDp = uri.toString()
+                }
+            }
+        }
     }
 }
 
