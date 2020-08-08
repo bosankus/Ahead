@@ -1,11 +1,8 @@
 package tech.androidplay.sonali.todo.data.viewmodel
 
+import android.net.Uri
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import tech.androidplay.sonali.todo.data.model.Todo
 import tech.androidplay.sonali.todo.data.repository.TaskRepository
 
@@ -20,10 +17,17 @@ class TaskViewModel(private val taskRepository: TaskRepository) : ViewModel() {
     var completeTaskLiveData: MutableLiveData<Boolean> = MutableLiveData()
     var fetchedTaskLiveData: MutableLiveData<MutableList<Todo>> = MutableLiveData()
 
-    fun uploadImage(userId: String, key: String, uri: String) {
-        viewModelScope.launch(Dispatchers.Default) {
-            taskRepository.uploadImage(userId, key, uri)
-        }
+
+    val todo = Todo()
+    var taskStatus: Boolean = todo.isCompleted
+
+    init {
+        fetchTask()
+    }
+
+    private fun fetchTask(): MutableLiveData<MutableList<Todo>> {
+        fetchedTaskLiveData = taskRepository.fetchTasks()
+        return fetchedTaskLiveData
     }
 
     fun createTask(todoName: String, todoDesc: String) {
@@ -31,13 +35,13 @@ class TaskViewModel(private val taskRepository: TaskRepository) : ViewModel() {
     }
 
     fun completeTask(taskId: String, status: Boolean): MutableLiveData<Boolean> {
+        taskStatus = status
         completeTaskLiveData = taskRepository.completeTask(taskId, status)
         return completeTaskLiveData
     }
 
-    fun fetchTask(): MutableLiveData<MutableList<Todo>> {
-        fetchedTaskLiveData = taskRepository.fetchTasks()
-        return fetchedTaskLiveData
+    fun uploadImage(uri: Uri) {
+        taskRepository.uploadImage(uri)
     }
 
 }

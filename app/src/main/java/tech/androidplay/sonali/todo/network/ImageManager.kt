@@ -12,6 +12,7 @@ import com.github.dhaval2404.imagepicker.ImagePicker
  */
 object ImageManager {
 
+    // Opens pop up window to pick or click image
     fun selectImage(context: Context) {
         ImagePicker.with(context as Activity)
             .crop()
@@ -20,6 +21,7 @@ object ImageManager {
             .start()
     }
 
+    // To convert Intent to string path
     fun parseData(data: Intent?): String {
         return ImagePicker.getFilePath(data).toString()
     }

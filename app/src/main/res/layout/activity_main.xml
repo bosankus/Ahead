@@ -6,8 +6,9 @@
     <data>
 
         <variable
-            name="customer"
-            type="tech.androidplay.sonali.todo.network.model.Customer" />
+            name="user"
+            type="tech.androidplay.sonali.todo.data.model.User" />
+
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -22,28 +23,30 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
+            <ImageView
+                android:id="@+id/imgUserDp"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="25dp"
+                android:elevation="1dp"
+                android:tint="@color/dribblePink"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:set_dp="@{user.userDp}" />
+
             <TextView
                 android:id="@+id/tvUserGreet"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
+                android:layout_marginStart="10dp"
                 android:layout_marginTop="25dp"
                 android:fontFamily="@font/jost"
                 android:padding="5sp"
                 android:text="Hi Ankush"
                 android:textColor="@color/grey2"
                 android:textSize="16sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <ImageView
-                android:id="@+id/imgMenu"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_marginTop="25dp"
-                android:layout_marginEnd="16dp"
-                android:src="@{customer.DLback}"
-                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/imgUserDp"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
@@ -133,8 +136,8 @@
                 android:id="@+id/bg_white_gradient"
                 android:layout_width="match_parent"
                 android:layout_height="90dp"
-                android:visibility="gone"
                 android:background="@drawable/bg_white_gradient"
+                android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />

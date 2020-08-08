@@ -19,7 +19,6 @@ import org.koin.android.ext.android.inject
 import tech.androidplay.sonali.todo.R
 import tech.androidplay.sonali.todo.adapter.TodoListAdapter
 import tech.androidplay.sonali.todo.data.viewmodel.TaskViewModel
-import tech.androidplay.sonali.todo.network.ImageManager.parseData
 import tech.androidplay.sonali.todo.network.ImageManager.selectImage
 import tech.androidplay.sonali.todo.utils.UIHelper.getCurrentDate
 import tech.androidplay.sonali.todo.utils.UIHelper.logMessage
@@ -83,6 +82,10 @@ class MainActivity : AppCompatActivity() {
         tvTodayDate.text = getCurrentDate()
         rvTodoList.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         rvTodoList.setHasFixedSize(false)
+        val recyclerviewState =
+            (rvTodoList.layoutManager as LinearLayoutManager).onSaveInstanceState()
+
+        (rvTodoList.layoutManager as LinearLayoutManager).onRestoreInstanceState(recyclerviewState)
     }
 
     private fun initiateFABAnimation() {
@@ -92,13 +95,7 @@ class MainActivity : AppCompatActivity() {
     @SuppressLint("InflateParams")
     private fun clickListeners() {
 
-        /*imgMenu.setOnClickListener {
-            firebaseAuth.signOut()
-            startActivity(Intent(this@MainActivity, SplashActivity::class.java))
-            overridePendingTransition(R.anim.fade_out_animation, R.anim.fade_in_animation)
-        }*/
-
-        imgMenu.setOnClickListener { selectImage(this) }
+        imgUserDp.setOnClickListener { selectImage(this) }
 
         efabAddTask.setOnClickListener {
             val bottomSheetFragment = BottomSheetFragment()
@@ -111,36 +108,27 @@ class MainActivity : AppCompatActivity() {
                 else if (dy < 0) efabAddTask.show()
             }
         })
-
     }
 
 
     private fun loadData() {
-        taskViewModel.fetchTask()
-        logMessage("hey")
-        try {
-            taskViewModel.fetchedTaskLiveData.observe(
-                this, Observer {
-                    if (it == null) {
-                        shimmerFrameLayout.visibility = View.GONE
-                        rvTodoList.visibility = View.GONE
-                        frameNoTodo.visibility = View.VISIBLE
-                    } else {
-                        todoListAdapter.setListData(it)
-                        showRecyclerView()
-                    }
+        taskViewModel.fetchedTaskLiveData.observe(
+            this, Observer {
+                if (it == null) {
+                    shimmerFrameLayout.visibility = View.GONE
+                    rvTodoList.visibility = View.GONE
+                    frameNoTodo.visibility = View.VISIBLE
+                } else {
+                    todoListAdapter.setListData(it)
+                    showRecyclerView()
                 }
-            )
-        } catch (e: Exception) {
-            logMessage("$e")
-        }
+            }
+        )
     }
 
     @SuppressLint("SetTextI18n")
     private fun showRecyclerView() {
-
         // Recyclerview settings
-        rvTodoList.smoothScrollToPosition(0)
         rvTodoList.adapter = todoListAdapter
 
         // Shimmer effect until data loads
@@ -152,11 +140,10 @@ class MainActivity : AppCompatActivity() {
         tvTodayCount.text = todoListAdapter.itemCount.toString() + " items"
     }
 
-
     @SuppressLint("Recycle")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (resultCode == Activity.RESULT_OK) {
-            taskViewModel.uploadImage("32520", "DLback", parseData(data))//36294
+        if (resultCode == Activity.RESULT_OK && data != null) {
+            taskViewModel.uploadImage(data.data!!)
         } else if (resultCode != Activity.RESULT_CANCELED)
             logMessage("Image picking cancelled")
         super.onActivityResult(requestCode, resultCode, data)
