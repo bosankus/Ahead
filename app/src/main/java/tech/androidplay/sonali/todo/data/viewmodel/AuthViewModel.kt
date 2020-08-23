@@ -1,5 +1,6 @@
 package tech.androidplay.sonali.todo.data.viewmodel
 
+import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -12,7 +13,8 @@ import tech.androidplay.sonali.todo.data.repository.AuthRepository
  * Author: Ankush
  * On: 4/22/2020, 5:51 AM
  */
-class AuthViewModel(private val authRepository: AuthRepository) : ViewModel() {
+class AuthViewModel @ViewModelInject constructor(private val authRepository: AuthRepository) :
+    ViewModel() {
 
     private val firebaseAuth: FirebaseAuth = FirebaseAuth.getInstance()
     var createAccountLiveData: MutableLiveData<Int> = MutableLiveData()

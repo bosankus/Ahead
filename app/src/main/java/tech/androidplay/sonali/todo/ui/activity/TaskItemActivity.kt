@@ -1,4 +1,4 @@
-package tech.androidplay.sonali.todo.view
+package tech.androidplay.sonali.todo.ui.activity
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle

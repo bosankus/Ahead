@@ -1,4 +1,4 @@
-package tech.androidplay.sonali.todo.view
+package tech.androidplay.sonali.todo.ui.activity
 
 import android.content.Intent
 import android.graphics.Color
@@ -6,21 +6,27 @@ import android.os.Bundle
 import android.text.TextUtils
 import android.view.View
 import android.view.animation.AnimationUtils
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_login.*
-import org.koin.android.ext.android.inject
 import tech.androidplay.sonali.todo.R
 import tech.androidplay.sonali.todo.data.viewmodel.AuthViewModel
 import tech.androidplay.sonali.todo.utils.CacheManager
 import tech.androidplay.sonali.todo.utils.UIHelper.networkFlag
 import tech.androidplay.sonali.todo.utils.UIHelper.showToast
 import tech.androidplay.sonali.todo.utils.UIHelper.viewAnimation
+import javax.inject.Inject
 
+
+@AndroidEntryPoint
 class LoginActivity : AppCompatActivity() {
 
-    private val authViewModel by inject<AuthViewModel>()
-    private val cache by inject<CacheManager>()
+    @Inject
+    lateinit var cache: CacheManager
+
+    private val authViewModel: AuthViewModel by viewModels()
 
     // Animation
     private val animFadeIn by lazy {
@@ -142,6 +148,11 @@ class LoginActivity : AppCompatActivity() {
 
         if (TextUtils.isEmpty(loginInputPasswordTxt.text.toString())) {
             loginInputPasswordTxt.error = "Required"
+            valid = false
+        }
+
+        if (loginInputPasswordTxt.text.toString().length < 6) {
+            loginInputPasswordTxt.error = "Minimum 6 characters"
             valid = false
         } else loginInputPasswordTxt.error = null
 

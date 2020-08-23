@@ -1,4 +1,4 @@
-package tech.androidplay.sonali.todo.view
+package tech.androidplay.sonali.todo.ui.activity
 
 import android.annotation.SuppressLint
 import android.app.Activity
@@ -8,28 +8,32 @@ import android.os.Bundle
 import android.view.View
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.frame_today_todo_header.*
 import kotlinx.android.synthetic.main.shimmer_layout.*
-import org.koin.android.ext.android.inject
 import tech.androidplay.sonali.todo.R
-import tech.androidplay.sonali.todo.adapter.TodoListAdapter
 import tech.androidplay.sonali.todo.data.viewmodel.TaskViewModel
-import tech.androidplay.sonali.todo.network.ImageManager.selectImage
+import tech.androidplay.sonali.todo.ui.adapter.TodoAdapter
+import tech.androidplay.sonali.todo.ui.fragment.BottomSheetFragment
+import tech.androidplay.sonali.todo.utils.ImageHelper.selectImage
 import tech.androidplay.sonali.todo.utils.UIHelper.getCurrentDate
 import tech.androidplay.sonali.todo.utils.UIHelper.logMessage
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
-    // Task View Model
-    private val taskViewModel by inject<TaskViewModel>()
-    private val todoListAdapter by inject<TodoListAdapter>()
+    @Inject
+    lateinit var todoAdapter: TodoAdapter
 
     private lateinit var showFab: Animation
+
+    private val taskViewModel: TaskViewModel by viewModels()
 
     @SuppressLint("SimpleDateFormat")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -47,24 +51,13 @@ class MainActivity : AppCompatActivity() {
         // load create task button animations
         initiateFABAnimation()
 
-//        loadChangedData()
+        load()
     }
 
     override fun onStart() {
         super.onStart()
         shimmerFrameLayout.startShimmer()
         // loading all task list
-        loadData()
-    }
-
-    override fun onResume() {
-        super.onResume()
-        shimmerFrameLayout.startShimmer()
-    }
-
-    override fun onPause() {
-        super.onPause()
-        shimmerFrameLayout.stopShimmer()
     }
 
     override fun onBackPressed() {
@@ -80,12 +73,6 @@ class MainActivity : AppCompatActivity() {
         window.navigationBarColor = Color.WHITE
 
         tvTodayDate.text = getCurrentDate()
-        rvTodoList.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
-        rvTodoList.setHasFixedSize(false)
-        val recyclerviewState =
-            (rvTodoList.layoutManager as LinearLayoutManager).onSaveInstanceState()
-
-        (rvTodoList.layoutManager as LinearLayoutManager).onRestoreInstanceState(recyclerviewState)
     }
 
     private fun initiateFABAnimation() {
@@ -98,7 +85,8 @@ class MainActivity : AppCompatActivity() {
         imgUserDp.setOnClickListener { selectImage(this) }
 
         efabAddTask.setOnClickListener {
-            val bottomSheetFragment = BottomSheetFragment()
+            val bottomSheetFragment =
+                BottomSheetFragment()
             bottomSheetFragment.show(supportFragmentManager, bottomSheetFragment.tag)
         }
 
@@ -111,34 +99,21 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-    private fun loadData() {
-        taskViewModel.fetchedTaskLiveData.observe(
-            this, Observer {
-                if (it == null) {
-                    shimmerFrameLayout.visibility = View.GONE
-                    rvTodoList.visibility = View.GONE
-                    frameNoTodo.visibility = View.VISIBLE
-                } else {
-                    todoListAdapter.setListData(it)
-                    showRecyclerView()
-                }
-            }
-        )
-    }
-
     @SuppressLint("SetTextI18n")
-    private fun showRecyclerView() {
-        // Recyclerview settings
-        rvTodoList.adapter = todoListAdapter
-
-        // Shimmer effect until data loads
-        frameNoTodo.visibility = View.GONE
-        shimmerFrameLayout.visibility = View.GONE
-        rvTodoList.visibility = View.VISIBLE
-
-        // Setting number of adapter item count
-        tvTodayCount.text = todoListAdapter.itemCount.toString() + " items"
+    private fun load() {
+        taskViewModel.fetchedTaskLiveData.observe(this, {
+            logMessage("$it")
+            if (it.isNotEmpty()){
+                shimmerFrameLayout.visibility = View.GONE
+                todoAdapter.submitList(it)
+                tvTodayCount.text = todoAdapter.itemCount.toString() + " item(s)"
+            } else {
+                shimmerFrameLayout.visibility = View.GONE
+                frameNoTodo.visibility = View.VISIBLE
+            }
+        })
     }
+
 
     @SuppressLint("Recycle")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
