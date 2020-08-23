@@ -10,4 +10,5 @@
     <string name="login_header_txt">Hello \nThere<font color="#E94D88">.</font></string>
     <string name="signup_create_acc_txt">Create account for <font color="#E94D88"><b>thinking Ahead</b></font></string>
     <string name="login_create_acc_txt">Have account? <font color="#E94D88"><b>Get in</b></font></string>
+    <string name="greet_txt">Hi Ankush</string>
 </resources>

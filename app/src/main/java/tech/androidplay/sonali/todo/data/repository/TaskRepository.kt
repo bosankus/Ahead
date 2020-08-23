@@ -2,6 +2,7 @@ package tech.androidplay.sonali.todo.data.repository
 
 import android.annotation.SuppressLint
 import android.net.Uri
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.CollectionReference
@@ -32,6 +33,11 @@ class TaskRepository() {
 
     private var taskListRef: CollectionReference =
         FirebaseFirestore.getInstance().collection("Tasks")
+
+    private val query: Query = taskListRef
+        .whereEqualTo("id", userId)
+        .orderBy("todoCreationTimeStamp", Query.Direction.ASCENDING)
+
     private var storageReference = FirebaseStorage.getInstance().reference
 
     private val todoList = arrayListOf<Todo>()
@@ -49,7 +55,6 @@ class TaskRepository() {
             "isEntered" to true,
             "isCompleted" to false
         )
-
 
         taskListRef.add(task).addOnSuccessListener {
             todo = Todo(userId, todoBody, todoDesc)
@@ -70,22 +75,11 @@ class TaskRepository() {
                 .await()
             completeTaskLiveData.postValue(true)
         }
-
-        // Deprecated
-        /*taskListRef.document(taskId)
-            .update("isCompleted", status)
-            .addOnSuccessListener { completeTaskLiveData.value = true }*/
-
         return completeTaskLiveData
     }
 
     fun fetchTasks(): MutableLiveData<MutableList<Todo>> {
         val fetchedTodoLiveData = MutableLiveData<MutableList<Todo>>()
-
-        val query: Query = taskListRef
-            .whereEqualTo("id", userId)
-            .orderBy("todoCreationTimeStamp", Query.Direction.ASCENDING)
-
         GlobalScope.launch(Dispatchers.IO) {
             val result = query.get().await().documents
             if (result.isNotEmpty()) {
@@ -97,21 +91,6 @@ class TaskRepository() {
                 fetchedTodoLiveData.postValue(todoList)
             }
         }
-
-        // Deprecated
-        /*query.get()
-            .addOnSuccessListener { querySnapshot ->
-                if (querySnapshot != null) {
-                    val snapShotList = querySnapshot.documents
-                    todoList.clear()
-                    snapShotList.forEach {
-                        val todoItems = it.toObject(Todo::class.java)
-                        todoList.add(0, todoItems!!)
-                    }
-                    fetchedTodoLiveData.value = todoList
-                }
-            }*/
-
         return fetchedTodoLiveData
     }
 
@@ -124,6 +103,7 @@ class TaskRepository() {
                 ref.downloadUrl.addOnSuccessListener { uri ->
                     logMessage("Repo: $uri")
                     user.userDp = uri.toString()
+                    // TODO: Store the URI in shared preference
                 }
             }
         }

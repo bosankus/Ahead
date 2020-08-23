@@ -1,4 +1,4 @@
-package tech.androidplay.sonali.todo.view
+package tech.androidplay.sonali.todo.ui.fragment
 
 import android.annotation.SuppressLint
 import android.app.TimePickerDialog
@@ -11,16 +11,17 @@ import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.*
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.fragment.app.viewModels
 import com.airbnb.lottie.LottieAnimationView
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.datepicker.MaterialDatePicker
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_add_task_bottom_sheet.*
 import kotlinx.android.synthetic.main.frame_date_time_picker.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
-import org.koin.android.ext.android.inject
 import tech.androidplay.sonali.todo.R
 import tech.androidplay.sonali.todo.data.viewmodel.TaskViewModel
 import java.text.SimpleDateFormat
@@ -31,9 +32,11 @@ import java.util.*
  * Author: Ankush
  * On: 5/3/2020, 12:22 PM
  */
+
+@AndroidEntryPoint
 class BottomSheetFragment : BottomSheetDialogFragment() {
 
-    private val taskViewModel by inject<TaskViewModel>()
+    private val taskViewModel: TaskViewModel by viewModels()
 
     private lateinit var clCreateTask: ConstraintLayout
     private lateinit var swAlarm: Switch

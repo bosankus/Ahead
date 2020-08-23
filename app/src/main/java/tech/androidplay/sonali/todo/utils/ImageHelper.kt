@@ -1,4 +1,4 @@
-package tech.androidplay.sonali.todo.network
+package tech.androidplay.sonali.todo.utils
 
 import android.app.Activity
 import android.content.Context
@@ -8,9 +8,10 @@ import com.github.dhaval2404.imagepicker.ImagePicker
 /**
  * Created by Androidplay
  * Author: Ankush
- * On: 6/15/2020, 1:34 PM
+ * On: 23/Aug/2020
+ * Email: ankush@androidplay.in
  */
-object ImageManager {
+object ImageHelper {
 
     // Opens pop up window to pick or click image
     fun selectImage(context: Context) {

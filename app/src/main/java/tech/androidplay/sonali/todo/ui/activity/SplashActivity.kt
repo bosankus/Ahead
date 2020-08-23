@@ -1,11 +1,10 @@
-package tech.androidplay.sonali.todo.view
+package tech.androidplay.sonali.todo.ui.activity
 
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.view.View
-import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
 import tech.androidplay.sonali.todo.R
