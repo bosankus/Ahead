@@ -112,27 +112,12 @@ class LoginActivity : AppCompatActivity() {
     private fun sendPasswordResetEmail() {
         val userEmail = loginInputEmailTxt.text.toString()
         if (validateInput(email = userEmail)) {
-            networkFlag = true
-            authViewModel.sendPasswordResetEmail(userEmail)
-            authViewModel.passwordResetLiveData.observe(
-                this,
-                {
-                    it?.let {
-                        if (it == 1) {
-                            networkFlag = false
-                            showToast(
-                                this,
-                                "Password reset email is sent to" +
-                                        " ${loginInputEmailTxt.text.toString()}"
-                            )
-                        } else {
-                            networkFlag = false
-                            showToast(this, "Invalid email id")
-                        }
-                    }
-                }
+            authViewModel.resetPassword(userEmail)
+            showToast(
+                this, "You will receive password " +
+                        "reset mail if you are registered with us"
             )
-        } else showToast(this, "Email is Empty")
+        }
     }
 
     private fun showLoading() {

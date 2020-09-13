@@ -15,8 +15,6 @@ import tech.androidplay.sonali.todo.utils.AuthResultData
 class AuthViewModel @ViewModelInject constructor(private val authRepository: AuthRepository) :
     ViewModel() {
 
-    var passwordResetLiveData: MutableLiveData<Int> = MutableLiveData()
-
 //    val firebaseUser by lazy { authRepository.firebaseUserLiveData }
 
     fun createAccount(email: String, password: String): LiveData<AuthResultData<FirebaseUser?>> {
@@ -33,9 +31,7 @@ class AuthViewModel @ViewModelInject constructor(private val authRepository: Aut
         }
     }
 
-    fun sendPasswordResetEmail(email: String) {
-        viewModelScope.launch {
-            passwordResetLiveData = authRepository.sendPasswordResetEmail(email)
-        }
+    fun resetPassword(email: String) {
+        authRepository.resetPassword(email)
     }
 }
