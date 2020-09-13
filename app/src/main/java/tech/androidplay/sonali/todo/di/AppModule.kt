@@ -1,5 +1,6 @@
 package tech.androidplay.sonali.todo.di
 
+import com.google.firebase.auth.FirebaseAuth
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -9,6 +10,7 @@ import tech.androidplay.sonali.todo.data.repository.TaskRepository
 import tech.androidplay.sonali.todo.ui.adapter.TodoAdapter
 import tech.androidplay.sonali.todo.utils.CacheManager
 import tech.androidplay.sonali.todo.utils.PermissionManager
+import javax.inject.Singleton
 
 /**
  * Created by Androidplay
@@ -20,6 +22,11 @@ import tech.androidplay.sonali.todo.utils.PermissionManager
 @Module
 @InstallIn(ActivityComponent::class)
 class AppModule {
+
+    @Provides
+    fun provideFirebaseInstance(): FirebaseAuth {
+        return FirebaseAuth.getInstance()
+    }
 
     @Provides
     fun providesPermissionManager(): PermissionManager {
@@ -42,7 +49,9 @@ class AppModule {
     }
 
     @Provides
-    fun providesAuthRepository(): AuthRepository {
-        return AuthRepository()
+    fun providesAuthRepository(
+        firebaseAuth: FirebaseAuth
+    ): AuthRepository {
+        return AuthRepository(firebaseAuth)
     }
 }

@@ -10,8 +10,10 @@ import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView
+import androidx.work.Constraints
+import androidx.work.OneTimeWorkRequest
+import androidx.work.WorkManager
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.frame_today_todo_header.*
@@ -23,10 +25,17 @@ import tech.androidplay.sonali.todo.ui.fragment.BottomSheetFragment
 import tech.androidplay.sonali.todo.utils.ImageHelper.selectImage
 import tech.androidplay.sonali.todo.utils.UIHelper.getCurrentDate
 import tech.androidplay.sonali.todo.utils.UIHelper.logMessage
+import tech.androidplay.sonali.todo.utils.UploadWorker
 import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
+
+    @Inject
+    lateinit var workManager: WorkManager
+
+    @Inject
+    lateinit var constraints: Constraints
 
     @Inject
     lateinit var todoAdapter: TodoAdapter
@@ -66,6 +75,7 @@ class MainActivity : AppCompatActivity() {
     }
 
 
+    // TODO: Find work around
     private fun setScreenUI() {
         // enable white status bar with black icons
         window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
@@ -102,11 +112,11 @@ class MainActivity : AppCompatActivity() {
     @SuppressLint("SetTextI18n")
     private fun load() {
         taskViewModel.fetchedTaskLiveData.observe(this, {
-            logMessage("$it")
-            if (it.isNotEmpty()){
+            if (it.isNotEmpty()) {
                 shimmerFrameLayout.visibility = View.GONE
-                todoAdapter.submitList(it)
+                todoAdapter.submitList(it.toMutableList())
                 tvTodayCount.text = todoAdapter.itemCount.toString() + " item(s)"
+                frameNoTodo.visibility = View.VISIBLE // just to make screen look good
             } else {
                 shimmerFrameLayout.visibility = View.GONE
                 frameNoTodo.visibility = View.VISIBLE
@@ -122,6 +132,20 @@ class MainActivity : AppCompatActivity() {
         } else if (resultCode != Activity.RESULT_CANCELED)
             logMessage("Image picking cancelled")
         super.onActivityResult(requestCode, resultCode, data)
+    }
+
+
+    // Call this method to run work manager
+    private fun initiateUploadRequest() {
+        val uploadRequest = OneTimeWorkRequest.Builder(UploadWorker::class.java)
+            .setConstraints(constraints)
+            .build()
+
+        workManager.enqueue(uploadRequest)
+        workManager.getWorkInfoByIdLiveData(uploadRequest.id)
+            .observe(this, {
+                tvNoTodo.text = it.state.name
+            })
     }
 }
 

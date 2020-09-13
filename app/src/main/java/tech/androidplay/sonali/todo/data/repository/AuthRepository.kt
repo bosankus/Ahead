@@ -3,8 +3,10 @@ package tech.androidplay.sonali.todo.data.repository
 import androidx.lifecycle.MutableLiveData
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
-import tech.androidplay.sonali.todo.data.model.User
+import kotlinx.coroutines.tasks.await
+import tech.androidplay.sonali.todo.utils.AuthResultData
 import tech.androidplay.sonali.todo.utils.UIHelper.logMessage
+import javax.inject.Inject
 
 /**
  * Created by Androidplay
@@ -16,58 +18,67 @@ import tech.androidplay.sonali.todo.utils.UIHelper.logMessage
 // Client ID: 768552120145-abp9v8hb05n3skksjg44jgblsnkudan7.apps.googleusercontent.com
 // Client Secret: GiFS-xS6M9M3-kmY8mKgclpV
 
-class AuthRepository {
-
-    private val firebaseAuth = FirebaseAuth.getInstance()
-    private val firebaseUser: FirebaseUser? by lazy { firebaseAuth.currentUser }
+class AuthRepository @Inject constructor(
+    private val firebaseAuth: FirebaseAuth
+) {
 
     private var createAccountLiveData: MutableLiveData<Int> = MutableLiveData()
     private var loginLiveData: MutableLiveData<Int> = MutableLiveData()
     private var passwordResetLiveData: MutableLiveData<Int> = MutableLiveData()
 
-    private val user = User()
+//    val firebaseUserLiveData by lazy { firebaseAuth.currentUser }
 
     // Creates Account
     fun createAccountWithEmailPassword(email: String, password: String): MutableLiveData<Int> {
         firebaseAuth.createUserWithEmailAndPassword(email, password)
-            .addOnCompleteListener { authTask ->
-                if (authTask.isSuccessful) {
-                    user.userId = firebaseUser?.uid.toString()
-                    user.userEmail = firebaseUser?.email.toString()
-                    user.isNewUser = true
+            .addOnCompleteListener { signUpTask ->
+                if (signUpTask.isSuccessful) {
                     createAccountLiveData.value = 1
                 } else {
-                    logMessage("creation ${authTask.exception}")
+                    logMessage("creation ${signUpTask.exception}")
                     createAccountLiveData.value = 0
                 }
             }
         return createAccountLiveData
     }
 
-
-    // Login User
-    fun loginWithEmailPassword(email: String, password: String): MutableLiveData<Int> {
-        firebaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener {
-            logMessage(it.exception.toString())
-            if (it.isSuccessful) {
-                user.userId = firebaseUser?.uid.toString()
-                user.userEmail = firebaseUser?.email.toString()
-                loginLiveData.value = 1
-            } else loginLiveData.value = 0
+    suspend fun createAccount(email: String, password: String): AuthResultData<FirebaseUser> {
+        return try {
+            val response = firebaseAuth
+                .createUserWithEmailAndPassword(email, password)
+                .await()
+            AuthResultData.Success(response.user)
+        } catch (e: Exception) {
+            AuthResultData.Failed(e.message)
         }
-        return loginLiveData
     }
 
+    suspend fun loginUser(email: String, password: String): AuthResultData<FirebaseUser> {
+        return try {
+            val response = firebaseAuth
+                .signInWithEmailAndPassword(email, password)
+                .await()
+            AuthResultData.Success(response.user)
+        } catch (e: Exception) {
+            AuthResultData.Failed(e.message)
+        }
+    }
 
     // Sending Password reset email
     fun sendPasswordResetEmail(email: String): MutableLiveData<Int> {
         firebaseAuth.sendPasswordResetEmail(email)
-            .addOnCompleteListener {
-                logMessage(it.exception.toString())
-                if (it.isSuccessful) {
+            .addOnCompleteListener { resetTask ->
+                logMessage(resetTask.exception.toString())
+                if (resetTask.isSuccessful) {
                     passwordResetLiveData.value = 1
                 } else passwordResetLiveData.value = 0
             }
         return passwordResetLiveData
     }
+
+
+    // Sign out user
+    /*fun signOut() {
+        firebaseAuth.signOut()
+    }*/
 }

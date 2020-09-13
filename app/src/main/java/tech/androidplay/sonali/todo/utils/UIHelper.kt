@@ -21,7 +21,6 @@ import java.util.*
 object UIHelper {
 
     private val TAG = "Androidplay"
-    var networkFlag: Boolean = false
 
     @SuppressLint("SimpleDateFormat")
     fun getCurrentTimestamp(): String =

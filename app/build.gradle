@@ -48,13 +48,13 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation 'androidx.core:core-ktx:1.3.1'
     implementation "androidx.fragment:fragment-ktx:1.2.5"
-    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.1'
     implementation "androidx.recyclerview:recyclerview:1.2.0-alpha05"
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     testImplementation 'junit:junit:4.13'
     implementation "androidx.multidex:multidex:2.0.1"
-    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.2'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
 
     // Work Manager
     implementation "androidx.work:work-runtime-ktx:$versions_work"
@@ -83,30 +83,33 @@ dependencies {
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.1.1'
 
     // Firebase
-    implementation 'com.google.firebase:firebase-database:19.3.1'
+    implementation 'com.google.firebase:firebase-database:19.4.0'
     implementation 'com.google.firebase:firebase-analytics:17.5.0'
     implementation 'com.google.firebase:firebase-auth:19.3.2'
     implementation 'com.google.android.gms:play-services-auth:18.1.0'
-    implementation 'com.google.firebase:firebase-firestore-ktx:21.5.0'
-    implementation 'com.google.firebase:firebase-storage-ktx:19.1.1'
-
-    // UI
-    implementation 'com.google.android.material:material:1.2.0'
-
-    // photo compressor
-    implementation 'id.zelory:compressor:3.0.0'
-
-    // Lottie Animation
-    implementation "com.airbnb.android:lottie:3.4.1"
-
-    // Firebase Shimmer effect
-    implementation 'com.facebook.shimmer:shimmer:0.5.0'
+    implementation 'com.google.firebase:firebase-firestore-ktx:21.6.0'
+    implementation 'com.google.firebase:firebase-storage-ktx:19.2.0'
 
     // DI - Hilt
     implementation 'androidx.hilt:hilt-lifecycle-viewmodel:1.0.0-alpha02'
     implementation "com.google.dagger:hilt-android:$hilt_version"
     kapt "com.google.dagger:hilt-android-compiler:$hilt_version"
     kapt 'androidx.hilt:hilt-compiler:1.0.0-alpha02'
+
+
+    /*UI Libraries*/
+
+    // UI
+    implementation 'com.google.android.material:material:1.2.1'
+
+    /*// photo compressor
+    implementation 'id.zelory:compressor:3.0.0'*/
+
+    // Lottie Animation
+    implementation "com.airbnb.android:lottie:3.4.1"
+
+    // Firebase Shimmer effect
+    implementation 'com.facebook.shimmer:shimmer:0.5.0'
 
     // Glide
     implementation 'com.github.bumptech.glide:glide:4.11.0'

@@ -12,5 +12,4 @@ data class User(
     var userEmail: String? = "",
     var userName: String? = "",
     var userDp: String? = "",
-    var isNewUser: Boolean = false
 ) : Serializable

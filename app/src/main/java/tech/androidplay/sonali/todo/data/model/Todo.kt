@@ -1,5 +1,6 @@
 package tech.androidplay.sonali.todo.data.model
 
+import androidx.room.Entity
 import com.google.firebase.firestore.DocumentId
 import java.io.Serializable
 

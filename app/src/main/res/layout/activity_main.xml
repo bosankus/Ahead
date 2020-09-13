@@ -116,7 +116,7 @@
             android:overScrollMode="never"
             android:padding="16dp"
             android:scrollbars="none"
-            android:visibility="gone"
+            android:nestedScrollingEnabled="false"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
