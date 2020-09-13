@@ -59,20 +59,29 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun clickListeners() {
-        btnSignUpEmailPassword.setOnClickListener { signUpUser() }
+        btnSignUpEmailPassword.setOnClickListener {
+            val userEmail = loginInputEmailTxt.text.toString()
+            val userPassword = loginInputPasswordTxt.text.toString()
+            signUpUser(userEmail, userPassword)
+        }
 
-        btnloginEmailPassword.setOnClickListener { login() }
+        btnloginEmailPassword.setOnClickListener {
+            val userEmail = loginInputEmailTxt.text.toString()
+            val userPassword = loginInputPasswordTxt.text.toString()
+            login(userEmail, userPassword)
+        }
 
-        tvForgotPassword.setOnClickListener { sendPasswordResetEmail() }
+        tvForgotPassword.setOnClickListener {
+            val userEmail = loginInputEmailTxt.text.toString()
+            resetPassword(userEmail)
+        }
 
         tvSignUpOption.setOnClickListener { setSignUpUI() }
 
         tvLoginOption.setOnClickListener { setLoginUi() }
     }
 
-    private fun signUpUser() {
-        val userEmail = loginInputEmailTxt.text.toString()
-        val userPassword = loginInputPasswordTxt.text.toString()
+    private fun signUpUser(userEmail: String, userPassword: String) {
         if (validateInput(userEmail, userPassword)) {
             authViewModel.createAccount(userEmail, userPassword).observe(
                 this,
@@ -88,9 +97,7 @@ class LoginActivity : AppCompatActivity() {
         } else showToast(this, "Please recheck your inputs")
     }
 
-    private fun login() {
-        val userEmail = loginInputEmailTxt.text.toString()
-        val userPassword = loginInputPasswordTxt.text.toString()
+    private fun login(userEmail: String, userPassword: String) {
         if (validateInput(userEmail, userPassword)) {
             networkFlag = true
             authViewModel.loginUser(userEmail, userPassword).observe(
@@ -109,8 +116,7 @@ class LoginActivity : AppCompatActivity() {
         } else showToast(this, "Please recheck your inputs")
     }
 
-    private fun sendPasswordResetEmail() {
-        val userEmail = loginInputEmailTxt.text.toString()
+    private fun resetPassword(userEmail: String) {
         if (validateInput(email = userEmail)) {
             authViewModel.resetPassword(userEmail)
             showToast(
@@ -118,6 +124,27 @@ class LoginActivity : AppCompatActivity() {
                         "reset mail if you are registered with us"
             )
         }
+    }
+
+    private fun validateInput(email: String = "", password: String = ""): Boolean {
+        var valid = true
+
+        if (TextUtils.isEmpty(email)) {
+            loginInputEmailTxt.error = "Required"
+            valid = false
+        } else loginEmailTxtLayout.error = null
+
+        if (TextUtils.isEmpty(password)) {
+            loginInputPasswordTxt.error = "Required"
+            valid = false
+        }
+
+        if (password.length < 6) {
+            loginInputPasswordTxt.error = "Minimum 6 characters"
+            valid = false
+        } else loginInputPasswordTxt.error = null
+
+        return valid
     }
 
     private fun showLoading() {
@@ -159,27 +186,6 @@ class LoginActivity : AppCompatActivity() {
             viewAnimation(btnloginEmailPassword, animFadeOut, true)
             viewAnimation(tvSignUpOption, animFadeOut, true)
         }
-    }
-
-    private fun validateInput(email: String = "", password: String = ""): Boolean {
-        var valid = true
-
-        if (TextUtils.isEmpty(email)) {
-            loginInputEmailTxt.error = "Required"
-            valid = false
-        } else loginEmailTxtLayout.error = null
-
-        if (TextUtils.isEmpty(password)) {
-            loginInputPasswordTxt.error = "Required"
-            valid = false
-        }
-
-        if (password.length < 6) {
-            loginInputPasswordTxt.error = "Minimum 6 characters"
-            valid = false
-        } else loginInputPasswordTxt.error = null
-
-        return valid
     }
 
     override fun onBackPressed() {
