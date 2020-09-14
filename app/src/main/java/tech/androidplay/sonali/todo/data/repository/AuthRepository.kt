@@ -4,7 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import kotlinx.coroutines.tasks.await
-import tech.androidplay.sonali.todo.utils.AuthResultData
+import tech.androidplay.sonali.todo.utils.ResultData
 import javax.inject.Inject
 
 /**
@@ -25,25 +25,25 @@ class AuthRepository @Inject constructor(
 
 //    val firebaseUserLiveData by lazy { firebaseAuth.currentUser }
 
-    suspend fun createAccount(email: String, password: String): AuthResultData<FirebaseUser> {
+    suspend fun createAccount(email: String, password: String): ResultData<FirebaseUser> {
         return try {
             val response = firebaseAuth
                 .createUserWithEmailAndPassword(email, password)
                 .await()
-            AuthResultData.Success(response.user)
+            ResultData.Success(response.user)
         } catch (e: Exception) {
-            AuthResultData.Failed(e.message)
+            ResultData.Failed(e.message)
         }
     }
 
-    suspend fun loginUser(email: String, password: String): AuthResultData<FirebaseUser> {
+    suspend fun loginUser(email: String, password: String): ResultData<FirebaseUser> {
         return try {
             val response = firebaseAuth
                 .signInWithEmailAndPassword(email, password)
                 .await()
-            AuthResultData.Success(response.user)
+            ResultData.Success(response.user)
         } catch (e: Exception) {
-            AuthResultData.Failed(e.message)
+            ResultData.Failed(e.message)
         }
     }
 
@@ -52,7 +52,7 @@ class AuthRepository @Inject constructor(
             firebaseAuth
                 .sendPasswordResetEmail(email)
         } catch (e: Exception) {
-            AuthResultData.Failed(e.message)
+            ResultData.Failed(e.message)
         }
     }
 

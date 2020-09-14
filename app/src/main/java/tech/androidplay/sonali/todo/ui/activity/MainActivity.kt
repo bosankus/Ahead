@@ -10,6 +10,7 @@ import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.paging.PagedList
 import androidx.recyclerview.widget.RecyclerView
 import androidx.work.Constraints
 import androidx.work.OneTimeWorkRequest
@@ -23,6 +24,7 @@ import tech.androidplay.sonali.todo.data.viewmodel.TaskViewModel
 import tech.androidplay.sonali.todo.ui.adapter.TodoAdapter
 import tech.androidplay.sonali.todo.ui.fragment.BottomSheetFragment
 import tech.androidplay.sonali.todo.utils.ImageHelper.selectImage
+import tech.androidplay.sonali.todo.utils.ResultData
 import tech.androidplay.sonali.todo.utils.UIHelper.getCurrentDate
 import tech.androidplay.sonali.todo.utils.UIHelper.logMessage
 import tech.androidplay.sonali.todo.utils.UploadWorker
@@ -43,6 +45,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var showFab: Animation
 
     private val taskViewModel: TaskViewModel by viewModels()
+
 
     @SuppressLint("SimpleDateFormat")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -83,6 +86,9 @@ class MainActivity : AppCompatActivity() {
         window.navigationBarColor = Color.WHITE
 
         tvTodayDate.text = getCurrentDate()
+        rvTodoList.apply {
+            adapter = todoAdapter
+        }
     }
 
     private fun initiateFABAnimation() {
@@ -111,17 +117,27 @@ class MainActivity : AppCompatActivity() {
 
     @SuppressLint("SetTextI18n")
     private fun load() {
-        taskViewModel.fetchedTaskLiveData.observe(this, {
-            if (it.isNotEmpty()) {
-                shimmerFrameLayout.visibility = View.GONE
-                todoAdapter.submitList(it.toMutableList())
-                tvTodayCount.text = todoAdapter.itemCount.toString() + " item(s)"
-                frameNoTodo.visibility = View.VISIBLE // just to make screen look good
-            } else {
-                shimmerFrameLayout.visibility = View.GONE
-                frameNoTodo.visibility = View.VISIBLE
+        taskViewModel.fetchTask().observe(
+            this,
+            {
+                it.let {
+                    when (it) {
+                        is ResultData.Loading -> {
+                            shimmerFrameLayout.visibility = View.VISIBLE
+                        }
+                        is ResultData.Success -> {
+                            shimmerFrameLayout.visibility = View.GONE
+                            todoAdapter.submitList(it.data)
+                            tvTodayCount.text = todoAdapter.itemCount.toString() + " item(s)"
+                        }
+                        is ResultData.Failed -> {
+                            shimmerFrameLayout.visibility = View.GONE
+                            frameNoTodo.visibility = View.VISIBLE
+                        }
+                    }
+                }
             }
-        })
+        )
     }
 
 

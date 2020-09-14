@@ -85,10 +85,14 @@ dependencies {
     // Firebase
     implementation 'com.google.firebase:firebase-database:19.4.0'
     implementation 'com.google.firebase:firebase-analytics:17.5.0'
-    implementation 'com.google.firebase:firebase-auth:19.3.2'
+    implementation 'com.google.firebase:firebase-auth:19.4.0'
     implementation 'com.google.android.gms:play-services-auth:18.1.0'
     implementation 'com.google.firebase:firebase-firestore-ktx:21.6.0'
+    implementation 'com.firebaseui:firebase-ui-firestore:6.2.0'
     implementation 'com.google.firebase:firebase-storage-ktx:19.2.0'
+
+    // Paging Library
+    implementation 'android.arch.paging:runtime:1.0.1'
 
     // DI - Hilt
     implementation 'androidx.hilt:hilt-lifecycle-viewmodel:1.0.0-alpha02'

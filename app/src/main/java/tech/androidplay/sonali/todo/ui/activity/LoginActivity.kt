@@ -12,7 +12,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_login.*
 import tech.androidplay.sonali.todo.R
 import tech.androidplay.sonali.todo.data.viewmodel.AuthViewModel
-import tech.androidplay.sonali.todo.utils.AuthResultData
+import tech.androidplay.sonali.todo.utils.ResultData
 import tech.androidplay.sonali.todo.utils.CacheManager
 import tech.androidplay.sonali.todo.utils.UIHelper.showToast
 import tech.androidplay.sonali.todo.utils.UIHelper.viewAnimation
@@ -88,9 +88,9 @@ class LoginActivity : AppCompatActivity() {
                 {
                     it?.let {
                         when (it) {
-                            is AuthResultData.Loading -> showLoading()
-                            is AuthResultData.Success -> goToMainActivity()
-                            is AuthResultData.Failed -> hideLoading(it.message.toString())
+                            is ResultData.Loading -> showLoading()
+                            is ResultData.Success -> goToMainActivity()
+                            is ResultData.Failed -> hideLoading(it.message.toString())
                         }
                     }
                 })
@@ -105,9 +105,9 @@ class LoginActivity : AppCompatActivity() {
                 {
                     it?.let {
                         when (it) {
-                            is AuthResultData.Loading -> showLoading()
-                            is AuthResultData.Success -> goToMainActivity()
-                            is AuthResultData.Failed -> hideLoading(it.message.toString())
+                            is ResultData.Loading -> showLoading()
+                            is ResultData.Success -> goToMainActivity()
+                            is ResultData.Failed -> hideLoading(it.message.toString())
                         }
                     }
                     networkFlag = false

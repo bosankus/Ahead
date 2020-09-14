@@ -2,10 +2,14 @@ package tech.androidplay.sonali.todo.data.viewmodel
 
 import android.net.Uri
 import androidx.hilt.lifecycle.ViewModelInject
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.liveData
+import com.google.firebase.firestore.DocumentSnapshot
 import tech.androidplay.sonali.todo.data.model.Todo
 import tech.androidplay.sonali.todo.data.repository.TaskRepository
+import tech.androidplay.sonali.todo.utils.ResultData
 
 /**
  * Created by Androidplay
@@ -15,31 +19,31 @@ import tech.androidplay.sonali.todo.data.repository.TaskRepository
 class TaskViewModel @ViewModelInject constructor(private val taskRepository: TaskRepository) :
     ViewModel() {
 
-    var createdTaskLiveData: MutableLiveData<Todo> = MutableLiveData()
     var completeTaskLiveData: MutableLiveData<Boolean> = MutableLiveData()
-    var fetchedTaskLiveData: MutableLiveData<MutableList<Todo>> = MutableLiveData()
 
 
     val todo = Todo()
     var taskStatus: Boolean = todo.isCompleted
 
-    init {
-        fetchTask()
+    fun createTask(todoName: String, todoDesc: String): LiveData<ResultData<Boolean>> {
+        return liveData {
+            emit(ResultData.Loading)
+            emit(taskRepository.create(todoName, todoDesc))
+        }
     }
 
-    private fun fetchTask(): MutableLiveData<MutableList<Todo>> {
-        fetchedTaskLiveData = taskRepository.fetchTasks()
-        return fetchedTaskLiveData
+    fun fetchTask(): LiveData<ResultData<MutableList<Todo>>> {
+        return liveData {
+            emit(ResultData.Loading)
+            emit(taskRepository.fetchTasks())
+        }
     }
 
-    fun createTask(todoName: String, todoDesc: String) {
-        createdTaskLiveData = taskRepository.createNewTask(todoName, todoDesc)
-    }
 
-    fun completeTask(taskId: String, status: Boolean): MutableLiveData<Boolean> {
-        taskStatus = status
+    fun completeTask(taskId: String, status: Boolean){
+        /*taskStatus = status
         completeTaskLiveData = taskRepository.completeTask(taskId, status)
-        return completeTaskLiveData
+        return completeTaskLiveData*/
     }
 
     fun uploadImage(uri: Uri) {
