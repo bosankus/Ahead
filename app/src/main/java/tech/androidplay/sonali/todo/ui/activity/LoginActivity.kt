@@ -8,13 +8,12 @@ import android.view.View
 import android.view.animation.AnimationUtils
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.Observer
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_login.*
 import tech.androidplay.sonali.todo.R
 import tech.androidplay.sonali.todo.data.viewmodel.AuthViewModel
+import tech.androidplay.sonali.todo.utils.ResultData
 import tech.androidplay.sonali.todo.utils.CacheManager
-import tech.androidplay.sonali.todo.utils.UIHelper.networkFlag
 import tech.androidplay.sonali.todo.utils.UIHelper.showToast
 import tech.androidplay.sonali.todo.utils.UIHelper.viewAnimation
 import javax.inject.Inject
@@ -38,8 +37,9 @@ class LoginActivity : AppCompatActivity() {
             R.anim.fade_out_animation
         )
     }
-    private val userEmail by lazy { loginInputEmailTxt.text.toString() }
-    private val userPassword by lazy { loginInputPasswordTxt.text.toString() }
+
+    // for accident control
+    private var networkFlag: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,84 +50,112 @@ class LoginActivity : AppCompatActivity() {
 
         // turning listeners on
         clickListeners()
+    }
 
+    private fun setScreenUI() {
+        window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+        window.statusBarColor = Color.WHITE
+        window.navigationBarColor = Color.WHITE
     }
 
     private fun clickListeners() {
-        btnSignUpEmailPassword.setOnClickListener { signUpUser() }
+        btnSignUpEmailPassword.setOnClickListener {
+            val userEmail = loginInputEmailTxt.text.toString()
+            val userPassword = loginInputPasswordTxt.text.toString()
+            signUpUser(userEmail, userPassword)
+        }
 
-        btnloginEmailPassword.setOnClickListener { loginUser() }
+        btnloginEmailPassword.setOnClickListener {
+            val userEmail = loginInputEmailTxt.text.toString()
+            val userPassword = loginInputPasswordTxt.text.toString()
+            login(userEmail, userPassword)
+        }
 
-        tvForgotPassword.setOnClickListener { sendPasswordResetEmail() }
+        tvForgotPassword.setOnClickListener {
+            val userEmail = loginInputEmailTxt.text.toString()
+            resetPassword(userEmail)
+        }
 
         tvSignUpOption.setOnClickListener { setSignUpUI() }
 
         tvLoginOption.setOnClickListener { setLoginUi() }
     }
 
-    private fun signUpUser() {
-        if (validateInput()) {
-            viewAnimation(btnSignUpEmailPassword, animFadeIn, false)
-            viewAnimation(lottieAuthLoading, null, true)
-            authViewModel.createAccountWithEmailPassword(userEmail, userPassword)
-            authViewModel.createAccountLiveData.observe(
+    private fun signUpUser(userEmail: String, userPassword: String) {
+        if (validateInput(userEmail, userPassword)) {
+            authViewModel.createAccount(userEmail, userPassword).observe(
                 this,
-                Observer {
-                    when (it) {
-                        1 -> goToMainActivity()
-                        0 -> {
-                            showToast(this, "User already signed up")
-                            viewAnimation(btnSignUpEmailPassword, animFadeOut, true)
-                            viewAnimation(lottieAuthLoading, null, false)
+                {
+                    it?.let {
+                        when (it) {
+                            is ResultData.Loading -> showLoading()
+                            is ResultData.Success -> goToMainActivity()
+                            is ResultData.Failed -> hideLoading(it.message.toString())
                         }
                     }
                 })
-        }
+        } else showToast(this, "Please recheck your inputs")
     }
 
-    private fun sendPasswordResetEmail() {
-        if (validateInput()) {
+    private fun login(userEmail: String, userPassword: String) {
+        if (validateInput(userEmail, userPassword)) {
             networkFlag = true
-            authViewModel.sendPasswordResetEmail(userEmail)
-            authViewModel.passwordResetLiveData.observe(
+            authViewModel.loginUser(userEmail, userPassword).observe(
                 this,
-                Observer {
-                    if (it == 1) {
-                        networkFlag = false
-                        showToast(
-                            this,
-                            "Password reset email is sent to ${loginInputEmailTxt.text.toString()}"
-                        )
-                    } else {
-                        networkFlag = false
-                        showToast(this, "Invalid email id")
+                {
+                    it?.let {
+                        when (it) {
+                            is ResultData.Loading -> showLoading()
+                            is ResultData.Success -> goToMainActivity()
+                            is ResultData.Failed -> hideLoading(it.message.toString())
+                        }
                     }
+                    networkFlag = false
                 }
             )
-        } else showToast(this, "Email is Empty")
+        } else showToast(this, "Please recheck your inputs")
     }
 
-    private fun loginUser() {
-        if (validateInput()) {
-            networkFlag = true
-            viewAnimation(btnloginEmailPassword, animFadeIn, false)
-            viewAnimation(lottieAuthLoading, null, true)
-            authViewModel.loginWithEmailPassword(userEmail, userPassword)
-            authViewModel.loginLiveData.observe(
-                this,
-                Observer {
-                    if (it == 1) {
-                        // Successfully Logged in
-                        networkFlag = false
-                        goToMainActivity()
-                    } else if (it == 0) {
-                        networkFlag = false
-                        showToast(this, "Something went wrong. Please retry.")
-                        viewAnimation(btnloginEmailPassword, animFadeOut, true)
-                        viewAnimation(lottieAuthLoading, null, false)
-                    }
-                })
+    private fun resetPassword(userEmail: String) {
+        if (validateInput(email = userEmail)) {
+            authViewModel.resetPassword(userEmail)
+            showToast(
+                this, "You will receive password " +
+                        "reset mail if you are registered with us"
+            )
         }
+    }
+
+    private fun validateInput(email: String = "", password: String = ""): Boolean {
+        var valid = true
+
+        if (TextUtils.isEmpty(email)) {
+            loginInputEmailTxt.error = "Required"
+            valid = false
+        } else loginEmailTxtLayout.error = null
+
+        if (TextUtils.isEmpty(password)) {
+            loginInputPasswordTxt.error = "Required"
+            valid = false
+        }
+
+        if (password.length < 6) {
+            loginInputPasswordTxt.error = "Minimum 6 characters"
+            valid = false
+        } else loginInputPasswordTxt.error = null
+
+        return valid
+    }
+
+    private fun showLoading() {
+        viewAnimation(btnloginEmailPassword, animFadeIn, false)
+        viewAnimation(lottieAuthLoading, null, true)
+    }
+
+    private fun hideLoading(message: String = "") {
+        showToast(this, message)
+        viewAnimation(btnloginEmailPassword, animFadeOut, true)
+        viewAnimation(lottieAuthLoading, null, false)
     }
 
     private fun goToMainActivity() {
@@ -136,33 +164,6 @@ class LoginActivity : AppCompatActivity() {
             R.anim.fade_out_animation,
             R.anim.fade_in_animation
         )
-    }
-
-    private fun validateInput(): Boolean {
-        var valid = true
-
-        if (TextUtils.isEmpty(loginInputEmailTxt.text.toString())) {
-            loginInputEmailTxt.error = "Required"
-            valid = false
-        } else loginEmailTxtLayout.error = null
-
-        if (TextUtils.isEmpty(loginInputPasswordTxt.text.toString())) {
-            loginInputPasswordTxt.error = "Required"
-            valid = false
-        }
-
-        if (loginInputPasswordTxt.text.toString().length < 6) {
-            loginInputPasswordTxt.error = "Minimum 6 characters"
-            valid = false
-        } else loginInputPasswordTxt.error = null
-
-        return valid
-    }
-
-    private fun setScreenUI() {
-        window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
-        window.statusBarColor = Color.WHITE
-        window.navigationBarColor = Color.WHITE
     }
 
     private fun setSignUpUI() {
@@ -192,8 +193,8 @@ class LoginActivity : AppCompatActivity() {
         finishAffinity()
     }
 
-    override fun onStop() {
-        super.onStop()
+    override fun onDestroy() {
+        super.onDestroy()
         cache.clearCache(this)
     }
 }

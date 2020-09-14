@@ -24,6 +24,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import tech.androidplay.sonali.todo.R
 import tech.androidplay.sonali.todo.data.viewmodel.TaskViewModel
+import tech.androidplay.sonali.todo.utils.ResultData
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -104,10 +105,6 @@ class BottomSheetFragment : BottomSheetDialogFragment() {
         }
 
         frameDateTimePicker.setOnClickListener {
-            /**
-             *  TODO: DatePicker opens very slowly. progressOpenCalendar is not working in View.GONE
-             *  Learn and use coroutines to optimise this
-             */
             job = showCalender()
         }
 
@@ -169,17 +166,19 @@ class BottomSheetFragment : BottomSheetDialogFragment() {
 
     private fun createTask() {
         taskViewModel.createTask(
-            tvTaskInput.text.toString(),
-            tvSelectDateTimeDesc.text.toString()
-        )
-        taskViewModel.createdTaskLiveData.observe(
-            viewLifecycleOwner,
-            androidx.lifecycle.Observer {
-                if (it.isEntered) {
-                    // TODO: Add Toast that task is created.
-                    dismiss()
+            tvTaskInput.text.toString(), tvSelectDateTimeDesc.text.toString()
+        ).observe(viewLifecycleOwner, {
+            it?.let {
+                when (it) {
+                    is ResultData.Loading -> {
+                    }
+                    is ResultData.Success -> {
+                    }
+                    is ResultData.Failed -> {
+                    }
                 }
-            })
+            }
+        })
     }
 
     override fun onDetach() {

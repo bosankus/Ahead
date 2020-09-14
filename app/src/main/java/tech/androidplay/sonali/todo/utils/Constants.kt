@@ -9,4 +9,8 @@ package tech.androidplay.sonali.todo.utils
 object Constants {
 
     const val GLOBAL_TAG = "Androidplay"
+
+    const val DISPLAY_IMAGE_URI = "DISPLAY_IMAGE_URI"
+
+    const val FIRESTORE_COLLECTION = "Tasks"
 }

@@ -1,12 +1,10 @@
 package tech.androidplay.sonali.todo.data.viewmodel
 
 import androidx.hilt.lifecycle.ViewModelInject
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import com.google.firebase.auth.FirebaseAuth
-import kotlinx.coroutines.launch
+import androidx.lifecycle.*
+import com.google.firebase.auth.FirebaseUser
 import tech.androidplay.sonali.todo.data.repository.AuthRepository
+import tech.androidplay.sonali.todo.utils.ResultData
 
 /**
  * Created by Androidplay
@@ -16,34 +14,23 @@ import tech.androidplay.sonali.todo.data.repository.AuthRepository
 class AuthViewModel @ViewModelInject constructor(private val authRepository: AuthRepository) :
     ViewModel() {
 
-    private val firebaseAuth: FirebaseAuth = FirebaseAuth.getInstance()
-    var createAccountLiveData: MutableLiveData<Int> = MutableLiveData()
-    var loginLiveData: MutableLiveData<Int> = MutableLiveData()
-    var passwordResetLiveData: MutableLiveData<Int> = MutableLiveData()
-    var state: Int = 0
+//    val firebaseUser by lazy { authRepository.firebaseUserLiveData }
 
-
-    fun createAccountWithEmailPassword(email: String, password: String) {
-        viewModelScope.launch {
-            createAccountLiveData =
-                authRepository.createAccountWithEmailPassword(email, password)
+    fun createAccount(email: String, password: String): LiveData<ResultData<FirebaseUser?>> {
+        return liveData {
+            emit(ResultData.Loading)
+            emit(authRepository.createAccount(email, password))
         }
     }
 
-    fun loginWithEmailPassword(email: String, password: String) {
-        viewModelScope.launch {
-            loginLiveData = authRepository.loginWithEmailPassword(email, password)
+    fun loginUser(email: String, password: String): LiveData<ResultData<FirebaseUser?>> {
+        return liveData {
+            emit(ResultData.Loading)
+            emit(authRepository.loginUser(email, password))
         }
     }
 
-    fun sendPasswordResetEmail(email: String) {
-        viewModelScope.launch {
-            passwordResetLiveData = authRepository.sendPasswordResetEmail(email)
-        }
-    }
-
-    fun signOut() {
-        firebaseAuth.signOut()
-        state = 1
+    fun resetPassword(email: String) {
+        authRepository.resetPassword(email)
     }
 }

@@ -1,6 +1,7 @@
 package tech.androidplay.sonali.todo.data.model
 
 import com.google.firebase.firestore.DocumentId
+import com.google.gson.annotations.SerializedName
 import java.io.Serializable
 
 /**
@@ -10,11 +11,16 @@ import java.io.Serializable
  */
 
 data class Todo(
+    @SerializedName("id")
     var id: String = "",
-    @DocumentId var docId: String = "",
+    @DocumentId
+    var docId: String = "",
+    @SerializedName("todoBody")
     var todoBody: String = "",
+    @SerializedName("todoDesc")
     var todoDesc: String = "",
+    @SerializedName("todoCreationTimeStamp")
     var todoCreationTimeStamp: String = "",
-    @JvmField var isEntered: Boolean = false,
-    @JvmField var isCompleted: Boolean = false
+    @SerializedName("isCompleted")
+    var isCompleted: Boolean = false
 ) : Serializable

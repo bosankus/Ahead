@@ -112,19 +112,18 @@
             android:layout_height="0dp"
             android:background="@android:color/transparent"
             android:clipToPadding="false"
+            android:nestedScrollingEnabled="false"
             android:orientation="vertical"
             android:overScrollMode="never"
             android:padding="16dp"
             android:scrollbars="none"
-            android:visibility="gone"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/frameTodayHeader"
-            app:layout_constraintVertical_bias="0.0"
-            tools:listitem="@layout/layout_main_todo_list" />
+            app:layout_constraintVertical_bias="0.0" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/bg_white_gradient"
