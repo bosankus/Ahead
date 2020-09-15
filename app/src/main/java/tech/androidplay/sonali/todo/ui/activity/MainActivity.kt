@@ -27,6 +27,8 @@ import tech.androidplay.sonali.todo.utils.ImageHelper.selectImage
 import tech.androidplay.sonali.todo.utils.ResultData
 import tech.androidplay.sonali.todo.utils.UIHelper.getCurrentDate
 import tech.androidplay.sonali.todo.utils.UIHelper.logMessage
+import tech.androidplay.sonali.todo.utils.UIHelper.showSnack
+import tech.androidplay.sonali.todo.utils.UIHelper.showToast
 import tech.androidplay.sonali.todo.utils.UploadWorker
 import javax.inject.Inject
 
@@ -126,6 +128,7 @@ class MainActivity : AppCompatActivity() {
                             shimmerFrameLayout.visibility = View.VISIBLE
                         }
                         is ResultData.Success -> {
+                            logMessage("")
                             shimmerFrameLayout.visibility = View.GONE
                             todoAdapter.submitList(it.data)
                             tvTodayCount.text = todoAdapter.itemCount.toString() + " item(s)"
@@ -133,6 +136,10 @@ class MainActivity : AppCompatActivity() {
                         is ResultData.Failed -> {
                             shimmerFrameLayout.visibility = View.GONE
                             frameNoTodo.visibility = View.VISIBLE
+                            showToast(
+                                this,
+                                it.toString()
+                            )
                         }
                     }
                 }

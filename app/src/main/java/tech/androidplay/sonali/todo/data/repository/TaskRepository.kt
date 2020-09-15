@@ -6,6 +6,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.Query
 import com.google.firebase.storage.StorageReference
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.tasks.await
 import tech.androidplay.sonali.todo.data.model.Todo
 import tech.androidplay.sonali.todo.data.model.User
@@ -47,7 +48,7 @@ class TaskRepository @Inject constructor(
         )
 
         return try {
-            taskListRef
+            val response = taskListRef
                 .add(task)
                 .await()
             ResultData.Success(true)
@@ -57,17 +58,12 @@ class TaskRepository @Inject constructor(
 
     }
 
-    suspend fun fetchTasks(): ResultData<MutableList<Todo>> {
-        return try {
-            val response = query
-                .get()
-                .await()
-            val data = response.toObjects(Todo::class.java)
-            ResultData.Success(data)
-        } catch (e: Exception) {
-            ResultData.Failed(e.message)
-        }
+    fun fetchTasks() = flow {
+        emit(ResultData.Loading)
+        val response = query.get().await().toObjects(Todo::class.java)
+        emit(ResultData.Success(response))
     }
+
 
     suspend fun completeTask(taskId: String, status: Boolean): MutableLiveData<Boolean> {
         val completeTaskLiveData: MutableLiveData<Boolean> = MutableLiveData()
