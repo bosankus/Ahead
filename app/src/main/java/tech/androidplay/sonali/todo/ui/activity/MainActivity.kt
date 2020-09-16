@@ -10,7 +10,6 @@ import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.paging.PagedList
 import androidx.recyclerview.widget.RecyclerView
 import androidx.work.Constraints
 import androidx.work.OneTimeWorkRequest
@@ -19,6 +18,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.frame_today_todo_header.*
 import kotlinx.android.synthetic.main.shimmer_layout.*
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import tech.androidplay.sonali.todo.R
 import tech.androidplay.sonali.todo.data.viewmodel.TaskViewModel
 import tech.androidplay.sonali.todo.ui.adapter.TodoAdapter
@@ -27,7 +27,6 @@ import tech.androidplay.sonali.todo.utils.ImageHelper.selectImage
 import tech.androidplay.sonali.todo.utils.ResultData
 import tech.androidplay.sonali.todo.utils.UIHelper.getCurrentDate
 import tech.androidplay.sonali.todo.utils.UIHelper.logMessage
-import tech.androidplay.sonali.todo.utils.UIHelper.showSnack
 import tech.androidplay.sonali.todo.utils.UIHelper.showToast
 import tech.androidplay.sonali.todo.utils.UploadWorker
 import javax.inject.Inject
@@ -117,9 +116,10 @@ class MainActivity : AppCompatActivity() {
     }
 
 
+    @ExperimentalCoroutinesApi
     @SuppressLint("SetTextI18n")
     private fun load() {
-        taskViewModel.fetchTask().observe(
+        taskViewModel.fetchRealtime().observe(
             this,
             {
                 it.let {

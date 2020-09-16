@@ -10,7 +10,9 @@ import tech.androidplay.sonali.todo.data.model.Todo
  * Author: Ankush
  * On: 8/11/2020, 4:54 PM
  */
-class TodoViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+class TodoViewHolder(
+    itemView: View,
+) : RecyclerView.ViewHolder(itemView) {
 
     fun bind(todoItem: Todo) {
         itemView.tvTodoListItem.text = todoItem.todoBody

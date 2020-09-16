@@ -2,9 +2,12 @@ package tech.androidplay.sonali.todo.ui.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.activity.viewModels
 import androidx.recyclerview.widget.ListAdapter
+import dagger.hilt.android.AndroidEntryPoint
 import tech.androidplay.sonali.todo.R
 import tech.androidplay.sonali.todo.data.model.Todo
+import tech.androidplay.sonali.todo.data.viewmodel.TaskViewModel
 
 /**
  * Created by Androidplay

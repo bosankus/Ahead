@@ -9,6 +9,7 @@ import android.view.View
 import android.view.animation.Animation
 import android.widget.TextView
 import android.widget.Toast
+import com.google.android.material.snackbar.Snackbar
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -31,6 +32,14 @@ object UIHelper {
 
     fun logMessage(message: String) {
         Log.d(TAG, message)
+    }
+
+    fun showSnack(view: View, message: String) {
+        Snackbar.make(
+            view,
+            message,
+            Snackbar.LENGTH_LONG,
+        ).show()
     }
 
     fun showToast(context: Context?, toastMessage: String) {
