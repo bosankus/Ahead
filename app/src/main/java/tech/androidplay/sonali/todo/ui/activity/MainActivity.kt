@@ -14,7 +14,6 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import androidx.work.Constraints
-import androidx.work.OneTimeWorkRequest
 import androidx.work.WorkManager
 import com.bumptech.glide.Glide
 import dagger.hilt.android.AndroidEntryPoint
@@ -32,7 +31,6 @@ import tech.androidplay.sonali.todo.utils.ResultData
 import tech.androidplay.sonali.todo.utils.UIHelper.getCurrentDate
 import tech.androidplay.sonali.todo.utils.UIHelper.logMessage
 import tech.androidplay.sonali.todo.utils.UIHelper.showToast
-import tech.androidplay.sonali.todo.utils.UploadWorker
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -49,6 +47,9 @@ class MainActivity : AppCompatActivity() {
 
     @Inject
     lateinit var sharedPreferences: SharedPreferences
+
+    @set:Inject
+    var userDisplayImage = ""
 
     private lateinit var showFab: Animation
 
@@ -78,8 +79,7 @@ class MainActivity : AppCompatActivity() {
     override fun onStart() {
         super.onStart()
         shimmerFrameLayout.startShimmer()
-        val imageUrl = sharedPreferences.getString(USER_DISPLAY_IMAGE, "")
-        loadUserDisplayImage(imageUrl)
+        loadUserDisplayImage(userDisplayImage)
     }
 
     override fun onBackPressed() {
