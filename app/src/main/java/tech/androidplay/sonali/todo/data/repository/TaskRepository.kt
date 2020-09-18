@@ -4,18 +4,15 @@ import android.net.Uri
 import androidx.lifecycle.MutableLiveData
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.CollectionReference
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.Query
 import com.google.firebase.storage.StorageReference
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.callbackFlow
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.tasks.await
 import tech.androidplay.sonali.todo.data.model.Todo
-import tech.androidplay.sonali.todo.data.model.User
 import tech.androidplay.sonali.todo.utils.ResultData
-import tech.androidplay.sonali.todo.utils.UIHelper.getCurrentTimestamp
-import tech.androidplay.sonali.todo.utils.UIHelper.logMessage
 import javax.inject.Inject
 
 /**
@@ -33,20 +30,18 @@ class TaskRepository @Inject constructor(
     private val storageReference: StorageReference
 ) {
 
-    private val userId = firebaseAuth.currentUser?.uid
+    private val userDetails = firebaseAuth.currentUser
 
     private val query: Query = taskListRef
-        .whereEqualTo("id", userId)
+        .whereEqualTo("id", userDetails?.uid)
         .orderBy("todoCreationTimeStamp", Query.Direction.ASCENDING)
-
-    private var user: User = User()
 
     suspend fun create(todoBody: String, todoDesc: String): ResultData<Boolean> {
         val task = hashMapOf(
-            "id" to userId,
+            "id" to userDetails?.uid,
             "todoBody" to todoBody,
             "todoDesc" to todoDesc,
-            "todoCreationTimeStamp" to getCurrentTimestamp(),
+            "todoCreationTimeStamp" to FieldValue.serverTimestamp(),
             "isCompleted" to false
         )
 
@@ -86,25 +81,17 @@ class TaskRepository @Inject constructor(
         return completeTaskLiveData
     }
 
-    fun uploadImage(uri: Uri) {
-        val ref = storageReference.child("profilePicture/${userId}")
-        val uploadTask = ref.putFile(uri)
-        uploadTask.addOnCompleteListener {
-            if (it.isSuccessful) {
-                ref.downloadUrl.addOnSuccessListener { uri ->
-                    logMessage("Repo: $uri")
-                    user.userDp = uri.toString()
-                    // TODO: Store the URI in shared preference
-                }
-            }
+    suspend fun uploadImage(uri: Uri): ResultData<String> {
+        val ref = storageReference
+            .child("${userDetails?.email}/${userDetails?.uid}")
+        return try {
+            ref.putFile(uri).await()
+            val imageUrl = ref.downloadUrl.await().toString()
+            ResultData.Success(imageUrl)
+        } catch (e: Exception) {
+            ResultData.Failed(e.message)
         }
     }
-
-    /*fun fetchTasks() = flow {
-        emit(ResultData.Loading)
-        val response = query.get().await().toObjects(Todo::class.java)
-        emit(ResultData.Success(response))
-    }*/
 }
 
 

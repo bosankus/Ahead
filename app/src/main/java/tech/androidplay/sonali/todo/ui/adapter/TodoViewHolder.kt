@@ -1,9 +1,9 @@
 package tech.androidplay.sonali.todo.ui.adapter
 
-import android.view.View
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.android.synthetic.main.layout_main_todo_list.view.*
 import tech.androidplay.sonali.todo.data.model.Todo
+import tech.androidplay.sonali.todo.databinding.LayoutMainTodoListBinding
+import tech.androidplay.sonali.todo.utils.UIHelper.logMessage
 
 /**
  * Created by Androidplay
@@ -11,10 +11,11 @@ import tech.androidplay.sonali.todo.data.model.Todo
  * On: 8/11/2020, 4:54 PM
  */
 class TodoViewHolder(
-    itemView: View,
-) : RecyclerView.ViewHolder(itemView) {
+    private val binding: LayoutMainTodoListBinding,
+) : RecyclerView.ViewHolder(binding.root) {
 
     fun bind(todoItem: Todo) {
-        itemView.tvTodoListItem.text = todoItem.todoBody
+        binding.todo = todoItem
+        binding.executePendingBindings()
     }
 }

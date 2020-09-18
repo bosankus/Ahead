@@ -3,7 +3,9 @@ package tech.androidplay.sonali.todo.ui.activity
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
+import android.content.SharedPreferences
 import android.graphics.Color
+import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import android.view.animation.Animation
@@ -14,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.work.Constraints
 import androidx.work.OneTimeWorkRequest
 import androidx.work.WorkManager
+import com.bumptech.glide.Glide
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.frame_today_todo_header.*
@@ -23,6 +26,7 @@ import tech.androidplay.sonali.todo.R
 import tech.androidplay.sonali.todo.data.viewmodel.TaskViewModel
 import tech.androidplay.sonali.todo.ui.adapter.TodoAdapter
 import tech.androidplay.sonali.todo.ui.fragment.BottomSheetFragment
+import tech.androidplay.sonali.todo.utils.Constants.USER_DISPLAY_IMAGE
 import tech.androidplay.sonali.todo.utils.ImageHelper.selectImage
 import tech.androidplay.sonali.todo.utils.ResultData
 import tech.androidplay.sonali.todo.utils.UIHelper.getCurrentDate
@@ -43,11 +47,15 @@ class MainActivity : AppCompatActivity() {
     @Inject
     lateinit var todoAdapter: TodoAdapter
 
+    @Inject
+    lateinit var sharedPreferences: SharedPreferences
+
     private lateinit var showFab: Animation
 
     private val taskViewModel: TaskViewModel by viewModels()
 
 
+    @ExperimentalCoroutinesApi
     @SuppressLint("SimpleDateFormat")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -64,13 +72,14 @@ class MainActivity : AppCompatActivity() {
         // load create task button animations
         initiateFABAnimation()
 
-        load()
+        loadTodo()
     }
 
     override fun onStart() {
         super.onStart()
         shimmerFrameLayout.startShimmer()
-        // loading all task list
+        val imageUrl = sharedPreferences.getString(USER_DISPLAY_IMAGE, "")
+        loadUserDisplayImage(imageUrl)
     }
 
     override fun onBackPressed() {
@@ -118,7 +127,7 @@ class MainActivity : AppCompatActivity() {
 
     @ExperimentalCoroutinesApi
     @SuppressLint("SetTextI18n")
-    private fun load() {
+    private fun loadTodo() {
         taskViewModel.fetchRealtime().observe(
             this,
             {
@@ -151,15 +160,39 @@ class MainActivity : AppCompatActivity() {
     @SuppressLint("Recycle")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (resultCode == Activity.RESULT_OK && data != null) {
-            taskViewModel.uploadImage(data.data!!)
+            uploadAndShowImage(data.data!!)
         } else if (resultCode != Activity.RESULT_CANCELED)
             logMessage("Image picking cancelled")
         super.onActivityResult(requestCode, resultCode, data)
     }
 
 
+    private fun uploadAndShowImage(uri: Uri?) {
+        uri?.let {
+            taskViewModel.uploadImage(uri).observe(this, {
+                when (it) {
+                    is ResultData.Loading -> logMessage("Uploading Image...")
+                    is ResultData.Success -> {
+                        sharedPreferences.edit().putString(USER_DISPLAY_IMAGE, it.data.toString())
+                            .apply()
+                        loadUserDisplayImage(it.data)
+                    }
+                    is ResultData.Failed -> logMessage("Something went wrong")
+                }
+            })
+        }
+    }
+
+    private fun loadUserDisplayImage(url: String?) {
+        url?.let {
+            Glide.with(this)
+                .load(url)
+                .into(imgUserDp)
+        }
+    }
+
     // Call this method to run work manager
-    private fun initiateUploadRequest() {
+    /*private fun initiateUploadRequest() {
         val uploadRequest = OneTimeWorkRequest.Builder(UploadWorker::class.java)
             .setConstraints(constraints)
             .build()
@@ -169,6 +202,6 @@ class MainActivity : AppCompatActivity() {
             .observe(this, {
                 tvNoTodo.text = it.state.name
             })
-    }
+    }*/
 }
 
