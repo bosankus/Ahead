@@ -22,6 +22,7 @@ import tech.androidplay.sonali.todo.R
 import tech.androidplay.sonali.todo.data.viewmodel.TaskViewModel
 import tech.androidplay.sonali.todo.databinding.FragmentAddTaskBottomSheetBinding
 import tech.androidplay.sonali.todo.utils.ResultData
+import tech.androidplay.sonali.todo.utils.UIHelper.showToast
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -87,12 +88,7 @@ class BottomSheetFragment : BottomSheetDialogFragment() {
         }
         binding.btCreateTask.setOnClickListener {
             if ((tvTaskInput.text.length) <= 0) tvTaskInput.error = "Cant't be empty mama!"
-            else {
-                binding.clCreateTask.visibility = View.INVISIBLE
-                binding.lottiCreateTaskLoading.visibility = View.VISIBLE
-                binding.lottiCreateTaskLoading.playAnimation()
-                createTask()
-            }
+            else createTask()
         }
     }
 
@@ -140,11 +136,15 @@ class BottomSheetFragment : BottomSheetDialogFragment() {
             it?.let {
                 when (it) {
                     is ResultData.Loading -> {
+                        binding.clCreateTask.visibility = View.INVISIBLE
+                        binding.lottiCreateTaskLoading.visibility = View.VISIBLE
+                        binding.lottiCreateTaskLoading.playAnimation()
                     }
                     is ResultData.Success -> {
+                        binding.lottiCreateTaskLoading.cancelAnimation()
+                        dismiss()
                     }
-                    is ResultData.Failed -> {
-                    }
+                    is ResultData.Failed -> showToast(requireContext(), "Something went wrong")
                 }
             }
         })

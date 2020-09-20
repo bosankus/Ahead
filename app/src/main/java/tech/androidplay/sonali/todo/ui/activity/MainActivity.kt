@@ -14,6 +14,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import androidx.work.Constraints
+import androidx.work.OneTimeWorkRequest
 import androidx.work.WorkManager
 import com.bumptech.glide.Glide
 import dagger.hilt.android.AndroidEntryPoint
@@ -31,6 +32,7 @@ import tech.androidplay.sonali.todo.utils.ResultData
 import tech.androidplay.sonali.todo.utils.UIHelper.getCurrentDate
 import tech.androidplay.sonali.todo.utils.UIHelper.logMessage
 import tech.androidplay.sonali.todo.utils.UIHelper.showToast
+import tech.androidplay.sonali.todo.utils.UploadWorker
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -183,7 +185,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     // Call this method to run work manager
-    /*private fun initiateUploadRequest() {
+    private fun initiateUploadRequest() {
         val uploadRequest = OneTimeWorkRequest.Builder(UploadWorker::class.java)
             .setConstraints(constraints)
             .build()
@@ -193,6 +195,6 @@ class MainActivity : AppCompatActivity() {
             .observe(this, {
                 tvNoTodo.text = it.state.name
             })
-    }*/
+    }
 }
 
