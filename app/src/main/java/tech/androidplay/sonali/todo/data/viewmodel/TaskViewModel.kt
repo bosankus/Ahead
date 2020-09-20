@@ -2,9 +2,13 @@ package tech.androidplay.sonali.todo.data.viewmodel
 
 import android.net.Uri
 import androidx.hilt.lifecycle.ViewModelInject
-import androidx.lifecycle.*
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.catch
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.liveData
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 import tech.androidplay.sonali.todo.data.model.Todo
 import tech.androidplay.sonali.todo.data.repository.TaskRepository
 import tech.androidplay.sonali.todo.utils.ResultData
@@ -17,34 +21,32 @@ import tech.androidplay.sonali.todo.utils.ResultData
 class TaskViewModel @ViewModelInject constructor(private val taskRepository: TaskRepository) :
     ViewModel() {
 
-    var completeTaskLiveData: MutableLiveData<Boolean> = MutableLiveData()
-
-    fun createTask(todoName: String, todoDesc: String): LiveData<ResultData<Boolean>> {
-        return liveData {
+    fun createTask(todoName: String, todoDesc: String) =
+        liveData {
             emit(ResultData.Loading)
             emit(taskRepository.create(todoName, todoDesc))
         }
+
+    @ExperimentalCoroutinesApi
+    fun fetchRealtime(): MutableLiveData<ResultData<MutableList<Todo>>> {
+        val response = MutableLiveData<ResultData<MutableList<Todo>>>()
+        viewModelScope.launch {
+            taskRepository.fetchTasks()
+                .collect {
+                    response.postValue(it)
+                }
+        }
+        return response
     }
 
-    fun fetchTask(): LiveData<ResultData<MutableList<Todo>>> {
-        return taskRepository
-            .fetchTasks()
-            .catch { e -> ResultData.Failed(e.message) }
-            .asLiveData(
-                Dispatchers.Default +
-                        viewModelScope.coroutineContext
-            )
+    fun changeTaskState(todoItem: Todo, status: Boolean) {
+        viewModelScope.launch { taskRepository.changeTaskState(todoItem.docId, status) }
     }
 
 
-/*fun completeTask(taskId: String, status: Boolean) {
-    *//*taskStatus = status
-    completeTaskLiveData = taskRepository.completeTask(taskId, status)
-    return completeTaskLiveData*//*
-}*/
-
-    fun uploadImage(uri: Uri) {
-        taskRepository.uploadImage(uri)
-    }
-
+    fun uploadImage(uri: Uri) =
+        liveData {
+            emit(ResultData.Loading)
+            emit(taskRepository.uploadImage(uri))
+        }
 }

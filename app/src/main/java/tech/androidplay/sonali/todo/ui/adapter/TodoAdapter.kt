@@ -3,8 +3,11 @@ package tech.androidplay.sonali.todo.ui.adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
-import tech.androidplay.sonali.todo.R
 import tech.androidplay.sonali.todo.data.model.Todo
+import tech.androidplay.sonali.todo.data.viewmodel.TaskViewModel
+import tech.androidplay.sonali.todo.databinding.LayoutMainTodoListBinding
+import tech.androidplay.sonali.todo.utils.UIHelper.logMessage
+import javax.inject.Inject
 
 /**
  * Created by Androidplay
@@ -12,16 +15,24 @@ import tech.androidplay.sonali.todo.data.model.Todo
  * On: 7/22/2020, 10:08 PM
  */
 
-class TodoAdapter : ListAdapter<Todo, TodoViewHolder>(TodoDiffUtilCallback()) {
+class TodoAdapter @Inject constructor(private val viewModel: TaskViewModel) :
+    ListAdapter<Todo, TodoViewHolder>(TodoDiffUtilCallback()), TodoEventListener {
+
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TodoViewHolder {
-        val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.layout_main_todo_list, parent, false)
-        return TodoViewHolder(view)
+        val layoutInflater = LayoutInflater.from(parent.context)
+        val binding = LayoutMainTodoListBinding.inflate(layoutInflater, parent, false)
+        return TodoViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: TodoViewHolder, position: Int) {
         val todoItem = getItem(position)
-        holder.bind(todoItem)
+        holder.bind(viewModel, todoItem)
+        holder.itemView.setOnClickListener { }
+    }
+
+    override fun completeTask(todo: Todo) {
+        logMessage(todo.todoBody)
     }
 
 }

@@ -9,6 +9,8 @@ import android.view.View
 import android.view.animation.Animation
 import android.widget.TextView
 import android.widget.Toast
+import com.google.android.material.snackbar.Snackbar
+import tech.androidplay.sonali.todo.utils.Constants.GLOBAL_TAG
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -20,8 +22,6 @@ import java.util.*
 
 object UIHelper {
 
-    private val TAG = "Androidplay"
-
     @SuppressLint("SimpleDateFormat")
     fun getCurrentTimestamp(): String =
         SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss Z").format(Date())
@@ -30,7 +30,7 @@ object UIHelper {
     fun getCurrentDate(): String = SimpleDateFormat("EEE, MMM d, ''yy").format(Date())
 
     fun logMessage(message: String) {
-        Log.d(TAG, message)
+        Log.d(GLOBAL_TAG, message)
     }
 
     fun showToast(context: Context?, toastMessage: String) {

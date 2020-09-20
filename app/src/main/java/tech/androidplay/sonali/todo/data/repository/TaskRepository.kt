@@ -1,15 +1,15 @@
 package tech.androidplay.sonali.todo.data.repository
 
 import android.net.Uri
-import androidx.lifecycle.MutableLiveData
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.Query
 import com.google.firebase.storage.StorageReference
-import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.tasks.await
 import tech.androidplay.sonali.todo.data.model.Todo
-import tech.androidplay.sonali.todo.data.model.User
 import tech.androidplay.sonali.todo.utils.ResultData
 import tech.androidplay.sonali.todo.utils.UIHelper.getCurrentTimestamp
 import tech.androidplay.sonali.todo.utils.UIHelper.logMessage
@@ -21,8 +21,6 @@ import javax.inject.Inject
  * On: 5/6/2020, 4:54 AM
  */
 
-// Glide not loading dp . Upoload working with download url fetch
-
 
 class TaskRepository @Inject constructor(
     firebaseAuth: FirebaseAuth,
@@ -30,17 +28,15 @@ class TaskRepository @Inject constructor(
     private val storageReference: StorageReference
 ) {
 
-    private val userId = firebaseAuth.currentUser?.uid
+    private val userDetails = firebaseAuth.currentUser
 
     private val query: Query = taskListRef
-        .whereEqualTo("id", userId)
+        .whereEqualTo("id", userDetails?.uid)
         .orderBy("todoCreationTimeStamp", Query.Direction.ASCENDING)
-
-    private var user: User = User()
 
     suspend fun create(todoBody: String, todoDesc: String): ResultData<Boolean> {
         val task = hashMapOf(
-            "id" to userId,
+            "id" to userDetails?.uid,
             "todoBody" to todoBody,
             "todoDesc" to todoDesc,
             "todoCreationTimeStamp" to getCurrentTimestamp(),
@@ -48,7 +44,7 @@ class TaskRepository @Inject constructor(
         )
 
         return try {
-            val response = taskListRef
+            taskListRef
                 .add(task)
                 .await()
             ResultData.Success(true)
@@ -58,33 +54,41 @@ class TaskRepository @Inject constructor(
 
     }
 
-    fun fetchTasks() = flow {
-        emit(ResultData.Loading)
-        val response = query.get().await().toObjects(Todo::class.java)
-        emit(ResultData.Success(response))
-    }
-
-
-    suspend fun completeTask(taskId: String, status: Boolean): MutableLiveData<Boolean> {
-        val completeTaskLiveData: MutableLiveData<Boolean> = MutableLiveData()
-        taskListRef.document(taskId)
-            .update("isCompleted", status)
-            .await()
-        completeTaskLiveData.postValue(true)
-        return completeTaskLiveData
-    }
-
-    fun uploadImage(uri: Uri) {
-        val ref = storageReference.child("profilePicture/${userId}")
-        val uploadTask = ref.putFile(uri)
-        uploadTask.addOnCompleteListener {
-            if (it.isSuccessful) {
-                ref.downloadUrl.addOnSuccessListener { uri ->
-                    logMessage("Repo: $uri")
-                    user.userDp = uri.toString()
-                    // TODO: Store the URI in shared preference
-                }
+    @ExperimentalCoroutinesApi
+    fun fetchTasks() = callbackFlow {
+        offer(ResultData.Loading)
+        val querySnapshot = query
+            .addSnapshotListener { value, error ->
+                if (error != null) return@addSnapshotListener
+                else if (!value?.isEmpty!!) {
+                    val todo = value.toObjects(Todo::class.java)
+                    offer(ResultData.Success(todo))
+                } else offer(ResultData.Failed())
             }
+        awaitClose {
+            querySnapshot.remove()
+        }
+    }
+
+    suspend fun changeTaskState(taskId: String, status: Boolean) {
+        try {
+            taskListRef.document(taskId)
+                .update("isCompleted", status)
+                .await()
+        } catch (e: Exception) {
+            logMessage(e.message.toString())
+        }
+    }
+
+    suspend fun uploadImage(uri: Uri): ResultData<String> {
+        val ref = storageReference
+            .child("${userDetails?.email}/${userDetails?.uid}")
+        return try {
+            ref.putFile(uri).await()
+            val imageUrl = ref.downloadUrl.await().toString()
+            ResultData.Success(imageUrl)
+        } catch (e: Exception) {
+            ResultData.Failed(e.message)
         }
     }
 }

@@ -3,31 +3,34 @@ package tech.androidplay.sonali.todo.ui.activity
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
+import android.content.SharedPreferences
 import android.graphics.Color
+import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.paging.PagedList
 import androidx.recyclerview.widget.RecyclerView
 import androidx.work.Constraints
 import androidx.work.OneTimeWorkRequest
 import androidx.work.WorkManager
+import com.bumptech.glide.Glide
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.frame_today_todo_header.*
 import kotlinx.android.synthetic.main.shimmer_layout.*
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import tech.androidplay.sonali.todo.R
 import tech.androidplay.sonali.todo.data.viewmodel.TaskViewModel
 import tech.androidplay.sonali.todo.ui.adapter.TodoAdapter
 import tech.androidplay.sonali.todo.ui.fragment.BottomSheetFragment
+import tech.androidplay.sonali.todo.utils.Constants.USER_DISPLAY_IMAGE
 import tech.androidplay.sonali.todo.utils.ImageHelper.selectImage
 import tech.androidplay.sonali.todo.utils.ResultData
 import tech.androidplay.sonali.todo.utils.UIHelper.getCurrentDate
 import tech.androidplay.sonali.todo.utils.UIHelper.logMessage
-import tech.androidplay.sonali.todo.utils.UIHelper.showSnack
 import tech.androidplay.sonali.todo.utils.UIHelper.showToast
 import tech.androidplay.sonali.todo.utils.UploadWorker
 import javax.inject.Inject
@@ -44,34 +47,36 @@ class MainActivity : AppCompatActivity() {
     @Inject
     lateinit var todoAdapter: TodoAdapter
 
+    @Inject
+    lateinit var sharedPreferences: SharedPreferences
+
+    @set:Inject
+    var userDisplayImage = ""
+
     private lateinit var showFab: Animation
 
     private val taskViewModel: TaskViewModel by viewModels()
 
 
+    @ExperimentalCoroutinesApi
     @SuppressLint("SimpleDateFormat")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        showFab = AnimationUtils.loadAnimation(this, R.anim.btn_up_animation)
-
-        // enable white status bar with black icons
         setScreenUI()
 
-        // turning listeners on
         clickListeners()
 
-        // load create task button animations
         initiateFABAnimation()
 
-        load()
+        loadTodo()
     }
 
     override fun onStart() {
         super.onStart()
         shimmerFrameLayout.startShimmer()
-        // loading all task list
+        loadUserDisplayImage(userDisplayImage)
     }
 
     override fun onBackPressed() {
@@ -87,6 +92,7 @@ class MainActivity : AppCompatActivity() {
         window.statusBarColor = Color.WHITE
         window.navigationBarColor = Color.WHITE
 
+        showFab = AnimationUtils.loadAnimation(this, R.anim.btn_up_animation)
         tvTodayDate.text = getCurrentDate()
         rvTodoList.apply {
             adapter = todoAdapter
@@ -117,33 +123,27 @@ class MainActivity : AppCompatActivity() {
     }
 
 
+    @ExperimentalCoroutinesApi
     @SuppressLint("SetTextI18n")
-    private fun load() {
-        taskViewModel.fetchTask().observe(
-            this,
-            {
-                it.let {
-                    when (it) {
-                        is ResultData.Loading -> {
-                            shimmerFrameLayout.visibility = View.VISIBLE
-                        }
-                        is ResultData.Success -> {
-                            logMessage("")
-                            shimmerFrameLayout.visibility = View.GONE
-                            todoAdapter.submitList(it.data)
-                            tvTodayCount.text = todoAdapter.itemCount.toString() + " item(s)"
-                        }
-                        is ResultData.Failed -> {
-                            shimmerFrameLayout.visibility = View.GONE
-                            frameNoTodo.visibility = View.VISIBLE
-                            showToast(
-                                this,
-                                it.toString()
-                            )
-                        }
+    private fun loadTodo() {
+        taskViewModel.fetchRealtime().observe(this, {
+            it.let {
+                when (it) {
+                    is ResultData.Loading -> shimmerFrameLayout.visibility = View.VISIBLE
+                    is ResultData.Success -> {
+                        logMessage("")
+                        shimmerFrameLayout.visibility = View.GONE
+                        todoAdapter.submitList(it.data)
+                        tvTodayCount.text = "${it.data?.size}" + " item(s)"
+                    }
+                    is ResultData.Failed -> {
+                        shimmerFrameLayout.visibility = View.GONE
+                        frameNoTodo.visibility = View.VISIBLE
+                        showToast(this, it.toString())
                     }
                 }
             }
+        }
         )
     }
 
@@ -151,12 +151,38 @@ class MainActivity : AppCompatActivity() {
     @SuppressLint("Recycle")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (resultCode == Activity.RESULT_OK && data != null) {
-            taskViewModel.uploadImage(data.data!!)
+            uploadAndShowImage(data.data!!)
         } else if (resultCode != Activity.RESULT_CANCELED)
             logMessage("Image picking cancelled")
         super.onActivityResult(requestCode, resultCode, data)
     }
 
+
+    private fun uploadAndShowImage(uri: Uri?) {
+        uri?.let {
+            taskViewModel.uploadImage(uri).observe(this, {
+                when (it) {
+                    is ResultData.Loading -> showToast(this, "Image Uploading")
+                    is ResultData.Success -> {
+                        showToast(this, "Image uploaded successfully")
+                        loadUserDisplayImage(it.data)
+                        sharedPreferences.edit().putString(USER_DISPLAY_IMAGE, it.data.toString())
+                            .apply()
+                    }
+                    is ResultData.Failed -> showToast(this, "Image Upload failed. Retry")
+                }
+            })
+        }
+    }
+
+    private fun loadUserDisplayImage(url: String?) {
+        url?.let {
+            Glide.with(this)
+                .load(url)
+                .placeholder(R.drawable.ic_default_dp)
+                .into(imgUserDp)
+        }
+    }
 
     // Call this method to run work manager
     private fun initiateUploadRequest() {

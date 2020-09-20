@@ -23,7 +23,6 @@
             android:elevation="1dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:tint="@color/dribblePink"
             tools:ignore="ContentDescription" />
 
         <TextView

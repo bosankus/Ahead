@@ -19,12 +19,16 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
-
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
+    }
+
+    buildFeatures {
+        dataBinding true
+        viewBinding true
     }
 
     compileOptions {
@@ -92,7 +96,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-storage-ktx:19.2.0'
 
     // Paging Library
-    implementation 'android.arch.paging:runtime:1.0.1'
+    implementation "androidx.paging:paging-runtime:2.1.2"
 
     // DI - Hilt
     implementation 'androidx.hilt:hilt-lifecycle-viewmodel:1.0.0-alpha02'
@@ -112,7 +116,7 @@ dependencies {
     // Lottie Animation
     implementation "com.airbnb.android:lottie:3.4.1"
 
-    // Firebase Shimmer effect
+    // Shimmer effect
     implementation 'com.facebook.shimmer:shimmer:0.5.0'
 
     // Glide

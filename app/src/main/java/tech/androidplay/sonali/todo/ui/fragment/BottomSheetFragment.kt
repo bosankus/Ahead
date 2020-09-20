@@ -9,22 +9,20 @@ import android.view.ViewGroup
 import android.view.WindowManager
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
-import android.widget.*
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.viewModels
-import com.airbnb.lottie.LottieAnimationView
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.datepicker.MaterialDatePicker
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_add_task_bottom_sheet.*
+import kotlinx.android.synthetic.main.fragment_add_task_bottom_sheet.view.*
 import kotlinx.android.synthetic.main.frame_date_time_picker.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
+import kotlinx.android.synthetic.main.frame_date_time_picker.view.*
 import tech.androidplay.sonali.todo.R
 import tech.androidplay.sonali.todo.data.viewmodel.TaskViewModel
+import tech.androidplay.sonali.todo.databinding.FragmentAddTaskBottomSheetBinding
 import tech.androidplay.sonali.todo.utils.ResultData
+import tech.androidplay.sonali.todo.utils.UIHelper.showToast
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -39,94 +37,61 @@ class BottomSheetFragment : BottomSheetDialogFragment() {
 
     private val taskViewModel: TaskViewModel by viewModels()
 
-    private lateinit var clCreateTask: ConstraintLayout
-    private lateinit var swAlarm: Switch
-    private lateinit var frameDateTimePicker: FrameLayout
-    private lateinit var pickedTimeStamp: TextView
-    private lateinit var pbOpenCalender: ProgressBar
-    private lateinit var lottieCreateTask: LottieAnimationView
-    private lateinit var btnCreateTask: Button
-
-    private lateinit var job: Job
+    private lateinit var binding: FragmentAddTaskBottomSheetBinding
+    private lateinit var includeLayoutBinding: ConstraintLayout
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val view = inflater.inflate(R.layout.fragment_add_task_bottom_sheet, container, false)
-        dialog?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_MODE_CHANGED)
+        binding = FragmentAddTaskBottomSheetBinding.inflate(inflater)
+        includeLayoutBinding = binding.bottomSheetLayout
 
-        // initializing variables
-        clCreateTask = view.findViewById(R.id.clCreateTask)
-        swAlarm = view.findViewById(R.id.swAlarm)
-        frameDateTimePicker = view.findViewById(R.id.frameDateTimePicker)
-        pbOpenCalender = view.findViewById(R.id.pbOpenCalender)
-        pickedTimeStamp = view.findViewById(R.id.tvSelectDateTimeDesc)
-        lottieCreateTask = view.findViewById(R.id.lottiCreateTaskLoading)
-        btnCreateTask = view.findViewById(R.id.btCreateTask)
-        job = Job()
+        setUpUi()
 
-        // UI visibility
-        frameDateTimePicker.visibility = View.GONE
-        pbOpenCalender.visibility = View.GONE
-
-        // setting click listeners
         clickListeners()
 
-        return view
+        return binding.root
     }
 
+    private fun setUpUi() {
+        dialog?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_MODE_CHANGED)
+        includeLayoutBinding.frameDateTimePicker.visibility = View.GONE
+        includeLayoutBinding.pbOpenCalender.visibility = View.GONE
+    }
 
     private fun clickListeners() {
-        swAlarm.setOnCheckedChangeListener { _, isChecked ->
+        binding.swAlarm.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
                 val animationUtils =
                     AnimationUtils.loadAnimation(context, R.anim.fade_out_animation)
-                frameDateTimePicker.startAnimation(animationUtils)
-                frameDateTimePicker.visibility = View.VISIBLE
+                includeLayoutBinding.frameDateTimePicker.startAnimation(animationUtils)
+                includeLayoutBinding.frameDateTimePicker.visibility = View.VISIBLE
             } else if (!isChecked) {
                 val animationUtils =
                     AnimationUtils.loadAnimation(context, R.anim.fade_in_animation)
-                frameDateTimePicker.startAnimation(animationUtils)
+                includeLayoutBinding.frameDateTimePicker.startAnimation(animationUtils)
                 animationUtils.setAnimationListener(object : Animation.AnimationListener {
-                    override fun onAnimationRepeat(animation: Animation?) {
-                    }
-
+                    override fun onAnimationRepeat(animation: Animation?) {}
                     override fun onAnimationEnd(animation: Animation?) {
-                        frameDateTimePicker.visibility = View.GONE
+                        includeLayoutBinding.frameDateTimePicker.visibility = View.GONE
                     }
 
-                    override fun onAnimationStart(animation: Animation?) {
-                    }
-
+                    override fun onAnimationStart(animation: Animation?) {}
                 })
             }
         }
-
-        frameDateTimePicker.setOnClickListener {
-            job = showCalender()
+        includeLayoutBinding.frameDateTimePicker.setOnClickListener {
+            initiateDateTimePicker()
+            includeLayoutBinding.pbOpenCalender.visibility = View.VISIBLE
         }
-
-
-        btnCreateTask.setOnClickListener {
-
+        binding.btCreateTask.setOnClickListener {
             if ((tvTaskInput.text.length) <= 0) tvTaskInput.error = "Cant't be empty mama!"
-            else {
-                clCreateTask.visibility = View.INVISIBLE
-                lottieCreateTask.visibility = View.VISIBLE
-                lottieCreateTask.playAnimation()
-
-                createTask()
-            }
+            else createTask()
         }
     }
 
-    // Handling long running task- opening calender
-    private fun showCalender() = CoroutineScope(Dispatchers.Main).launch {
-        initiateDateTimePicker()
-        pbOpenCalender.visibility = View.VISIBLE
-    }
 
     // pick date & time of task to be notified
     private fun initiateDateTimePicker() {
@@ -137,11 +102,11 @@ class BottomSheetFragment : BottomSheetDialogFragment() {
             pbOpenCalender.visibility = View.GONE
         }
         datePicker.addOnPositiveButtonClickListener {
-            pbOpenCalender.visibility = View.GONE
+            includeLayoutBinding.pbOpenCalender.visibility = View.GONE
             initiateTimePicker(datePicker.headerText)
         }
         datePicker.addOnNegativeButtonClickListener {
-            pbOpenCalender.visibility = View.GONE
+            includeLayoutBinding.pbOpenCalender.visibility = View.GONE
         }
     }
 
@@ -152,7 +117,7 @@ class BottomSheetFragment : BottomSheetDialogFragment() {
         val timeSetListener = TimePickerDialog.OnTimeSetListener { timePicker, hourOfDay, minute ->
             cal.set(Calendar.HOUR_OF_DAY, hourOfDay)
             cal.set(Calendar.MINUTE, minute)
-            pickedTimeStamp.text =
+            includeLayoutBinding.tvSelectDateTimeDesc.text =
                 date + ", " + SimpleDateFormat("HH:mm").format(cal.time).toString()
         }
         TimePickerDialog(
@@ -171,18 +136,18 @@ class BottomSheetFragment : BottomSheetDialogFragment() {
             it?.let {
                 when (it) {
                     is ResultData.Loading -> {
+                        binding.clCreateTask.visibility = View.INVISIBLE
+                        binding.lottiCreateTaskLoading.visibility = View.VISIBLE
+                        binding.lottiCreateTaskLoading.playAnimation()
                     }
                     is ResultData.Success -> {
+                        binding.lottiCreateTaskLoading.cancelAnimation()
+                        dismiss()
                     }
-                    is ResultData.Failed -> {
-                    }
+                    is ResultData.Failed -> showToast(requireContext(), "Something went wrong")
                 }
             }
         })
     }
 
-    override fun onDetach() {
-        super.onDetach()
-        job.cancel()
-    }
 }

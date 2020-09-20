@@ -1,52 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/todoItemList"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/clItemListContainer"
+    <data>
+
+        <variable
+            name="itemClickListener"
+            type="tech.androidplay.sonali.todo.ui.adapter.TodoEventListener" />
+
+        <variable
+            name="todo"
+            type="tech.androidplay.sonali.todo.data.model.Todo" />
+    </data>
+
+    <LinearLayout
+        android:id="@+id/todoItemList"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="15sp"
-        android:focusable="false"
-        android:focusableInTouchMode="false"
-        tools:ignore="UselessParent">
+        android:orientation="vertical">
 
-        <RadioButton
-            android:id="@+id/rbTodoItemStatus"
-            android:layout_width="wrap_content"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/clItemListContainer"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:buttonTint="@color/dribblePink"
-            android:clickable="false"
-            android:fontFamily="@font/jost"
-            android:minWidth="0dp"
-            android:minHeight="0dp"
-            android:scaleX="0.7"
-            android:scaleY="0.7"
-            android:textColor="@color/grey3"
-            android:textSize="15sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:ignore="RtlSymmetry" />
+            android:layout_marginBottom="15sp"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            tools:ignore="UselessParent">
 
-        <TextView
-            android:id="@+id/tvTodoListItem"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:ellipsize="end"
-            android:fontFamily="@font/jost"
-            android:textColor="@color/grey3"
-            android:textSize="15sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/rbTodoItemStatus"
-            app:layout_constraintTop_toTopOf="@+id/rbTodoItemStatus" />
+            <RadioButton
+                android:id="@+id/rbTodoItemStatus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:buttonTint="@color/dribblePink"
+                android:checked="@{todo.isCompleted}"
+                android:clickable="true"
+                android:fontFamily="@font/jost"
+                android:minWidth="0dp"
+                android:minHeight="0dp"
+                android:scaleX="0.7"
+                android:scaleY="0.7"
+                android:textColor="@color/grey3"
+                android:textSize="15sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="RtlSymmetry" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            <TextView
+                android:id="@+id/tvTodoListItem"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:ellipsize="end"
+                android:fontFamily="@font/jost"
+                android:text="@{todo.todoBody}"
+                android:textColor="@color/grey3"
+                android:textSize="15sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/rbTodoItemStatus"
+                app:layout_constraintTop_toTopOf="@+id/rbTodoItemStatus" />
 
-</LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </LinearLayout>
+</layout>
