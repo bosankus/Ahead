@@ -39,8 +39,10 @@ class TaskViewModel @ViewModelInject constructor(private val taskRepository: Tas
         return response
     }
 
-    fun completeTask(todo: Todo) {
+    fun changeTaskState(todoItem: Todo, status: Boolean) {
+        viewModelScope.launch { taskRepository.changeTaskState(todoItem.docId, status) }
     }
+
 
     fun uploadImage(uri: Uri) =
         liveData {

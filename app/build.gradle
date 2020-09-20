@@ -28,6 +28,7 @@ android {
 
     buildFeatures {
         dataBinding true
+        viewBinding true
     }
 
     compileOptions {
@@ -115,7 +116,7 @@ dependencies {
     // Lottie Animation
     implementation "com.airbnb.android:lottie:3.4.1"
 
-    // Firebase Shimmer effect
+    // Shimmer effect
     implementation 'com.facebook.shimmer:shimmer:0.5.0'
 
     // Glide

@@ -1,7 +1,5 @@
 package tech.androidplay.sonali.todo.di
 
-import androidx.paging.PagedList
-import com.firebase.ui.firestore.paging.FirestorePagingOptions
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
@@ -11,10 +9,9 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ActivityComponent
-import dagger.hilt.android.qualifiers.ApplicationContext
-import tech.androidplay.sonali.todo.data.model.Todo
 import tech.androidplay.sonali.todo.data.repository.AuthRepository
 import tech.androidplay.sonali.todo.data.repository.TaskRepository
+import tech.androidplay.sonali.todo.data.viewmodel.TaskViewModel
 import tech.androidplay.sonali.todo.ui.adapter.TodoAdapter
 import tech.androidplay.sonali.todo.utils.CacheManager
 import tech.androidplay.sonali.todo.utils.Constants.FIRESTORE_COLLECTION
@@ -56,10 +53,6 @@ class AppModule {
         return CacheManager()
     }
 
-    @Provides
-    fun providesTodoAdapter(): TodoAdapter {
-        return TodoAdapter()
-    }
 
     @Provides
     fun providesTaskRepository(
@@ -68,6 +61,20 @@ class AppModule {
         storageReference: StorageReference
     ): TaskRepository {
         return TaskRepository(firebaseAuth, collectionReference, storageReference)
+    }
+
+    @Provides
+    fun provideTaskViewModel(
+        taskRepository: TaskRepository
+    ): TaskViewModel {
+        return TaskViewModel(taskRepository)
+    }
+
+    @Provides
+    fun providesTodoAdapter(
+        viewModel: TaskViewModel
+    ): TodoAdapter {
+        return TodoAdapter(viewModel)
     }
 
     @Provides

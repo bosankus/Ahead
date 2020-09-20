@@ -62,15 +62,10 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        showFab = AnimationUtils.loadAnimation(this, R.anim.btn_up_animation)
-
-        // enable white status bar with black icons
         setScreenUI()
 
-        // turning listeners on
         clickListeners()
 
-        // load create task button animations
         initiateFABAnimation()
 
         loadTodo()
@@ -95,6 +90,7 @@ class MainActivity : AppCompatActivity() {
         window.statusBarColor = Color.WHITE
         window.navigationBarColor = Color.WHITE
 
+        showFab = AnimationUtils.loadAnimation(this, R.anim.btn_up_animation)
         tvTodayDate.text = getCurrentDate()
         rvTodoList.apply {
             adapter = todoAdapter
@@ -128,31 +124,24 @@ class MainActivity : AppCompatActivity() {
     @ExperimentalCoroutinesApi
     @SuppressLint("SetTextI18n")
     private fun loadTodo() {
-        taskViewModel.fetchRealtime().observe(
-            this,
-            {
-                it.let {
-                    when (it) {
-                        is ResultData.Loading -> {
-                            shimmerFrameLayout.visibility = View.VISIBLE
-                        }
-                        is ResultData.Success -> {
-                            logMessage("")
-                            shimmerFrameLayout.visibility = View.GONE
-                            todoAdapter.submitList(it.data)
-                            tvTodayCount.text = todoAdapter.itemCount.toString() + " item(s)"
-                        }
-                        is ResultData.Failed -> {
-                            shimmerFrameLayout.visibility = View.GONE
-                            frameNoTodo.visibility = View.VISIBLE
-                            showToast(
-                                this,
-                                it.toString()
-                            )
-                        }
+        taskViewModel.fetchRealtime().observe(this, {
+            it.let {
+                when (it) {
+                    is ResultData.Loading -> shimmerFrameLayout.visibility = View.VISIBLE
+                    is ResultData.Success -> {
+                        logMessage("")
+                        shimmerFrameLayout.visibility = View.GONE
+                        todoAdapter.submitList(it.data)
+                        tvTodayCount.text = "${it.data?.size}" + " item(s)"
+                    }
+                    is ResultData.Failed -> {
+                        shimmerFrameLayout.visibility = View.GONE
+                        frameNoTodo.visibility = View.VISIBLE
+                        showToast(this, it.toString())
                     }
                 }
             }
+        }
         )
     }
 
@@ -171,13 +160,14 @@ class MainActivity : AppCompatActivity() {
         uri?.let {
             taskViewModel.uploadImage(uri).observe(this, {
                 when (it) {
-                    is ResultData.Loading -> logMessage("Uploading Image...")
+                    is ResultData.Loading -> showToast(this, "Image Uploading")
                     is ResultData.Success -> {
+                        showToast(this, "Image uploaded successfully")
+                        loadUserDisplayImage(it.data)
                         sharedPreferences.edit().putString(USER_DISPLAY_IMAGE, it.data.toString())
                             .apply()
-                        loadUserDisplayImage(it.data)
                     }
-                    is ResultData.Failed -> logMessage("Something went wrong")
+                    is ResultData.Failed -> showToast(this, "Image Upload failed. Retry")
                 }
             })
         }
@@ -187,6 +177,7 @@ class MainActivity : AppCompatActivity() {
         url?.let {
             Glide.with(this)
                 .load(url)
+                .placeholder(R.drawable.ic_default_dp)
                 .into(imgUserDp)
         }
     }

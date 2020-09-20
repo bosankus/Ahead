@@ -4,8 +4,10 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import tech.androidplay.sonali.todo.data.model.Todo
+import tech.androidplay.sonali.todo.data.viewmodel.TaskViewModel
 import tech.androidplay.sonali.todo.databinding.LayoutMainTodoListBinding
 import tech.androidplay.sonali.todo.utils.UIHelper.logMessage
+import javax.inject.Inject
 
 /**
  * Created by Androidplay
@@ -13,7 +15,10 @@ import tech.androidplay.sonali.todo.utils.UIHelper.logMessage
  * On: 7/22/2020, 10:08 PM
  */
 
-class TodoAdapter : ListAdapter<Todo, TodoViewHolder>(TodoDiffUtilCallback()), TodoEventListener {
+class TodoAdapter @Inject constructor(private val viewModel: TaskViewModel) :
+    ListAdapter<Todo, TodoViewHolder>(TodoDiffUtilCallback()), TodoEventListener {
+
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TodoViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
         val binding = LayoutMainTodoListBinding.inflate(layoutInflater, parent, false)
@@ -22,8 +27,8 @@ class TodoAdapter : ListAdapter<Todo, TodoViewHolder>(TodoDiffUtilCallback()), T
 
     override fun onBindViewHolder(holder: TodoViewHolder, position: Int) {
         val todoItem = getItem(position)
-        holder.bind(todoItem)
-        holder.itemView.setOnClickListener {  }
+        holder.bind(viewModel, todoItem)
+        holder.itemView.setOnClickListener { }
     }
 
     override fun completeTask(todo: Todo) {

@@ -26,7 +26,6 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="15sp"
             android:focusable="false"
-            android:onClick="@{() -> itemClickListener.completeTask(todo)}"
             android:focusableInTouchMode="false"
             tools:ignore="UselessParent">
 
@@ -35,7 +34,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:buttonTint="@color/dribblePink"
-                android:clickable="false"
+                android:checked="@{todo.isCompleted}"
+                android:clickable="true"
                 android:fontFamily="@font/jost"
                 android:minWidth="0dp"
                 android:minHeight="0dp"
