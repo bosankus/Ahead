@@ -33,8 +33,13 @@ object UIHelper {
         Log.d(GLOBAL_TAG, message)
     }
 
-    fun showToast(context: Context?, toastMessage: String) {
+    fun showToast(context: Context, toastMessage: String) {
         Toast.makeText(context, toastMessage, Toast.LENGTH_SHORT).show()
+    }
+
+    fun showSnack(view: View, message: String) {
+        Snackbar.make(view, message, Snackbar.LENGTH_LONG)
+            .show()
     }
 
     fun viewAnimation(view: View, animation: Animation?, visibility: Boolean) {

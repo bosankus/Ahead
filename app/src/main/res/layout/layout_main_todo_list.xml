@@ -23,10 +23,11 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/clItemListContainer"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="15sp"
+            android:layout_height="45dp"
+            android:background="?attr/selectableItemBackground"
             android:focusable="false"
             android:focusableInTouchMode="false"
+            android:padding="8dp"
             tools:ignore="UselessParent">
 
             <RadioButton
@@ -36,6 +37,7 @@
                 android:buttonTint="@color/dribblePink"
                 android:checked="@{todo.isCompleted}"
                 android:clickable="true"
+                android:enabled="false"
                 android:fontFamily="@font/jost"
                 android:minWidth="0dp"
                 android:minHeight="0dp"

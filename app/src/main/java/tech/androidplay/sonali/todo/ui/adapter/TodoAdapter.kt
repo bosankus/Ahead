@@ -1,5 +1,6 @@
 package tech.androidplay.sonali.todo.ui.adapter
 
+import android.app.AlertDialog
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
@@ -15,7 +16,10 @@ import javax.inject.Inject
  * On: 7/22/2020, 10:08 PM
  */
 
-class TodoAdapter @Inject constructor(private val viewModel: TaskViewModel) :
+class TodoAdapter @Inject constructor(
+    private val viewModel: TaskViewModel,
+    private val dialog: AlertDialog.Builder
+) :
     ListAdapter<Todo, TodoViewHolder>(TodoDiffUtilCallback()), TodoEventListener {
 
 
@@ -27,7 +31,7 @@ class TodoAdapter @Inject constructor(private val viewModel: TaskViewModel) :
 
     override fun onBindViewHolder(holder: TodoViewHolder, position: Int) {
         val todoItem = getItem(position)
-        holder.bind(viewModel, todoItem)
+        holder.bind(viewModel, todoItem, dialog)
         holder.itemView.setOnClickListener { }
     }
 
