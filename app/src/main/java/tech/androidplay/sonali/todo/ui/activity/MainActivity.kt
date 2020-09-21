@@ -160,7 +160,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun uploadAndShowImage(uri: Uri?) {
         uri?.let {
-            taskViewModel.uploadImage(uri).observe(this, {
+            taskViewModel.uploadImage(uri)?.observe(this, {
                 when (it) {
                     is ResultData.Loading -> showToast(this, "Image Uploading")
                     is ResultData.Success -> {

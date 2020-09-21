@@ -80,6 +80,16 @@ class TaskRepository @Inject constructor(
         }
     }
 
+    suspend fun deleteTask(docId: String) {
+        try {
+            taskListRef.document(docId)
+                .delete()
+                .await()
+        } catch (e: Exception) {
+            logMessage(e.message.toString())
+        }
+    }
+
     suspend fun uploadImage(uri: Uri): ResultData<String> {
         val ref = storageReference
             .child("${userDetails?.email}/${userDetails?.uid}")
