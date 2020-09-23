@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.ListAdapter
 import tech.androidplay.sonali.todo.data.model.Todo
 import tech.androidplay.sonali.todo.data.viewmodel.TaskViewModel
 import tech.androidplay.sonali.todo.databinding.LayoutMainTodoListBinding
-import tech.androidplay.sonali.todo.utils.UIHelper.logMessage
+import java.util.*
 import javax.inject.Inject
 
 /**
@@ -19,9 +19,25 @@ import javax.inject.Inject
 class TodoAdapter @Inject constructor(
     private val viewModel: TaskViewModel,
     private val dialog: AlertDialog.Builder
-) :
-    ListAdapter<Todo, TodoViewHolder>(TodoDiffUtilCallback()), TodoEventListener {
+) : ListAdapter<Todo, TodoViewHolder>(TodoDiffUtilCallback()) {
 
+    private var unfilteredList = listOf<Todo>()
+
+    fun modifyList(list: List<Todo>) {
+        unfilteredList = list
+        submitList(list)
+    }
+
+    fun filterList(query: CharSequence?) {
+        val list = mutableListOf<Todo>()
+        query?.let {
+            list.addAll(unfilteredList.filter {
+                it.todoBody.toLowerCase(Locale.getDefault())
+                    .contains(query.toString().toLowerCase(Locale.getDefault()))
+            })
+        } ?: list.addAll(unfilteredList)
+        submitList(list)
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TodoViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
@@ -32,11 +48,8 @@ class TodoAdapter @Inject constructor(
     override fun onBindViewHolder(holder: TodoViewHolder, position: Int) {
         val todoItem = getItem(position)
         holder.bind(viewModel, todoItem, dialog)
-        holder.itemView.setOnClickListener { }
-    }
+        holder.itemView.setOnClickListener {
 
-    override fun completeTask(todo: Todo) {
-        logMessage(todo.todoBody)
+        }
     }
-
 }
