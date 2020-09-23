@@ -21,6 +21,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="25dp"
             android:elevation="1dp"
+            android:visibility="gone"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:ignore="ContentDescription" />
@@ -29,13 +30,14 @@
             android:id="@+id/tvUserGreet"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="25dp"
-            android:fontFamily="@font/jost"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="30dp"
+            android:fontFamily="@font/calibre"
             android:padding="5sp"
             android:text="@string/greet_txt"
             android:textColor="@color/grey2"
-            android:textSize="16sp"
+            android:textSize="35sp"
+            android:visibility="gone"
             app:layout_constraintStart_toEndOf="@id/imgUserDp"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -44,23 +46,36 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="5dp"
-            android:fontFamily="@font/jost_bold"
-            android:text="All tasks"
+            android:layout_marginTop="35dp"
+            android:fontFamily="@font/calibre"
+            android:text="tasks"
             android:textColor="@color/grey3"
-            android:textSize="32sp"
+            android:textSize="55sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tvUserGreet" />
 
-        <include
-            android:id="@+id/frameTodayHeader"
-            layout="@layout/frame_today_todo_header"
+        <com.iammert.library.ui.multisearchviewlib.MultiSearchView
+            android:id="@+id/searchTask"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="20dp"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="16dp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvAllTasksHeader" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvAllTasksHeader"/>
+
+        <TextView
+            android:id="@+id/tvTodayHeader"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:fontFamily="@font/calibre_semi"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:textSize="18sp"
+            android:text="TODAY"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/searchTask"
+            android:textColor="@color/dribblePink" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/frameNoTodo"
@@ -102,7 +117,7 @@
             android:layout_marginTop="16sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/frameTodayHeader" />
+            app:layout_constraintTop_toBottomOf="@+id/tvTodayHeader" />
 
 
         <androidx.recyclerview.widget.RecyclerView
@@ -115,12 +130,13 @@
             android:orientation="vertical"
             android:overScrollMode="never"
             android:scrollbars="none"
+            android:layout_marginTop="8dp"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/frameTodayHeader"
+            app:layout_constraintTop_toBottomOf="@+id/tvTodayHeader"
             app:layout_constraintVertical_bias="0.0" />
 
         <androidx.constraintlayout.widget.ConstraintLayout

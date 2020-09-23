@@ -17,9 +17,9 @@ import androidx.work.Constraints
 import androidx.work.OneTimeWorkRequest
 import androidx.work.WorkManager
 import com.bumptech.glide.Glide
+import com.iammert.library.ui.multisearchviewlib.MultiSearchView
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.frame_today_todo_header.*
 import kotlinx.android.synthetic.main.shimmer_layout.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import tech.androidplay.sonali.todo.R
@@ -29,7 +29,6 @@ import tech.androidplay.sonali.todo.ui.fragment.BottomSheetFragment
 import tech.androidplay.sonali.todo.utils.Constants.USER_DISPLAY_IMAGE
 import tech.androidplay.sonali.todo.utils.ImageHelper.selectImage
 import tech.androidplay.sonali.todo.utils.ResultData
-import tech.androidplay.sonali.todo.utils.UIHelper.getCurrentDate
 import tech.androidplay.sonali.todo.utils.UIHelper.logMessage
 import tech.androidplay.sonali.todo.utils.UIHelper.showToast
 import tech.androidplay.sonali.todo.utils.UploadWorker
@@ -93,7 +92,6 @@ class MainActivity : AppCompatActivity() {
         window.navigationBarColor = Color.WHITE
 
         showFab = AnimationUtils.loadAnimation(this, R.anim.btn_up_animation)
-        tvTodayDate.text = getCurrentDate()
         rvTodoList.apply {
             adapter = todoAdapter
         }
@@ -120,6 +118,26 @@ class MainActivity : AppCompatActivity() {
                 else if (dy < 0) efabAddTask.show()
             }
         })
+
+        searchTask.clearFocus()
+        searchTask.setSearchViewListener(object : MultiSearchView.MultiSearchViewListener {
+            override fun onItemSelected(index: Int, s: CharSequence) {
+                todoAdapter.filterList(s)
+            }
+
+            override fun onSearchComplete(index: Int, s: CharSequence) {
+                todoAdapter.filterList(s)
+                searchTask.clearFocus()
+            }
+
+            override fun onSearchItemRemoved(index: Int) {
+                searchTask.clearFocus()
+            }
+
+            override fun onTextChanged(index: Int, s: CharSequence) {
+            }
+
+        })
     }
 
 
@@ -133,8 +151,7 @@ class MainActivity : AppCompatActivity() {
                     is ResultData.Success -> {
                         logMessage("")
                         shimmerFrameLayout.visibility = View.GONE
-                        todoAdapter.submitList(it.data)
-                        tvTodayCount.text = "${it.data?.size}" + " item(s)"
+                        it.data?.let { list -> todoAdapter.modifyList(list) }
                     }
                     is ResultData.Failed -> {
                         shimmerFrameLayout.visibility = View.GONE
