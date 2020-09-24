@@ -24,7 +24,7 @@ class TodoViewHolder(
     ) {
         binding.todo = todoItem
         binding.executePendingBindings()
-        binding.clItemListContainer.setOnClickListener {
+        binding.cbTaskStatus.setOnClickListener {
             if (todoItem.isCompleted)
                 viewModel.changeTaskState(todoItem, false)
             else viewModel.changeTaskState(todoItem, true)

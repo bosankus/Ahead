@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto" android:id="@+id/nav_graph"
+    app:startDestination="@id/splashFragment">
+
+    <fragment
+        android:id="@+id/authFragment"
+        android:name="tech.androidplay.sonali.todo.ui.fragment.AuthFragment"
+        android:label="AuthFragment" >
+        <action
+            android:id="@+id/action_authFragment_to_taskFragment"
+            app:destination="@id/taskFragment"
+            app:enterAnim="@anim/fade_out_animation"
+            app:exitAnim="@anim/fade_in_animation" />
+    </fragment>
+    <fragment
+        android:id="@+id/taskFragment"
+        android:name="tech.androidplay.sonali.todo.ui.fragment.TaskFragment"
+        android:label="TaskFragment" />
+    <fragment
+        android:id="@+id/splashFragment"
+        android:name="tech.androidplay.sonali.todo.ui.fragment.SplashFragment"
+        android:label="SplashFragment" >
+        <action
+            android:id="@+id/action_splashFragment_to_authFragment"
+            app:destination="@id/authFragment"
+            app:enterAnim="@anim/fade_out_animation"
+            app:exitAnim="@anim/fade_in_animation" />
+        <action
+            android:id="@+id/action_splashFragment_to_taskFragment"
+            app:destination="@id/taskFragment"
+            app:enterAnim="@anim/fade_out_animation"
+            app:exitAnim="@anim/fade_in_animation" />
+    </fragment>
+</navigation>

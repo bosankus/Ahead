@@ -11,4 +11,5 @@
     <string name="signup_create_acc_txt">Create account for <font color="#E94D88"><b>thinking Ahead</b></font></string>
     <string name="login_create_acc_txt">Have account? <font color="#E94D88"><b>Get in</b></font></string>
     <string name="greet_txt">hi</string>
+    <string name="think">think.</string>
 </resources>
