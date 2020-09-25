@@ -27,6 +27,7 @@ import javax.inject.Inject
  */
 
 @AndroidEntryPoint
+@ExperimentalCoroutinesApi
 class TaskFragment : Fragment(R.layout.fragment_task) {
 
     @Inject
@@ -39,7 +40,6 @@ class TaskFragment : Fragment(R.layout.fragment_task) {
         shimmerFrameLayout.startShimmer()
     }
 
-    @ExperimentalCoroutinesApi
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -47,7 +47,6 @@ class TaskFragment : Fragment(R.layout.fragment_task) {
         setListeners()
         loadTasks()
     }
-
 
     private fun setUpScreen() {
         rvTodoList.apply {
@@ -66,7 +65,6 @@ class TaskFragment : Fragment(R.layout.fragment_task) {
             }
         })
 
-        searchTask.clearFocus()
         searchTask.setSearchViewListener(object : MultiSearchView.MultiSearchViewListener {
             override fun onItemSelected(index: Int, s: CharSequence) {
                 todoAdapter.filterList(s)
@@ -74,21 +72,20 @@ class TaskFragment : Fragment(R.layout.fragment_task) {
 
             override fun onSearchComplete(index: Int, s: CharSequence) {
                 todoAdapter.filterList(s)
-                searchTask.clearFocus()
             }
 
             override fun onSearchItemRemoved(index: Int) {
-                searchTask.clearFocus()
+                loadTasks()
             }
 
             override fun onTextChanged(index: Int, s: CharSequence) {
+                todoAdapter.filterList(s)
             }
         })
     }
 
-    @ExperimentalCoroutinesApi
     private fun loadTasks() {
-        taskViewModel.fetchRealtime().observe(viewLifecycleOwner, {
+        taskViewModel.fetchTasksRealtime().observe(viewLifecycleOwner, {
             it.let {
                 when (it) {
                     is ResultData.Loading -> shimmerFrameLayout.visibility = View.VISIBLE

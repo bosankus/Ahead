@@ -16,4 +16,6 @@ object Constants {
 
     const val SHARED_PREFERENCE_NAME = "SHARED_PREFERENCE_NAME"
     const val USER_DISPLAY_IMAGE = "USER_DISPLAY_IMAGE"
+
+    const val TASK_DOC_ID = "TASK_DOC_ID"
 }

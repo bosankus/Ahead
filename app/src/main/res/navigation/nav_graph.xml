@@ -16,7 +16,12 @@
     <fragment
         android:id="@+id/taskFragment"
         android:name="tech.androidplay.sonali.todo.ui.fragment.TaskFragment"
-        android:label="TaskFragment" />
+        android:label="TaskFragment" >
+        <action
+            android:id="@+id/action_taskFragment_to_taskEditFragment"
+            app:destination="@id/taskEditFragment"
+            app:enterAnim="@anim/fade_out_animation" />
+    </fragment>
     <fragment
         android:id="@+id/splashFragment"
         android:name="tech.androidplay.sonali.todo.ui.fragment.SplashFragment"
@@ -31,5 +36,16 @@
             app:destination="@id/taskFragment"
             app:enterAnim="@anim/fade_out_animation"
             app:exitAnim="@anim/fade_in_animation" />
+    </fragment>
+    <fragment
+        android:id="@+id/taskEditFragment"
+        android:name="tech.androidplay.sonali.todo.ui.fragment.TaskEditFragment"
+        android:label="TaskEditFragment" >
+        <action
+            android:id="@+id/action_taskEditFragment_to_taskFragment"
+            app:destination="@id/taskFragment"
+            app:exitAnim="@anim/fade_in_animation"
+            app:popUpTo="@id/taskFragment"
+            app:popUpToInclusive="true" />
     </fragment>
 </navigation>
