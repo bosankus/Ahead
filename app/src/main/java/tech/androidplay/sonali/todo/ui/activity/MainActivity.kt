@@ -1,36 +1,22 @@
 package tech.androidplay.sonali.todo.ui.activity
 
 import android.annotation.SuppressLint
-import android.app.Activity
-import android.content.Intent
-import android.content.SharedPreferences
 import android.graphics.Color
-import android.net.Uri
 import android.os.Bundle
 import android.view.View
-import android.view.animation.Animation
-import android.view.animation.AnimationUtils
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.RecyclerView
+import androidx.navigation.NavController
+import androidx.navigation.findNavController
 import androidx.work.Constraints
 import androidx.work.OneTimeWorkRequest
 import androidx.work.WorkManager
-import com.bumptech.glide.Glide
-import com.iammert.library.ui.multisearchviewlib.MultiSearchView
+import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.shimmer_layout.*
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import tech.androidplay.sonali.todo.R
-import tech.androidplay.sonali.todo.data.viewmodel.TaskViewModel
-import tech.androidplay.sonali.todo.ui.adapter.TodoAdapter
-import tech.androidplay.sonali.todo.ui.fragment.BottomSheetFragment
-import tech.androidplay.sonali.todo.utils.Constants.USER_DISPLAY_IMAGE
-import tech.androidplay.sonali.todo.utils.ImageHelper.selectImage
-import tech.androidplay.sonali.todo.utils.ResultData
+import tech.androidplay.sonali.todo.R.id.taskEditFragment
+import tech.androidplay.sonali.todo.R.id.taskFragment
 import tech.androidplay.sonali.todo.utils.UIHelper.logMessage
-import tech.androidplay.sonali.todo.utils.UIHelper.showToast
 import tech.androidplay.sonali.todo.utils.UploadWorker
 import javax.inject.Inject
 
@@ -43,44 +29,14 @@ class MainActivity : AppCompatActivity() {
     @Inject
     lateinit var constraints: Constraints
 
-    @Inject
-    lateinit var todoAdapter: TodoAdapter
+    private lateinit var firebaseAuth: FirebaseAuth
 
-    @Inject
-    lateinit var sharedPreferences: SharedPreferences
-
-    @set:Inject
-    var userDisplayImage = ""
-
-    private lateinit var showFab: Animation
-
-    private val taskViewModel: TaskViewModel by viewModels()
-
-
-    @ExperimentalCoroutinesApi
     @SuppressLint("SimpleDateFormat")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         setScreenUI()
-
-        clickListeners()
-
-        initiateFABAnimation()
-
-        loadTodo()
-    }
-
-    override fun onStart() {
-        super.onStart()
-        shimmerFrameLayout.startShimmer()
-        loadUserDisplayImage(userDisplayImage)
-    }
-
-    override fun onBackPressed() {
-        super.onBackPressed()
-        finishAffinity()
     }
 
 
@@ -90,116 +46,8 @@ class MainActivity : AppCompatActivity() {
         window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
         window.statusBarColor = Color.WHITE
         window.navigationBarColor = Color.WHITE
-
-        showFab = AnimationUtils.loadAnimation(this, R.anim.btn_up_animation)
-        rvTodoList.apply {
-            adapter = todoAdapter
-        }
     }
 
-    private fun initiateFABAnimation() {
-        efabAddTask.startAnimation(showFab)
-    }
-
-    @SuppressLint("InflateParams")
-    private fun clickListeners() {
-
-        imgUserDp.setOnClickListener { selectImage(this) }
-
-        efabAddTask.setOnClickListener {
-            val bottomSheetFragment =
-                BottomSheetFragment()
-            bottomSheetFragment.show(supportFragmentManager, bottomSheetFragment.tag)
-        }
-
-        rvTodoList.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                if (dy > 0) efabAddTask.hide()
-                else if (dy < 0) efabAddTask.show()
-            }
-        })
-
-        searchTask.clearFocus()
-        searchTask.setSearchViewListener(object : MultiSearchView.MultiSearchViewListener {
-            override fun onItemSelected(index: Int, s: CharSequence) {
-                todoAdapter.filterList(s)
-            }
-
-            override fun onSearchComplete(index: Int, s: CharSequence) {
-                todoAdapter.filterList(s)
-                searchTask.clearFocus()
-            }
-
-            override fun onSearchItemRemoved(index: Int) {
-                searchTask.clearFocus()
-            }
-
-            override fun onTextChanged(index: Int, s: CharSequence) {
-            }
-
-        })
-    }
-
-
-    @ExperimentalCoroutinesApi
-    @SuppressLint("SetTextI18n")
-    private fun loadTodo() {
-        taskViewModel.fetchRealtime().observe(this, {
-            it.let {
-                when (it) {
-                    is ResultData.Loading -> shimmerFrameLayout.visibility = View.VISIBLE
-                    is ResultData.Success -> {
-                        logMessage("")
-                        shimmerFrameLayout.visibility = View.GONE
-                        it.data?.let { list -> todoAdapter.modifyList(list) }
-                    }
-                    is ResultData.Failed -> {
-                        shimmerFrameLayout.visibility = View.GONE
-                        frameNoTodo.visibility = View.VISIBLE
-                        showToast(this, it.toString())
-                    }
-                }
-            }
-        }
-        )
-    }
-
-
-    @SuppressLint("Recycle")
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (resultCode == Activity.RESULT_OK && data != null) {
-            uploadAndShowImage(data.data!!)
-        } else if (resultCode != Activity.RESULT_CANCELED)
-            logMessage("Image picking cancelled")
-        super.onActivityResult(requestCode, resultCode, data)
-    }
-
-
-    private fun uploadAndShowImage(uri: Uri?) {
-        uri?.let {
-            taskViewModel.uploadImage(uri)?.observe(this, {
-                when (it) {
-                    is ResultData.Loading -> showToast(this, "Image Uploading")
-                    is ResultData.Success -> {
-                        showToast(this, "Image uploaded successfully")
-                        loadUserDisplayImage(it.data)
-                        sharedPreferences.edit().putString(USER_DISPLAY_IMAGE, it.data.toString())
-                            .apply()
-                    }
-                    is ResultData.Failed -> showToast(this, "Image Upload failed. Retry")
-                }
-            })
-        }
-    }
-
-    private fun loadUserDisplayImage(url: String?) {
-        url?.let {
-            Glide.with(this)
-                .load(url)
-                .placeholder(R.drawable.ic_default_dp)
-                .into(imgUserDp)
-        }
-    }
 
     // Call this method to run work manager
     private fun initiateUploadRequest() {
@@ -210,7 +58,7 @@ class MainActivity : AppCompatActivity() {
         workManager.enqueue(uploadRequest)
         workManager.getWorkInfoByIdLiveData(uploadRequest.id)
             .observe(this, {
-                tvNoTodo.text = it.state.name
+                logMessage(it.state.name)
             })
     }
 }

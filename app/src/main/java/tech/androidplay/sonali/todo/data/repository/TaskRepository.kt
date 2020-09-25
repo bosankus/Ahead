@@ -55,13 +55,14 @@ class TaskRepository @Inject constructor(
     }
 
     @ExperimentalCoroutinesApi
-    fun fetchTasks() = callbackFlow {
+    fun fetchTasksRealtime() = callbackFlow {
         offer(ResultData.Loading)
         val querySnapshot = query
             .addSnapshotListener { value, error ->
                 if (error != null) return@addSnapshotListener
                 else if (!value?.isEmpty!!) {
                     val todo = value.toObjects(Todo::class.java)
+                    logMessage("$todo")
                     offer(ResultData.Success(todo))
                 } else offer(ResultData.Failed())
             }
@@ -70,10 +71,22 @@ class TaskRepository @Inject constructor(
         }
     }
 
-    suspend fun changeTaskState(taskId: String, status: Boolean) {
+    suspend fun fetchTaskDetails(taskId: String): ResultData<Todo> {
+        return try {
+            val response = taskListRef.document(taskId)
+                .get()
+                .await()
+            val data = response.toObject(Todo::class.java)
+            ResultData.Success(data)
+        } catch (e: Exception) {
+            ResultData.Failed(e.message)
+        }
+    }
+
+    suspend fun updateTask(taskId: String, map: Map<String, Any>) {
         try {
             taskListRef.document(taskId)
-                .update("isCompleted", status)
+                .update(map)
                 .await()
         } catch (e: Exception) {
             logMessage(e.message.toString())

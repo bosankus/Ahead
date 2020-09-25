@@ -1,10 +1,14 @@
 package tech.androidplay.sonali.todo.ui.adapter
 
 import android.app.AlertDialog
+import androidx.core.os.bundleOf
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
+import tech.androidplay.sonali.todo.R
 import tech.androidplay.sonali.todo.data.model.Todo
 import tech.androidplay.sonali.todo.data.viewmodel.TaskViewModel
 import tech.androidplay.sonali.todo.databinding.LayoutMainTodoListBinding
+import tech.androidplay.sonali.todo.utils.Constants.TASK_DOC_ID
 import tech.androidplay.sonali.todo.utils.UIHelper.showSnack
 
 /**
@@ -24,10 +28,14 @@ class TodoViewHolder(
     ) {
         binding.todo = todoItem
         binding.executePendingBindings()
-        binding.clItemListContainer.setOnClickListener {
+        binding.cbTaskStatus.setOnClickListener {
             if (todoItem.isCompleted)
-                viewModel.changeTaskState(todoItem, false)
-            else viewModel.changeTaskState(todoItem, true)
+                viewModel.updateTask(todoItem.docId, false)
+            else viewModel.updateTask(todoItem.docId, true)
+        }
+        binding.clItemListContainer.setOnClickListener {
+            val bundle = bundleOf(TASK_DOC_ID to todoItem.docId)
+            it?.findNavController()?.navigate(R.id.action_taskFragment_to_taskEditFragment, bundle)
         }
         binding.clItemListContainer.setOnLongClickListener {
             dialog.setPositiveButton("Yes") { dialogInterface, _ ->

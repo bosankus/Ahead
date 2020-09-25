@@ -12,6 +12,8 @@ import kotlinx.coroutines.launch
 import tech.androidplay.sonali.todo.data.model.Todo
 import tech.androidplay.sonali.todo.data.repository.TaskRepository
 import tech.androidplay.sonali.todo.utils.ResultData
+import tech.androidplay.sonali.todo.utils.UIHelper.getCurrentTimestamp
+import tech.androidplay.sonali.todo.utils.UIHelper.logMessage
 
 /**
  * Created by Androidplay
@@ -28,10 +30,10 @@ class TaskViewModel @ViewModelInject constructor(private val taskRepository: Tas
         }
 
     @ExperimentalCoroutinesApi
-    fun fetchRealtime(): MutableLiveData<ResultData<MutableList<Todo>>> {
+    fun fetchTasksRealtime(): MutableLiveData<ResultData<MutableList<Todo>>> {
         val response = MutableLiveData<ResultData<MutableList<Todo>>>()
         viewModelScope.launch {
-            taskRepository.fetchTasks()
+            taskRepository.fetchTasksRealtime()
                 .collect {
                     response.postValue(it)
                 }
@@ -39,13 +41,32 @@ class TaskViewModel @ViewModelInject constructor(private val taskRepository: Tas
         return response
     }
 
-    fun changeTaskState(todoItem: Todo?, status: Boolean) {
-        todoItem?.let {
-            viewModelScope.launch {
-                taskRepository.changeTaskState(
-                    todoItem.docId,
-                    status
+    fun fetchTaskDetails(taskId: String) =
+        liveData {
+            emit(ResultData.Loading)
+            emit(taskRepository.fetchTaskDetails(taskId))
+        }
+
+    fun updateTask(
+        taskId: String?,
+        status: Boolean,
+        todoBody: String? = "",
+        todoDesc: String? = ""
+    ) {
+        val map: Map<String, Any> =
+            if (!todoBody.isNullOrEmpty() && !todoDesc.isNullOrEmpty())
+                mapOf(
+                    "todoBody" to todoBody,
+                    "todoDesc" to todoDesc,
+                    "updatedOn" to getCurrentTimestamp()
                 )
+            else mapOf(
+                "isCompleted" to status,
+                "updatedOn" to getCurrentTimestamp()
+            )
+        taskId?.let {
+            viewModelScope.launch {
+                taskRepository.updateTask(taskId, map)
             }
         }
     }
@@ -61,4 +82,9 @@ class TaskViewModel @ViewModelInject constructor(private val taskRepository: Tas
                 emit(taskRepository.uploadImage(uri))
             }
         }
+
+    override fun onCleared() {
+        super.onCleared()
+        logMessage("ViewModel Cleared")
+    }
 }

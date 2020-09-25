@@ -1,64 +1,51 @@
-package tech.androidplay.sonali.todo.ui.activity
+package tech.androidplay.sonali.todo.ui.fragment
 
-import android.content.Intent
-import android.graphics.Color
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.View
 import android.view.animation.AnimationUtils
-import androidx.activity.viewModels
-import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.android.synthetic.main.activity_login.*
+import kotlinx.android.synthetic.main.fragment_auth.*
 import tech.androidplay.sonali.todo.R
 import tech.androidplay.sonali.todo.data.viewmodel.AuthViewModel
-import tech.androidplay.sonali.todo.utils.ResultData
 import tech.androidplay.sonali.todo.utils.CacheManager
+import tech.androidplay.sonali.todo.utils.ResultData
+import tech.androidplay.sonali.todo.utils.UIHelper.showSnack
 import tech.androidplay.sonali.todo.utils.UIHelper.showToast
 import tech.androidplay.sonali.todo.utils.UIHelper.viewAnimation
 import javax.inject.Inject
 
+/**
+ * Created by Androidplay
+ * Author: Ankush
+ * On: 24/Sep/2020
+ * Email: ankush@androidplay.in
+ */
 
 @AndroidEntryPoint
-class LoginActivity : AppCompatActivity() {
+class AuthFragment : Fragment(R.layout.fragment_auth) {
 
     @Inject
     lateinit var cache: CacheManager
-
     private val authViewModel: AuthViewModel by viewModels()
-
-    // Animation
+    private var networkFlag: Boolean = false
     private val animFadeIn by lazy {
-        AnimationUtils.loadAnimation(this, R.anim.fade_in_animation)
+        AnimationUtils.loadAnimation(requireContext(), R.anim.fade_in_animation)
     }
     private val animFadeOut by lazy {
-        AnimationUtils.loadAnimation(
-            this,
-            R.anim.fade_out_animation
-        )
+        AnimationUtils.loadAnimation(requireContext(), R.anim.fade_out_animation)
     }
 
-    // for accident control
-    private var networkFlag: Boolean = false
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_login)
-
-        // enable white status bar with black icons
-        setScreenUI()
-
-        // turning listeners on
-        clickListeners()
+        setListeners()
     }
 
-    private fun setScreenUI() {
-        window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
-        window.statusBarColor = Color.WHITE
-        window.navigationBarColor = Color.WHITE
-    }
-
-    private fun clickListeners() {
+    private fun setListeners() {
         btnSignUpEmailPassword.setOnClickListener {
             val userEmail = loginInputEmailTxt.text.toString()
             val userPassword = loginInputPasswordTxt.text.toString()
@@ -84,7 +71,7 @@ class LoginActivity : AppCompatActivity() {
     private fun signUpUser(userEmail: String, userPassword: String) {
         if (validateInput(userEmail, userPassword)) {
             authViewModel.createAccount(userEmail, userPassword).observe(
-                this,
+                viewLifecycleOwner,
                 {
                     it?.let {
                         when (it) {
@@ -94,14 +81,14 @@ class LoginActivity : AppCompatActivity() {
                         }
                     }
                 })
-        } else showToast(this, "Please recheck your inputs")
+        } else showSnack(requireView(), "Please recheck your inputs")
     }
 
     private fun login(userEmail: String, userPassword: String) {
         if (validateInput(userEmail, userPassword)) {
             networkFlag = true
             authViewModel.loginUser(userEmail, userPassword).observe(
-                this,
+                viewLifecycleOwner,
                 {
                     it?.let {
                         when (it) {
@@ -113,14 +100,14 @@ class LoginActivity : AppCompatActivity() {
                     networkFlag = false
                 }
             )
-        } else showToast(this, "Please recheck your inputs")
+        } else showToast(requireContext(), "Please recheck your inputs")
     }
 
     private fun resetPassword(userEmail: String) {
         if (validateInput(email = userEmail)) {
             authViewModel.resetPassword(userEmail)
-            showToast(
-                this, "You will receive password " +
+            showSnack(
+                requireView(), "You will receive password " +
                         "reset mail if you are registered with us"
             )
         }
@@ -147,28 +134,24 @@ class LoginActivity : AppCompatActivity() {
         return valid
     }
 
+    private fun goToMainActivity() {
+        findNavController().navigate(R.id.action_authFragment_to_taskFragment)
+    }
+
     private fun showLoading() {
         viewAnimation(btnloginEmailPassword, animFadeIn, false)
         viewAnimation(lottieAuthLoading, null, true)
     }
 
     private fun hideLoading(message: String = "") {
-        showToast(this, message)
+        showSnack(requireView(), message)
         viewAnimation(btnloginEmailPassword, animFadeOut, true)
         viewAnimation(lottieAuthLoading, null, false)
     }
 
-    private fun goToMainActivity() {
-        startActivity(Intent(this@LoginActivity, MainActivity::class.java))
-        overridePendingTransition(
-            R.anim.fade_out_animation,
-            R.anim.fade_in_animation
-        )
-    }
-
     private fun setSignUpUI() {
         if (networkFlag) {
-            showToast(this, "Have Patience")
+            showToast(requireContext(), "Have Patience")
         } else {
             viewAnimation(btnloginEmailPassword, animFadeIn, false)
             viewAnimation(tvSignUpOption, animFadeIn, false)
@@ -179,7 +162,7 @@ class LoginActivity : AppCompatActivity() {
 
     private fun setLoginUi() {
         if (networkFlag) {
-            showToast(this, "Have Patience")
+            showToast(requireContext(), "Have Patience")
         } else {
             viewAnimation(btnSignUpEmailPassword, animFadeIn, false)
             viewAnimation(tvLoginOption, animFadeIn, false)
@@ -188,13 +171,8 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
-    override fun onBackPressed() {
-        super.onBackPressed()
-        finishAffinity()
-    }
-
     override fun onDestroy() {
         super.onDestroy()
-        cache.clearCache(this)
+        cache.clearCache(requireContext())
     }
 }
