@@ -8,7 +8,10 @@ import tech.androidplay.sonali.todo.R
 import tech.androidplay.sonali.todo.data.model.Todo
 import tech.androidplay.sonali.todo.data.viewmodel.TaskViewModel
 import tech.androidplay.sonali.todo.databinding.LayoutMainTodoListBinding
+import tech.androidplay.sonali.todo.utils.Constants.TASK_DOC_BODY
+import tech.androidplay.sonali.todo.utils.Constants.TASK_DOC_DESC
 import tech.androidplay.sonali.todo.utils.Constants.TASK_DOC_ID
+import tech.androidplay.sonali.todo.utils.Constants.TASK_STATUS
 import tech.androidplay.sonali.todo.utils.UIHelper.showSnack
 
 /**
@@ -34,7 +37,12 @@ class TodoViewHolder(
             else viewModel.updateTask(todoItem.docId, true)
         }
         binding.clItemListContainer.setOnClickListener {
-            val bundle = bundleOf(TASK_DOC_ID to todoItem.docId)
+            val bundle = bundleOf(
+                TASK_DOC_ID to todoItem.docId,
+                TASK_DOC_BODY to todoItem.todoBody,
+                TASK_DOC_DESC to todoItem.todoDesc,
+                TASK_STATUS to todoItem.isCompleted
+            )
             it?.findNavController()?.navigate(R.id.action_taskFragment_to_taskEditFragment, bundle)
         }
         binding.clItemListContainer.setOnLongClickListener {

@@ -4,15 +4,13 @@ import android.os.Bundle
 import android.view.View
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.iammert.library.ui.multisearchviewlib.MultiSearchView
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.fragment_add_task_bottom_sheet.*
 import kotlinx.android.synthetic.main.fragment_task.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import tech.androidplay.sonali.todo.R
@@ -20,6 +18,7 @@ import tech.androidplay.sonali.todo.data.viewmodel.TaskViewModel
 import tech.androidplay.sonali.todo.ui.adapter.TodoAdapter
 import tech.androidplay.sonali.todo.utils.ResultData
 import tech.androidplay.sonali.todo.utils.UIHelper
+import tech.androidplay.sonali.todo.utils.UIHelper.findLocationOfCenterOnTheScreen
 import javax.inject.Inject
 
 /**
@@ -50,7 +49,6 @@ class TaskFragment : Fragment(R.layout.fragment_task) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         setUpScreen()
         setListeners()
         loadTasks()
@@ -67,6 +65,8 @@ class TaskFragment : Fragment(R.layout.fragment_task) {
     private fun setListeners() {
 
         efabAddTask.setOnClickListener {
+            val position = it.findLocationOfCenterOnTheScreen()
+            /*val bundle = bundleOf("POSITION" to position)*/
             findNavController().navigate(R.id.bottomSheetFragment)
         }
 
@@ -113,4 +113,5 @@ class TaskFragment : Fragment(R.layout.fragment_task) {
             }
         })
     }
+
 }

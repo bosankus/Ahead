@@ -21,6 +21,7 @@ import kotlinx.android.synthetic.main.frame_date_time_picker.view.*
 import tech.androidplay.sonali.todo.R
 import tech.androidplay.sonali.todo.data.viewmodel.TaskViewModel
 import tech.androidplay.sonali.todo.databinding.FragmentAddTaskBottomSheetBinding
+import tech.androidplay.sonali.todo.utils.ExitWithAnimation
 import tech.androidplay.sonali.todo.utils.ResultData
 import tech.androidplay.sonali.todo.utils.UIHelper.showToast
 import java.text.SimpleDateFormat
@@ -40,6 +41,9 @@ class BottomSheetFragment : BottomSheetDialogFragment() {
     private lateinit var binding: FragmentAddTaskBottomSheetBinding
     private lateinit var includeLayoutBinding: ConstraintLayout
 
+    /*override var posX: Int? = null
+    override var posY: Int? = null*/
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -53,8 +57,8 @@ class BottomSheetFragment : BottomSheetDialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        /*view.startCircularReveal(false)*/
         setUpUi()
-
         clickListeners()
     }
 
@@ -98,8 +102,7 @@ class BottomSheetFragment : BottomSheetDialogFragment() {
 
     // pick date & time of task to be notified
     private fun initiateDateTimePicker() {
-        val datePickerBuilder = MaterialDatePicker.Builder.datePicker()
-        val datePicker = datePickerBuilder.build()
+        val datePicker = MaterialDatePicker.Builder.datePicker().build()
         datePicker.show(parentFragmentManager, datePicker.toString())
         datePicker.addOnCancelListener {
             pbOpenCalender.visibility = View.GONE
@@ -152,5 +155,17 @@ class BottomSheetFragment : BottomSheetDialogFragment() {
             }
         })
     }
+
+    /*override fun isToBeExitedWithAnimation(): Boolean = true
+
+    companion object {
+        @JvmStatic
+        fun newInstance(exit: IntArray? = null): BottomSheetFragment = BottomSheetFragment().apply {
+            if (exit != null && exit.size == 2) {
+                posX = exit[0]
+                posY = exit[1]
+            }
+        }
+    }*/
 
 }
