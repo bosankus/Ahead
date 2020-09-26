@@ -47,11 +47,6 @@ class AppModule {
     }
 
     @Provides
-    fun providesPermissionManager(): PermissionManager {
-        return PermissionManager()
-    }
-
-    @Provides
     fun providesCacheManager(): CacheManager {
         return CacheManager()
     }

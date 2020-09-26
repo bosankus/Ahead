@@ -34,6 +34,16 @@ class TaskFragment : Fragment(R.layout.fragment_task) {
     private val taskViewModel: TaskViewModel by viewModels()
     private lateinit var showFab: Animation
 
+    override fun onResume() {
+        super.onResume()
+        shimmerFrameLayout.startShimmer()
+    }
+
+    override fun onPause() {
+        shimmerFrameLayout.stopShimmer()
+        super.onPause()
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -43,7 +53,6 @@ class TaskFragment : Fragment(R.layout.fragment_task) {
     }
 
     private fun setUpScreen() {
-        shimmerFrameLayout.startShimmer()
         rvTodoList.apply {
             adapter = todoAdapter
         }
@@ -83,7 +92,6 @@ class TaskFragment : Fragment(R.layout.fragment_task) {
         taskViewModel.fetchTasksRealtime().observe(viewLifecycleOwner, {
             it.let {
                 when (it) {
-                    is ResultData.Loading -> shimmerFrameLayout.visibility = View.VISIBLE
                     is ResultData.Success -> {
                         shimmerFrameLayout.visibility = View.GONE
                         it.data?.let { list -> todoAdapter.modifyList(list) }

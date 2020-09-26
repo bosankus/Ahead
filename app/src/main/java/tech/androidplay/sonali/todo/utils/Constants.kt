@@ -1,5 +1,7 @@
 package tech.androidplay.sonali.todo.utils
 
+import android.Manifest
+
 /**
  * Created by Androidplay
  * Author: Ankush
@@ -18,4 +20,10 @@ object Constants {
     const val USER_DISPLAY_IMAGE = "USER_DISPLAY_IMAGE"
 
     const val TASK_DOC_ID = "TASK_DOC_ID"
+
+    const val WRITE_EXTERNAL_STORAGE = Manifest.permission.WRITE_EXTERNAL_STORAGE
+    const val READ_EXTERNAL_STORAGE = Manifest.permission.READ_EXTERNAL_STORAGE
+    const val STORAGE_PERMISSION_REQUEST_RATIONAL =
+        "You need to accept location permissions to use this app"
+    const val STORAGE_PERMISSION_REQUEST_CODE = 101
 }

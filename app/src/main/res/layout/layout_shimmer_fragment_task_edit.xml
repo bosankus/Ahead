@@ -4,66 +4,56 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/tvEditTasksHeader"
-        android:layout_width="120dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="35dp"
-        android:background="@color/shimmerColor"
-        android:textSize="55sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/chipAlarmTime"
         android:layout_width="120dp"
-        android:layout_height="50dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/padding_16dp"
         android:layout_marginTop="8dp"
         android:background="@color/shimmerColor"
-        android:textSize="55sp"
+        android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvEditTasksHeader" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageButton
         android:id="@+id/imgDeleteTask"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_margin="@dimen/padding_16dp"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="@dimen/padding_16dp"
         android:background="@color/shimmerColor"
         android:padding="5dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvEditTasksHeader" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageButton
         android:id="@+id/imgAttachFile"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_margin="@dimen/padding_16dp"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="@dimen/padding_16dp"
         android:background="@color/shimmerColor"
         android:padding="5dp"
         app:layout_constraintEnd_toStartOf="@id/imgDeleteTask"
-        app:layout_constraintTop_toBottomOf="@+id/tvEditTasksHeader" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.appcompat.widget.AppCompatEditText
         android:id="@+id/etTaskBody"
-        android:layout_width="match_parent"
+        android:layout_width="160dp"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/padding_16dp"
         android:background="@color/shimmerColor"
-        android:textSize="24sp"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/chipAlarmTime" />
 
     <androidx.appcompat.widget.AppCompatEditText
         android:id="@+id/etTaskDesc"
-        android:layout_width="match_parent"
+        android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/padding_16dp"
         android:background="@color/shimmerColor"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/etTaskBody" />
 
