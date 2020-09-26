@@ -6,9 +6,13 @@ import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.Navigation
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.iammert.library.ui.multisearchviewlib.MultiSearchView
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.fragment_add_task_bottom_sheet.*
 import kotlinx.android.synthetic.main.fragment_task.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import tech.androidplay.sonali.todo.R
@@ -61,6 +65,10 @@ class TaskFragment : Fragment(R.layout.fragment_task) {
     }
 
     private fun setListeners() {
+
+        efabAddTask.setOnClickListener {
+            findNavController().navigate(R.id.bottomSheetFragment)
+        }
 
         rvTodoList.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
