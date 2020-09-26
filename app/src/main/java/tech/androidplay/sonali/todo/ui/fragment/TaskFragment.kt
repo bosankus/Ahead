@@ -6,11 +6,14 @@ import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.Navigation
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.iammert.library.ui.multisearchviewlib.MultiSearchView
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.fragment_add_task_bottom_sheet.*
 import kotlinx.android.synthetic.main.fragment_task.*
-import kotlinx.android.synthetic.main.shimmer_layout.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import tech.androidplay.sonali.todo.R
 import tech.androidplay.sonali.todo.data.viewmodel.TaskViewModel
@@ -35,9 +38,14 @@ class TaskFragment : Fragment(R.layout.fragment_task) {
     private val taskViewModel: TaskViewModel by viewModels()
     private lateinit var showFab: Animation
 
-    override fun onStart() {
-        super.onStart()
+    override fun onResume() {
+        super.onResume()
         shimmerFrameLayout.startShimmer()
+    }
+
+    override fun onPause() {
+        shimmerFrameLayout.stopShimmer()
+        super.onPause()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -57,6 +65,10 @@ class TaskFragment : Fragment(R.layout.fragment_task) {
     }
 
     private fun setListeners() {
+
+        efabAddTask.setOnClickListener {
+            findNavController().navigate(R.id.bottomSheetFragment)
+        }
 
         rvTodoList.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
@@ -88,7 +100,6 @@ class TaskFragment : Fragment(R.layout.fragment_task) {
         taskViewModel.fetchTasksRealtime().observe(viewLifecycleOwner, {
             it.let {
                 when (it) {
-                    is ResultData.Loading -> shimmerFrameLayout.visibility = View.VISIBLE
                     is ResultData.Success -> {
                         shimmerFrameLayout.visibility = View.GONE
                         it.data?.let { list -> todoAdapter.modifyList(list) }

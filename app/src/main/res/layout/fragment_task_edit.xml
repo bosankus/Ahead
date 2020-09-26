@@ -8,7 +8,9 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:weightSum="2">
 
         <TextView
             android:id="@+id/tvEditTasksHeader"
@@ -23,77 +25,137 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <com.google.android.material.chip.Chip
-            android:id="@+id/chipTaskAlarmTime"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/padding_16dp"
-            android:layout_marginTop="8dp"
-            android:text="@string/app_name"
-            android:textColor="@color/grey3"
-            app:chipBackgroundColor="@color/dribblePinkLight"
-            app:chipIcon="@drawable/ic_alarm"
-            app:chipIconSize="22dp"
-            app:chipIconTint="@color/grey3"
-            app:closeIconEnabled="true"
-            app:closeIconTint="@color/grey3"
-            app:ensureMinTouchTargetSize="true"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvEditTasksHeader" />
-
-        <ImageButton
-            android:id="@+id/imgDeleteTask"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/padding_16dp"
-            android:background="@android:color/transparent"
-            android:padding="5dp"
-            android:src="@drawable/ic_delete"
-            android:tint="@color/grey2"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvEditTasksHeader" />
-
-        <ImageButton
-            android:id="@+id/imgAttachFile"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/padding_16dp"
-            android:background="@android:color/transparent"
-            android:padding="5dp"
-            android:src="@drawable/ic_attachment"
-            android:tint="@color/grey2"
-            app:layout_constraintEnd_toStartOf="@id/imgDeleteTask"
-            app:layout_constraintTop_toBottomOf="@+id/tvEditTasksHeader" />
-
-        <androidx.appcompat.widget.AppCompatEditText
-            android:id="@+id/etTaskBody"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/padding_16dp"
-            android:background="@android:color/transparent"
-            android:ellipsize="end"
-            android:inputType="text"
-            android:maxLines="1"
-            android:textColor="@color/grey3"
-            android:textSize="24sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/chipTaskAlarmTime" />
-
-        <androidx.appcompat.widget.AppCompatEditText
-            android:id="@+id/etTaskDesc"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/clParentLayoutTaskEdit"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_margin="@dimen/padding_16dp"
-            android:background="@android:color/transparent"
-            android:gravity="top"
-            android:inputType="textMultiLine"
-            android:layoutDirection="ltr"
-            android:text="Abcd tomar nake debo ghi"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/etTaskBody" />
+            app:layout_constraintTop_toBottomOf="@+id/tvEditTasksHeader">
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chipTaskAlarmTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/padding_16dp"
+                android:layout_marginTop="8dp"
+                android:text="@string/app_name"
+                android:textColor="@color/grey3"
+                app:chipBackgroundColor="@color/dribblePinkLight"
+                app:chipIcon="@drawable/ic_alarm"
+                app:chipIconSize="22dp"
+                app:chipIconTint="@color/grey3"
+                app:closeIconEnabled="true"
+                app:closeIconTint="@color/grey3"
+                app:ensureMinTouchTargetSize="true"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageButton
+                android:id="@+id/imgDeleteTask"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/padding_16dp"
+                android:background="@android:color/transparent"
+                android:padding="5dp"
+                android:src="@drawable/ic_delete"
+                android:tint="@color/grey3"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageButton
+                android:id="@+id/imgAttachFile"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/padding_16dp"
+                android:background="@android:color/transparent"
+                android:padding="5dp"
+                android:src="@drawable/ic_attachment"
+                android:tint="@color/grey3"
+                app:layout_constraintEnd_toStartOf="@id/imgDeleteTask"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/etTaskBody"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/padding_16dp"
+                android:background="@android:color/transparent"
+                android:ellipsize="end"
+                android:inputType="text"
+                android:maxLines="1"
+                android:textColor="@color/grey3"
+                android:textSize="24sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/chipTaskAlarmTime" />
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/etTaskDesc"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_margin="@dimen/padding_16dp"
+                android:background="@android:color/transparent"
+                android:gravity="top"
+                android:inputType="textMultiLine"
+                android:layoutDirection="ltr"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/etTaskBody" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <com.facebook.shimmer.ShimmerFrameLayout
+            android:id="@+id/shimmerTaskEdit"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="8dp"
+            android:background="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvEditTasksHeader">
+
+            <include layout="@layout/layout_shimmer_fragment_task_edit" />
+
+        </com.facebook.shimmer.ShimmerFrameLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/clErroLayoutTaskEdit"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:visibility="gone">
+
+        <ImageView
+            android:id="@+id/clParentErrorLayoutImg"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:src="@drawable/ic_firebase_error"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/clParentErrorLayoutTxt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginTop="16dp"
+            android:fontFamily="@font/jost"
+            android:text="Whoops! Something seems wrong!"
+            android:textColor="@color/grey3"
+            android:textSize="18sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/clParentErrorLayoutImg" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -20,13 +20,10 @@
             android:layout_height="wrap_content"
             android:background="@color/shimmerColor"
             android:buttonTint="@android:color/transparent"
-            android:fontFamily="@font/jost"
             android:minWidth="0dp"
             android:minHeight="0dp"
             android:scaleX="0.6"
             android:scaleY="0.6"
-            android:textColor="@color/grey3"
-            android:textSize="15sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:ignore="RtlSymmetry" />
@@ -37,10 +34,6 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:background="@color/shimmerColor"
-            android:ellipsize="end"
-            android:fontFamily="@font/jost"
-            android:textColor="@color/grey3"
-            android:textSize="13sp"
             app:layout_constraintStart_toEndOf="@+id/rbTodoItemStatus"
             app:layout_constraintTop_toTopOf="@+id/rbTodoItemStatus" />
 
@@ -48,11 +41,8 @@
             android:id="@+id/tvTodoListItemDesc"
             android:layout_width="150dp"
             android:layout_height="wrap_content"
-            android:background="@color/shimmerColor"
             android:layout_marginTop="8dp"
-            android:fontFamily="@font/jost"
-            android:textColor="@color/grey2"
-            android:textSize="14sp"
+            android:background="@color/shimmerColor"
             app:layout_constraintStart_toStartOf="@+id/tvTodoListItem"
             app:layout_constraintTop_toBottomOf="@+id/tvTodoListItem" />
 

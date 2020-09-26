@@ -48,11 +48,14 @@ class BottomSheetFragment : BottomSheetDialogFragment() {
         binding = FragmentAddTaskBottomSheetBinding.inflate(inflater)
         includeLayoutBinding = binding.bottomSheetLayout
 
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         setUpUi()
 
         clickListeners()
-
-        return binding.root
     }
 
     private fun setUpUi() {
