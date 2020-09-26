@@ -20,6 +20,9 @@ object Constants {
     const val USER_DISPLAY_IMAGE = "USER_DISPLAY_IMAGE"
 
     const val TASK_DOC_ID = "TASK_DOC_ID"
+    const val TASK_DOC_BODY = "TASK_DOC_BODY"
+    const val TASK_DOC_DESC = "TASK_DOC_DESC"
+    const val TASK_STATUS = "TASK_STATUS"
 
     const val WRITE_EXTERNAL_STORAGE = Manifest.permission.WRITE_EXTERNAL_STORAGE
     const val READ_EXTERNAL_STORAGE = Manifest.permission.READ_EXTERNAL_STORAGE

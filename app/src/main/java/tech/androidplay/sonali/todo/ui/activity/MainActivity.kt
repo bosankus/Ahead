@@ -1,13 +1,10 @@
 package tech.androidplay.sonali.todo.ui.activity
 
 import android.annotation.SuppressLint
-import android.app.Activity
-import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.work.Constraints
 import androidx.work.OneTimeWorkRequest
@@ -16,8 +13,6 @@ import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_main.*
 import tech.androidplay.sonali.todo.R
-import tech.androidplay.sonali.todo.R.id.taskEditFragment
-import tech.androidplay.sonali.todo.R.id.taskFragment
 import tech.androidplay.sonali.todo.utils.UIHelper.logMessage
 import tech.androidplay.sonali.todo.utils.UploadWorker
 import javax.inject.Inject
@@ -43,6 +38,7 @@ class MainActivity : AppCompatActivity() {
 
 
     // TODO: Find work around
+    @SuppressLint("ResourceAsColor")
     private fun setScreenUI() {
         // enable white status bar with black icons
         window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR

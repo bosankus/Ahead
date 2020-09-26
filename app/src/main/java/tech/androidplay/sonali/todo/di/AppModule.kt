@@ -2,6 +2,8 @@ package tech.androidplay.sonali.todo.di
 
 import android.app.AlertDialog
 import android.content.Context
+import android.widget.DatePicker
+import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
@@ -18,7 +20,6 @@ import tech.androidplay.sonali.todo.data.viewmodel.TaskViewModel
 import tech.androidplay.sonali.todo.ui.adapter.TodoAdapter
 import tech.androidplay.sonali.todo.utils.CacheManager
 import tech.androidplay.sonali.todo.utils.Constants.FIRESTORE_COLLECTION
-import tech.androidplay.sonali.todo.utils.PermissionManager
 
 /**
  * Created by Androidplay

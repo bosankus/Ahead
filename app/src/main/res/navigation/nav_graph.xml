@@ -46,7 +46,6 @@
         <action
             android:id="@+id/action_taskEditFragment_to_taskFragment"
             app:destination="@id/taskFragment"
-            app:exitAnim="@anim/fade_in_animation"
             app:popUpTo="@id/taskFragment"
             app:popUpToInclusive="true" />
     </fragment>

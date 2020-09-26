@@ -142,7 +142,7 @@
             android:id="@+id/efabAddTask"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="20dp"
+            android:layout_margin="20sp"
             android:backgroundTint="@color/dribblePink"
             android:fontFamily="@font/jost_bold"
             android:minHeight="1dp"
@@ -154,7 +154,6 @@
             app:iconTint="@color/white"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
             app:rippleColor="@color/white" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
