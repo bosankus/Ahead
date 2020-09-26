@@ -9,6 +9,8 @@ import android.view.View
 import android.view.animation.Animation
 import android.widget.TextView
 import android.widget.Toast
+import androidx.fragment.app.FragmentActivity
+import com.github.dhaval2404.imagepicker.ImagePicker
 import com.google.android.material.snackbar.Snackbar
 import tech.androidplay.sonali.todo.utils.Constants.GLOBAL_TAG
 import java.text.SimpleDateFormat
@@ -62,4 +64,11 @@ object UIHelper {
         textView.text = spannable
     }
 
+    fun FragmentActivity.selectImage() {
+        ImagePicker.with(this)
+            .crop()
+            .compress(1024)
+            .maxResultSize(1080, 1080)
+            .start()
+    }
 }

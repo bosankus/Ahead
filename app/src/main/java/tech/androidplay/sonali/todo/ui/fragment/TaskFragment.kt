@@ -10,7 +10,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.iammert.library.ui.multisearchviewlib.MultiSearchView
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_task.*
-import kotlinx.android.synthetic.main.shimmer_layout.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import tech.androidplay.sonali.todo.R
 import tech.androidplay.sonali.todo.data.viewmodel.TaskViewModel
@@ -35,11 +34,6 @@ class TaskFragment : Fragment(R.layout.fragment_task) {
     private val taskViewModel: TaskViewModel by viewModels()
     private lateinit var showFab: Animation
 
-    override fun onStart() {
-        super.onStart()
-        shimmerFrameLayout.startShimmer()
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -49,6 +43,7 @@ class TaskFragment : Fragment(R.layout.fragment_task) {
     }
 
     private fun setUpScreen() {
+        shimmerFrameLayout.startShimmer()
         rvTodoList.apply {
             adapter = todoAdapter
         }
