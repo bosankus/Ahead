@@ -3,6 +3,7 @@ package tech.androidplay.sonali.todo.ui.adapter
 import android.app.AlertDialog
 import androidx.core.os.bundleOf
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.recyclerview.widget.RecyclerView
 import tech.androidplay.sonali.todo.R
 import tech.androidplay.sonali.todo.data.model.Todo
@@ -31,11 +32,16 @@ class TodoViewHolder(
     ) {
         binding.todo = todoItem
         binding.executePendingBindings()
+        binding.tvTodoListItem.apply {
+            transitionName = "todoBody"
+        }
+
         binding.cbTaskStatus.setOnClickListener {
             if (todoItem.isCompleted)
                 viewModel.updateTask(todoItem.docId, false)
             else viewModel.updateTask(todoItem.docId, true)
         }
+
         binding.clItemListContainer.setOnClickListener {
             val bundle = bundleOf(
                 TASK_DOC_ID to todoItem.docId,
@@ -43,8 +49,13 @@ class TodoViewHolder(
                 TASK_DOC_DESC to todoItem.todoDesc,
                 TASK_STATUS to todoItem.isCompleted
             )
-            it?.findNavController()?.navigate(R.id.action_taskFragment_to_taskEditFragment, bundle)
+            val extras = FragmentNavigatorExtras(
+                binding.tvTodoListItem to "todoBody"
+            )
+            it?.findNavController()
+                ?.navigate(R.id.action_taskFragment_to_taskEditFragment, bundle, null, extras)
         }
+
         binding.clItemListContainer.setOnLongClickListener {
             dialog.setPositiveButton("Yes") { dialogInterface, _ ->
                 viewModel.deleteTask(todoItem.docId)

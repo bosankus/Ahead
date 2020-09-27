@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.view.View
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
-import androidx.core.os.bundleOf
+import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -37,6 +37,7 @@ class TaskFragment : Fragment(R.layout.fragment_task) {
     private val taskViewModel: TaskViewModel by viewModels()
     private lateinit var showFab: Animation
 
+
     override fun onResume() {
         super.onResume()
         shimmerFrameLayout.startShimmer()
@@ -52,6 +53,10 @@ class TaskFragment : Fragment(R.layout.fragment_task) {
         setUpScreen()
         setListeners()
         loadTasks()
+
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
+            activity?.finishAffinity()
+        }
     }
 
     private fun setUpScreen() {

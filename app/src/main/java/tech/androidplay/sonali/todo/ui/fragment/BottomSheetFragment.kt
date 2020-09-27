@@ -21,7 +21,6 @@ import kotlinx.android.synthetic.main.frame_date_time_picker.view.*
 import tech.androidplay.sonali.todo.R
 import tech.androidplay.sonali.todo.data.viewmodel.TaskViewModel
 import tech.androidplay.sonali.todo.databinding.FragmentAddTaskBottomSheetBinding
-import tech.androidplay.sonali.todo.utils.ExitWithAnimation
 import tech.androidplay.sonali.todo.utils.ResultData
 import tech.androidplay.sonali.todo.utils.UIHelper.showToast
 import java.text.SimpleDateFormat
@@ -137,7 +136,7 @@ class BottomSheetFragment : BottomSheetDialogFragment() {
 
     private fun createTask() {
         taskViewModel.createTask(
-            tvTaskInput.text.toString(), tvSelectDateTimeDesc.text.toString()
+            tvTaskInput.text.toString(), tvTaskDescInput.text.toString()
         ).observe(viewLifecycleOwner, {
             it?.let {
                 when (it) {

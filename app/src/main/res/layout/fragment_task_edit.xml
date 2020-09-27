@@ -76,6 +76,7 @@
             android:ellipsize="end"
             android:inputType="text"
             android:maxLines="1"
+            android:transitionName="todoBody"
             android:textColor="@color/grey3"
             android:textSize="24sp"
             app:layout_constraintEnd_toEndOf="parent"
