@@ -1,15 +1,27 @@
 <resources>
     <string name="app_name">think Ahead</string>
-    <string name="things_to_do__header_txt">Things to do</string>
-    <string name="add_task_layout_txt">+ Add task🔥</string>
-    <string name="login_btn_txt">Get Inside</string>
 
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="tvHomeHeader">What\'s your plan?</string>
     <string name="login_header_txt">Hello \nThere<font color="#E94D88">.</font></string>
     <string name="signup_create_acc_txt">Create account for <font color="#E94D88"><b>thinking Ahead</b></font></string>
     <string name="login_create_acc_txt">Have account? <font color="#E94D88"><b>Get in</b></font></string>
-    <string name="greet_txt">hi</string>
     <string name="think">think.</string>
+    <string name="hint_alarm_txt"><![CDATA[00:00:00]]></string>
+    <string name="new_task">New task</string>
+    <string name="set_alarm">Set Alarm</string>
+    <string name="ring_alarm_for_this_task">Ring alarm for this task</string>
+    <string name="task">Task</string>
+    <string name="task_description">Task Description</string>
+    <string name="create_task">Create task</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="forgot_password">Forgot Password ?</string>
+    <string name="sign_up">Sign up</string>
+    <string name="login">login</string>
+    <string name="today">TODAY</string>
+    <string name="all_tasks_completed_add_more">All tasks Completed. Add more</string>
+    <string name="add_task">Add Task</string>
+    <string name="whoops_something_seems_wrong">Whoops! Something seems wrong!</string>
+    <string name="edit">Edit</string>
+    <string name="save_task">Save Task</string>
 </resources>

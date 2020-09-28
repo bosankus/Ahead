@@ -1,8 +1,8 @@
 package tech.androidplay.sonali.todo.di
 
 import android.app.AlertDialog
+import android.app.TimePickerDialog
 import android.content.Context
-import android.widget.DatePicker
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.CollectionReference
@@ -20,6 +20,7 @@ import tech.androidplay.sonali.todo.data.viewmodel.TaskViewModel
 import tech.androidplay.sonali.todo.ui.adapter.TodoAdapter
 import tech.androidplay.sonali.todo.utils.CacheManager
 import tech.androidplay.sonali.todo.utils.Constants.FIRESTORE_COLLECTION
+import java.util.*
 
 /**
  * Created by Androidplay
@@ -61,12 +62,26 @@ class AppModule {
     }
 
     @Provides
+    fun providesDatePickerDialog() =
+        MaterialDatePicker.Builder.datePicker().build()
+
+    @Provides
+    fun providesCalender(): Calendar = Calendar.getInstance()
+
+    @Provides
+    fun providesTimePickerDialogTimeSetListener(calendar: Calendar): TimePickerDialog.OnTimeSetListener =
+        TimePickerDialog.OnTimeSetListener { _, hourOfDay, minute ->
+            calendar.set(Calendar.HOUR_OF_DAY, hourOfDay)
+            calendar.set(Calendar.MINUTE, minute)
+        }
+
+
+    @Provides
     fun providesTaskRepository(
         firebaseAuth: FirebaseAuth,
         collectionReference: CollectionReference,
-        storageReference: StorageReference
     ): TaskRepository {
-        return TaskRepository(firebaseAuth, collectionReference, storageReference)
+        return TaskRepository(firebaseAuth, collectionReference)
     }
 
     @Provides
@@ -77,18 +92,18 @@ class AppModule {
     }
 
     @Provides
+    fun providesAuthRepository(
+        firebaseAuth: FirebaseAuth
+    ): AuthRepository {
+        return AuthRepository(firebaseAuth)
+    }
+
+    @Provides
     fun providesTodoAdapter(
         alertDialog: AlertDialog.Builder,
         viewModel: TaskViewModel
     ): TodoAdapter {
         return TodoAdapter(viewModel, alertDialog)
-    }
-
-    @Provides
-    fun providesAuthRepository(
-        firebaseAuth: FirebaseAuth
-    ): AuthRepository {
-        return AuthRepository(firebaseAuth)
     }
 
 }

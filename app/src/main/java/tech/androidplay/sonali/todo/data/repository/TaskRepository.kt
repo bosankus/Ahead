@@ -1,6 +1,5 @@
 package tech.androidplay.sonali.todo.data.repository
 
-import android.net.Uri
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.Query
@@ -25,7 +24,6 @@ import javax.inject.Inject
 class TaskRepository @Inject constructor(
     firebaseAuth: FirebaseAuth,
     private val taskListRef: CollectionReference,
-    private val storageReference: StorageReference
 ) {
 
     private val userDetails = firebaseAuth.currentUser
@@ -34,11 +32,16 @@ class TaskRepository @Inject constructor(
         .whereEqualTo("id", userDetails?.uid)
         .orderBy("todoCreationTimeStamp", Query.Direction.ASCENDING)
 
-    suspend fun create(todoBody: String, todoDesc: String): ResultData<Boolean> {
+    suspend fun create(
+        todoBody: String,
+        todoDesc: String,
+        todoReminder: String
+    ): ResultData<Boolean> {
         val task = hashMapOf(
             "id" to userDetails?.uid,
             "todoBody" to todoBody,
             "todoDesc" to todoDesc,
+            "todoReminder" to todoReminder,
             "todoCreationTimeStamp" to getCurrentTimestamp(),
             "isCompleted" to false
         )
@@ -71,7 +74,7 @@ class TaskRepository @Inject constructor(
         }
     }
 
-    suspend fun fetchTaskDetails(taskId: String): ResultData<Todo> {
+    /*suspend fun fetchTaskDetails(taskId: String): ResultData<Todo> {
         return try {
             val response = taskListRef.document(taskId)
                 .get()
@@ -81,7 +84,7 @@ class TaskRepository @Inject constructor(
         } catch (e: Exception) {
             ResultData.Failed(e.message)
         }
-    }
+    }*/
 
     suspend fun updateTask(taskId: String, map: Map<String, Any>) {
         try {
@@ -103,7 +106,7 @@ class TaskRepository @Inject constructor(
         }
     }
 
-    suspend fun uploadImage(uri: Uri): ResultData<String> {
+    /*suspend fun uploadImage(uri: Uri): ResultData<String> {
         val ref = storageReference
             .child("${userDetails?.email}/${userDetails?.uid}")
         return try {
@@ -113,7 +116,7 @@ class TaskRepository @Inject constructor(
         } catch (e: Exception) {
             ResultData.Failed(e.message)
         }
-    }
+    }*/
 }
 
 
