@@ -13,9 +13,8 @@ import tech.androidplay.sonali.todo.data.viewmodel.TaskViewModel
 import tech.androidplay.sonali.todo.utils.Constants.TASK_DOC_BODY
 import tech.androidplay.sonali.todo.utils.Constants.TASK_DOC_DESC
 import tech.androidplay.sonali.todo.utils.Constants.TASK_DOC_ID
+import tech.androidplay.sonali.todo.utils.Constants.TASK_REMINDER
 import tech.androidplay.sonali.todo.utils.Constants.TASK_STATUS
-import tech.androidplay.sonali.todo.utils.PermissionManager.askStoragePermission
-import tech.androidplay.sonali.todo.utils.UIHelper.selectImage
 import tech.androidplay.sonali.todo.utils.UIHelper.showSnack
 
 /**
@@ -33,6 +32,7 @@ class TaskEditFragment : Fragment(R.layout.fragment_task_edit) {
     private var taskBody: String? = ""
     private var taskDesc: String? = ""
     private var taskStatus: Boolean? = false
+    private var taskReminder: String? = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,9 +52,11 @@ class TaskEditFragment : Fragment(R.layout.fragment_task_edit) {
         taskBody = arguments?.getString(TASK_DOC_BODY)
         taskDesc = arguments?.getString(TASK_DOC_DESC)
         taskStatus = arguments?.getBoolean(TASK_STATUS)
+        taskReminder = arguments?.getString(TASK_REMINDER) ?: "Add Reminder"
 
         etTaskBody.setText(taskBody)
         etTaskDesc.setText(taskDesc)
+        chipTaskAlarmTime.text = taskReminder
     }
 
     private fun setListener() {
@@ -64,14 +66,10 @@ class TaskEditFragment : Fragment(R.layout.fragment_task_edit) {
             showSnack(requireView(), "Task Deleted")
         }
 
-        imgAttachFile.setOnClickListener {
-            askStoragePermission(this)
-            requireActivity().selectImage()
-        }
-
+        // TODO: Click chip to open datepicker
         efabSaveTask.setOnClickListener {
             val taskBody = etTaskBody.text.toString()
-            val taskDesc = etTaskBody.text.toString()
+            val taskDesc = etTaskDesc.text.toString()
             taskViewModel.updateTask(taskId, taskStatus!!, taskBody, taskDesc)
             showSnack(requireView(), "Task Deleted")
         }

@@ -1,6 +1,5 @@
 package tech.androidplay.sonali.todo.data.viewmodel
 
-import android.net.Uri
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -23,10 +22,10 @@ import tech.androidplay.sonali.todo.utils.UIHelper.logMessage
 class TaskViewModel @ViewModelInject constructor(private val taskRepository: TaskRepository) :
     ViewModel() {
 
-    fun createTask(todoName: String, todoDesc: String) =
+    fun createTask(todoName: String, todoDesc: String, todoReminder: String = "") =
         liveData {
             emit(ResultData.Loading)
-            emit(taskRepository.create(todoName, todoDesc))
+            emit(taskRepository.create(todoName, todoDesc, todoReminder))
         }
 
     @ExperimentalCoroutinesApi
@@ -41,11 +40,11 @@ class TaskViewModel @ViewModelInject constructor(private val taskRepository: Tas
         return response
     }
 
-    fun fetchTaskDetails(taskId: String) =
+    /*fun fetchTaskDetails(taskId: String) =
         liveData {
             emit(ResultData.Loading)
             emit(taskRepository.fetchTaskDetails(taskId))
-        }
+        }*/
 
     fun updateTask(
         taskId: String?,
@@ -75,13 +74,13 @@ class TaskViewModel @ViewModelInject constructor(private val taskRepository: Tas
         docId?.let { viewModelScope.launch { taskRepository.deleteTask(docId) } }
     }
 
-    fun uploadImage(uri: Uri?) =
+    /*fun uploadImage(uri: Uri?) =
         uri?.let {
             liveData {
                 emit(ResultData.Loading)
                 emit(taskRepository.uploadImage(uri))
             }
-        }
+        }*/
 
     override fun onCleared() {
         super.onCleared()

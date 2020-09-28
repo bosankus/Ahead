@@ -1,6 +1,5 @@
 package tech.androidplay.sonali.todo.data.repository
 
-import androidx.lifecycle.MutableLiveData
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import kotlinx.coroutines.tasks.await
@@ -20,10 +19,6 @@ import javax.inject.Inject
 class AuthRepository @Inject constructor(
     private val firebaseAuth: FirebaseAuth
 ) {
-
-    private var passwordResetLiveData: MutableLiveData<Int> = MutableLiveData()
-
-//    val firebaseUserLiveData by lazy { firebaseAuth.currentUser }
 
     suspend fun createAccount(email: String, password: String): ResultData<FirebaseUser> {
         return try {

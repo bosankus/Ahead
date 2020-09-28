@@ -5,11 +5,9 @@
     android:id="@+id/taskFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/white"
     tools:context=".ui.activity.MainActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/clParentLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -20,7 +18,8 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="35dp"
             android:fontFamily="@font/calibre"
-            android:text="tasks"
+            android:text="@string/task"
+            android:textAllCaps="false"
             android:textColor="@color/grey3"
             android:textSize="55sp"
             app:layout_constraintStart_toStartOf="parent"
@@ -43,7 +42,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
             android:fontFamily="@font/calibre_semi"
-            android:text="TODAY"
+            android:text="@string/today"
             android:textColor="@color/dribblePink"
             android:textSize="18sp"
             app:layout_constraintStart_toStartOf="parent"
@@ -110,16 +109,16 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="ContentDescription" />
 
             <TextView
-                android:id="@+id/tvNoTodo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start"
                 android:layout_marginTop="16sp"
                 android:fontFamily="@font/jost_semi"
-                android:text="All tasks Completed. Add more"
+                android:text="@string/all_tasks_completed_add_more"
                 android:textColor="@color/grey3"
                 android:textSize="16sp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -129,7 +128,6 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/bg_white_gradient"
             android:layout_width="match_parent"
             android:layout_height="90dp"
             android:background="@drawable/bg_white_gradient"
@@ -146,7 +144,7 @@
             android:backgroundTint="@color/dribblePink"
             android:fontFamily="@font/jost_bold"
             android:minHeight="1dp"
-            android:text="Add Task"
+            android:text="@string/add_task"
             android:textColor="@color/white"
             android:textSize="13sp"
             app:icon="@android:drawable/ic_input_add"
@@ -159,7 +157,6 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/clParentErrorLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/white"
@@ -173,16 +170,16 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="ContentDescription" />
 
         <TextView
-            android:id="@+id/clParentErrorLayoutTxt"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end"
             android:layout_marginTop="16dp"
             android:fontFamily="@font/jost"
-            android:text="Whoops! Something seems wrong!"
+            android:text="@string/whoops_something_seems_wrong"
             android:textColor="@color/grey3"
             android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="parent"

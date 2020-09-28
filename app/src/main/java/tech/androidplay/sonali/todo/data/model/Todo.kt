@@ -19,6 +19,8 @@ data class Todo(
     var todoBody: String = "",
     @SerializedName("todoDesc")
     var todoDesc: String = "",
+    @SerializedName("todoReminder")
+    var todoReminder: String = "",
     @SerializedName("todoCreationTimeStamp")
     var todoCreationTimeStamp: String = "",
     @JvmField

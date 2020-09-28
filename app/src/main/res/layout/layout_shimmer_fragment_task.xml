@@ -2,13 +2,11 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/shimmerItemList"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/todoItemListContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="20sp"
@@ -38,7 +36,6 @@
             app:layout_constraintTop_toTopOf="@+id/rbTodoItemStatus" />
 
         <TextView
-            android:id="@+id/tvTodoListItemDesc"
             android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"

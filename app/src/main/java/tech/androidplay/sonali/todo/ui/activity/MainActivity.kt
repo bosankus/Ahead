@@ -5,16 +5,10 @@ import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import androidx.navigation.findNavController
 import androidx.work.Constraints
-import androidx.work.OneTimeWorkRequest
 import androidx.work.WorkManager
-import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.android.synthetic.main.activity_main.*
 import tech.androidplay.sonali.todo.R
-import tech.androidplay.sonali.todo.utils.UIHelper.logMessage
-import tech.androidplay.sonali.todo.utils.UploadWorker
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -25,8 +19,6 @@ class MainActivity : AppCompatActivity() {
 
     @Inject
     lateinit var constraints: Constraints
-
-    private lateinit var firebaseAuth: FirebaseAuth
 
     @SuppressLint("SimpleDateFormat")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -48,7 +40,7 @@ class MainActivity : AppCompatActivity() {
 
 
     // Call this method to run work manager
-    private fun initiateUploadRequest() {
+    /*private fun initiateUploadRequest() {
         val uploadRequest = OneTimeWorkRequest.Builder(UploadWorker::class.java)
             .setConstraints(constraints)
             .build()
@@ -58,6 +50,6 @@ class MainActivity : AppCompatActivity() {
             .observe(this, {
                 logMessage(it.state.name)
             })
-    }
+    }*/
 }
 

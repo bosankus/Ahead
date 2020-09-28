@@ -1,7 +1,6 @@
 package tech.androidplay.sonali.todo.ui.fragment
 
 import android.os.Bundle
-import android.os.CountDownTimer
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController

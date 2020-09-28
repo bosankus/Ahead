@@ -18,7 +18,6 @@ import tech.androidplay.sonali.todo.data.viewmodel.TaskViewModel
 import tech.androidplay.sonali.todo.ui.adapter.TodoAdapter
 import tech.androidplay.sonali.todo.utils.ResultData
 import tech.androidplay.sonali.todo.utils.UIHelper
-import tech.androidplay.sonali.todo.utils.UIHelper.findLocationOfCenterOnTheScreen
 import javax.inject.Inject
 
 /**
@@ -36,7 +35,6 @@ class TaskFragment : Fragment(R.layout.fragment_task) {
     lateinit var todoAdapter: TodoAdapter
     private val taskViewModel: TaskViewModel by viewModels()
     private lateinit var showFab: Animation
-
 
     override fun onResume() {
         super.onResume()
@@ -70,8 +68,6 @@ class TaskFragment : Fragment(R.layout.fragment_task) {
     private fun setListeners() {
 
         efabAddTask.setOnClickListener {
-            val position = it.findLocationOfCenterOnTheScreen()
-            /*val bundle = bundleOf("POSITION" to position)*/
             findNavController().navigate(R.id.bottomSheetFragment)
         }
 
