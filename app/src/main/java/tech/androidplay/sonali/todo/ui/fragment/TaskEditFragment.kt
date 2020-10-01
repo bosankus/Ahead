@@ -71,7 +71,7 @@ class TaskEditFragment : Fragment(R.layout.fragment_task_edit) {
             val taskBody = etTaskBody.text.toString()
             val taskDesc = etTaskDesc.text.toString()
             taskViewModel.updateTask(taskId, taskStatus!!, taskBody, taskDesc)
-            showSnack(requireView(), "Task Deleted")
+            showSnack(requireView(), "Task Saved")
         }
     }
 

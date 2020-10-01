@@ -12,7 +12,6 @@ import tech.androidplay.sonali.todo.data.model.Todo
 import tech.androidplay.sonali.todo.data.repository.TaskRepository
 import tech.androidplay.sonali.todo.utils.ResultData
 import tech.androidplay.sonali.todo.utils.UIHelper.getCurrentTimestamp
-import tech.androidplay.sonali.todo.utils.UIHelper.logMessage
 
 /**
  * Created by Androidplay
@@ -82,8 +81,4 @@ class TaskViewModel @ViewModelInject constructor(private val taskRepository: Tas
             }
         }*/
 
-    override fun onCleared() {
-        super.onCleared()
-        logMessage("ViewModel Cleared")
-    }
 }
