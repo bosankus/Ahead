@@ -67,7 +67,7 @@ class TaskFragment : Fragment(R.layout.fragment_task) {
     private fun setListeners() {
 
         efabAddTask.setOnClickListener {
-            findNavController().navigate(R.id.bottomSheetFragment)
+            findNavController().navigate(R.id.action_taskFragment_to_taskCreateFragment)
         }
 
         rvTodoList.addOnScrollListener(object : RecyclerView.OnScrollListener() {

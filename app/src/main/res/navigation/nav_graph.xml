@@ -22,6 +22,9 @@
             android:id="@+id/action_taskFragment_to_taskEditFragment"
             app:destination="@id/taskEditFragment"
             app:enterAnim="@anim/fade_out_animation" />
+        <action
+            android:id="@+id/action_taskFragment_to_taskCreateFragment"
+            app:destination="@id/taskCreateFragment" />
     </fragment>
     <fragment
         android:id="@+id/splashFragment"
@@ -48,8 +51,12 @@
             app:popUpTo="@id/taskFragment"
             app:popUpToInclusive="true" />
     </fragment>
-    <dialog
-        android:id="@+id/bottomSheetFragment"
-        android:name="tech.androidplay.sonali.todo.ui.fragment.BottomSheetFragment"
-        tools:layout="@layout/fragment_add_task_bottom_sheet" />
+    <fragment
+        android:id="@+id/taskCreateFragment"
+        android:name="tech.androidplay.sonali.todo.ui.fragment.TaskCreateFragment"
+        tools:layout="TaskCreateFragment">
+        <action
+            android:id="@+id/action_taskCreateFragment_to_taskFragment"
+            app:destination="@id/taskFragment" />
+    </fragment>
 </navigation>

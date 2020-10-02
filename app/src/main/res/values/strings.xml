@@ -6,7 +6,8 @@
     <string name="signup_create_acc_txt">Create account for <font color="#E94D88"><b>thinking Ahead</b></font></string>
     <string name="login_create_acc_txt">Have account? <font color="#E94D88"><b>Get in</b></font></string>
     <string name="think">think.</string>
-    <string name="hint_alarm_txt"><![CDATA[00:00:00]]></string>
+    <string name="hint_date_txt">Select Date</string>
+    <string name="hint_time_txt">Select Time</string>
     <string name="new_task">New task</string>
     <string name="set_alarm">Set Alarm</string>
     <string name="ring_alarm_for_this_task">Ring alarm for this task</string>

@@ -49,6 +49,8 @@ object UIHelper {
         else view.visibility = View.INVISIBLE
     }
 
+    val CalendarInstance: Calendar = Calendar.getInstance()
+
     /*fun strikeText(textView: TextView) {
         val text = textView.text.toString()
         val spannable = SpannableString(text)
