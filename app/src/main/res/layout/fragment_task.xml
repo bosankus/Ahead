@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/taskFragment"
@@ -99,6 +99,7 @@
             android:id="@+id/frameNoTodo"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:background="@color/white"
             android:visibility="gone">
 
             <ImageView
@@ -127,40 +128,13 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="90dp"
-            android:background="@drawable/bg_white_gradient"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
-
-        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-            android:id="@+id/efabAddTask"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="20sp"
-            android:backgroundTint="@color/dribblePink"
-            android:fontFamily="@font/jost_bold"
-            android:minHeight="1dp"
-            android:text="@string/add_task"
-            android:textColor="@color/white"
-            android:textSize="13sp"
-            app:icon="@android:drawable/ic_input_add"
-            app:iconPadding="0sp"
-            app:iconTint="@color/white"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:rippleColor="@color/white" />
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <!--<androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/white"
-        android:visibility="gone">
+        android:visibility="visible">
 
         <ImageView
             android:id="@+id/clParentErrorLayoutImg"
@@ -186,6 +160,23 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/clParentErrorLayoutImg" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>-->
 
-</FrameLayout>
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        android:id="@+id/efabAddTask"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="20sp"
+        android:backgroundTint="@color/dribblePink"
+        android:fontFamily="@font/jost_bold"
+        android:layout_gravity="bottom|end"
+        android:minHeight="1dp"
+        android:text="@string/add_task"
+        android:textColor="@color/white"
+        android:textSize="13sp"
+        app:icon="@android:drawable/ic_input_add"
+        app:iconPadding="0sp"
+        app:iconTint="@color/white"
+        app:rippleColor="@color/white" />
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

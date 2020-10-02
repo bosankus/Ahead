@@ -17,7 +17,6 @@ import tech.androidplay.sonali.todo.R
 import tech.androidplay.sonali.todo.data.viewmodel.TaskViewModel
 import tech.androidplay.sonali.todo.ui.adapter.TodoAdapter
 import tech.androidplay.sonali.todo.utils.ResultData
-import tech.androidplay.sonali.todo.utils.UIHelper
 import javax.inject.Inject
 
 /**
@@ -68,7 +67,7 @@ class TaskFragment : Fragment(R.layout.fragment_task) {
     private fun setListeners() {
 
         efabAddTask.setOnClickListener {
-            findNavController().navigate(R.id.bottomSheetFragment)
+            findNavController().navigate(R.id.action_taskFragment_to_taskCreateFragment)
         }
 
         rvTodoList.addOnScrollListener(object : RecyclerView.OnScrollListener() {
@@ -103,12 +102,12 @@ class TaskFragment : Fragment(R.layout.fragment_task) {
                 when (it) {
                     is ResultData.Success -> {
                         shimmerFrameLayout.visibility = View.GONE
+                        frameNoTodo.visibility = View.GONE
                         it.data?.let { list -> todoAdapter.modifyList(list) }
                     }
                     is ResultData.Failed -> {
                         shimmerFrameLayout.visibility = View.GONE
                         frameNoTodo.visibility = View.VISIBLE
-                        UIHelper.showToast(requireContext(), it.toString())
                     }
                 }
             }

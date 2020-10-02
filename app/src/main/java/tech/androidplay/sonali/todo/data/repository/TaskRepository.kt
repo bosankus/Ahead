@@ -3,7 +3,6 @@ package tech.androidplay.sonali.todo.data.repository
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.Query
-import com.google.firebase.storage.StorageReference
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.callbackFlow
@@ -11,7 +10,6 @@ import kotlinx.coroutines.tasks.await
 import tech.androidplay.sonali.todo.data.model.Todo
 import tech.androidplay.sonali.todo.utils.ResultData
 import tech.androidplay.sonali.todo.utils.UIHelper.getCurrentTimestamp
-import tech.androidplay.sonali.todo.utils.UIHelper.logMessage
 import javax.inject.Inject
 
 /**
@@ -65,7 +63,6 @@ class TaskRepository @Inject constructor(
                 if (error != null) return@addSnapshotListener
                 else if (!value?.isEmpty!!) {
                     val todo = value.toObjects(Todo::class.java)
-                    logMessage("$todo")
                     offer(ResultData.Success(todo))
                 } else offer(ResultData.Failed())
             }
@@ -92,7 +89,6 @@ class TaskRepository @Inject constructor(
                 .update(map)
                 .await()
         } catch (e: Exception) {
-            logMessage(e.message.toString())
         }
     }
 
@@ -102,7 +98,6 @@ class TaskRepository @Inject constructor(
                 .delete()
                 .await()
         } catch (e: Exception) {
-            logMessage(e.message.toString())
         }
     }
 

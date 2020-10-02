@@ -12,6 +12,8 @@ import dagger.hilt.android.components.ApplicationComponent
 import dagger.hilt.android.qualifiers.ApplicationContext
 import tech.androidplay.sonali.todo.utils.Constants.SHARED_PREFERENCE_NAME
 import tech.androidplay.sonali.todo.utils.Constants.USER_DISPLAY_IMAGE
+import tech.androidplay.sonali.todo.utils.DatePickerFragment
+import tech.androidplay.sonali.todo.utils.TimePickerFragment
 import javax.inject.Singleton
 
 /**
@@ -50,4 +52,12 @@ class ServiceModule {
     @Provides
     fun provideUserDisplayImage(sharedPreferences: SharedPreferences) =
         sharedPreferences.getString(USER_DISPLAY_IMAGE, "") ?: ""
+
+    @Singleton
+    @Provides
+    fun providesDatePickerFragment() = DatePickerFragment()
+
+    @Singleton
+    @Provides
+    fun providesTimePickerFragment() = TimePickerFragment()
 }

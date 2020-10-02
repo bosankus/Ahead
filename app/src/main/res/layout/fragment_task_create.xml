@@ -4,10 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:clipToPadding="false"
-    android:paddingBottom="10dp"
-    app:behavior_hideable="true"
-    app:behavior_peekHeight="0dp"
-    app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
+    android:paddingBottom="10dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/clCreateTask"
@@ -81,18 +78,41 @@
                 app:layout_constraintTop_toBottomOf="@+id/tvAlarmHeader" />
 
             <TextView
-                android:id="@+id/tvSelectDateTimeDesc"
+                android:id="@+id/tvSelectDateDesc"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="20dp"
+                android:layout_marginStart="26dp"
+                android:background="?attr/selectableItemBackground"
+                android:drawablePadding="5dp"
                 android:fontFamily="@font/jost"
-                android:padding="6dp"
-                android:text="@string/hint_alarm_txt"
+                android:paddingTop="6dp"
+                android:paddingBottom="6dp"
+                android:text="@string/hint_date_txt"
                 android:textColor="@color/dribblePink"
                 android:textSize="14sp"
-                app:layout_constraintBottom_toBottomOf="@+id/tvAlarmDesc"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/tvAlarmHeader" />
+                app:drawableStartCompat="@drawable/ic_date"
+                app:drawableTint="@color/dribblePink"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvAlarmDesc" />
+
+            <TextView
+                android:id="@+id/tvSelectTimeDesc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:background="?attr/selectableItemBackground"
+                android:drawablePadding="5dp"
+                android:fontFamily="@font/jost"
+                android:paddingTop="6dp"
+                android:paddingBottom="6dp"
+                android:text="@string/hint_time_txt"
+                android:textColor="@color/dribblePink"
+                android:textSize="14sp"
+                app:drawableStartCompat="@drawable/ic_time"
+                app:drawableTint="@color/dribblePink"
+                app:layout_constraintStart_toEndOf="@+id/tvSelectDateDesc"
+                app:layout_constraintTop_toBottomOf="@+id/tvAlarmDesc" />
+
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -23,6 +23,15 @@ object Constants {
     const val TASK_STATUS = "TASK_STATUS"
     const val TASK_REMINDER = "TASK_REMINDER"
 
+    const val EXTRA_DATE = "EXTRA_DATE"
+    const val EXTRA_TIME = "EXTRA_TIME"
+
+    const val DATE_REQUEST_CODE = 100
+    const val DATE_RESULT_CODE = 101
+
+    const val TIME_REQUEST_CODE = 200
+    const val TIME_RESULT_CODE = 201
+
     /*const val WRITE_EXTERNAL_STORAGE = Manifest.permission.WRITE_EXTERNAL_STORAGE
     const val READ_EXTERNAL_STORAGE = Manifest.permission.READ_EXTERNAL_STORAGE
     const val STORAGE_PERMISSION_REQUEST_RATIONAL =
