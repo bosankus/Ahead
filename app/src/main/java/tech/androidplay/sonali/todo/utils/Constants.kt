@@ -48,6 +48,8 @@ object Constants {
     const val START_SYNC_SERVICE = "START_SYNC_SERVICE"
     const val STOP_SYNC_SERVICE  = "STOP_SYNC_SERVICE"
 
+    const val TASK_TABLE = "TASK_TABLE"
+
     /*const val WRITE_EXTERNAL_STORAGE = Manifest.permission.WRITE_EXTERNAL_STORAGE
     const val READ_EXTERNAL_STORAGE = Manifest.permission.READ_EXTERNAL_STORAGE
     const val STORAGE_PERMISSION_REQUEST_RATIONAL =

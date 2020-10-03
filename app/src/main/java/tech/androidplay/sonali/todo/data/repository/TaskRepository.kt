@@ -8,6 +8,7 @@ import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.tasks.await
 import tech.androidplay.sonali.todo.data.model.Todo
+import tech.androidplay.sonali.todo.data.room.TaskDao
 import tech.androidplay.sonali.todo.utils.ResultData
 import tech.androidplay.sonali.todo.utils.UIHelper.getCurrentTimestamp
 import javax.inject.Inject
@@ -21,6 +22,7 @@ import javax.inject.Inject
 
 class TaskRepository @Inject constructor(
     firebaseAuth: FirebaseAuth,
+    private val taskDao: TaskDao,
     private val taskListRef: CollectionReference,
 ) {
 
@@ -29,6 +31,12 @@ class TaskRepository @Inject constructor(
     private val query: Query = taskListRef
         .whereEqualTo("id", userDetails?.uid)
         .orderBy("todoCreationTimeStamp", Query.Direction.ASCENDING)
+
+    suspend fun insertTask(todo: Todo) = taskDao.insertTask(todo)
+
+    suspend fun deleteTask(todo: Todo) = taskDao.deleteTask(todo)
+
+    fun getAllTasks() = taskDao.getTaskByCreationTime()
 
     suspend fun create(
         todoBody: String,
@@ -70,18 +78,6 @@ class TaskRepository @Inject constructor(
             querySnapshot.remove()
         }
     }
-
-    /*suspend fun fetchTaskDetails(taskId: String): ResultData<Todo> {
-        return try {
-            val response = taskListRef.document(taskId)
-                .get()
-                .await()
-            val data = response.toObject(Todo::class.java)
-            ResultData.Success(data)
-        } catch (e: Exception) {
-            ResultData.Failed(e.message)
-        }
-    }*/
 
     suspend fun updateTask(taskId: String, map: Map<String, Any>) {
         try {

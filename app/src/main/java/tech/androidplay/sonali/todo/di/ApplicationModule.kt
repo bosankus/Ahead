@@ -2,15 +2,25 @@ package tech.androidplay.sonali.todo.di
 
 import android.content.Context
 import android.content.SharedPreferences
+import androidx.room.Room
 import androidx.work.Constraints
 import androidx.work.NetworkType
 import androidx.work.WorkManager
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.CollectionReference
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ApplicationComponent
 import dagger.hilt.android.qualifiers.ApplicationContext
+import tech.androidplay.sonali.todo.data.room.TaskDatabase
+import tech.androidplay.sonali.todo.utils.CacheManager
+import tech.androidplay.sonali.todo.utils.Constants
 import tech.androidplay.sonali.todo.utils.Constants.SHARED_PREFERENCE_NAME
+import tech.androidplay.sonali.todo.utils.Constants.TASK_TABLE
 import tech.androidplay.sonali.todo.utils.Constants.USER_DISPLAY_IMAGE
 import tech.androidplay.sonali.todo.utils.DatePickerFragment
 import tech.androidplay.sonali.todo.utils.TimePickerFragment
@@ -27,6 +37,43 @@ import javax.inject.Singleton
 @Module
 @InstallIn(ApplicationComponent::class)
 class ApplicationModule {
+
+    @Singleton
+    @Provides
+    fun providesTaskDatabase(@ApplicationContext context: Context) =
+        Room.databaseBuilder(
+            context,
+            TaskDatabase::class.java,
+            TASK_TABLE
+        ).build()
+
+    @Singleton
+    @Provides
+    fun getTaskDao(db: TaskDatabase) = db.getTaskDao()
+
+    @Singleton
+    @Provides
+    fun provideFirebaseInstance(): FirebaseAuth {
+        return FirebaseAuth.getInstance()
+    }
+
+    @Singleton
+    @Provides
+    fun providesFireStoreReference(): CollectionReference {
+        return FirebaseFirestore.getInstance().collection(Constants.FIRESTORE_COLLECTION)
+    }
+
+    @Singleton
+    @Provides
+    fun providesStorageReference(): StorageReference {
+        return FirebaseStorage.getInstance().reference
+    }
+
+    @Singleton
+    @Provides
+    fun providesCacheManager(): CacheManager {
+        return CacheManager()
+    }
 
     @Singleton
     @Provides
