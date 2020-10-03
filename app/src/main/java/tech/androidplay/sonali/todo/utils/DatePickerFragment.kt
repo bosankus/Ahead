@@ -6,10 +6,12 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.DatePicker
 import androidx.fragment.app.DialogFragment
+import dagger.hilt.android.AndroidEntryPoint
 import tech.androidplay.sonali.todo.utils.Constants.DATE_RESULT_CODE
 import tech.androidplay.sonali.todo.utils.Constants.EXTRA_DATE
 import tech.androidplay.sonali.todo.utils.UIHelper.CalendarInstance
 import java.util.*
+import javax.inject.Inject
 
 /**
  * Created by Androidplay
@@ -18,9 +20,11 @@ import java.util.*
  * Email: ankush@androidplay.in
  */
 
+@AndroidEntryPoint
 class DatePickerFragment : DialogFragment(), DatePickerDialog.OnDateSetListener {
 
-    private val calendar: Calendar = CalendarInstance
+    @Inject
+    lateinit var calendar: Calendar
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val year = calendar.get(Calendar.YEAR)
@@ -34,8 +38,7 @@ class DatePickerFragment : DialogFragment(), DatePickerDialog.OnDateSetListener 
 
     override fun onDateSet(view: DatePicker?, y: Int, m: Int, d: Int) {
         calendar.set(y, m, d)
-        var date = ""
-        date =
+        val date =
             if (m < 10)
                 "$d.0$m.$y "
             else if (d < 10)

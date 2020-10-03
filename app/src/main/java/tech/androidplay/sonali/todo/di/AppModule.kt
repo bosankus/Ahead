@@ -55,30 +55,6 @@ class AppModule {
     }
 
     @Provides
-    fun providesAlertDialog(@ActivityContext context: Context): AlertDialog.Builder {
-        val alertDialog = AlertDialog.Builder(context)
-        alertDialog.setMessage("Do you want to delete the task")
-        alertDialog.setCancelable(true)
-        return alertDialog
-    }
-
-    @Provides
-    fun providesDatePickerDialog() =
-        MaterialDatePicker.Builder.datePicker().build()
-
-    @Provides
-    fun providesCalender(): Calendar = Calendar.getInstance()
-
-
-    @Provides
-    fun providesTimePickerDialogTimeSetListener(calendar: Calendar): TimePickerDialog.OnTimeSetListener =
-        TimePickerDialog.OnTimeSetListener { _, hourOfDay, minute ->
-            calendar.set(Calendar.HOUR_OF_DAY, hourOfDay)
-            calendar.set(Calendar.MINUTE, minute)
-        }
-
-
-    @Provides
     fun providesTaskRepository(
         firebaseAuth: FirebaseAuth,
         collectionReference: CollectionReference,
@@ -106,6 +82,14 @@ class AppModule {
         viewModel: TaskViewModel
     ): TodoAdapter {
         return TodoAdapter(viewModel, alertDialog)
+    }
+
+    @Provides
+    fun providesAlertDialog(@ActivityContext context: Context): AlertDialog.Builder {
+        val alertDialog = AlertDialog.Builder(context)
+        alertDialog.setMessage("Do you want to delete the task")
+        alertDialog.setCancelable(true)
+        return alertDialog
     }
 
 }

@@ -1,7 +1,5 @@
 package tech.androidplay.sonali.todo.ui.fragment
 
-import android.annotation.SuppressLint
-import android.app.TimePickerDialog
 import android.content.Intent
 import android.os.Bundle
 import android.provider.AlarmClock
@@ -12,19 +10,20 @@ import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_task_create.*
 import tech.androidplay.sonali.todo.R
+import tech.androidplay.sonali.todo.SyncService
 import tech.androidplay.sonali.todo.data.viewmodel.TaskViewModel
 import tech.androidplay.sonali.todo.utils.Constants.DATE_REQUEST_CODE
 import tech.androidplay.sonali.todo.utils.Constants.DATE_RESULT_CODE
 import tech.androidplay.sonali.todo.utils.Constants.EXTRA_DATE
 import tech.androidplay.sonali.todo.utils.Constants.EXTRA_TIME
+import tech.androidplay.sonali.todo.utils.Constants.START_SYNC_SERVICE
+import tech.androidplay.sonali.todo.utils.Constants.STOP_SYNC_SERVICE
 import tech.androidplay.sonali.todo.utils.Constants.TIME_REQUEST_CODE
 import tech.androidplay.sonali.todo.utils.Constants.TIME_RESULT_CODE
 import tech.androidplay.sonali.todo.utils.DatePickerFragment
 import tech.androidplay.sonali.todo.utils.ResultData
 import tech.androidplay.sonali.todo.utils.TimePickerFragment
-import tech.androidplay.sonali.todo.utils.UIHelper.getCalenderTime
 import tech.androidplay.sonali.todo.utils.UIHelper.showToast
-import java.util.*
 import javax.inject.Inject
 
 /**
@@ -41,12 +40,6 @@ class TaskCreateFragment : Fragment(R.layout.fragment_task_create) {
 
     @Inject
     lateinit var timePickerFragment: TimePickerFragment
-
-    @Inject
-    lateinit var calendar: Calendar
-
-    @Inject
-    lateinit var timeSetListener: TimePickerDialog.OnTimeSetListener
 
     private val taskViewModel: TaskViewModel by viewModels()
 
@@ -77,19 +70,6 @@ class TaskCreateFragment : Fragment(R.layout.fragment_task_create) {
         }
     }
 
-
-    // time picker
-    @SuppressLint("SimpleDateFormat", "SetTextI18n")
-    private fun initiateTimePicker(date: String) {
-        tvSelectDateDesc.text = "$date, ${getCalenderTime(calendar)}"
-        TimePickerDialog(
-            context,
-            timeSetListener,
-            calendar.get(Calendar.HOUR_OF_DAY),
-            calendar.get(Calendar.MINUTE),
-            true
-        ).show()
-    }
 
     private fun createTask() {
         val todoBody = tvTaskInput.text.toString()
@@ -127,13 +107,22 @@ class TaskCreateFragment : Fragment(R.layout.fragment_task_create) {
         startActivity(intent)
     }
 
+    private fun sendCommandToService(action: String) {
+        Intent(requireContext(), SyncService::class.java).also {
+            it.action = action
+            requireContext().startService(it)
+        }
+    }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (resultCode == DATE_RESULT_CODE) {
             val date = data?.getSerializableExtra(EXTRA_DATE).toString()
             tvSelectDateDesc.text = date
+            sendCommandToService(STOP_SYNC_SERVICE)
         } else if (resultCode == TIME_RESULT_CODE) {
             val time = data?.getSerializableExtra(EXTRA_TIME).toString()
             tvSelectTimeDesc.text = time
+            sendCommandToService(START_SYNC_SERVICE)
         }
     }
 }

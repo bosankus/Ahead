@@ -34,11 +34,6 @@ class TaskEditFragment : Fragment(R.layout.fragment_task_edit) {
     private var taskStatus: Boolean? = false
     private var taskReminder: String? = ""
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        sharedElementEnterTransition =
-            TransitionInflater.from(context).inflateTransition(android.R.transition.move)
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

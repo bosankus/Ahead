@@ -1,5 +1,7 @@
 package tech.androidplay.sonali.todo.utils
 
+import android.os.Build
+
 /**
  * Created by Androidplay
  * Author: Ankush
@@ -31,6 +33,20 @@ object Constants {
 
     const val TIME_REQUEST_CODE = 200
     const val TIME_RESULT_CODE = 201
+
+    const val ACTION_SHOW_TASK_FRAGMENT = "ACTION_SHOW_TASK_FRAGMENT"
+    const val NOTIFICATION_CHANNEL_ID = "think_channel"
+    const val NOTIFICATION_CHANNEL_NAME = "think"
+    const val NOTIFICATION_ID = 1
+
+    const val NOTIFICATION_GROUP_ID = "111"
+    const val NOTIFICATION_GROUP_NAME = "syncing"
+
+    const val ANDROID_OREO = Build.VERSION_CODES.O
+    const val ANDROID_10 = Build.VERSION_CODES.Q
+
+    const val START_SYNC_SERVICE = "START_SYNC_SERVICE"
+    const val STOP_SYNC_SERVICE  = "STOP_SYNC_SERVICE"
 
     /*const val WRITE_EXTERNAL_STORAGE = Manifest.permission.WRITE_EXTERNAL_STORAGE
     const val READ_EXTERNAL_STORAGE = Manifest.permission.READ_EXTERNAL_STORAGE
