@@ -6,10 +6,12 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.TimePicker
 import androidx.fragment.app.DialogFragment
+import dagger.hilt.android.AndroidEntryPoint
 import tech.androidplay.sonali.todo.utils.Constants.EXTRA_TIME
 import tech.androidplay.sonali.todo.utils.Constants.TIME_RESULT_CODE
 import tech.androidplay.sonali.todo.utils.UIHelper.CalendarInstance
 import java.util.*
+import javax.inject.Inject
 
 /**
  * Created by Androidplay
@@ -17,9 +19,12 @@ import java.util.*
  * On: 02/Oct/2020
  * Email: ankush@androidplay.in
  */
+
+@AndroidEntryPoint
 class TimePickerFragment : DialogFragment(), TimePickerDialog.OnTimeSetListener {
 
-    private val calendar = CalendarInstance
+    @Inject
+    lateinit var calendar: Calendar
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val hour = calendar.get(Calendar.HOUR_OF_DAY)

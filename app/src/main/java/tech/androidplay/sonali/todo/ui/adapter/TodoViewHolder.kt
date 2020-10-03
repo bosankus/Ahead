@@ -3,7 +3,6 @@ package tech.androidplay.sonali.todo.ui.adapter
 import android.app.AlertDialog
 import androidx.core.os.bundleOf
 import androidx.navigation.findNavController
-import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.recyclerview.widget.RecyclerView
 import tech.androidplay.sonali.todo.R
 import tech.androidplay.sonali.todo.data.model.Todo
@@ -51,11 +50,8 @@ class TodoViewHolder(
                 TASK_STATUS to todoItem.isCompleted,
                 TASK_REMINDER to todoItem.todoReminder
             )
-            val extras = FragmentNavigatorExtras(
-                binding.tvTodoListItem to "todoBody"
-            )
             it?.findNavController()
-                ?.navigate(R.id.action_taskFragment_to_taskEditFragment, bundle, null, extras)
+                ?.navigate(R.id.action_taskFragment_to_taskEditFragment, bundle)
         }
 
         binding.clItemListContainer.setOnLongClickListener {

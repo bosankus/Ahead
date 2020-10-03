@@ -1,63 +1,58 @@
 package tech.androidplay.sonali.todo.di
 
+import android.app.PendingIntent
 import android.content.Context
-import android.content.SharedPreferences
-import androidx.work.Constraints
-import androidx.work.NetworkType
-import androidx.work.WorkManager
+import android.content.Intent
+import androidx.core.app.NotificationCompat
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.components.ApplicationComponent
+import dagger.hilt.android.components.ServiceComponent
 import dagger.hilt.android.qualifiers.ApplicationContext
-import tech.androidplay.sonali.todo.utils.Constants.SHARED_PREFERENCE_NAME
-import tech.androidplay.sonali.todo.utils.Constants.USER_DISPLAY_IMAGE
-import tech.androidplay.sonali.todo.utils.DatePickerFragment
-import tech.androidplay.sonali.todo.utils.TimePickerFragment
-import javax.inject.Singleton
+import dagger.hilt.android.scopes.ServiceScoped
+import tech.androidplay.sonali.todo.R
+import tech.androidplay.sonali.todo.ui.activity.MainActivity
+import tech.androidplay.sonali.todo.utils.Constants.ACTION_SHOW_TASK_FRAGMENT
+import tech.androidplay.sonali.todo.utils.Constants.NOTIFICATION_CHANNEL_ID
 
 /**
  * Created by Androidplay
  * Author: Ankush
- * On: 24/Aug/2020
+ * On: 03/Oct/2020
  * Email: ankush@androidplay.in
  */
 
 @Module
-@InstallIn(ApplicationComponent::class)
+@InstallIn(ServiceComponent::class)
 class ServiceModule {
 
-    @Singleton
+    @ServiceScoped
     @Provides
-    fun providesWorkManager(
-        @ApplicationContext app: Context
-    ): WorkManager {
-        return WorkManager.getInstance(app.applicationContext)
-    }
+    fun provideBaseNotificationBuilder(
+        @ApplicationContext context: Context,
+        pendingIntent: PendingIntent
+    ): NotificationCompat.Builder = NotificationCompat.Builder(
+        context,
+        NOTIFICATION_CHANNEL_ID
+    )
+        .setAutoCancel(true)
+        .setOngoing(false)
+        .setSmallIcon(R.drawable.ic_time)
+        .setContentTitle("Syncing task")
+        .setContentText("Task Sync started")
+        .setContentIntent(pendingIntent)
 
-    @Singleton
-    @Provides
-    fun providesConstraints(): Constraints {
-        return Constraints.Builder()
-            .setRequiredNetworkType(NetworkType.CONNECTED)
-            .build()
-    }
 
-    @Singleton
+    @ServiceScoped
     @Provides
-    fun provideSharedPreference(@ApplicationContext app: Context): SharedPreferences =
-        app.getSharedPreferences(SHARED_PREFERENCE_NAME, Context.MODE_PRIVATE)
-
-    @Singleton
-    @Provides
-    fun provideUserDisplayImage(sharedPreferences: SharedPreferences) =
-        sharedPreferences.getString(USER_DISPLAY_IMAGE, "") ?: ""
-
-    @Singleton
-    @Provides
-    fun providesDatePickerFragment() = DatePickerFragment()
-
-    @Singleton
-    @Provides
-    fun providesTimePickerFragment() = TimePickerFragment()
+    fun providesPendingIntent(
+        @ApplicationContext context: Context
+    ): PendingIntent = PendingIntent.getActivity(
+        context,
+        0,
+        Intent(context, MainActivity::class.java).also {
+            it.action = ACTION_SHOW_TASK_FRAGMENT
+        },
+        PendingIntent.FLAG_UPDATE_CURRENT
+    )
 }
