@@ -24,11 +24,11 @@ object UIHelper {
         SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss Z").format(Date())
 
     /*@SuppressLint("SimpleDateFormat")
-    fun getCurrentDate(): String = SimpleDateFormat("EEE, MMM d, ''yy").format(Date())*/
+    fun getCurrentDate(): String = SimpleDateFormat("EEE, MMM d, ''yy").format(Date())
 
     @SuppressLint("SimpleDateFormat")
     fun getCalenderTime(calendar: Calendar): String =
-        SimpleDateFormat("HH:mm").format(calendar.time).toString()
+        SimpleDateFormat("HH:mm").format(calendar.time).toString()*/
 
     fun logMessage(message: String) {
         Log.d(GLOBAL_TAG, message)
@@ -48,8 +48,6 @@ object UIHelper {
         if (visibility) view.visibility = View.VISIBLE
         else view.visibility = View.INVISIBLE
     }
-
-    val CalendarInstance: Calendar = Calendar.getInstance()
 
     /*fun strikeText(textView: TextView) {
         val text = textView.text.toString()

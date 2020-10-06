@@ -6,24 +6,15 @@ import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
-import androidx.work.Constraints
-import androidx.work.WorkManager
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_main.*
 import tech.androidplay.sonali.todo.R
 import tech.androidplay.sonali.todo.utils.Constants.ACTION_SHOW_TASK_FRAGMENT
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
-    @Inject
-    lateinit var workManager: WorkManager
-
-    @Inject
-    lateinit var constraints: Constraints
 
     @SuppressLint("SimpleDateFormat")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -55,18 +46,5 @@ class MainActivity : AppCompatActivity() {
         if (intent.action == ACTION_SHOW_TASK_FRAGMENT)
             navHostFragment.findNavController().navigate(R.id.action_global_taskCreateFragment)
     }
-
-    // Call this method to run work manager
-    /*private fun initiateUploadRequest() {
-        val uploadRequest = OneTimeWorkRequest.Builder(UploadWorker::class.java)
-            .setConstraints(constraints)
-            .build()
-
-        workManager.enqueue(uploadRequest)
-        workManager.getWorkInfoByIdLiveData(uploadRequest.id)
-            .observe(this, {
-                logMessage(it.state.name)
-            })
-    }*/
 }
 

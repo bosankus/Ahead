@@ -1,5 +1,6 @@
 package tech.androidplay.sonali.todo.utils
 
+import android.Manifest
 import android.os.Build
 
 /**
@@ -43,16 +44,19 @@ object Constants {
     const val NOTIFICATION_GROUP_NAME = "syncing"
 
     const val ANDROID_OREO = Build.VERSION_CODES.O
-    const val ANDROID_10 = Build.VERSION_CODES.Q
+//    const val ANDROID_10 = Build.VERSION_CODES.Q
 
     const val START_SYNC_SERVICE = "START_SYNC_SERVICE"
     const val STOP_SYNC_SERVICE  = "STOP_SYNC_SERVICE"
 
-    const val TASK_TABLE = "TASK_TABLE"
-
-    /*const val WRITE_EXTERNAL_STORAGE = Manifest.permission.WRITE_EXTERNAL_STORAGE
+    const val WRITE_EXTERNAL_STORAGE = Manifest.permission.WRITE_EXTERNAL_STORAGE
     const val READ_EXTERNAL_STORAGE = Manifest.permission.READ_EXTERNAL_STORAGE
     const val STORAGE_PERMISSION_REQUEST_RATIONAL =
         "You need to accept location permissions to use this app"
-    const val STORAGE_PERMISSION_REQUEST_CODE = 101*/
+    const val STORAGE_PERMISSION_REQUEST_CODE = 101
+
+    const val PICK_GALLERY_IMAGE = 102
+
+    const val ALARM_TEXT = "ALARM_TEXT"
+    const val ALARM_DESCRIPTION = "ALARM_DESCRIPTION"
 }

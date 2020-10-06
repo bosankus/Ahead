@@ -1,10 +1,7 @@
 package tech.androidplay.sonali.todo.data.model
 
-import androidx.room.Entity
-import androidx.room.PrimaryKey
 import com.google.firebase.firestore.DocumentId
 import com.google.gson.annotations.SerializedName
-import tech.androidplay.sonali.todo.utils.Constants.TASK_TABLE
 import java.io.Serializable
 
 /**
@@ -13,9 +10,7 @@ import java.io.Serializable
  * On: 5/6/2020, 5:30 AM
  */
 
-@Entity(tableName = TASK_TABLE)
 data class Todo(
-    @PrimaryKey
     @SerializedName("id")
     var id: String = "",
     @DocumentId
@@ -30,5 +25,5 @@ data class Todo(
     var todoCreationTimeStamp: String = "",
     @JvmField
     @SerializedName("isCompleted")
-    var isCompleted: Boolean = true
+    var isCompleted: Boolean = false
 ) : Serializable
