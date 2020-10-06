@@ -22,7 +22,6 @@
     <string name="today">TODAY</string>
     <string name="all_tasks_completed_add_more">All tasks Completed. Add more</string>
     <string name="add_task">Add Task</string>
-    <string name="whoops_something_seems_wrong">Whoops! Something seems wrong!</string>
     <string name="edit">Edit</string>
     <string name="save_task">Save Task</string>
 </resources>

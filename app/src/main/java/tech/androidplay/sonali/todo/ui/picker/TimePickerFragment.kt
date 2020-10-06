@@ -1,4 +1,4 @@
-package tech.androidplay.sonali.todo.utils
+package tech.androidplay.sonali.todo.ui.picker
 
 import android.app.Dialog
 import android.app.TimePickerDialog
@@ -9,7 +9,6 @@ import androidx.fragment.app.DialogFragment
 import dagger.hilt.android.AndroidEntryPoint
 import tech.androidplay.sonali.todo.utils.Constants.EXTRA_TIME
 import tech.androidplay.sonali.todo.utils.Constants.TIME_RESULT_CODE
-import tech.androidplay.sonali.todo.utils.UIHelper.CalendarInstance
 import java.util.*
 import javax.inject.Inject
 

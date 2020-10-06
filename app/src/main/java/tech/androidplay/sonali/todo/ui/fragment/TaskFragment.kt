@@ -100,6 +100,7 @@ class TaskFragment : Fragment(R.layout.fragment_task) {
         taskViewModel.fetchTasksRealtime().observe(viewLifecycleOwner, {
             it.let {
                 when (it) {
+                    is ResultData.Loading -> shimmerFrameLayout.visibility = View.VISIBLE
                     is ResultData.Success -> {
                         shimmerFrameLayout.visibility = View.GONE
                         frameNoTodo.visibility = View.GONE

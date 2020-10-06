@@ -1,11 +1,11 @@
 package tech.androidplay.sonali.todo.di
 
+import android.app.AlarmManager
+import android.app.PendingIntent
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
-import androidx.room.Room
-import androidx.work.Constraints
-import androidx.work.NetworkType
-import androidx.work.WorkManager
+import androidx.core.app.NotificationCompat
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
@@ -16,14 +16,14 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ApplicationComponent
 import dagger.hilt.android.qualifiers.ApplicationContext
-import tech.androidplay.sonali.todo.data.room.TaskDatabase
+import tech.androidplay.sonali.todo.R
+import tech.androidplay.sonali.todo.ui.activity.MainActivity
+import tech.androidplay.sonali.todo.ui.picker.DatePickerFragment
+import tech.androidplay.sonali.todo.ui.picker.TimePickerFragment
 import tech.androidplay.sonali.todo.utils.CacheManager
 import tech.androidplay.sonali.todo.utils.Constants
 import tech.androidplay.sonali.todo.utils.Constants.SHARED_PREFERENCE_NAME
-import tech.androidplay.sonali.todo.utils.Constants.TASK_TABLE
 import tech.androidplay.sonali.todo.utils.Constants.USER_DISPLAY_IMAGE
-import tech.androidplay.sonali.todo.utils.DatePickerFragment
-import tech.androidplay.sonali.todo.utils.TimePickerFragment
 import java.util.*
 import javax.inject.Singleton
 
@@ -37,19 +37,6 @@ import javax.inject.Singleton
 @Module
 @InstallIn(ApplicationComponent::class)
 class ApplicationModule {
-
-    @Singleton
-    @Provides
-    fun providesTaskDatabase(@ApplicationContext context: Context) =
-        Room.databaseBuilder(
-            context,
-            TaskDatabase::class.java,
-            TASK_TABLE
-        ).build()
-
-    @Singleton
-    @Provides
-    fun getTaskDao(db: TaskDatabase) = db.getTaskDao()
 
     @Singleton
     @Provides
@@ -75,20 +62,9 @@ class ApplicationModule {
         return CacheManager()
     }
 
-    @Singleton
     @Provides
-    fun providesWorkManager(
-        @ApplicationContext app: Context
-    ): WorkManager {
-        return WorkManager.getInstance(app.applicationContext)
-    }
-
-    @Singleton
-    @Provides
-    fun providesConstraints(): Constraints {
-        return Constraints.Builder()
-            .setRequiredNetworkType(NetworkType.CONNECTED)
-            .build()
+    fun providesAlarmManager(@ApplicationContext context: Context): AlarmManager {
+        return context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
     }
 
     @Singleton
@@ -112,4 +88,29 @@ class ApplicationModule {
     @Singleton
     @Provides
     fun providesTimePickerFragment() = TimePickerFragment()
+
+
+    @Provides
+    fun provideBaseNotificationBuilder(
+        @ApplicationContext context: Context,
+    ): NotificationCompat.Builder = NotificationCompat.Builder(
+        context,
+        Constants.NOTIFICATION_CHANNEL_ID
+    )
+        .setAutoCancel(true)
+        .setOngoing(false)
+        .setSmallIcon(R.drawable.ic_time)
+
+
+    @Provides
+    fun providesPendingIntent(
+        @ApplicationContext context: Context
+    ): PendingIntent = PendingIntent.getActivity(
+        context,
+        0,
+        Intent(context, MainActivity::class.java).also {
+            it.action = Constants.ACTION_SHOW_TASK_FRAGMENT
+        },
+        PendingIntent.FLAG_UPDATE_CURRENT
+    )
 }

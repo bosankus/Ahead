@@ -1,14 +1,15 @@
 package tech.androidplay.sonali.todo.data.repository
 
+import android.net.Uri
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.Query
+import com.google.firebase.storage.StorageReference
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.tasks.await
 import tech.androidplay.sonali.todo.data.model.Todo
-import tech.androidplay.sonali.todo.data.room.TaskDao
 import tech.androidplay.sonali.todo.utils.ResultData
 import tech.androidplay.sonali.todo.utils.UIHelper.getCurrentTimestamp
 import javax.inject.Inject
@@ -22,7 +23,7 @@ import javax.inject.Inject
 
 class TaskRepository @Inject constructor(
     firebaseAuth: FirebaseAuth,
-    private val taskDao: TaskDao,
+    private val storageReference: StorageReference,
     private val taskListRef: CollectionReference,
 ) {
 
@@ -32,17 +33,12 @@ class TaskRepository @Inject constructor(
         .whereEqualTo("id", userDetails?.uid)
         .orderBy("todoCreationTimeStamp", Query.Direction.ASCENDING)
 
-    suspend fun insertTask(todo: Todo) = taskDao.insertTask(todo)
-
-    suspend fun deleteTask(todo: Todo) = taskDao.deleteTask(todo)
-
-    fun getAllTasks() = taskDao.getTaskByCreationTime()
 
     suspend fun create(
         todoBody: String,
         todoDesc: String,
         todoReminder: String
-    ): ResultData<Boolean> {
+    ): ResultData<String> {
         val task = hashMapOf(
             "id" to userDetails?.uid,
             "todoBody" to todoBody,
@@ -53,10 +49,10 @@ class TaskRepository @Inject constructor(
         )
 
         return try {
-            taskListRef
+            val docRef = taskListRef
                 .add(task)
                 .await()
-            ResultData.Success(true)
+            ResultData.Success(docRef.id)
         } catch (e: Exception) {
             ResultData.Failed(false.toString())
         }
@@ -97,9 +93,9 @@ class TaskRepository @Inject constructor(
         }
     }
 
-    /*suspend fun uploadImage(uri: Uri): ResultData<String> {
+    suspend fun uploadImage(uri: Uri, docRefId: String): ResultData<String> {
         val ref = storageReference
-            .child("${userDetails?.email}/${userDetails?.uid}")
+            .child("${userDetails?.email}/$docRefId")
         return try {
             ref.putFile(uri).await()
             val imageUrl = ref.downloadUrl.await().toString()
@@ -107,7 +103,7 @@ class TaskRepository @Inject constructor(
         } catch (e: Exception) {
             ResultData.Failed(e.message)
         }
-    }*/
+    }
 }
 
 

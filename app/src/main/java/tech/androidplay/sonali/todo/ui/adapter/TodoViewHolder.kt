@@ -57,7 +57,6 @@ class TodoViewHolder(
         binding.clItemListContainer.setOnLongClickListener {
             dialog.setPositiveButton("Yes") { dialogInterface, _ ->
                 viewModel.deleteTask(todoItem.docId)
-                showSnack(it, "you have deleted ${todoItem.todoBody}")
                 dialogInterface.dismiss()
             }.create().show()
             true

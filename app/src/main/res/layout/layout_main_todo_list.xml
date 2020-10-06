@@ -28,15 +28,17 @@
 
             <TextView
                 android:id="@+id/tvTodoListItem"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
+                android:layout_marginEnd="20sp"
                 android:ellipsize="end"
                 android:fontFamily="@font/calibre"
                 android:text="@{todo.todoBody}"
                 android:textColor="@color/grey3"
                 android:textSize="18sp"
                 app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/cbTaskStatus"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
