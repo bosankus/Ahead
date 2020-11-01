@@ -57,6 +57,7 @@
             android:background="@color/white"
             android:orientation="vertical"
             android:visibility="gone"
+            app:shimmer_auto_start="true"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tvTodayHeader">

@@ -9,6 +9,7 @@ import androidx.fragment.app.DialogFragment
 import dagger.hilt.android.AndroidEntryPoint
 import tech.androidplay.sonali.todo.utils.Constants.DATE_RESULT_CODE
 import tech.androidplay.sonali.todo.utils.Constants.EXTRA_DATE
+import java.time.LocalDate
 import java.util.*
 import javax.inject.Inject
 
@@ -35,16 +36,9 @@ class DatePickerFragment : DialogFragment(), DatePickerDialog.OnDateSetListener 
         }!!
     }
 
-    override fun onDateSet(view: DatePicker?, y: Int, m: Int, d: Int) {
-        calendar.set(y, m, d)
-        val date =
-            if (m < 10)
-                "$d.0$m.$y "
-            else if (d < 10)
-                "0$d.$m.$y "
-            else if (m < 10 && d < 10)
-                "0$d.0$m.$y "
-            else "$d.$m.$y "
+    override fun onDateSet(view: DatePicker?, year: Int, month: Int, day: Int) {
+        calendar.set(year, month + 1, day)
+        val date = "$day-${month + 1}-$year"
 
         targetFragment?.let {
             val intent = Intent().putExtra(EXTRA_DATE, date)

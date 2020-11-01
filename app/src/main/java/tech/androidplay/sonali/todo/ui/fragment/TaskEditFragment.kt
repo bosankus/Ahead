@@ -5,6 +5,7 @@ import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.bumptech.glide.Glide
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_task_edit.*
 import tech.androidplay.sonali.todo.R
@@ -12,6 +13,7 @@ import tech.androidplay.sonali.todo.data.viewmodel.TaskViewModel
 import tech.androidplay.sonali.todo.utils.Constants.TASK_DOC_BODY
 import tech.androidplay.sonali.todo.utils.Constants.TASK_DOC_DESC
 import tech.androidplay.sonali.todo.utils.Constants.TASK_DOC_ID
+import tech.androidplay.sonali.todo.utils.Constants.TASK_IMAGE_URL
 import tech.androidplay.sonali.todo.utils.Constants.TASK_REMINDER
 import tech.androidplay.sonali.todo.utils.Constants.TASK_STATUS
 import tech.androidplay.sonali.todo.utils.UIHelper.showSnack
@@ -32,7 +34,7 @@ class TaskEditFragment : Fragment(R.layout.fragment_task_edit) {
     private var taskDesc: String? = ""
     private var taskStatus: Boolean? = false
     private var taskReminder: String? = ""
-
+    private var taskImage: String? = ""
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -47,10 +49,15 @@ class TaskEditFragment : Fragment(R.layout.fragment_task_edit) {
         taskDesc = arguments?.getString(TASK_DOC_DESC)
         taskStatus = arguments?.getBoolean(TASK_STATUS)
         taskReminder = arguments?.getString(TASK_REMINDER) ?: "Add Reminder"
+        taskImage = arguments?.getString(TASK_IMAGE_URL)
 
         etTaskBody.setText(taskBody)
         etTaskDesc.setText(taskDesc)
         chipTaskAlarmTime.text = taskReminder
+        Glide.with(requireActivity())
+            .load(taskImage)
+            .circleCrop()
+            .into(imgTask)
     }
 
     private fun setListener() {

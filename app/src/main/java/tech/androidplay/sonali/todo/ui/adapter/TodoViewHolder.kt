@@ -11,6 +11,7 @@ import tech.androidplay.sonali.todo.databinding.LayoutMainTodoListBinding
 import tech.androidplay.sonali.todo.utils.Constants.TASK_DOC_BODY
 import tech.androidplay.sonali.todo.utils.Constants.TASK_DOC_DESC
 import tech.androidplay.sonali.todo.utils.Constants.TASK_DOC_ID
+import tech.androidplay.sonali.todo.utils.Constants.TASK_IMAGE_URL
 import tech.androidplay.sonali.todo.utils.Constants.TASK_REMINDER
 import tech.androidplay.sonali.todo.utils.Constants.TASK_STATUS
 import tech.androidplay.sonali.todo.utils.UIHelper.showSnack
@@ -48,7 +49,8 @@ class TodoViewHolder(
                 TASK_DOC_BODY to todoItem.todoBody,
                 TASK_DOC_DESC to todoItem.todoDesc,
                 TASK_STATUS to todoItem.isCompleted,
-                TASK_REMINDER to todoItem.todoReminder
+                TASK_REMINDER to todoItem.todoReminder,
+                TASK_IMAGE_URL to todoItem.taskImage
             )
             it?.findNavController()
                 ?.navigate(R.id.action_taskFragment_to_taskEditFragment, bundle)
