@@ -35,16 +35,6 @@ class TaskFragment : Fragment(R.layout.fragment_task) {
     private val taskViewModel: TaskViewModel by viewModels()
     private lateinit var showFab: Animation
 
-    override fun onResume() {
-        super.onResume()
-        shimmerFrameLayout.startShimmer()
-    }
-
-    override fun onPause() {
-        shimmerFrameLayout.stopShimmer()
-        super.onPause()
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setUpScreen()
@@ -57,9 +47,6 @@ class TaskFragment : Fragment(R.layout.fragment_task) {
     }
 
     private fun setUpScreen() {
-        rvTodoList.apply {
-            adapter = todoAdapter
-        }
         showFab = AnimationUtils.loadAnimation(requireContext(), R.anim.btn_up_animation)
         efabAddTask.startAnimation(showFab)
     }
@@ -97,6 +84,9 @@ class TaskFragment : Fragment(R.layout.fragment_task) {
     }
 
     private fun loadTasks() {
+        rvTodoList.apply {
+            adapter = todoAdapter
+        }
         taskViewModel.fetchTasksRealtime().observe(viewLifecycleOwner, {
             it.let {
                 when (it) {

@@ -25,6 +25,7 @@ object Constants {
     const val TASK_DOC_DESC = "TASK_DOC_DESC"
     const val TASK_STATUS = "TASK_STATUS"
     const val TASK_REMINDER = "TASK_REMINDER"
+    const val TASK_IMAGE_URL = "TASK_IMAGE_URL"
 
     const val EXTRA_DATE = "EXTRA_DATE"
     const val EXTRA_TIME = "EXTRA_TIME"
@@ -47,7 +48,7 @@ object Constants {
 //    const val ANDROID_10 = Build.VERSION_CODES.Q
 
     const val START_SYNC_SERVICE = "START_SYNC_SERVICE"
-    const val STOP_SYNC_SERVICE  = "STOP_SYNC_SERVICE"
+    const val STOP_SYNC_SERVICE = "STOP_SYNC_SERVICE"
 
     const val WRITE_EXTERNAL_STORAGE = Manifest.permission.WRITE_EXTERNAL_STORAGE
     const val READ_EXTERNAL_STORAGE = Manifest.permission.READ_EXTERNAL_STORAGE

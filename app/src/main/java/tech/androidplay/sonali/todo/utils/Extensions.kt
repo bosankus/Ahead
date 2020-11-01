@@ -1,6 +1,5 @@
 package tech.androidplay.sonali.todo.utils
 
-import android.content.Context
 import androidx.fragment.app.Fragment
 import com.github.dhaval2404.imagepicker.ImagePicker
 
@@ -13,7 +12,7 @@ import com.github.dhaval2404.imagepicker.ImagePicker
 
 object Extensions {
 
-    fun Fragment.selectImage(context: Context) {
+    fun Fragment.selectImage(context: Fragment) {
         ImagePicker.with(this)
             .crop()
             .compress(1024)

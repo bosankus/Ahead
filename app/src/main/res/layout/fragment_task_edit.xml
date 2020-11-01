@@ -39,6 +39,15 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tvEditTasksHeader" />
 
+        <ImageView
+            android:id="@+id/imgTask"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="@dimen/padding_16dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintStart_toEndOf="@+id/chipTaskAlarmTime"
+            app:layout_constraintTop_toBottomOf="@+id/tvEditTasksHeader"/>
+
         <ImageButton
             android:id="@+id/imgDeleteTask"
             android:layout_width="wrap_content"

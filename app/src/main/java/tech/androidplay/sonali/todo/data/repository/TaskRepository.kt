@@ -34,10 +34,11 @@ class TaskRepository @Inject constructor(
         .orderBy("todoCreationTimeStamp", Query.Direction.ASCENDING)
 
 
-    suspend fun create(
+    suspend fun createTaskWithImage(
         todoBody: String,
         todoDesc: String,
-        todoReminder: String
+        todoReminder: String,
+        uri: Uri
     ): ResultData<String> {
         val task = hashMapOf(
             "id" to userDetails?.uid,
@@ -47,7 +48,35 @@ class TaskRepository @Inject constructor(
             "todoCreationTimeStamp" to getCurrentTimestamp(),
             "isCompleted" to false
         )
+        return try {
+            // Network: Create task
+            val docRef = taskListRef
+                .add(task)
+                .await()
+            // Network: Upload Image for the task Id
+            val imageUrl = uploadFile(uri, docRef.id)
+            // Network: Store Image Url in the task
+            updateTask(docRef.id, mapOf("taskImage" to imageUrl))
+            // return image url
+            ResultData.Success(imageUrl)
+        } catch (e: Exception) {
+            ResultData.Failed(false.toString())
+        }
+    }
 
+    suspend fun createTaskWithoutImage(
+        todoBody: String,
+        todoDesc: String,
+        todoReminder: String,
+    ): ResultData<String> {
+        val task = hashMapOf(
+            "id" to userDetails?.uid,
+            "todoBody" to todoBody,
+            "todoDesc" to todoDesc,
+            "todoReminder" to todoReminder,
+            "todoCreationTimeStamp" to getCurrentTimestamp(),
+            "isCompleted" to false
+        )
         return try {
             val docRef = taskListRef
                 .add(task)
@@ -56,11 +85,10 @@ class TaskRepository @Inject constructor(
         } catch (e: Exception) {
             ResultData.Failed(false.toString())
         }
-
     }
 
     @ExperimentalCoroutinesApi
-    fun fetchTasksRealtime() = callbackFlow {
+    suspend fun fetchTasksRealtime() = callbackFlow {
         offer(ResultData.Loading)
         val querySnapshot = query
             .addSnapshotListener { value, error ->
@@ -74,6 +102,7 @@ class TaskRepository @Inject constructor(
             querySnapshot.remove()
         }
     }
+
 
     suspend fun updateTask(taskId: String, map: Map<String, Any>) {
         try {
@@ -102,6 +131,18 @@ class TaskRepository @Inject constructor(
             ResultData.Success(imageUrl)
         } catch (e: Exception) {
             ResultData.Failed(e.message)
+        }
+    }
+
+    suspend fun uploadFile(uri: Uri, docRefId: String): String {
+        val ref = storageReference
+            .child("${userDetails?.email}/$docRefId")
+        return try {
+            ref.putFile(uri).await()
+            val imageUrl = ref.downloadUrl.await().toString()
+            imageUrl
+        } catch (e: Exception) {
+            ""
         }
     }
 }

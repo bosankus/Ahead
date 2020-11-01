@@ -3,7 +3,6 @@ package tech.androidplay.sonali.todo.ui.fragment
 import android.app.Activity
 import android.app.AlarmManager
 import android.app.AlertDialog
-import android.app.PendingIntent
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -17,9 +16,6 @@ import tech.androidplay.sonali.todo.R
 import tech.androidplay.sonali.todo.data.viewmodel.TaskViewModel
 import tech.androidplay.sonali.todo.ui.picker.DatePickerFragment
 import tech.androidplay.sonali.todo.ui.picker.TimePickerFragment
-import tech.androidplay.sonali.todo.utils.AlarmReceiver
-import tech.androidplay.sonali.todo.utils.Constants.ALARM_DESCRIPTION
-import tech.androidplay.sonali.todo.utils.Constants.ALARM_TEXT
 import tech.androidplay.sonali.todo.utils.Constants.DATE_REQUEST_CODE
 import tech.androidplay.sonali.todo.utils.Constants.DATE_RESULT_CODE
 import tech.androidplay.sonali.todo.utils.Constants.EXTRA_DATE
@@ -28,6 +24,7 @@ import tech.androidplay.sonali.todo.utils.Constants.TIME_REQUEST_CODE
 import tech.androidplay.sonali.todo.utils.Constants.TIME_RESULT_CODE
 import tech.androidplay.sonali.todo.utils.Extensions.selectImage
 import tech.androidplay.sonali.todo.utils.ResultData
+import tech.androidplay.sonali.todo.utils.UIHelper.logMessage
 import tech.androidplay.sonali.todo.utils.UIHelper.showToast
 import java.util.*
 import javax.inject.Inject
@@ -80,7 +77,7 @@ class TaskCreateFragment : Fragment(R.layout.fragment_task_create) {
         }
 
         tvSelectImage.setOnClickListener {
-            this.selectImage(requireContext())
+            this.selectImage(this)
         }
 
         btCreateTask.setOnClickListener {
@@ -94,78 +91,53 @@ class TaskCreateFragment : Fragment(R.layout.fragment_task_create) {
         val todoBody = tvTaskInput.text.toString()
         val todoDesc = tvTaskDescInput.text.toString()
         val todoReminder = tvSelectDateDesc.text.toString() + tvSelectTimeDesc.text.toString()
-        taskViewModel.createTask(todoBody, todoDesc, todoReminder).observe(viewLifecycleOwner, {
-            it?.let {
-                when (it) {
-                    is ResultData.Loading -> {
-                        clCreateTask.visibility = View.INVISIBLE
-                        lottiCreateTaskLoading.visibility = View.VISIBLE
-                        lottiCreateTaskLoading.playAnimation()
-                    }
-                    is ResultData.Success -> {
-                        taskViewModel.uploadImage(taskImage, it.data!!)
-                        lottiCreateTaskLoading.cancelAnimation()
-                        startAlarm()
-                        findNavController().navigate(R.id.action_taskCreateFragment_to_taskFragment)
-                    }
-                    is ResultData.Failed -> {
-                        lottiCreateTaskLoading.cancelAnimation()
-                        showToast(requireContext(), "Something went wrong")
+        taskViewModel.createTask(todoBody, todoDesc, todoReminder, taskImage)
+            .observe(viewLifecycleOwner, {
+                it?.let {
+                    when (it) {
+                        is ResultData.Loading -> {
+                            clCreateTask.visibility = View.INVISIBLE
+                            lottiCreateTaskLoading.visibility = View.VISIBLE
+                            lottiCreateTaskLoading.playAnimation()
+                        }
+                        is ResultData.Success -> {
+                            taskImage = null
+                            logMessage(it.data.toString())
+                            lottiCreateTaskLoading.cancelAnimation()
+                            findNavController().navigate(R.id.action_taskCreateFragment_to_taskFragment)
+                        }
+                        is ResultData.Failed -> {
+                            lottiCreateTaskLoading.cancelAnimation()
+                            showToast(requireContext(), "Something went wrong")
+                        }
                     }
                 }
-            }
-        })
+            })
     }
 
-    /**
-     * TODO: Alarm Set enabled here,
-     * Here we have to get hour & minute along with custom Alarm Clock message
-     * get hour and minute from bundle
-     **/
-    /*private fun setAlarm(hour: Int, minute: Int) {
-        val intent = Intent(AlarmClock.ACTION_SET_ALARM)
-        intent.putExtra(AlarmClock.EXTRA_MESSAGE, "Think Ahead alarm")
-        intent.putExtra(AlarmClock.EXTRA_HOUR, hour)
-        intent.putExtra(AlarmClock.EXTRA_MINUTES, minute)
-        intent.putExtra(AlarmClock.EXTRA_DAYS, 6)
-        startActivity(intent)
-    }*/
-
-    private fun startAlarm() {
-        val intent = Intent(requireContext(), AlarmReceiver::class.java).apply {
-            this.putExtra(ALARM_TEXT, "Title")
-            this.putExtra(ALARM_DESCRIPTION, "Description")
-        }
-        val pendingIntent =
-            PendingIntent.getBroadcast(
-                requireContext(),
-                0,
-                intent,
-                PendingIntent.FLAG_UPDATE_CURRENT
-            )
-        calendar.set(2020, 9, 7, 2, 13  , 0 )
-        alarmManager.setExact(
-            AlarmManager.RTC_WAKEUP,
-            calendar.timeInMillis,
-            pendingIntent
-        )
-    }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         when (resultCode) {
             DATE_RESULT_CODE -> {
                 val date = data?.getSerializableExtra(EXTRA_DATE).toString()
-                tvSelectDateDesc.text = date
+                pickedDate = date
+                tvSelectDateDesc.text = pickedDate
+
             }
             TIME_RESULT_CODE -> {
                 val time = data?.getSerializableExtra(EXTRA_TIME).toString()
                 tvSelectTimeDesc.text = time
             }
-            Activity.RESULT_OK -> taskImage = data?.data
+            Activity.RESULT_OK -> {
+                taskImage = data?.data
+                tvSelectImage.text = taskImage.toString()
+
+            }
         }
     }
 
     companion object {
         var taskImage: Uri? = null
+        var pickedDate: String? = ""
     }
 }

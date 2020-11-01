@@ -2,10 +2,8 @@ package tech.androidplay.sonali.todo.data.viewmodel
 
 import android.net.Uri
 import androidx.hilt.lifecycle.ViewModelInject
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.liveData
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -23,11 +21,22 @@ class TaskViewModel @ViewModelInject constructor(private val taskRepository: Tas
     ViewModel() {
 
 
-    fun createTask(todoName: String, todoDesc: String, todoReminder: String = "") =
-        liveData {
+    fun createTask(
+        todoName: String,
+        todoDesc: String,
+        todoReminder: String = "",
+        uri: Uri?
+    ): LiveData<ResultData<String>> {
+        return if (uri != null)
+            liveData {
+                emit(ResultData.Loading)
+                emit(taskRepository.createTaskWithImage(todoName, todoDesc, todoReminder, uri))
+            }
+        else liveData {
             emit(ResultData.Loading)
-            emit(taskRepository.create(todoName, todoDesc, todoReminder))
+            emit(taskRepository.createTaskWithoutImage(todoName, todoDesc, todoReminder))
         }
+    }
 
     @ExperimentalCoroutinesApi
     fun fetchTasksRealtime(): MutableLiveData<ResultData<MutableList<Todo>>> {
@@ -59,7 +68,7 @@ class TaskViewModel @ViewModelInject constructor(private val taskRepository: Tas
                 "updatedOn" to getCurrentTimestamp()
             )
         taskId?.let {
-            viewModelScope.launch {
+            viewModelScope.launch(Dispatchers.IO) {
                 taskRepository.updateTask(taskId, map)
             }
         }
@@ -78,3 +87,4 @@ class TaskViewModel @ViewModelInject constructor(private val taskRepository: Tas
         }
 
 }
+

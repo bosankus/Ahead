@@ -25,5 +25,7 @@ data class Todo(
     var todoCreationTimeStamp: String = "",
     @JvmField
     @SerializedName("isCompleted")
-    var isCompleted: Boolean = false
+    var isCompleted: Boolean = false,
+    @SerializedName("taskImage")
+    var taskImage: String? = null
 ) : Serializable
