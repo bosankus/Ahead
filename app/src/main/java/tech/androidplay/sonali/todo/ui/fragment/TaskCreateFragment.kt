@@ -2,7 +2,7 @@ package tech.androidplay.sonali.todo.ui.fragment
 
 import android.app.Activity
 import android.app.AlarmManager
-import android.app.AlertDialog
+import android.app.PendingIntent
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -13,9 +13,19 @@ import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_task_create.*
 import tech.androidplay.sonali.todo.R
+import tech.androidplay.sonali.todo.TodoApplication
+import tech.androidplay.sonali.todo.TodoApplication.Companion.GLOBAL_DAY
+import tech.androidplay.sonali.todo.TodoApplication.Companion.GLOBAL_HOUR
+import tech.androidplay.sonali.todo.TodoApplication.Companion.GLOBAL_MINUTE
+import tech.androidplay.sonali.todo.TodoApplication.Companion.GLOBAL_MONTH
+import tech.androidplay.sonali.todo.TodoApplication.Companion.GLOBAL_SECOND
+import tech.androidplay.sonali.todo.TodoApplication.Companion.GLOBAL_YEAR
 import tech.androidplay.sonali.todo.data.viewmodel.TaskViewModel
 import tech.androidplay.sonali.todo.ui.picker.DatePickerFragment
 import tech.androidplay.sonali.todo.ui.picker.TimePickerFragment
+import tech.androidplay.sonali.todo.utils.AlarmReceiver
+import tech.androidplay.sonali.todo.utils.Constants.ALARM_DESCRIPTION
+import tech.androidplay.sonali.todo.utils.Constants.ALARM_TEXT
 import tech.androidplay.sonali.todo.utils.Constants.DATE_REQUEST_CODE
 import tech.androidplay.sonali.todo.utils.Constants.DATE_RESULT_CODE
 import tech.androidplay.sonali.todo.utils.Constants.EXTRA_DATE
@@ -39,6 +49,9 @@ import javax.inject.Inject
 class TaskCreateFragment : Fragment(R.layout.fragment_task_create) {
 
     @Inject
+    lateinit var app: TodoApplication
+
+    @Inject
     lateinit var datePickerFragment: DatePickerFragment
 
     @Inject
@@ -49,9 +62,6 @@ class TaskCreateFragment : Fragment(R.layout.fragment_task_create) {
 
     @Inject
     lateinit var calendar: Calendar
-
-    @Inject
-    lateinit var dialog: AlertDialog.Builder
 
     private val taskViewModel: TaskViewModel by viewModels()
 
@@ -104,6 +114,7 @@ class TaskCreateFragment : Fragment(R.layout.fragment_task_create) {
                             taskImage = null
                             logMessage(it.data.toString())
                             lottiCreateTaskLoading.cancelAnimation()
+                            startAlarm(todoBody, todoDesc)
                             findNavController().navigate(R.id.action_taskCreateFragment_to_taskFragment)
                         }
                         is ResultData.Failed -> {
@@ -115,6 +126,37 @@ class TaskCreateFragment : Fragment(R.layout.fragment_task_create) {
             })
     }
 
+    // TODO: Only work on this untill you make it.
+    private fun startAlarm(todoBody: String, todoDesc: String) {
+        val YEAR = GLOBAL_YEAR
+        val DAY = GLOBAL_DAY
+        val MONTH = GLOBAL_MONTH
+        val MINUTE = GLOBAL_MINUTE
+        val HOUR = GLOBAL_HOUR
+        val SECOND = GLOBAL_SECOND
+
+        val intent = Intent(requireContext(), AlarmReceiver::class.java).apply {
+            this.putExtra(ALARM_TEXT, todoBody)
+            this.putExtra(ALARM_DESCRIPTION, todoDesc)
+        }
+        val pendingIntent =
+            PendingIntent.getBroadcast(
+                requireContext(),
+                0,
+                intent,
+                PendingIntent.FLAG_UPDATE_CURRENT
+            )
+
+        // TODO: This needs to be from user input timestamp
+        calendar.set(YEAR, MONTH, DAY, HOUR, MINUTE, SECOND)
+
+        alarmManager.setExact(
+            AlarmManager.RTC_WAKEUP,
+            calendar.timeInMillis,
+            pendingIntent
+        )
+    }
+
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         when (resultCode) {
@@ -122,7 +164,6 @@ class TaskCreateFragment : Fragment(R.layout.fragment_task_create) {
                 val date = data?.getSerializableExtra(EXTRA_DATE).toString()
                 pickedDate = date
                 tvSelectDateDesc.text = pickedDate
-
             }
             TIME_RESULT_CODE -> {
                 val time = data?.getSerializableExtra(EXTRA_TIME).toString()

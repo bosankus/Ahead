@@ -7,9 +7,12 @@ import android.os.Bundle
 import android.widget.DatePicker
 import androidx.fragment.app.DialogFragment
 import dagger.hilt.android.AndroidEntryPoint
+import tech.androidplay.sonali.todo.TodoApplication
+import tech.androidplay.sonali.todo.TodoApplication.Companion.GLOBAL_DAY
+import tech.androidplay.sonali.todo.TodoApplication.Companion.GLOBAL_MONTH
+import tech.androidplay.sonali.todo.TodoApplication.Companion.GLOBAL_YEAR
 import tech.androidplay.sonali.todo.utils.Constants.DATE_RESULT_CODE
 import tech.androidplay.sonali.todo.utils.Constants.EXTRA_DATE
-import java.time.LocalDate
 import java.util.*
 import javax.inject.Inject
 
@@ -38,6 +41,11 @@ class DatePickerFragment : DialogFragment(), DatePickerDialog.OnDateSetListener 
 
     override fun onDateSet(view: DatePicker?, year: Int, month: Int, day: Int) {
         calendar.set(year, month + 1, day)
+
+        GLOBAL_YEAR = year
+        GLOBAL_MONTH = month
+        GLOBAL_DAY = day
+
         val date = "$day-${month + 1}-$year"
 
         targetFragment?.let {
