@@ -7,6 +7,9 @@ import android.os.Bundle
 import android.widget.TimePicker
 import androidx.fragment.app.DialogFragment
 import dagger.hilt.android.AndroidEntryPoint
+import tech.androidplay.sonali.todo.TodoApplication
+import tech.androidplay.sonali.todo.TodoApplication.Companion.GLOBAL_HOUR
+import tech.androidplay.sonali.todo.TodoApplication.Companion.GLOBAL_MINUTE
 import tech.androidplay.sonali.todo.utils.Constants.EXTRA_TIME
 import tech.androidplay.sonali.todo.utils.Constants.TIME_RESULT_CODE
 import java.util.*
@@ -39,7 +42,11 @@ class TimePickerFragment : DialogFragment(), TimePickerDialog.OnTimeSetListener 
     }
 
     override fun onTimeSet(p0: TimePicker?, hour: Int, minute: Int) {
+        GLOBAL_HOUR = hour
+        GLOBAL_MINUTE = minute
+
         val time = "$hour:$minute"
+
         targetFragment?.let {
             val intent = Intent().putExtra(EXTRA_TIME, time)
             it.onActivityResult(targetRequestCode, TIME_RESULT_CODE, intent)

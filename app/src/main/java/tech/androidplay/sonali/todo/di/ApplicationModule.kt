@@ -7,7 +7,6 @@ import android.content.Intent
 import android.content.SharedPreferences
 import androidx.core.app.NotificationCompat
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
@@ -17,6 +16,7 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ApplicationComponent
 import dagger.hilt.android.qualifiers.ApplicationContext
 import tech.androidplay.sonali.todo.R
+import tech.androidplay.sonali.todo.TodoApplication
 import tech.androidplay.sonali.todo.ui.activity.MainActivity
 import tech.androidplay.sonali.todo.ui.picker.DatePickerFragment
 import tech.androidplay.sonali.todo.ui.picker.TimePickerFragment
@@ -38,34 +38,17 @@ import javax.inject.Singleton
 @InstallIn(ApplicationComponent::class)
 class ApplicationModule {
 
-    @Singleton
     @Provides
-    fun provideFirebaseInstance(): FirebaseAuth {
-        return FirebaseAuth.getInstance()
-    }
+    fun providesApplication() = TodoApplication()
 
     @Singleton
     @Provides
-    fun providesFireStoreReference(): CollectionReference {
-        return FirebaseFirestore.getInstance().collection(Constants.FIRESTORE_COLLECTION)
-    }
+    fun provideFirebaseInstance() = FirebaseAuth.getInstance()
 
     @Singleton
     @Provides
-    fun providesStorageReference(): StorageReference {
-        return FirebaseStorage.getInstance().reference
-    }
-
-    @Singleton
-    @Provides
-    fun providesCacheManager(): CacheManager {
-        return CacheManager()
-    }
-
-    @Provides
-    fun providesAlarmManager(@ApplicationContext context: Context): AlarmManager {
-        return context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-    }
+    fun providesFireStoreReference() =
+        FirebaseFirestore.getInstance().collection(Constants.FIRESTORE_COLLECTION)
 
     @Singleton
     @Provides
@@ -89,6 +72,22 @@ class ApplicationModule {
     @Provides
     fun providesTimePickerFragment() = TimePickerFragment()
 
+    @Singleton
+    @Provides
+    fun providesStorageReference(): StorageReference {
+        return FirebaseStorage.getInstance().reference
+    }
+
+    @Singleton
+    @Provides
+    fun providesCacheManager(): CacheManager {
+        return CacheManager()
+    }
+
+    @Provides
+    fun providesAlarmManager(@ApplicationContext context: Context): AlarmManager {
+        return context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+    }
 
     @Provides
     fun provideBaseNotificationBuilder(

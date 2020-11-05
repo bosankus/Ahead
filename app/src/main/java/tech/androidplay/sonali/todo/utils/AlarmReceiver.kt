@@ -50,11 +50,12 @@ class AlarmReceiver : HiltBroadcastReceiver() {
         if (Build.VERSION.SDK_INT >= ANDROID_OREO)
             createNotification(notificationManager)
 
-        notificationBuilder.apply {
+        // Notification button
+        /*notificationBuilder.apply {
             setContentTitle(alarmText)
             setContentText(alarmDescription)
             addAction(R.drawable.ic_snooze, "Stop", pendingIntent)
-        }
+        }*/
 
         notificationManager.notify(NOTIFICATION_ID, notificationBuilder.build())
     }
