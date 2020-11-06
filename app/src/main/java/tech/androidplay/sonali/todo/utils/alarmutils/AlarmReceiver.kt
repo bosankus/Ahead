@@ -1,4 +1,4 @@
-package tech.androidplay.sonali.todo.utils
+package tech.androidplay.sonali.todo.utils.alarmutils
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -9,13 +9,12 @@ import android.graphics.Color
 import android.os.Build
 import androidx.core.app.NotificationCompat
 import dagger.hilt.android.AndroidEntryPoint
-import tech.androidplay.sonali.todo.R
 import tech.androidplay.sonali.todo.di.HiltBroadcastReceiver
+import tech.androidplay.sonali.todo.utils.Constants
 import tech.androidplay.sonali.todo.utils.Constants.ALARM_DESCRIPTION
 import tech.androidplay.sonali.todo.utils.Constants.ALARM_TEXT
 import tech.androidplay.sonali.todo.utils.Constants.ANDROID_OREO
 import tech.androidplay.sonali.todo.utils.Constants.NOTIFICATION_ID
-import tech.androidplay.sonali.todo.utils.UIHelper.logMessage
 import javax.inject.Inject
 
 /**
@@ -55,6 +54,7 @@ class AlarmReceiver : HiltBroadcastReceiver() {
         notificationBuilder.apply {
             setContentTitle(alarmText)
             setContentText(alarmDescription)
+            setStyle(NotificationCompat.BigTextStyle().bigText(alarmDescription))
             /*addAction(R.drawable.ic_snooze, "Mark as Completed", pendingIntent)*/
         }
 

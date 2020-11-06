@@ -2,6 +2,7 @@ package tech.androidplay.sonali.todo.ui.fragment
 
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.app.AlarmManager
 import android.app.AlertDialog
 import android.content.Intent
 import android.net.Uri
@@ -33,6 +34,10 @@ import tech.androidplay.sonali.todo.utils.Extensions.selectImage
 import tech.androidplay.sonali.todo.utils.ResultData
 import tech.androidplay.sonali.todo.utils.UIHelper.showSnack
 import tech.androidplay.sonali.todo.utils.UIHelper.showToast
+import tech.androidplay.sonali.todo.utils.alarmutils.cancelAlarmedNotification
+import tech.androidplay.sonali.todo.utils.alarmutils.generateRequestCode
+import tech.androidplay.sonali.todo.utils.alarmutils.startAlarmedNotification
+import java.util.*
 import javax.inject.Inject
 
 /**
@@ -53,6 +58,12 @@ class TaskEditFragment : Fragment(R.layout.fragment_task_edit) {
 
     @Inject
     lateinit var timePickerFragment: TimePickerFragment
+
+    @Inject
+    lateinit var alarmManager: AlarmManager
+
+    @Inject
+    lateinit var calendar: Calendar
 
     private val taskViewModel: TaskViewModel by viewModels()
     private var taskId: String? = ""
@@ -118,9 +129,12 @@ class TaskEditFragment : Fragment(R.layout.fragment_task_edit) {
         })
     }
 
+
     private fun deleteTask() {
         dialog.setPositiveButton("Yes") { dialogInterface, _ ->
             taskViewModel.deleteTask(taskId)
+            val requestCode = taskId!!.generateRequestCode()
+            cancelAlarmedNotification(requestCode)
             showSnack(requireView(), "Task Deleted")
             findNavController().navigate(R.id.action_taskEditFragment_to_taskFragment)
             dialogInterface.dismiss()
