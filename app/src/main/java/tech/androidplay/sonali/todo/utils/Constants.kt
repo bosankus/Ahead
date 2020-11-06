@@ -24,7 +24,8 @@ object Constants {
     const val TASK_DOC_BODY = "TASK_DOC_BODY"
     const val TASK_DOC_DESC = "TASK_DOC_DESC"
     const val TASK_STATUS = "TASK_STATUS"
-    const val TASK_REMINDER = "TASK_REMINDER"
+    const val TASK_DATE = "TASK_DATE"
+    const val TASK_TIME = "TASK_TIME"
     const val TASK_IMAGE_URL = "TASK_IMAGE_URL"
 
     const val EXTRA_DATE = "EXTRA_DATE"

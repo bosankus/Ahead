@@ -92,12 +92,13 @@ class ApplicationModule {
     @Provides
     fun provideBaseNotificationBuilder(
         @ApplicationContext context: Context,
+        pendingIntent: PendingIntent
     ): NotificationCompat.Builder = NotificationCompat.Builder(
         context,
         Constants.NOTIFICATION_CHANNEL_ID
     )
+        .setContentIntent(pendingIntent)
         .setAutoCancel(true)
-        .setOngoing(false)
         .setSmallIcon(R.drawable.ic_time)
 
 

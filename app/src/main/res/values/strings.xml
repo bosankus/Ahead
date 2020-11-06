@@ -24,4 +24,5 @@
     <string name="add_task">Add Task</string>
     <string name="edit">Edit</string>
     <string name="save_task">Save Task</string>
+    <string name="delete_task">Delete Task</string>
 </resources>

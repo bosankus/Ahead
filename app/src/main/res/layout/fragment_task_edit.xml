@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/taskEditFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -23,43 +22,50 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <ImageView
+            android:id="@+id/imgTask"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_marginEnd="@dimen/padding_16dp"
+            app:layout_constraintBottom_toBottomOf="@+id/tvEditTasksHeader"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tvEditTasksHeader" />
 
-        <com.google.android.material.chip.Chip
-            android:id="@+id/chipTaskAlarmTime"
+        <TextView
+            android:id="@+id/tvSelectDate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/padding_16dp"
-            android:layout_marginTop="8dp"
-            android:textColor="@color/grey3"
-            app:chipBackgroundColor="@color/dribblePinkLight"
-            app:chipIcon="@drawable/ic_alarm"
-            app:chipIconSize="22dp"
-            app:chipIconTint="@color/grey3"
-            app:ensureMinTouchTargetSize="true"
+            android:layout_marginStart="16dp"
+            android:background="?attr/selectableItemBackground"
+            android:drawablePadding="5dp"
+            android:fontFamily="@font/jost"
+            android:paddingTop="6dp"
+            android:paddingBottom="6dp"
+            android:text="@string/hint_date_txt"
+            android:textColor="@color/dribblePink"
+            android:textSize="14sp"
+            app:drawableStartCompat="@drawable/ic_date"
+            app:drawableTint="@color/dribblePink"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tvEditTasksHeader" />
 
-        <ImageView
-            android:id="@+id/imgTask"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_marginStart="@dimen/padding_16dp"
-            android:layout_marginTop="8dp"
-            app:layout_constraintStart_toEndOf="@+id/chipTaskAlarmTime"
-            app:layout_constraintTop_toBottomOf="@+id/tvEditTasksHeader"/>
-
-        <ImageButton
-            android:id="@+id/imgDeleteTask"
+        <TextView
+            android:id="@+id/tvSelectTime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/padding_16dp"
-            android:background="@android:color/transparent"
-            android:padding="5dp"
-            android:src="@drawable/ic_delete"
-            android:tint="@color/grey3"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvEditTasksHeader"
-            tools:ignore="ContentDescription" />
+            android:layout_marginStart="16dp"
+            android:background="?attr/selectableItemBackground"
+            android:drawablePadding="5dp"
+            android:fontFamily="@font/jost"
+            android:paddingTop="6dp"
+            android:paddingBottom="6dp"
+            android:text="@string/hint_time_txt"
+            android:textColor="@color/dribblePink"
+            android:textSize="14sp"
+            app:drawableStartCompat="@drawable/ic_time"
+            app:drawableTint="@color/dribblePink"
+            app:layout_constraintStart_toEndOf="@+id/tvSelectDate"
+            app:layout_constraintTop_toBottomOf="@+id/tvEditTasksHeader" />
 
         <androidx.appcompat.widget.AppCompatEditText
             android:id="@+id/etTaskBody"
@@ -68,6 +74,7 @@
             android:layout_margin="@dimen/padding_16dp"
             android:background="@android:color/transparent"
             android:ellipsize="end"
+            android:fontFamily="@font/calibre"
             android:inputType="text"
             android:maxLines="1"
             android:textColor="@color/grey3"
@@ -75,7 +82,7 @@
             android:transitionName="todoBody"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/chipTaskAlarmTime" />
+            app:layout_constraintTop_toBottomOf="@+id/tvSelectTime" />
 
         <androidx.appcompat.widget.AppCompatEditText
             android:id="@+id/etTaskDesc"
@@ -83,6 +90,7 @@
             android:layout_height="0dp"
             android:layout_margin="@dimen/padding_16dp"
             android:background="@android:color/transparent"
+            android:fontFamily="@font/calubre_light"
             android:gravity="top"
             android:inputType="textMultiLine"
             android:layoutDirection="ltr"
@@ -93,21 +101,40 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-        android:id="@+id/efabSaveTask"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="end|bottom"
-        android:layout_margin="20sp"
-        android:backgroundTint="@color/dribblePink"
-        android:fontFamily="@font/jost_bold"
-        android:minHeight="1dp"
-        android:text="@string/save_task"
-        android:textColor="@color/white"
-        android:textSize="13sp"
-        app:icon="@drawable/ic_check"
-        app:iconPadding="5sp"
-        app:iconTint="@color/white"
-        app:rippleColor="@color/white" />
+        android:layout_gravity="start|end|bottom"
+        android:orientation="horizontal"
+        android:weightSum="2">
+
+        <Button
+            android:id="@+id/btnDeleteTask"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:backgroundTint="@color/white"
+            android:fontFamily="@font/jost_bold"
+            android:text="@string/delete_task"
+            android:textColor="@color/dribblePink"
+            android:textSize="13sp"
+            app:icon="@drawable/ic_delete"
+            app:iconTint="@color/dribblePink" />
+
+        <Button
+            android:id="@+id/btnSaveTask"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@color/dribblePink"
+            android:fontFamily="@font/jost_bold"
+            android:text="@string/save_task"
+            android:textColor="@color/white"
+            android:textSize="13sp"
+            app:icon="@drawable/ic_check"
+            app:iconTint="@color/white"/>
+    </LinearLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

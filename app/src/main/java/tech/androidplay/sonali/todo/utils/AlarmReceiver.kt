@@ -15,6 +15,7 @@ import tech.androidplay.sonali.todo.utils.Constants.ALARM_DESCRIPTION
 import tech.androidplay.sonali.todo.utils.Constants.ALARM_TEXT
 import tech.androidplay.sonali.todo.utils.Constants.ANDROID_OREO
 import tech.androidplay.sonali.todo.utils.Constants.NOTIFICATION_ID
+import tech.androidplay.sonali.todo.utils.UIHelper.logMessage
 import javax.inject.Inject
 
 /**
@@ -51,11 +52,11 @@ class AlarmReceiver : HiltBroadcastReceiver() {
             createNotification(notificationManager)
 
         // Notification button
-        /*notificationBuilder.apply {
+        notificationBuilder.apply {
             setContentTitle(alarmText)
             setContentText(alarmDescription)
-            addAction(R.drawable.ic_snooze, "Stop", pendingIntent)
-        }*/
+            /*addAction(R.drawable.ic_snooze, "Mark as Completed", pendingIntent)*/
+        }
 
         notificationManager.notify(NOTIFICATION_ID, notificationBuilder.build())
     }
@@ -70,7 +71,6 @@ class AlarmReceiver : HiltBroadcastReceiver() {
             setShowBadge(true)
 
         }
-
         notificationManager.createNotificationChannel(channel)
     }
 

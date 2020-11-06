@@ -1,7 +1,10 @@
 package tech.androidplay.sonali.todo.ui.fragment
 
+import android.annotation.SuppressLint
+import android.app.Activity
 import android.app.AlertDialog
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
@@ -16,14 +19,19 @@ import tech.androidplay.sonali.todo.ui.picker.DatePickerFragment
 import tech.androidplay.sonali.todo.ui.picker.TimePickerFragment
 import tech.androidplay.sonali.todo.utils.Constants
 import tech.androidplay.sonali.todo.utils.Constants.DATE_RESULT_CODE
+import tech.androidplay.sonali.todo.utils.Constants.TASK_DATE
 import tech.androidplay.sonali.todo.utils.Constants.TASK_DOC_BODY
 import tech.androidplay.sonali.todo.utils.Constants.TASK_DOC_DESC
 import tech.androidplay.sonali.todo.utils.Constants.TASK_DOC_ID
 import tech.androidplay.sonali.todo.utils.Constants.TASK_IMAGE_URL
-import tech.androidplay.sonali.todo.utils.Constants.TASK_REMINDER
 import tech.androidplay.sonali.todo.utils.Constants.TASK_STATUS
+import tech.androidplay.sonali.todo.utils.Constants.TASK_TIME
 import tech.androidplay.sonali.todo.utils.Constants.TIME_REQUEST_CODE
+import tech.androidplay.sonali.todo.utils.Constants.TIME_RESULT_CODE
+import tech.androidplay.sonali.todo.utils.Extensions.selectImage
+import tech.androidplay.sonali.todo.utils.ResultData
 import tech.androidplay.sonali.todo.utils.UIHelper.showSnack
+import tech.androidplay.sonali.todo.utils.UIHelper.showToast
 import javax.inject.Inject
 
 /**
@@ -42,15 +50,16 @@ class TaskEditFragment : Fragment(R.layout.fragment_task_edit) {
     @Inject
     lateinit var datePickerFragment: DatePickerFragment
 
-    /*@Inject
-    lateinit var timePickerFragment: TimePickerFragment*/
+    @Inject
+    lateinit var timePickerFragment: TimePickerFragment
 
     private val taskViewModel: TaskViewModel by viewModels()
     private var taskId: String? = ""
     private var taskBody: String? = ""
     private var taskDesc: String? = ""
     private var taskStatus: Boolean? = false
-    private var taskReminder: String? = ""
+    private var taskDate: String? = ""
+    private var taskTime: String? = ""
     private var taskImage: String? = ""
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -65,37 +74,67 @@ class TaskEditFragment : Fragment(R.layout.fragment_task_edit) {
         taskBody = arguments?.getString(TASK_DOC_BODY)
         taskDesc = arguments?.getString(TASK_DOC_DESC)
         taskStatus = arguments?.getBoolean(TASK_STATUS)
-        taskReminder = arguments?.getString(TASK_REMINDER) ?: "Add Reminder"
+        taskDate = arguments?.getString(TASK_DATE) ?: "Add Reminder"
+        taskTime = arguments?.getString(TASK_TIME) ?: "Add Reminder"
         taskImage = arguments?.getString(TASK_IMAGE_URL)
 
         etTaskBody.setText(taskBody)
         etTaskDesc.setText(taskDesc)
-        chipTaskAlarmTime.text = taskReminder
-        Glide.with(requireActivity())
-            .load(taskImage)
-            .circleCrop()
-            .into(imgTask)
-            .clearOnDetach()
+        tvSelectDate.text = taskDate
+        tvSelectTime.text = taskTime
+        taskImage?.let { loadImage(it) }
     }
 
     private fun setListener() {
-        chipTaskAlarmTime.setOnClickListener { openDateTimePicker() }
-        efabSaveTask.setOnClickListener { saveTask() }
-        imgDeleteTask.setOnClickListener { deleteTask() }
+        tvSelectDate.setOnClickListener { openDatePicker() }
+        tvSelectTime.setOnClickListener { openTimePicker() }
+        btnSaveTask.setOnClickListener { saveTask() }
+        btnDeleteTask.setOnClickListener { deleteTask() }
+        imgTask.setOnClickListener { selectImage(this) }
     }
 
-    private fun openDateTimePicker() {
+    private fun openDatePicker() {
         if (!datePickerFragment.isAdded) {
             datePickerFragment.setTargetFragment(this, Constants.DATE_REQUEST_CODE)
             datePickerFragment.show(parentFragmentManager, "DATE PICKER")
         }
     }
 
+    private fun openTimePicker() {
+        if (!timePickerFragment.isAdded) {
+            timePickerFragment.setTargetFragment(this, TIME_REQUEST_CODE)
+            timePickerFragment.show(parentFragmentManager, "TIME PICKER")
+        }
+    }
+
     private fun saveTask() {
         val taskBody = etTaskBody.text.toString()
         val taskDesc = etTaskDesc.text.toString()
-        taskViewModel.updateTask(taskId, taskStatus!!, taskBody, taskDesc)
+        val todoDate = tvSelectDate.text.toString()
+        val todoTime = tvSelectTime.text.toString()
+        taskViewModel.updateTask(taskId, taskStatus!!, taskBody, taskDesc, todoDate, todoTime)
         showSnack(requireView(), "Task Saved")
+    }
+
+    private fun loadImage(image: String) {
+        Glide.with(requireActivity())
+            .load(image)
+            .circleCrop()
+            .into(imgTask)
+            .clearOnDetach()
+    }
+
+    private fun changeImage(pickedImage: Uri?) {
+        taskViewModel.uploadImage(pickedImage, taskId!!).observe(viewLifecycleOwner, { imageUrl ->
+            when (imageUrl) {
+                is ResultData.Loading -> showToast(requireContext(), "Uploading Image")
+                is ResultData.Success -> {
+                    val url = imageUrl.data
+                    url?.let { loadImage(it) }
+                }
+                is ResultData.Failed -> showToast(requireContext(), "Something went wrong")
+            }
+        })
     }
 
     private fun deleteTask() {
@@ -107,15 +146,22 @@ class TaskEditFragment : Fragment(R.layout.fragment_task_edit) {
         }.create().show()
     }
 
+    @SuppressLint("SetTextI18n")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         when (resultCode) {
             DATE_RESULT_CODE -> {
                 val date = data?.getSerializableExtra(Constants.EXTRA_DATE).toString()
                 pickedDate = date
+                tvSelectDate.text = pickedDate
             }
-            TIME_REQUEST_CODE -> {
+            TIME_RESULT_CODE -> {
                 val time = data?.getSerializableExtra(Constants.EXTRA_TIME).toString()
                 pickedTime = time
+                tvSelectTime.text = pickedTime
+            }
+            Activity.RESULT_OK -> {
+                pickedImage = data?.data
+                changeImage(pickedImage)
             }
         }
     }
@@ -123,5 +169,6 @@ class TaskEditFragment : Fragment(R.layout.fragment_task_edit) {
     companion object {
         var pickedDate = ""
         var pickedTime = ""
+        var pickedImage: Uri? = null
     }
 }
