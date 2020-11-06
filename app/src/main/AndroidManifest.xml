@@ -33,7 +33,7 @@
             </intent-filter>
         </activity>
 
-        <receiver android:name=".utils.AlarmReceiver" />
+        <receiver android:name=".utils.alarmutils.AlarmReceiver" />
     </application>
 
 </manifest>

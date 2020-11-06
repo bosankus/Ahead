@@ -60,7 +60,7 @@ class TaskRepository @Inject constructor(
             // Network: Store Image Url in the task
             updateTask(docRef.id, mapOf("taskImage" to imageUrl))
             // return image url
-            ResultData.Success(imageUrl)
+            ResultData.Success(docRef.id)
         } catch (e: Exception) {
             ResultData.Failed(false.toString())
         }
