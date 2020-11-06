@@ -26,12 +26,12 @@ import tech.androidplay.sonali.todo.ui.picker.TimePickerFragment
 import tech.androidplay.sonali.todo.utils.AlarmReceiver
 import tech.androidplay.sonali.todo.utils.Constants.ALARM_DESCRIPTION
 import tech.androidplay.sonali.todo.utils.Constants.ALARM_TEXT
-import tech.androidplay.sonali.todo.utils.Constants.DATE_REQUEST_CODE
 import tech.androidplay.sonali.todo.utils.Constants.DATE_RESULT_CODE
 import tech.androidplay.sonali.todo.utils.Constants.EXTRA_DATE
 import tech.androidplay.sonali.todo.utils.Constants.EXTRA_TIME
-import tech.androidplay.sonali.todo.utils.Constants.TIME_REQUEST_CODE
 import tech.androidplay.sonali.todo.utils.Constants.TIME_RESULT_CODE
+import tech.androidplay.sonali.todo.utils.Extensions.openDatePicker
+import tech.androidplay.sonali.todo.utils.Extensions.openTimePicker
 import tech.androidplay.sonali.todo.utils.Extensions.selectImage
 import tech.androidplay.sonali.todo.utils.ResultData
 import tech.androidplay.sonali.todo.utils.UIHelper.showToast
@@ -71,26 +71,11 @@ class TaskCreateFragment : Fragment(R.layout.fragment_task_create) {
     }
 
     private fun clickListeners() {
-        tvSelectDateDesc.setOnClickListener {
-            if (!datePickerFragment.isAdded) {
-                datePickerFragment.setTargetFragment(this, DATE_REQUEST_CODE)
-                datePickerFragment.show(parentFragmentManager, "DATE PICKER")
-            }
-        }
-
-        tvSelectTimeDesc.setOnClickListener {
-            if (!timePickerFragment.isAdded) {
-                timePickerFragment.setTargetFragment(this, TIME_REQUEST_CODE)
-                timePickerFragment.show(parentFragmentManager, "TIME PICKER")
-            }
-        }
-
-        tvSelectImage.setOnClickListener {
-            this.selectImage(this)
-        }
-
+        tvSelectDateDesc.setOnClickListener { openDatePicker(datePickerFragment) }
+        tvSelectTimeDesc.setOnClickListener { openTimePicker(timePickerFragment) }
+        tvSelectImage.setOnClickListener { selectImage(this) }
         btCreateTask.setOnClickListener {
-            if ((tvTaskInput.text.length) <= 0) tvTaskInput.error = "Cant't be empty mama!"
+            if ((tvTaskInput.text.length) <= 0) tvTaskInput.error = "Cant't be empty!"
             else createTask()
         }
     }

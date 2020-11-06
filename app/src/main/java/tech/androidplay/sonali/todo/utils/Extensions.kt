@@ -1,9 +1,11 @@
 package tech.androidplay.sonali.todo.utils
 
-import android.content.Context
-import android.view.View
+import android.widget.ImageView
 import androidx.fragment.app.Fragment
+import com.bumptech.glide.Glide
 import com.github.dhaval2404.imagepicker.ImagePicker
+import tech.androidplay.sonali.todo.ui.picker.DatePickerFragment
+import tech.androidplay.sonali.todo.ui.picker.TimePickerFragment
 
 /**
  * Created by Androidplay
@@ -22,5 +24,25 @@ object Extensions {
             .start()
     }
 
+    fun ImageView.loadImageCircleCropped(url: String) {
+        Glide.with(this.context)
+            .load(url)
+            .circleCrop()
+            .into(this)
+            .clearOnDetach()
+    }
 
+    fun Fragment.openTimePicker(timePickerFragment: TimePickerFragment) {
+        if (!timePickerFragment.isAdded) {
+            timePickerFragment.setTargetFragment(this, Constants.TIME_REQUEST_CODE)
+            timePickerFragment.show(parentFragmentManager, "TIME PICKER")
+        }
+    }
+
+    fun Fragment.openDatePicker(datePickerFragment: DatePickerFragment) {
+        if (!datePickerFragment.isAdded) {
+            datePickerFragment.setTargetFragment(this, Constants.DATE_REQUEST_CODE)
+            datePickerFragment.show(parentFragmentManager, "DATE PICKER")
+        }
+    }
 }

@@ -10,7 +10,6 @@ import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import com.bumptech.glide.Glide
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_task_edit.*
 import tech.androidplay.sonali.todo.R
@@ -26,8 +25,10 @@ import tech.androidplay.sonali.todo.utils.Constants.TASK_DOC_ID
 import tech.androidplay.sonali.todo.utils.Constants.TASK_IMAGE_URL
 import tech.androidplay.sonali.todo.utils.Constants.TASK_STATUS
 import tech.androidplay.sonali.todo.utils.Constants.TASK_TIME
-import tech.androidplay.sonali.todo.utils.Constants.TIME_REQUEST_CODE
 import tech.androidplay.sonali.todo.utils.Constants.TIME_RESULT_CODE
+import tech.androidplay.sonali.todo.utils.Extensions.loadImageCircleCropped
+import tech.androidplay.sonali.todo.utils.Extensions.openDatePicker
+import tech.androidplay.sonali.todo.utils.Extensions.openTimePicker
 import tech.androidplay.sonali.todo.utils.Extensions.selectImage
 import tech.androidplay.sonali.todo.utils.ResultData
 import tech.androidplay.sonali.todo.utils.UIHelper.showSnack
@@ -82,30 +83,17 @@ class TaskEditFragment : Fragment(R.layout.fragment_task_edit) {
         etTaskDesc.setText(taskDesc)
         tvSelectDate.text = taskDate
         tvSelectTime.text = taskTime
-        taskImage?.let { loadImage(it) }
+        taskImage?.let { imgTask.loadImageCircleCropped(it) }
     }
 
     private fun setListener() {
-        tvSelectDate.setOnClickListener { openDatePicker() }
-        tvSelectTime.setOnClickListener { openTimePicker() }
+        tvSelectDate.setOnClickListener { openDatePicker(datePickerFragment) }
+        tvSelectTime.setOnClickListener { openTimePicker(timePickerFragment) }
         btnSaveTask.setOnClickListener { saveTask() }
         btnDeleteTask.setOnClickListener { deleteTask() }
         imgTask.setOnClickListener { selectImage(this) }
     }
 
-    private fun openDatePicker() {
-        if (!datePickerFragment.isAdded) {
-            datePickerFragment.setTargetFragment(this, Constants.DATE_REQUEST_CODE)
-            datePickerFragment.show(parentFragmentManager, "DATE PICKER")
-        }
-    }
-
-    private fun openTimePicker() {
-        if (!timePickerFragment.isAdded) {
-            timePickerFragment.setTargetFragment(this, TIME_REQUEST_CODE)
-            timePickerFragment.show(parentFragmentManager, "TIME PICKER")
-        }
-    }
 
     private fun saveTask() {
         val taskBody = etTaskBody.text.toString()
@@ -116,13 +104,6 @@ class TaskEditFragment : Fragment(R.layout.fragment_task_edit) {
         showSnack(requireView(), "Task Saved")
     }
 
-    private fun loadImage(image: String) {
-        Glide.with(requireActivity())
-            .load(image)
-            .circleCrop()
-            .into(imgTask)
-            .clearOnDetach()
-    }
 
     private fun changeImage(pickedImage: Uri?) {
         taskViewModel.uploadImage(pickedImage, taskId!!).observe(viewLifecycleOwner, { imageUrl ->
@@ -130,7 +111,7 @@ class TaskEditFragment : Fragment(R.layout.fragment_task_edit) {
                 is ResultData.Loading -> showToast(requireContext(), "Uploading Image")
                 is ResultData.Success -> {
                     val url = imageUrl.data
-                    url?.let { loadImage(it) }
+                    url?.let { imgTask.loadImageCircleCropped(it) }
                 }
                 is ResultData.Failed -> showToast(requireContext(), "Something went wrong")
             }
