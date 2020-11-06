@@ -86,6 +86,14 @@ class TaskViewModel @ViewModelInject constructor(private val taskRepository: Tas
         }
     }
 
+    fun uploadImage(uri: Uri?, taskId: String) = uri?.let {
+        liveData {
+            emit(ResultData.Loading)
+            emit(taskRepository.uploadImage(uri, taskId))
+        }
+    }!!
+
+
     fun deleteTask(docId: String?) {
         docId?.let { viewModelScope.launch { taskRepository.deleteTask(docId) } }
     }

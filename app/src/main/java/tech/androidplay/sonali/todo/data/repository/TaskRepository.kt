@@ -126,6 +126,17 @@ class TaskRepository @Inject constructor(
         }
     }
 
+    suspend fun uploadImage(uri: Uri, docRefId: String): ResultData<String> {
+        val ref = storageReference
+            .child("${userDetails?.email}/$docRefId")
+        return try {
+            ref.putFile(uri).await()
+            val imageUrl = ref.downloadUrl.await().toString()
+            ResultData.Success(imageUrl)
+        } catch (e: Exception) {
+            ResultData.Failed(e.message)
+        }
+    }
 
     private suspend fun uploadFile(uri: Uri, docRefId: String): String {
         val ref = storageReference

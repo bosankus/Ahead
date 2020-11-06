@@ -1,8 +1,10 @@
 package tech.androidplay.sonali.todo.ui.fragment
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.app.AlertDialog
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
@@ -26,7 +28,10 @@ import tech.androidplay.sonali.todo.utils.Constants.TASK_STATUS
 import tech.androidplay.sonali.todo.utils.Constants.TASK_TIME
 import tech.androidplay.sonali.todo.utils.Constants.TIME_REQUEST_CODE
 import tech.androidplay.sonali.todo.utils.Constants.TIME_RESULT_CODE
+import tech.androidplay.sonali.todo.utils.Extensions.selectImage
+import tech.androidplay.sonali.todo.utils.ResultData
 import tech.androidplay.sonali.todo.utils.UIHelper.showSnack
+import tech.androidplay.sonali.todo.utils.UIHelper.showToast
 import javax.inject.Inject
 
 /**
@@ -77,11 +82,7 @@ class TaskEditFragment : Fragment(R.layout.fragment_task_edit) {
         etTaskDesc.setText(taskDesc)
         tvSelectDate.text = taskDate
         tvSelectTime.text = taskTime
-        Glide.with(requireActivity())
-            .load(taskImage)
-            .circleCrop()
-            .into(imgTask)
-            .clearOnDetach()
+        taskImage?.let { loadImage(it) }
     }
 
     private fun setListener() {
@@ -89,6 +90,7 @@ class TaskEditFragment : Fragment(R.layout.fragment_task_edit) {
         tvSelectTime.setOnClickListener { openTimePicker() }
         btnSaveTask.setOnClickListener { saveTask() }
         btnDeleteTask.setOnClickListener { deleteTask() }
+        imgTask.setOnClickListener { selectImage(this) }
     }
 
     private fun openDatePicker() {
@@ -114,6 +116,27 @@ class TaskEditFragment : Fragment(R.layout.fragment_task_edit) {
         showSnack(requireView(), "Task Saved")
     }
 
+    private fun loadImage(image: String) {
+        Glide.with(requireActivity())
+            .load(image)
+            .circleCrop()
+            .into(imgTask)
+            .clearOnDetach()
+    }
+
+    private fun changeImage(pickedImage: Uri?) {
+        taskViewModel.uploadImage(pickedImage, taskId!!).observe(viewLifecycleOwner, { imageUrl ->
+            when (imageUrl) {
+                is ResultData.Loading -> showToast(requireContext(), "Uploading Image")
+                is ResultData.Success -> {
+                    val url = imageUrl.data
+                    url?.let { loadImage(it) }
+                }
+                is ResultData.Failed -> showToast(requireContext(), "Something went wrong")
+            }
+        })
+    }
+
     private fun deleteTask() {
         dialog.setPositiveButton("Yes") { dialogInterface, _ ->
             taskViewModel.deleteTask(taskId)
@@ -136,12 +159,16 @@ class TaskEditFragment : Fragment(R.layout.fragment_task_edit) {
                 pickedTime = time
                 tvSelectTime.text = pickedTime
             }
+            Activity.RESULT_OK -> {
+                pickedImage = data?.data
+                changeImage(pickedImage)
+            }
         }
     }
-
 
     companion object {
         var pickedDate = ""
         var pickedTime = ""
+        var pickedImage: Uri? = null
     }
 }
