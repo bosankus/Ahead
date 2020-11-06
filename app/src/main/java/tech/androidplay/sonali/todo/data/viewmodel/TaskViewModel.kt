@@ -3,7 +3,6 @@ package tech.androidplay.sonali.todo.data.viewmodel
 import android.net.Uri
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.*
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -24,17 +23,26 @@ class TaskViewModel @ViewModelInject constructor(private val taskRepository: Tas
     fun createTask(
         todoName: String,
         todoDesc: String,
-        todoReminder: String = "",
+        todoDate: String,
+        todoTime: String,
         uri: Uri?
     ): LiveData<ResultData<String>> {
         return if (uri != null)
             liveData {
                 emit(ResultData.Loading)
-                emit(taskRepository.createTaskWithImage(todoName, todoDesc, todoReminder, uri))
+                emit(
+                    taskRepository.createTaskWithImage(
+                        todoName,
+                        todoDesc,
+                        todoDate,
+                        todoTime,
+                        uri
+                    )
+                )
             }
         else liveData {
             emit(ResultData.Loading)
-            emit(taskRepository.createTaskWithoutImage(todoName, todoDesc, todoReminder))
+            emit(taskRepository.createTaskWithoutImage(todoName, todoDesc, todoDate, todoTime))
         }
     }
 
@@ -54,13 +62,17 @@ class TaskViewModel @ViewModelInject constructor(private val taskRepository: Tas
         taskId: String?,
         status: Boolean,
         todoBody: String? = "",
-        todoDesc: String? = ""
+        todoDesc: String? = "",
+        todoDate: String? = "",
+        todoTime: String? = "",
     ) {
         val map: Map<String, Any> =
-            if (!todoBody.isNullOrEmpty() && !todoDesc.isNullOrEmpty())
+            if (!todoBody.isNullOrEmpty() && !todoDesc.isNullOrEmpty() && !todoDate.isNullOrEmpty() && !todoTime.isNullOrEmpty())
                 mapOf(
                     "todoBody" to todoBody,
                     "todoDesc" to todoDesc,
+                    "todoDate" to todoDate,
+                    "todoTime" to todoTime,
                     "updatedOn" to getCurrentTimestamp()
                 )
             else mapOf(
@@ -68,7 +80,7 @@ class TaskViewModel @ViewModelInject constructor(private val taskRepository: Tas
                 "updatedOn" to getCurrentTimestamp()
             )
         taskId?.let {
-            viewModelScope.launch(Dispatchers.IO) {
+            viewModelScope.launch {
                 taskRepository.updateTask(taskId, map)
             }
         }
@@ -77,14 +89,6 @@ class TaskViewModel @ViewModelInject constructor(private val taskRepository: Tas
     fun deleteTask(docId: String?) {
         docId?.let { viewModelScope.launch { taskRepository.deleteTask(docId) } }
     }
-
-    fun uploadImage(uri: Uri?, docRefId: String) =
-        uri?.let {
-            liveData {
-                emit(ResultData.Loading)
-                emit(taskRepository.uploadImage(uri, docRefId))
-            }
-        }
 
 }
 

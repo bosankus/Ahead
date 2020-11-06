@@ -37,14 +37,16 @@ class TaskRepository @Inject constructor(
     suspend fun createTaskWithImage(
         todoBody: String,
         todoDesc: String,
-        todoReminder: String,
+        todoDate: String,
+        todoTime: String,
         uri: Uri
     ): ResultData<String> {
         val task = hashMapOf(
             "id" to userDetails?.uid,
             "todoBody" to todoBody,
             "todoDesc" to todoDesc,
-            "todoReminder" to todoReminder,
+            "todoDate" to todoDate,
+            "todoTime" to todoTime,
             "todoCreationTimeStamp" to getCurrentTimestamp(),
             "isCompleted" to false
         )
@@ -67,13 +69,15 @@ class TaskRepository @Inject constructor(
     suspend fun createTaskWithoutImage(
         todoBody: String,
         todoDesc: String,
-        todoReminder: String,
+        todoDate: String,
+        todoTime: String,
     ): ResultData<String> {
         val task = hashMapOf(
             "id" to userDetails?.uid,
             "todoBody" to todoBody,
             "todoDesc" to todoDesc,
-            "todoReminder" to todoReminder,
+            "todoDate" to todoDate,
+            "todoTime" to todoTime,
             "todoCreationTimeStamp" to getCurrentTimestamp(),
             "isCompleted" to false
         )
@@ -122,19 +126,8 @@ class TaskRepository @Inject constructor(
         }
     }
 
-    suspend fun uploadImage(uri: Uri, docRefId: String): ResultData<String> {
-        val ref = storageReference
-            .child("${userDetails?.email}/$docRefId")
-        return try {
-            ref.putFile(uri).await()
-            val imageUrl = ref.downloadUrl.await().toString()
-            ResultData.Success(imageUrl)
-        } catch (e: Exception) {
-            ResultData.Failed(e.message)
-        }
-    }
 
-    suspend fun uploadFile(uri: Uri, docRefId: String): String {
+    private suspend fun uploadFile(uri: Uri, docRefId: String): String {
         val ref = storageReference
             .child("${userDetails?.email}/$docRefId")
         return try {

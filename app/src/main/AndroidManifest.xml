@@ -9,7 +9,7 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission android:name="com.android.alarm.permission.SET_ALARM" />
-    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
 
     <application
         android:name=".TodoApplication"
@@ -20,6 +20,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/MaterialTheme"
+        android:windowSoftInputMode="adjustResize"
         tools:ignore="AllowBackup,UnusedAttribute">
 
         <activity
@@ -32,7 +33,7 @@
             </intent-filter>
         </activity>
 
-        <receiver android:name=".utils.AlarmReceiver"/>
+        <receiver android:name=".utils.AlarmReceiver" />
     </application>
 
 </manifest>

@@ -34,7 +34,6 @@ import tech.androidplay.sonali.todo.utils.Constants.TIME_REQUEST_CODE
 import tech.androidplay.sonali.todo.utils.Constants.TIME_RESULT_CODE
 import tech.androidplay.sonali.todo.utils.Extensions.selectImage
 import tech.androidplay.sonali.todo.utils.ResultData
-import tech.androidplay.sonali.todo.utils.UIHelper.logMessage
 import tech.androidplay.sonali.todo.utils.UIHelper.showToast
 import java.util.*
 import javax.inject.Inject
@@ -100,8 +99,9 @@ class TaskCreateFragment : Fragment(R.layout.fragment_task_create) {
     private fun createTask() {
         val todoBody = tvTaskInput.text.toString()
         val todoDesc = tvTaskDescInput.text.toString()
-        val todoReminder = tvSelectDateDesc.text.toString() + tvSelectTimeDesc.text.toString()
-        taskViewModel.createTask(todoBody, todoDesc, todoReminder, taskImage)
+        val todoDate = tvSelectDateDesc.text.toString()
+        val todoTime = tvSelectTimeDesc.text.toString()
+        taskViewModel.createTask(todoBody, todoDesc, todoDate, todoTime, taskImage)
             .observe(viewLifecycleOwner, {
                 it?.let {
                     when (it) {
@@ -112,7 +112,6 @@ class TaskCreateFragment : Fragment(R.layout.fragment_task_create) {
                         }
                         is ResultData.Success -> {
                             taskImage = null
-                            logMessage(it.data.toString())
                             lottiCreateTaskLoading.cancelAnimation()
                             startAlarm(todoBody, todoDesc)
                             findNavController().navigate(R.id.action_taskCreateFragment_to_taskFragment)
@@ -126,14 +125,13 @@ class TaskCreateFragment : Fragment(R.layout.fragment_task_create) {
             })
     }
 
-    // TODO: Only work on this untill you make it.
     private fun startAlarm(todoBody: String, todoDesc: String) {
-        val YEAR = GLOBAL_YEAR
-        val DAY = GLOBAL_DAY
-        val MONTH = GLOBAL_MONTH
-        val MINUTE = GLOBAL_MINUTE
-        val HOUR = GLOBAL_HOUR
-        val SECOND = GLOBAL_SECOND
+        val year = GLOBAL_YEAR
+        val day = GLOBAL_DAY
+        val month = GLOBAL_MONTH
+        val minute = GLOBAL_MINUTE
+        val hour = GLOBAL_HOUR
+        val second = GLOBAL_SECOND
 
         val intent = Intent(requireContext(), AlarmReceiver::class.java).apply {
             this.putExtra(ALARM_TEXT, todoBody)
@@ -147,9 +145,7 @@ class TaskCreateFragment : Fragment(R.layout.fragment_task_create) {
                 PendingIntent.FLAG_UPDATE_CURRENT
             )
 
-        // TODO: This needs to be from user input timestamp
-        calendar.set(YEAR, MONTH, DAY, HOUR, MINUTE, SECOND)
-
+        calendar.set(year, month, day, hour, minute, second)
         alarmManager.setExact(
             AlarmManager.RTC_WAKEUP,
             calendar.timeInMillis,
@@ -172,7 +168,6 @@ class TaskCreateFragment : Fragment(R.layout.fragment_task_create) {
             Activity.RESULT_OK -> {
                 taskImage = data?.data
                 tvSelectImage.text = taskImage.toString()
-
             }
         }
     }
