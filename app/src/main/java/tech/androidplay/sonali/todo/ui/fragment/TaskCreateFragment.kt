@@ -82,33 +82,42 @@ class TaskCreateFragment : Fragment(R.layout.fragment_task_create) {
             .observe(viewLifecycleOwner, {
                 it?.let {
                     when (it) {
-                        is ResultData.Loading -> {
-                            clCreateTask.visibility = View.INVISIBLE
-                            lottiCreateTaskLoading.visibility = View.VISIBLE
-                            lottiCreateTaskLoading.playAnimation()
-                        }
-                        is ResultData.Success -> {
-                            taskImage = null
-                            val requestCode = it.data!!.generateRequestCode()
-                            startAlarmedNotification(
-                                requestCode,
-                                todoBody,
-                                todoDesc,
-                                calendar,
-                                alarmManager
-                            )
-                            lottiCreateTaskLoading.cancelAnimation()
-                            findNavController().navigate(R.id.action_taskCreateFragment_to_taskFragment)
-                        }
-                        is ResultData.Failed -> {
-                            lottiCreateTaskLoading.cancelAnimation()
-                            showToast(requireContext(), "Something went wrong")
-                        }
+                        is ResultData.Loading -> handleLoading()
+                        is ResultData.Success -> handleSuccess(it, todoBody, todoDesc)
+                        is ResultData.Failed -> handleFailure()
                     }
                 }
             })
     }
 
+    private fun handleLoading() {
+        clCreateTask.visibility = View.INVISIBLE
+        lottiCreateTaskLoading.visibility = View.VISIBLE
+        lottiCreateTaskLoading.playAnimation()
+    }
+
+    private fun handleSuccess(
+        taskId: ResultData.Success<String>,
+        todoBody: String,
+        todoDesc: String
+    ) {
+        taskImage = null
+        val requestCode = taskId.data!!.generateRequestCode()
+        startAlarmedNotification(
+            requestCode,
+            todoBody,
+            todoDesc,
+            calendar,
+            alarmManager
+        )
+        lottiCreateTaskLoading.cancelAnimation()
+        findNavController().navigate(R.id.action_taskCreateFragment_to_taskFragment)
+    }
+
+    private fun handleFailure() {
+        lottiCreateTaskLoading.cancelAnimation()
+        showToast(requireContext(), "Something went wrong")
+    }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         when (resultCode) {

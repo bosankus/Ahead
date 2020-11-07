@@ -60,6 +60,7 @@
             android:paddingTop="6dp"
             android:paddingBottom="6dp"
             android:text="@string/hint_time_txt"
+            android:visibility="gone"
             android:textColor="@color/dribblePink"
             android:textSize="14sp"
             app:drawableStartCompat="@drawable/ic_time"
@@ -82,7 +83,7 @@
             android:transitionName="todoBody"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvSelectTime" />
+            app:layout_constraintTop_toBottomOf="@+id/tvSelectDate" />
 
         <androidx.appcompat.widget.AppCompatEditText
             android:id="@+id/etTaskDesc"

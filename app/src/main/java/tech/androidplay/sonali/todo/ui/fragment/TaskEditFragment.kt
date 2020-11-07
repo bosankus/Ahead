@@ -24,7 +24,6 @@ import tech.androidplay.sonali.todo.utils.Constants.TASK_DOC_BODY
 import tech.androidplay.sonali.todo.utils.Constants.TASK_DOC_DESC
 import tech.androidplay.sonali.todo.utils.Constants.TASK_DOC_ID
 import tech.androidplay.sonali.todo.utils.Constants.TASK_IMAGE_URL
-import tech.androidplay.sonali.todo.utils.Constants.TASK_STATUS
 import tech.androidplay.sonali.todo.utils.Constants.TASK_TIME
 import tech.androidplay.sonali.todo.utils.Constants.TIME_RESULT_CODE
 import tech.androidplay.sonali.todo.utils.Extensions.loadImageCircleCropped
@@ -47,6 +46,7 @@ import javax.inject.Inject
  * Email: ankush@androidplay.in
  */
 
+@SuppressLint("SetTextI18n")
 @AndroidEntryPoint
 class TaskEditFragment : Fragment(R.layout.fragment_task_edit) {
 
@@ -69,7 +69,6 @@ class TaskEditFragment : Fragment(R.layout.fragment_task_edit) {
     private var taskId: String? = ""
     private var taskBody: String? = ""
     private var taskDesc: String? = ""
-    private var taskStatus: Boolean? = false
     private var taskDate: String? = ""
     private var taskTime: String? = ""
     private var taskImage: String? = ""
@@ -85,21 +84,20 @@ class TaskEditFragment : Fragment(R.layout.fragment_task_edit) {
         taskId = arguments?.getString(TASK_DOC_ID)
         taskBody = arguments?.getString(TASK_DOC_BODY)
         taskDesc = arguments?.getString(TASK_DOC_DESC)
-        taskStatus = arguments?.getBoolean(TASK_STATUS)
         taskDate = arguments?.getString(TASK_DATE) ?: "Add Reminder"
         taskTime = arguments?.getString(TASK_TIME) ?: "Add Reminder"
         taskImage = arguments?.getString(TASK_IMAGE_URL)
 
         etTaskBody.setText(taskBody)
         etTaskDesc.setText(taskDesc)
-        tvSelectDate.text = taskDate
-        tvSelectTime.text = taskTime
+        tvSelectDate.text = "$taskDate, $taskTime"
+        /*tvSelectTime.text = taskTime*/
         taskImage?.let { imgTask.loadImageCircleCropped(it) }
     }
 
     private fun setListener() {
         tvSelectDate.setOnClickListener { openDatePicker(datePickerFragment) }
-        tvSelectTime.setOnClickListener { openTimePicker(timePickerFragment) }
+        /*tvSelectTime.setOnClickListener { openTimePicker(timePickerFragment) }*/
         btnSaveTask.setOnClickListener { saveTask() }
         btnDeleteTask.setOnClickListener { deleteTask() }
         imgTask.setOnClickListener { selectImage(this) }
@@ -111,7 +109,9 @@ class TaskEditFragment : Fragment(R.layout.fragment_task_edit) {
         val taskDesc = etTaskDesc.text.toString()
         val todoDate = tvSelectDate.text.toString()
         val todoTime = tvSelectTime.text.toString()
-        taskViewModel.updateTask(taskId, taskStatus!!, taskBody, taskDesc, todoDate, todoTime)
+        taskViewModel.updateTask(taskId!!, taskBody, taskDesc, todoDate, todoTime)
+        val requestCode = taskId!!.generateRequestCode()
+        this.startAlarmedNotification(requestCode, taskBody, taskDesc, calendar, alarmManager)
         showSnack(requireView(), "Task Saved")
     }
 
@@ -148,6 +148,7 @@ class TaskEditFragment : Fragment(R.layout.fragment_task_edit) {
                 val date = data?.getSerializableExtra(Constants.EXTRA_DATE).toString()
                 pickedDate = date
                 tvSelectDate.text = pickedDate
+                openTimePicker(timePickerFragment)
             }
             TIME_RESULT_CODE -> {
                 val time = data?.getSerializableExtra(Constants.EXTRA_TIME).toString()

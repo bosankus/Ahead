@@ -41,8 +41,8 @@ class TodoViewHolder(
 
         binding.cbTaskStatus.setOnClickListener {
             if (todoItem.isCompleted)
-                viewModel.updateTask(todoItem.docId, false)
-            else viewModel.updateTask(todoItem.docId, true)
+                viewModel.changeTaskStatus(todoItem.docId, false)
+            else viewModel.changeTaskStatus(todoItem.docId, true)
         }
 
         binding.clItemListContainer.setOnClickListener {
