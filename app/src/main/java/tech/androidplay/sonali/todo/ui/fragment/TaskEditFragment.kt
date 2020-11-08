@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.AlarmManager
 import android.app.AlertDialog
+import android.app.PendingIntent
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -18,6 +19,7 @@ import tech.androidplay.sonali.todo.data.viewmodel.TaskViewModel
 import tech.androidplay.sonali.todo.ui.picker.DatePickerFragment
 import tech.androidplay.sonali.todo.ui.picker.TimePickerFragment
 import tech.androidplay.sonali.todo.utils.Constants
+import tech.androidplay.sonali.todo.utils.Constants.ALARM_ID
 import tech.androidplay.sonali.todo.utils.Constants.DATE_RESULT_CODE
 import tech.androidplay.sonali.todo.utils.Constants.TASK_DATE
 import tech.androidplay.sonali.todo.utils.Constants.TASK_DOC_BODY
@@ -31,6 +33,7 @@ import tech.androidplay.sonali.todo.utils.Extensions.openDatePicker
 import tech.androidplay.sonali.todo.utils.Extensions.openTimePicker
 import tech.androidplay.sonali.todo.utils.Extensions.selectImage
 import tech.androidplay.sonali.todo.utils.ResultData
+import tech.androidplay.sonali.todo.utils.UIHelper.logMessage
 import tech.androidplay.sonali.todo.utils.UIHelper.showSnack
 import tech.androidplay.sonali.todo.utils.UIHelper.showToast
 import tech.androidplay.sonali.todo.utils.alarmutils.cancelAlarmedNotification
@@ -65,7 +68,11 @@ class TaskEditFragment : Fragment(R.layout.fragment_task_edit) {
     @Inject
     lateinit var calendar: Calendar
 
+    @Inject
+    lateinit var pendingIntent: PendingIntent
+
     private val taskViewModel: TaskViewModel by viewModels()
+    private var alarmId: String = ""
     private var taskId: String? = ""
     private var taskBody: String? = ""
     private var taskDesc: String? = ""
@@ -81,18 +88,23 @@ class TaskEditFragment : Fragment(R.layout.fragment_task_edit) {
     }
 
     private fun setUpScreen() {
-        taskId = arguments?.getString(TASK_DOC_ID)
-        taskBody = arguments?.getString(TASK_DOC_BODY)
-        taskDesc = arguments?.getString(TASK_DOC_DESC)
-        taskDate = arguments?.getString(TASK_DATE) ?: "Add Reminder"
-        taskTime = arguments?.getString(TASK_TIME) ?: "Add Reminder"
-        taskImage = arguments?.getString(TASK_IMAGE_URL)
+        if (alarmId.isNotEmpty())
+            loadTaskFromNotification(alarmId)
+        else {
+            taskId = arguments?.getString(TASK_DOC_ID)
+            logMessage(taskId!!)
+            taskBody = arguments?.getString(TASK_DOC_BODY)
+            taskDesc = arguments?.getString(TASK_DOC_DESC)
+            taskDate = arguments?.getString(TASK_DATE) ?: "Add Reminder"
+            taskTime = arguments?.getString(TASK_TIME) ?: "Add Reminder"
+            taskImage = arguments?.getString(TASK_IMAGE_URL)
 
-        etTaskBody.setText(taskBody)
-        etTaskDesc.setText(taskDesc)
-        tvSelectDate.text = "$taskDate, $taskTime"
-        /*tvSelectTime.text = taskTime*/
-        taskImage?.let { imgTask.loadImageCircleCropped(it) }
+            etTaskBody.setText(taskBody)
+            etTaskDesc.setText(taskDesc)
+            tvSelectDate.text = "$taskDate, $taskTime"
+            /*tvSelectTime.text = taskTime*/
+            taskImage?.let { imgTask.loadImageCircleCropped(it) }
+        }
     }
 
     private fun setListener() {
@@ -103,6 +115,9 @@ class TaskEditFragment : Fragment(R.layout.fragment_task_edit) {
         imgTask.setOnClickListener { selectImage(this) }
     }
 
+    private fun loadTaskFromNotification(alarmId: String) {
+
+    }
 
     private fun saveTask() {
         val taskBody = etTaskBody.text.toString()
@@ -111,7 +126,7 @@ class TaskEditFragment : Fragment(R.layout.fragment_task_edit) {
         val todoTime = tvSelectTime.text.toString()
         taskViewModel.updateTask(taskId!!, taskBody, taskDesc, todoDate, todoTime)
         val requestCode = taskId!!.generateRequestCode()
-        this.startAlarmedNotification(requestCode, taskBody, taskDesc, calendar, alarmManager)
+        startAlarmedNotification(requestCode, taskBody, taskDesc, calendar, alarmManager)
         showSnack(requireView(), "Task Saved")
     }
 
@@ -153,7 +168,8 @@ class TaskEditFragment : Fragment(R.layout.fragment_task_edit) {
             TIME_RESULT_CODE -> {
                 val time = data?.getSerializableExtra(Constants.EXTRA_TIME).toString()
                 pickedTime = time
-                tvSelectTime.text = pickedTime
+                tvSelectDate.text = "$pickedDate, $pickedTime"
+                /*tvSelectTime.text = pickedTime*/
             }
             Activity.RESULT_OK -> {
                 pickedImage = data?.data

@@ -10,6 +10,7 @@ import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_main.*
 import tech.androidplay.sonali.todo.R
+import tech.androidplay.sonali.todo.utils.Constants.ACTION_SHOW_TASK_EDIT_FRAGMENT
 import tech.androidplay.sonali.todo.utils.Constants.ACTION_SHOW_TASK_FRAGMENT
 
 @AndroidEntryPoint
@@ -44,7 +45,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun navigateToGlobalFragment(intent: Intent) {
         if (intent.action == ACTION_SHOW_TASK_FRAGMENT)
-            navHostFragment.findNavController().navigate(R.id.action_global_taskCreateFragment)
+            navHostFragment.findNavController().navigate(R.id.action_global_taskFragment)
     }
 }
 

@@ -15,7 +15,6 @@ fun String.generateRequestCode(): Int {
     var code = 0
     for (i in this.indices - 1) {
         ascii = this[i].toInt()
-        logMessage(ascii.toString())
         code += ascii
     }
     return code

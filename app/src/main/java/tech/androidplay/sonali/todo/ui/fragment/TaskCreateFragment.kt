@@ -12,7 +12,6 @@ import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_task_create.*
 import tech.androidplay.sonali.todo.R
-import tech.androidplay.sonali.todo.TodoApplication
 import tech.androidplay.sonali.todo.data.viewmodel.TaskViewModel
 import tech.androidplay.sonali.todo.ui.picker.DatePickerFragment
 import tech.androidplay.sonali.todo.ui.picker.TimePickerFragment
@@ -38,9 +37,6 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class TaskCreateFragment : Fragment(R.layout.fragment_task_create) {
-
-    @Inject
-    lateinit var app: TodoApplication
 
     @Inject
     lateinit var datePickerFragment: DatePickerFragment
@@ -83,7 +79,7 @@ class TaskCreateFragment : Fragment(R.layout.fragment_task_create) {
                 it?.let {
                     when (it) {
                         is ResultData.Loading -> handleLoading()
-                        is ResultData.Success -> handleSuccess(it, todoBody, todoDesc)
+                        is ResultData.Success -> handleSuccess(it.data!!, todoBody, todoDesc)
                         is ResultData.Failed -> handleFailure()
                     }
                 }
@@ -97,12 +93,12 @@ class TaskCreateFragment : Fragment(R.layout.fragment_task_create) {
     }
 
     private fun handleSuccess(
-        taskId: ResultData.Success<String>,
+        taskId: String,
         todoBody: String,
         todoDesc: String
     ) {
         taskImage = null
-        val requestCode = taskId.data!!.generateRequestCode()
+        val requestCode = taskId.generateRequestCode()
         startAlarmedNotification(
             requestCode,
             todoBody,

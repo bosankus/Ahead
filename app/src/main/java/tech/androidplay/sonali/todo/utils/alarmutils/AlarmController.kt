@@ -6,7 +6,16 @@ import android.content.Intent
 import android.view.View
 import androidx.fragment.app.Fragment
 import tech.androidplay.sonali.todo.TodoApplication
+import tech.androidplay.sonali.todo.TodoApplication.Companion.GLOBAL_DAY
+import tech.androidplay.sonali.todo.TodoApplication.Companion.GLOBAL_HOUR
+import tech.androidplay.sonali.todo.TodoApplication.Companion.GLOBAL_MINUTE
+import tech.androidplay.sonali.todo.TodoApplication.Companion.GLOBAL_MONTH
+import tech.androidplay.sonali.todo.TodoApplication.Companion.GLOBAL_SECOND
+import tech.androidplay.sonali.todo.TodoApplication.Companion.GLOBAL_YEAR
 import tech.androidplay.sonali.todo.utils.Constants
+import tech.androidplay.sonali.todo.utils.Constants.ALARM_DESCRIPTION
+import tech.androidplay.sonali.todo.utils.Constants.ALARM_ID
+import tech.androidplay.sonali.todo.utils.Constants.ALARM_TEXT
 import java.util.*
 
 /**
@@ -23,16 +32,16 @@ fun Fragment.startAlarmedNotification(
     calendar: Calendar,
     alarmManager: AlarmManager
 ) {
-    val year = TodoApplication.GLOBAL_YEAR
-    val day = TodoApplication.GLOBAL_DAY
-    val month = TodoApplication.GLOBAL_MONTH
-    val minute = TodoApplication.GLOBAL_MINUTE
-    val hour = TodoApplication.GLOBAL_HOUR
-    val second = TodoApplication.GLOBAL_SECOND
+    val year = GLOBAL_YEAR
+    val day = GLOBAL_DAY
+    val month = GLOBAL_MONTH
+    val minute = GLOBAL_MINUTE
+    val hour = GLOBAL_HOUR
+    val second = GLOBAL_SECOND
 
     val intent = Intent(requireContext(), AlarmReceiver::class.java).apply {
-        this.putExtra(Constants.ALARM_TEXT, notificationText)
-        this.putExtra(Constants.ALARM_DESCRIPTION, notificationBody)
+        this.putExtra(ALARM_TEXT, notificationText)
+        this.putExtra(ALARM_DESCRIPTION, notificationBody)
     }
     val pendingIntent =
         PendingIntent.getBroadcast(

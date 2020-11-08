@@ -12,6 +12,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import tech.androidplay.sonali.todo.di.HiltBroadcastReceiver
 import tech.androidplay.sonali.todo.utils.Constants
 import tech.androidplay.sonali.todo.utils.Constants.ALARM_DESCRIPTION
+import tech.androidplay.sonali.todo.utils.Constants.ALARM_ID
 import tech.androidplay.sonali.todo.utils.Constants.ALARM_TEXT
 import tech.androidplay.sonali.todo.utils.Constants.ANDROID_OREO
 import tech.androidplay.sonali.todo.utils.Constants.NOTIFICATION_ID
@@ -36,8 +37,8 @@ class AlarmReceiver : HiltBroadcastReceiver() {
     override fun onReceive(context: Context?, intent: Intent?) {
         super.onReceive(context, intent)
         intent?.let {
-            alarmText = it.extras?.get(ALARM_TEXT).toString()
-            alarmDescription = it.extras?.get(ALARM_DESCRIPTION).toString()
+            alarmText = "${it.extras?.get(ALARM_TEXT)}"
+            alarmDescription = "${it.extras?.get(ALARM_DESCRIPTION)}"
         }
         showNotification(context, alarmText, alarmDescription)
     }
@@ -69,12 +70,12 @@ class AlarmReceiver : HiltBroadcastReceiver() {
         ).apply {
             lightColor = Color.YELLOW
             setShowBadge(true)
-
         }
         notificationManager.createNotificationChannel(channel)
     }
 
     companion object {
+        var alarmId = ""
         var alarmText = ""
         var alarmDescription = ""
     }

@@ -38,6 +38,7 @@ object Constants {
     const val TIME_RESULT_CODE = 201
 
     const val ACTION_SHOW_TASK_FRAGMENT = "ACTION_SHOW_TASK_FRAGMENT"
+    const val ACTION_SHOW_TASK_EDIT_FRAGMENT = "ACTION_SHOW_TASK_EDIT_FRAGMENT"
     const val NOTIFICATION_CHANNEL_ID = "think_channel"
     const val NOTIFICATION_CHANNEL_NAME = "think"
     const val NOTIFICATION_ID = 1
@@ -59,6 +60,7 @@ object Constants {
 
     const val PICK_GALLERY_IMAGE = 102
 
+    const val ALARM_ID = "ALARM_ID"
     const val ALARM_TEXT = "ALARM_TEXT"
     const val ALARM_DESCRIPTION = "ALARM_DESCRIPTION"
 }

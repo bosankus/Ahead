@@ -59,7 +59,6 @@
             android:fontFamily="@font/jost"
             android:paddingTop="6dp"
             android:paddingBottom="6dp"
-            android:text="@string/hint_time_txt"
             android:visibility="gone"
             android:textColor="@color/dribblePink"
             android:textSize="14sp"
