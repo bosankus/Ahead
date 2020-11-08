@@ -101,15 +101,14 @@ class TaskEditFragment : Fragment(R.layout.fragment_task_edit) {
 
             etTaskBody.setText(taskBody)
             etTaskDesc.setText(taskDesc)
-            tvSelectDate.text = "$taskDate, $taskTime"
-            /*tvSelectTime.text = taskTime*/
+            tvSelectDate.text = taskDate
+            tvSelectTime.text = taskTime
             taskImage?.let { imgTask.loadImageCircleCropped(it) }
         }
     }
 
     private fun setListener() {
         tvSelectDate.setOnClickListener { openDatePicker(datePickerFragment) }
-        /*tvSelectTime.setOnClickListener { openTimePicker(timePickerFragment) }*/
         btnSaveTask.setOnClickListener { saveTask() }
         btnDeleteTask.setOnClickListener { deleteTask() }
         imgTask.setOnClickListener { selectImage(this) }
@@ -168,8 +167,7 @@ class TaskEditFragment : Fragment(R.layout.fragment_task_edit) {
             TIME_RESULT_CODE -> {
                 val time = data?.getSerializableExtra(Constants.EXTRA_TIME).toString()
                 pickedTime = time
-                tvSelectDate.text = "$pickedDate, $pickedTime"
-                /*tvSelectTime.text = pickedTime*/
+                tvSelectTime.text = pickedTime
             }
             Activity.RESULT_OK -> {
                 pickedImage = data?.data
