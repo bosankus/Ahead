@@ -1,7 +1,5 @@
 package tech.androidplay.sonali.todo.utils.alarmutils
 
-import tech.androidplay.sonali.todo.utils.UIHelper.logMessage
-
 /**
  * Created by Androidplay
  * Author: Ankush

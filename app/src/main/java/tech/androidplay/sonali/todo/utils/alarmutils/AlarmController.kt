@@ -5,16 +5,13 @@ import android.app.PendingIntent
 import android.content.Intent
 import android.view.View
 import androidx.fragment.app.Fragment
-import tech.androidplay.sonali.todo.TodoApplication
 import tech.androidplay.sonali.todo.TodoApplication.Companion.GLOBAL_DAY
 import tech.androidplay.sonali.todo.TodoApplication.Companion.GLOBAL_HOUR
 import tech.androidplay.sonali.todo.TodoApplication.Companion.GLOBAL_MINUTE
 import tech.androidplay.sonali.todo.TodoApplication.Companion.GLOBAL_MONTH
 import tech.androidplay.sonali.todo.TodoApplication.Companion.GLOBAL_SECOND
 import tech.androidplay.sonali.todo.TodoApplication.Companion.GLOBAL_YEAR
-import tech.androidplay.sonali.todo.utils.Constants
 import tech.androidplay.sonali.todo.utils.Constants.ALARM_DESCRIPTION
-import tech.androidplay.sonali.todo.utils.Constants.ALARM_ID
 import tech.androidplay.sonali.todo.utils.Constants.ALARM_TEXT
 import java.util.*
 

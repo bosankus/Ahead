@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -20,10 +20,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:fontFamily="@font/jost"
+            android:fontFamily="@font/calibre_semi"
             android:text="@string/new_task"
             android:textColor="@color/grey2"
-            android:textSize="16sp"
+            android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -58,10 +58,10 @@
                 android:layout_marginStart="26dp"
                 android:layout_marginTop="16dp"
                 android:ellipsize="end"
-                android:fontFamily="@font/jost"
+                android:fontFamily="@font/calibre_semi"
                 android:text="@string/set_alarm"
                 android:textColor="@color/grey3"
-                android:textSize="16sp"
+                android:textSize="18sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -70,49 +70,22 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="26sp"
-                android:fontFamily="@font/jost"
+                android:fontFamily="@font/calibre_semi"
                 android:text="@string/ring_alarm_for_this_task"
                 android:textColor="@color/grey2"
-                android:textSize="14sp"
+                android:textSize="16sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tvAlarmHeader" />
 
-            <TextView
-                android:id="@+id/tvSelectDateDesc"
+            <include
+                android:id="@+id/layoutDateTime"
+                layout="@layout/layout_date_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="26dp"
-                android:background="?attr/selectableItemBackground"
-                android:drawablePadding="5dp"
-                android:fontFamily="@font/jost"
-                android:paddingTop="6dp"
-                android:paddingBottom="6dp"
-                android:text="@string/hint_date_txt"
-                android:textColor="@color/dribblePink"
-                android:textSize="14sp"
-                app:drawableStartCompat="@drawable/ic_date"
-                app:drawableTint="@color/dribblePink"
+                android:layout_marginTop="10dp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tvAlarmDesc" />
-
-            <TextView
-                android:id="@+id/tvSelectTimeDesc"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:background="?attr/selectableItemBackground"
-                android:drawablePadding="5dp"
-                android:fontFamily="@font/jost"
-                android:paddingTop="6dp"
-                android:paddingBottom="6dp"
-                android:text="@string/hint_time_txt"
-                android:textColor="@color/dribblePink"
-                android:textSize="14sp"
-                app:drawableStartCompat="@drawable/ic_time"
-                app:drawableTint="@color/dribblePink"
-                app:layout_constraintStart_toEndOf="@+id/tvSelectDateDesc"
-                app:layout_constraintTop_toBottomOf="@+id/tvAlarmDesc" />
-
+                app:layout_constraintTop_toBottomOf="@id/tvAlarmDesc" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -122,10 +95,10 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="28sp"
             android:layout_marginTop="26dp"
-            android:fontFamily="@font/jost"
+            android:fontFamily="@font/calibre_semi"
             android:text="@string/create_task"
             android:textColor="@color/grey2"
-            android:textSize="16sp"
+            android:textSize="18sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/clAlarm" />
 
@@ -150,12 +123,12 @@
                 android:layout_marginEnd="26dp"
                 android:layout_marginBottom="16sp"
                 android:autofillHints=""
-                android:fontFamily="@font/jost"
+                android:fontFamily="@font/calibre_semi"
                 android:hint="@string/task"
                 android:inputType="text"
                 android:maxLines="1"
                 android:textColor="@color/grey3"
-                android:textSize="16sp"
+                android:textSize="18sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -169,11 +142,11 @@
                 android:layout_marginEnd="26dp"
                 android:layout_marginBottom="16sp"
                 android:autofillHints=""
-                android:fontFamily="@font/jost"
+                android:fontFamily="@font/calibre_semi"
                 android:hint="@string/task_description"
                 android:inputType="textMultiLine"
                 android:textColor="@color/grey3"
-                android:textSize="16sp"
+                android:textSize="18sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tvTaskInput" />
@@ -188,11 +161,11 @@
             android:layout_marginTop="16dp"
             android:drawablePadding="8dp"
             android:ellipsize="end"
-            android:fontFamily="@font/jost"
+            android:fontFamily="@font/calibre"
             android:padding="5dp"
-            android:text="Attach Image"
+            android:text="@string/attach_image"
             android:textColor="@color/dribblePink"
-            android:textSize="16sp"
+            android:textSize="18sp"
             app:drawableStartCompat="@drawable/ic_attach"
             app:drawableTint="@color/dribblePink"
             app:layout_constraintStart_toStartOf="parent"
@@ -203,10 +176,10 @@
             style="?android:attr/borderlessButtonStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="16sp"
+            android:layout_margin="18sp"
             android:background="@drawable/bg_rounded"
             android:backgroundTint="@color/dribblePink"
-            android:fontFamily="@font/jost_semi"
+            android:fontFamily="@font/calibre_bold"
             android:text="@string/create_task"
             android:textAllCaps="false"
             android:textColor="@color/white"
@@ -220,14 +193,10 @@
         android:id="@+id/lottiCreateTaskLoading"
         android:layout_width="100dp"
         android:layout_height="100dp"
+        android:layout_gravity="center"
         android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
         app:lottie_fileName="lottie_create_task.json"
         app:lottie_loop="true" />
 
 
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

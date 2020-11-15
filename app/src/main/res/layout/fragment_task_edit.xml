@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/taskEditFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -29,43 +30,17 @@
             android:layout_marginEnd="@dimen/padding_16dp"
             app:layout_constraintBottom_toBottomOf="@+id/tvEditTasksHeader"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/tvEditTasksHeader" />
+            app:layout_constraintTop_toTopOf="@+id/tvEditTasksHeader"
+            tools:ignore="ContentDescription" />
 
-        <TextView
-            android:id="@+id/tvSelectDate"
+        <include
+            android:id="@+id/layoutEditDateTime"
+            layout="@layout/layout_date_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:background="?attr/selectableItemBackground"
-            android:drawablePadding="5dp"
-            android:fontFamily="@font/jost"
-            android:paddingTop="6dp"
-            android:paddingBottom="6dp"
-            android:text="@string/hint_date_txt"
-            android:textColor="@color/dribblePink"
-            android:textSize="14sp"
-            app:drawableStartCompat="@drawable/ic_date"
-            app:drawableTint="@color/dribblePink"
+            android:layout_marginStart="@dimen/padding_16dp"
+            android:layout_marginTop="10dp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvEditTasksHeader" />
-
-        <TextView
-            android:id="@+id/tvSelectTime"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:background="?attr/selectableItemBackground"
-            android:drawablePadding="5dp"
-            android:fontFamily="@font/jost"
-            android:paddingTop="6dp"
-            android:paddingBottom="6dp"
-            android:hint="Time"
-            android:textColorHint="@color/dribblePink"
-            android:textColor="@color/dribblePink"
-            android:textSize="14sp"
-            app:drawableStartCompat="@drawable/ic_time"
-            app:drawableTint="@color/dribblePink"
-            app:layout_constraintStart_toEndOf="@+id/tvSelectDate"
             app:layout_constraintTop_toBottomOf="@+id/tvEditTasksHeader" />
 
         <androidx.appcompat.widget.AppCompatEditText
@@ -83,7 +58,7 @@
             android:transitionName="todoBody"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvSelectDate" />
+            app:layout_constraintTop_toBottomOf="@+id/layoutEditDateTime" />
 
         <androidx.appcompat.widget.AppCompatEditText
             android:id="@+id/etTaskDesc"
@@ -135,7 +110,7 @@
             android:textColor="@color/white"
             android:textSize="13sp"
             app:icon="@drawable/ic_check"
-            app:iconTint="@color/white"/>
+            app:iconTint="@color/white" />
     </LinearLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

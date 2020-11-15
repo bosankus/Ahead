@@ -10,7 +10,6 @@ import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_main.*
 import tech.androidplay.sonali.todo.R
-import tech.androidplay.sonali.todo.utils.Constants.ACTION_SHOW_TASK_EDIT_FRAGMENT
 import tech.androidplay.sonali.todo.utils.Constants.ACTION_SHOW_TASK_FRAGMENT
 
 @AndroidEntryPoint

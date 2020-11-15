@@ -11,6 +11,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_task_create.*
+import kotlinx.android.synthetic.main.layout_date_time.*
 import tech.androidplay.sonali.todo.R
 import tech.androidplay.sonali.todo.data.viewmodel.TaskViewModel
 import tech.androidplay.sonali.todo.ui.picker.DatePickerFragment
@@ -59,8 +60,7 @@ class TaskCreateFragment : Fragment(R.layout.fragment_task_create) {
     }
 
     private fun clickListeners() {
-        tvSelectDateDesc.setOnClickListener { openDatePicker(datePickerFragment) }
-        tvSelectTimeDesc.setOnClickListener { openTimePicker(timePickerFragment) }
+        layoutDateTime.setOnClickListener { openDatePicker(datePickerFragment) }
         tvSelectImage.setOnClickListener { selectImage(this) }
         btCreateTask.setOnClickListener {
             if ((tvTaskInput.text.length) <= 0) tvTaskInput.error = "Cant't be empty!"
@@ -72,8 +72,8 @@ class TaskCreateFragment : Fragment(R.layout.fragment_task_create) {
     private fun createTask() {
         val todoBody = tvTaskInput.text.toString()
         val todoDesc = tvTaskDescInput.text.toString()
-        val todoDate = tvSelectDateDesc.text.toString()
-        val todoTime = tvSelectTimeDesc.text.toString()
+        val todoDate = tvSelectDate.text.toString()
+        val todoTime = tvSelectTime.text.toString()
         taskViewModel.createTask(todoBody, todoDesc, todoDate, todoTime, taskImage)
             .observe(viewLifecycleOwner, {
                 it?.let {
@@ -120,11 +120,12 @@ class TaskCreateFragment : Fragment(R.layout.fragment_task_create) {
             DATE_RESULT_CODE -> {
                 val date = data?.getSerializableExtra(EXTRA_DATE).toString()
                 pickedDate = date
-                tvSelectDateDesc.text = pickedDate
+                tvSelectDate.text = pickedDate
+                openTimePicker(timePickerFragment)
             }
             TIME_RESULT_CODE -> {
                 val time = data?.getSerializableExtra(EXTRA_TIME).toString()
-                tvSelectTimeDesc.text = time
+                tvSelectTime.text = time
             }
             Activity.RESULT_OK -> {
                 taskImage = data?.data

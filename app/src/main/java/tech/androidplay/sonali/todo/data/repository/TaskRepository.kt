@@ -131,6 +131,8 @@ class TaskRepository @Inject constructor(
         return try {
             ref.putFile(uri).await()
             val imageUrl = ref.downloadUrl.await().toString()
+            val newImgMap = mapOf("taskImage" to imageUrl)
+            updateTask(docRefId, newImgMap)
             ResultData.Success(imageUrl)
         } catch (e: Exception) {
             ResultData.Failed(e.message)

@@ -14,12 +14,12 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_task_edit.*
+import kotlinx.android.synthetic.main.layout_date_time.*
 import tech.androidplay.sonali.todo.R
 import tech.androidplay.sonali.todo.data.viewmodel.TaskViewModel
 import tech.androidplay.sonali.todo.ui.picker.DatePickerFragment
 import tech.androidplay.sonali.todo.ui.picker.TimePickerFragment
 import tech.androidplay.sonali.todo.utils.Constants
-import tech.androidplay.sonali.todo.utils.Constants.ALARM_ID
 import tech.androidplay.sonali.todo.utils.Constants.DATE_RESULT_CODE
 import tech.androidplay.sonali.todo.utils.Constants.TASK_DATE
 import tech.androidplay.sonali.todo.utils.Constants.TASK_DOC_BODY
@@ -72,7 +72,8 @@ class TaskEditFragment : Fragment(R.layout.fragment_task_edit) {
     lateinit var pendingIntent: PendingIntent
 
     private val taskViewModel: TaskViewModel by viewModels()
-    private var alarmId: String = ""
+
+    //    private var alarmId: String = ""
     private var taskId: String? = ""
     private var taskBody: String? = ""
     private var taskDesc: String? = ""
@@ -88,35 +89,28 @@ class TaskEditFragment : Fragment(R.layout.fragment_task_edit) {
     }
 
     private fun setUpScreen() {
-        if (alarmId.isNotEmpty())
-            loadTaskFromNotification(alarmId)
-        else {
-            taskId = arguments?.getString(TASK_DOC_ID)
-            logMessage(taskId!!)
-            taskBody = arguments?.getString(TASK_DOC_BODY)
-            taskDesc = arguments?.getString(TASK_DOC_DESC)
-            taskDate = arguments?.getString(TASK_DATE) ?: "Add Reminder"
-            taskTime = arguments?.getString(TASK_TIME) ?: "Add Reminder"
-            taskImage = arguments?.getString(TASK_IMAGE_URL)
+        taskId = arguments?.getString(TASK_DOC_ID)
+        logMessage(taskId!!)
+        taskBody = arguments?.getString(TASK_DOC_BODY)
+        taskDesc = arguments?.getString(TASK_DOC_DESC)
+        taskDate = arguments?.getString(TASK_DATE) ?: "Add Reminder"
+        taskTime = arguments?.getString(TASK_TIME) ?: "Add Reminder"
+        taskImage = arguments?.getString(TASK_IMAGE_URL)
 
-            etTaskBody.setText(taskBody)
-            etTaskDesc.setText(taskDesc)
-            tvSelectDate.text = taskDate
-            tvSelectTime.text = taskTime
-            taskImage?.let { imgTask.loadImageCircleCropped(it) }
-        }
+        etTaskBody.setText(taskBody)
+        etTaskDesc.setText(taskDesc)
+        tvSelectDate.text = taskDate
+        tvSelectTime.text = taskTime
+        taskImage?.let { imgTask.loadImageCircleCropped(it) }
     }
 
     private fun setListener() {
-        tvSelectDate.setOnClickListener { openDatePicker(datePickerFragment) }
+        layoutEditDateTime.setOnClickListener { openDatePicker(datePickerFragment) }
         btnSaveTask.setOnClickListener { saveTask() }
-        btnDeleteTask.setOnClickListener { deleteTask() }
+        btnDeleteTask.setOnClickListener { deleteTask(taskId) }
         imgTask.setOnClickListener { selectImage(this) }
     }
 
-    private fun loadTaskFromNotification(alarmId: String) {
-
-    }
 
     private fun saveTask() {
         val taskBody = etTaskBody.text.toString()
@@ -144,14 +138,14 @@ class TaskEditFragment : Fragment(R.layout.fragment_task_edit) {
     }
 
 
-    private fun deleteTask() {
+    private fun deleteTask(docId: String?) {
         dialog.setPositiveButton("Yes") { dialogInterface, _ ->
-            taskViewModel.deleteTask(taskId)
-            val requestCode = taskId!!.generateRequestCode()
+            val requestCode = docId!!.generateRequestCode()
+            taskViewModel.deleteTask(docId)
             cancelAlarmedNotification(requestCode)
-            showSnack(requireView(), "Task Deleted")
             findNavController().navigate(R.id.action_taskEditFragment_to_taskFragment)
             dialogInterface.dismiss()
+            showToast(requireContext(), "Task deleted.")
         }.create().show()
     }
 

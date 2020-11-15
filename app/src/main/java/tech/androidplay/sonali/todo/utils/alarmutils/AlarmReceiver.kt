@@ -12,7 +12,6 @@ import dagger.hilt.android.AndroidEntryPoint
 import tech.androidplay.sonali.todo.di.HiltBroadcastReceiver
 import tech.androidplay.sonali.todo.utils.Constants
 import tech.androidplay.sonali.todo.utils.Constants.ALARM_DESCRIPTION
-import tech.androidplay.sonali.todo.utils.Constants.ALARM_ID
 import tech.androidplay.sonali.todo.utils.Constants.ALARM_TEXT
 import tech.androidplay.sonali.todo.utils.Constants.ANDROID_OREO
 import tech.androidplay.sonali.todo.utils.Constants.NOTIFICATION_ID
@@ -75,7 +74,7 @@ class AlarmReceiver : HiltBroadcastReceiver() {
     }
 
     companion object {
-        var alarmId = ""
+        /*var alarmId = ""*/
         var alarmText = ""
         var alarmDescription = ""
     }
