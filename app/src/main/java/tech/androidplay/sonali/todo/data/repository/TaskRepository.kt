@@ -107,23 +107,22 @@ class TaskRepository @Inject constructor(
         }
     }
 
+    suspend fun changeTaskStatus(taskId: String, map: Map<String, Boolean>) {
+        taskListRef.document(taskId)
+            .update(map)
+            .await()
+    }
 
-    suspend fun updateTask(taskId: String, map: Map<String, Any>) {
-        try {
-            taskListRef.document(taskId)
-                .update(map)
-                .await()
-        } catch (e: Exception) {
-        }
+    suspend fun updateTask(taskId: String, map: Map<String, Any?>) {
+        taskListRef.document(taskId)
+            .update(map)
+            .await()
     }
 
     suspend fun deleteTask(docId: String) {
-        try {
-            taskListRef.document(docId)
-                .delete()
-                .await()
-        } catch (e: Exception) {
-        }
+        taskListRef.document(docId)
+            .delete()
+            .await()
     }
 
     suspend fun uploadImage(uri: Uri, docRefId: String): ResultData<String> {
@@ -132,6 +131,8 @@ class TaskRepository @Inject constructor(
         return try {
             ref.putFile(uri).await()
             val imageUrl = ref.downloadUrl.await().toString()
+            val newImgMap = mapOf("taskImage" to imageUrl)
+            updateTask(docRefId, newImgMap)
             ResultData.Success(imageUrl)
         } catch (e: Exception) {
             ResultData.Failed(e.message)

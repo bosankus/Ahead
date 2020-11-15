@@ -10,11 +10,17 @@ import javax.inject.Inject
  * Created by Androidplay
  * Author: Ankush
  * On: 4/22/2020, 5:52 AM
+ * *************************
+ * Test Cases:
+ * The input for creating account and login is not valid if:
+ * ...the username (i.e email id) already exists
+ * ...the password is less than 6 letters
+ * ...the username/password field is empty
+ * *************************
+ * The input for resetting password is invalid if:
+ * ...the username is not registered, no reset email will go
+ * ...the username field is empty
  */
-
-// Google Sign in:
-// Client ID: 768552120145-abp9v8hb05n3skksjg44jgblsnkudan7.apps.googleusercontent.com
-// Client Secret: GiFS-xS6M9M3-kmY8mKgclpV
 
 class AuthRepository @Inject constructor(
     private val firebaseAuth: FirebaseAuth

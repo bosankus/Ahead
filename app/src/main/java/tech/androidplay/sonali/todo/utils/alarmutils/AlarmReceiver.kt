@@ -36,8 +36,8 @@ class AlarmReceiver : HiltBroadcastReceiver() {
     override fun onReceive(context: Context?, intent: Intent?) {
         super.onReceive(context, intent)
         intent?.let {
-            alarmText = it.extras?.get(ALARM_TEXT).toString()
-            alarmDescription = it.extras?.get(ALARM_DESCRIPTION).toString()
+            alarmText = "${it.extras?.get(ALARM_TEXT)}"
+            alarmDescription = "${it.extras?.get(ALARM_DESCRIPTION)}"
         }
         showNotification(context, alarmText, alarmDescription)
     }
@@ -69,12 +69,12 @@ class AlarmReceiver : HiltBroadcastReceiver() {
         ).apply {
             lightColor = Color.YELLOW
             setShowBadge(true)
-
         }
         notificationManager.createNotificationChannel(channel)
     }
 
     companion object {
+        /*var alarmId = ""*/
         var alarmText = ""
         var alarmDescription = ""
     }

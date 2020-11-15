@@ -44,7 +44,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun navigateToGlobalFragment(intent: Intent) {
         if (intent.action == ACTION_SHOW_TASK_FRAGMENT)
-            navHostFragment.findNavController().navigate(R.id.action_global_taskCreateFragment)
+            navHostFragment.findNavController().navigate(R.id.action_global_taskFragment)
     }
 }
 

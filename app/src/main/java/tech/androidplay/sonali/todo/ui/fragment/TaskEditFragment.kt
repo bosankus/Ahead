@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.AlarmManager
 import android.app.AlertDialog
+import android.app.PendingIntent
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -13,6 +14,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_task_edit.*
+import kotlinx.android.synthetic.main.layout_date_time.*
 import tech.androidplay.sonali.todo.R
 import tech.androidplay.sonali.todo.data.viewmodel.TaskViewModel
 import tech.androidplay.sonali.todo.ui.picker.DatePickerFragment
@@ -24,7 +26,6 @@ import tech.androidplay.sonali.todo.utils.Constants.TASK_DOC_BODY
 import tech.androidplay.sonali.todo.utils.Constants.TASK_DOC_DESC
 import tech.androidplay.sonali.todo.utils.Constants.TASK_DOC_ID
 import tech.androidplay.sonali.todo.utils.Constants.TASK_IMAGE_URL
-import tech.androidplay.sonali.todo.utils.Constants.TASK_STATUS
 import tech.androidplay.sonali.todo.utils.Constants.TASK_TIME
 import tech.androidplay.sonali.todo.utils.Constants.TIME_RESULT_CODE
 import tech.androidplay.sonali.todo.utils.Extensions.loadImageCircleCropped
@@ -32,6 +33,7 @@ import tech.androidplay.sonali.todo.utils.Extensions.openDatePicker
 import tech.androidplay.sonali.todo.utils.Extensions.openTimePicker
 import tech.androidplay.sonali.todo.utils.Extensions.selectImage
 import tech.androidplay.sonali.todo.utils.ResultData
+import tech.androidplay.sonali.todo.utils.UIHelper.logMessage
 import tech.androidplay.sonali.todo.utils.UIHelper.showSnack
 import tech.androidplay.sonali.todo.utils.UIHelper.showToast
 import tech.androidplay.sonali.todo.utils.alarmutils.cancelAlarmedNotification
@@ -47,6 +49,7 @@ import javax.inject.Inject
  * Email: ankush@androidplay.in
  */
 
+@SuppressLint("SetTextI18n")
 @AndroidEntryPoint
 class TaskEditFragment : Fragment(R.layout.fragment_task_edit) {
 
@@ -65,11 +68,15 @@ class TaskEditFragment : Fragment(R.layout.fragment_task_edit) {
     @Inject
     lateinit var calendar: Calendar
 
+    @Inject
+    lateinit var pendingIntent: PendingIntent
+
     private val taskViewModel: TaskViewModel by viewModels()
+
+    //    private var alarmId: String = ""
     private var taskId: String? = ""
     private var taskBody: String? = ""
     private var taskDesc: String? = ""
-    private var taskStatus: Boolean? = false
     private var taskDate: String? = ""
     private var taskTime: String? = ""
     private var taskImage: String? = ""
@@ -83,9 +90,9 @@ class TaskEditFragment : Fragment(R.layout.fragment_task_edit) {
 
     private fun setUpScreen() {
         taskId = arguments?.getString(TASK_DOC_ID)
+        logMessage(taskId!!)
         taskBody = arguments?.getString(TASK_DOC_BODY)
         taskDesc = arguments?.getString(TASK_DOC_DESC)
-        taskStatus = arguments?.getBoolean(TASK_STATUS)
         taskDate = arguments?.getString(TASK_DATE) ?: "Add Reminder"
         taskTime = arguments?.getString(TASK_TIME) ?: "Add Reminder"
         taskImage = arguments?.getString(TASK_IMAGE_URL)
@@ -98,10 +105,9 @@ class TaskEditFragment : Fragment(R.layout.fragment_task_edit) {
     }
 
     private fun setListener() {
-        tvSelectDate.setOnClickListener { openDatePicker(datePickerFragment) }
-        tvSelectTime.setOnClickListener { openTimePicker(timePickerFragment) }
+        layoutEditDateTime.setOnClickListener { openDatePicker(datePickerFragment) }
         btnSaveTask.setOnClickListener { saveTask() }
-        btnDeleteTask.setOnClickListener { deleteTask() }
+        btnDeleteTask.setOnClickListener { deleteTask(taskId) }
         imgTask.setOnClickListener { selectImage(this) }
     }
 
@@ -111,7 +117,9 @@ class TaskEditFragment : Fragment(R.layout.fragment_task_edit) {
         val taskDesc = etTaskDesc.text.toString()
         val todoDate = tvSelectDate.text.toString()
         val todoTime = tvSelectTime.text.toString()
-        taskViewModel.updateTask(taskId, taskStatus!!, taskBody, taskDesc, todoDate, todoTime)
+        taskViewModel.updateTask(taskId!!, taskBody, taskDesc, todoDate, todoTime)
+        val requestCode = taskId!!.generateRequestCode()
+        startAlarmedNotification(requestCode, taskBody, taskDesc, calendar, alarmManager)
         showSnack(requireView(), "Task Saved")
     }
 
@@ -130,14 +138,14 @@ class TaskEditFragment : Fragment(R.layout.fragment_task_edit) {
     }
 
 
-    private fun deleteTask() {
+    private fun deleteTask(docId: String?) {
         dialog.setPositiveButton("Yes") { dialogInterface, _ ->
-            taskViewModel.deleteTask(taskId)
-            val requestCode = taskId!!.generateRequestCode()
+            val requestCode = docId!!.generateRequestCode()
+            taskViewModel.deleteTask(docId)
             cancelAlarmedNotification(requestCode)
-            showSnack(requireView(), "Task Deleted")
             findNavController().navigate(R.id.action_taskEditFragment_to_taskFragment)
             dialogInterface.dismiss()
+            showToast(requireContext(), "Task deleted.")
         }.create().show()
     }
 
@@ -148,6 +156,7 @@ class TaskEditFragment : Fragment(R.layout.fragment_task_edit) {
                 val date = data?.getSerializableExtra(Constants.EXTRA_DATE).toString()
                 pickedDate = date
                 tvSelectDate.text = pickedDate
+                openTimePicker(timePickerFragment)
             }
             TIME_RESULT_CODE -> {
                 val time = data?.getSerializableExtra(Constants.EXTRA_TIME).toString()

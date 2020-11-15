@@ -58,32 +58,26 @@ class TaskViewModel @ViewModelInject constructor(private val taskRepository: Tas
         return response
     }
 
+    fun changeTaskStatus(taskId: String, status: Boolean) {
+        val map: Map<String, Boolean> = mapOf("isCompleted" to status)
+        viewModelScope.launch { taskRepository.changeTaskStatus(taskId, map) }
+    }
+
     fun updateTask(
-        taskId: String?,
-        status: Boolean,
+        taskId: String,
         todoBody: String? = "",
         todoDesc: String? = "",
         todoDate: String? = "",
         todoTime: String? = "",
     ) {
-        val map: Map<String, Any> =
-            if (!todoBody.isNullOrEmpty() && !todoDesc.isNullOrEmpty() && !todoDate.isNullOrEmpty() && !todoTime.isNullOrEmpty())
-                mapOf(
-                    "todoBody" to todoBody,
-                    "todoDesc" to todoDesc,
-                    "todoDate" to todoDate,
-                    "todoTime" to todoTime,
-                    "updatedOn" to getCurrentTimestamp()
-                )
-            else mapOf(
-                "isCompleted" to status,
-                "updatedOn" to getCurrentTimestamp()
-            )
-        taskId?.let {
-            viewModelScope.launch {
-                taskRepository.updateTask(taskId, map)
-            }
-        }
+        val map: Map<String, Any?> = mapOf(
+            "todoBody" to todoBody,
+            "todoDesc" to todoDesc,
+            "todoDate" to todoDate,
+            "todoTime" to todoTime,
+            "updatedOn" to getCurrentTimestamp()
+        )
+        viewModelScope.launch { taskRepository.updateTask(taskId, map) }
     }
 
     fun uploadImage(uri: Uri?, taskId: String) = uri?.let {

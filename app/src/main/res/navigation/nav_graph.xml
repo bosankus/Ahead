@@ -6,8 +6,8 @@
     app:startDestination="@id/splashFragment">
 
     <action
-        android:id="@+id/action_global_taskCreateFragment"
-        app:destination="@id/taskCreateFragment"
+        android:id="@+id/action_global_taskFragment"
+        app:destination="@id/taskFragment"
         app:launchSingleTop="true" />
 
     <fragment

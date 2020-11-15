@@ -25,4 +25,7 @@
     <string name="edit">Edit</string>
     <string name="save_task">Save Task</string>
     <string name="delete_task">Delete Task</string>
+    <string name="attach_image">Attach Image</string>
+    <string name="date">Date</string>
+    <string name="time">Time</string>
 </resources>

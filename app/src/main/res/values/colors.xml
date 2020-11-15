@@ -14,6 +14,6 @@
 
     <!--    Scrapped Colors-->
     <color name="dribblePink">#E94D88</color>
-    <color name="dribblePinkLight">#F998BD</color>
+    <!--<color name="dribblePinkLight">#F998BD</color>-->
     <color name="shimmerColor">#dddddd</color>
 </resources>
