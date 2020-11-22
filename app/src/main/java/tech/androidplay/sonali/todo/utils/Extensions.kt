@@ -3,7 +3,11 @@ package tech.androidplay.sonali.todo.utils
 import android.widget.ImageView
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.CenterCrop
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.github.dhaval2404.imagepicker.ImagePicker
+import tech.androidplay.sonali.todo.R
 import tech.androidplay.sonali.todo.ui.picker.DatePickerFragment
 import tech.androidplay.sonali.todo.ui.picker.TimePickerFragment
 
@@ -28,6 +32,8 @@ object Extensions {
         Glide.with(this.context)
             .load(url)
             .circleCrop()
+            .transform(CenterCrop(), RoundedCorners(20))
+            .transition(DrawableTransitionOptions.withCrossFade())
             .into(this)
             .clearOnDetach()
     }
@@ -45,4 +51,9 @@ object Extensions {
             datePickerFragment.show(parentFragmentManager, "DATE PICKER")
         }
     }
+
+    fun String.compareWith(newString: String): Boolean {
+        return this.compareTo(newString) == 0
+    }
+
 }

@@ -25,6 +25,20 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <ImageView
+            android:id="@+id/imgAllTaskMenu"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="20dp"
+            android:padding="5dp"
+            android:background="?attr/selectableItemBackground"
+            android:src="@drawable/ic_menu"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="@+id/tvAllTasksHeader"
+            app:layout_constraintTop_toTopOf="@+id/tvAllTasksHeader"
+            tools:ignore="ContentDescription" />
+
+
         <com.iammert.library.ui.multisearchviewlib.MultiSearchView
             android:id="@+id/searchTask"
             android:layout_width="match_parent"
@@ -57,10 +71,10 @@
             android:background="@color/white"
             android:orientation="vertical"
             android:visibility="gone"
-            app:shimmer_auto_start="true"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvTodayHeader">
+            app:layout_constraintTop_toBottomOf="@+id/tvTodayHeader"
+            app:shimmer_auto_start="true">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -135,10 +149,10 @@
         android:id="@+id/efabAddTask"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
         android:layout_margin="20sp"
         android:backgroundTint="@color/dribblePink"
         android:fontFamily="@font/jost_bold"
-        android:layout_gravity="bottom|end"
         android:minHeight="1dp"
         android:text="@string/add_task"
         android:textColor="@color/white"

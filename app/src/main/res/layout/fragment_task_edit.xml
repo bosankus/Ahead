@@ -28,6 +28,22 @@
             android:layout_width="45dp"
             android:layout_height="45dp"
             android:layout_marginEnd="@dimen/padding_16dp"
+            android:visibility="invisible"
+            android:background="?attr/selectableItemBackground"
+            app:layout_constraintBottom_toBottomOf="@+id/tvEditTasksHeader"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tvEditTasksHeader"
+            tools:ignore="ContentDescription" />
+
+        <ImageView
+            android:id="@+id/imgTaskNoImage"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:src="@drawable/ic_attach"
+            android:padding="8dp"
+            android:visibility="invisible"
+            android:background="?attr/selectableItemBackground"
+            android:layout_marginEnd="@dimen/padding_16dp"
             app:layout_constraintBottom_toBottomOf="@+id/tvEditTasksHeader"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/tvEditTasksHeader"

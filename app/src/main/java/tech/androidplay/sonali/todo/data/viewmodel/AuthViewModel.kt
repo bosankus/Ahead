@@ -28,4 +28,8 @@ class AuthViewModel @ViewModelInject constructor(private val authRepository: Aut
     fun resetPassword(email: String) {
         authRepository.resetPassword(email)
     }
+
+    fun logoutUser() {
+        authRepository.signOut()
+    }
 }

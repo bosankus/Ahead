@@ -167,7 +167,6 @@
             android:textColor="@color/dribblePink"
             android:textSize="18sp"
             app:drawableStartCompat="@drawable/ic_attach"
-            app:drawableTint="@color/dribblePink"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/clTaskInput" />
 

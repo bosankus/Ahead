@@ -28,4 +28,10 @@
     <string name="attach_image">Attach Image</string>
     <string name="date">Date</string>
     <string name="time">Time</string>
+    <string name="edit_task">Edit Task</string>
+    <string name="attach_file">Attach file</string>
+    <string name="category">Category</string>
+    <string name="add_alarm_time">Add alarm time</string>
+    <string name="logout">Logout</string>
+    <string name="share">Share</string>
 </resources>

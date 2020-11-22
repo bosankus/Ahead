@@ -1,9 +1,12 @@
 package tech.androidplay.sonali.todo.ui.fragment
 
+import android.annotation.SuppressLint
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.View
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
+import android.widget.PopupMenu
 import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -14,9 +17,11 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_task.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import tech.androidplay.sonali.todo.R
+import tech.androidplay.sonali.todo.data.viewmodel.AuthViewModel
 import tech.androidplay.sonali.todo.data.viewmodel.TaskViewModel
 import tech.androidplay.sonali.todo.ui.adapter.TodoAdapter
 import tech.androidplay.sonali.todo.utils.ResultData
+import tech.androidplay.sonali.todo.utils.UIHelper.showToast
 import javax.inject.Inject
 
 /**
@@ -32,7 +37,11 @@ class TaskFragment : Fragment(R.layout.fragment_task) {
 
     @Inject
     lateinit var todoAdapter: TodoAdapter
+
+    @Inject
+    lateinit var sharedPreferences: SharedPreferences
     private val taskViewModel: TaskViewModel by viewModels()
+    private val authViewModel: AuthViewModel by viewModels()
     private lateinit var showFab: Animation
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -81,6 +90,8 @@ class TaskFragment : Fragment(R.layout.fragment_task) {
                 todoAdapter.filterList(s)
             }
         })
+
+        imgAllTaskMenu.setOnClickListener { showPopupMenu(imgAllTaskMenu) }
     }
 
     private fun loadTasks() {
@@ -105,4 +116,27 @@ class TaskFragment : Fragment(R.layout.fragment_task) {
         })
     }
 
+    private fun showPopupMenu(view: View) {
+        val popupMenu = PopupMenu(requireContext(), view)
+        popupMenu.menuInflater.inflate(R.menu.fragment_task_menu, popupMenu.menu)
+        popupMenu.show()
+
+        popupMenu.setOnMenuItemClickListener {
+            when (it.itemId) {
+                R.id.menu_logout -> {
+                    showToast(requireContext(), "You are logged out.")
+                    logOutUser()
+                }
+                R.id.menu_share_app -> {}
+            }
+            true
+        }
+    }
+
+    @SuppressLint("CommitPrefEdits")
+    private fun logOutUser() {
+        sharedPreferences.edit().clear()
+        authViewModel.logoutUser()
+        findNavController().navigate(R.id.action_taskFragment_to_authFragment)
+    }
 }

@@ -18,6 +18,7 @@
         <item name="android:colorForeground">@color/grey1</item>
         <item name="android:textColorPrimary">@color/grey3</item>
         <item name="android:textColorSecondary">@color/grey2</item>
+        <item name="fontFamily">@font/calibre</item>
     </style>
 
 

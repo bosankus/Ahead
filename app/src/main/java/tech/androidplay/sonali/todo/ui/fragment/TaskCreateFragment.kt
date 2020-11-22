@@ -74,6 +74,7 @@ class TaskCreateFragment : Fragment(R.layout.fragment_task_create) {
         val todoDesc = tvTaskDescInput.text.toString()
         val todoDate = tvSelectDate.text.toString()
         val todoTime = tvSelectTime.text.toString()
+
         taskViewModel.createTask(todoBody, todoDesc, todoDate, todoTime, taskImage)
             .observe(viewLifecycleOwner, {
                 it?.let {

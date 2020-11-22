@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:background="?attr/selectableItemBackground"
+    android:orientation="horizontal">
 
     <TextView
         android:id="@+id/tvSelectDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="?attr/selectableItemBackground"
         android:drawablePadding="5dp"
         android:fontFamily="@font/calibre_semi"
         android:paddingTop="6dp"
@@ -17,16 +18,13 @@
         android:textColor="@color/dribblePink"
         android:textSize="16sp"
         app:drawableStartCompat="@drawable/ic_date"
-        app:drawableTint="@color/dribblePink"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:drawableTint="@color/dribblePink" />
 
     <TextView
         android:id="@+id/tvSelectTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:background="?attr/selectableItemBackground"
         android:drawablePadding="5dp"
         android:fontFamily="@font/calibre_semi"
         android:paddingTop="6dp"
@@ -35,8 +33,6 @@
         android:textColor="@color/dribblePink"
         android:textSize="15sp"
         app:drawableStartCompat="@drawable/ic_time"
-        app:drawableTint="@color/dribblePink"
-        app:layout_constraintStart_toEndOf="@+id/tvSelectDate"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:drawableTint="@color/dribblePink" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

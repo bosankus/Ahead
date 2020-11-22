@@ -59,7 +59,7 @@ class AuthRepository @Inject constructor(
 
 
     // Sign out user
-    /*fun signOut() {
+    fun signOut() {
         firebaseAuth.signOut()
-    }*/
+    }
 }
