@@ -6,9 +6,12 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
+import android.media.AudioAttributes
+import android.net.Uri
 import android.os.Build
 import androidx.core.app.NotificationCompat
 import dagger.hilt.android.AndroidEntryPoint
+import tech.androidplay.sonali.todo.R
 import tech.androidplay.sonali.todo.di.HiltBroadcastReceiver
 import tech.androidplay.sonali.todo.utils.Constants
 import tech.androidplay.sonali.todo.utils.Constants.ALARM_DESCRIPTION
@@ -48,7 +51,7 @@ class AlarmReceiver : HiltBroadcastReceiver() {
                     as NotificationManager
 
         if (Build.VERSION.SDK_INT >= ANDROID_OREO)
-            createNotification(notificationManager)
+            createNotification(context, notificationManager)
 
         // Notification button
         notificationBuilder.apply {
@@ -61,13 +64,21 @@ class AlarmReceiver : HiltBroadcastReceiver() {
         notificationManager.notify(NOTIFICATION_ID, notificationBuilder.build())
     }
 
-    private fun createNotification(notificationManager: NotificationManager) {
+    private fun createNotification(context: Context, notificationManager: NotificationManager) {
+        val uri = Uri.parse("android.resource://" + context.packageName + "/" + R.raw.noti_sound)
+
+        val attributes = AudioAttributes.Builder()
+            .setUsage(AudioAttributes.USAGE_NOTIFICATION_RINGTONE)
+            .build()
+
         val channel = NotificationChannel(
             Constants.NOTIFICATION_CHANNEL_ID,
             Constants.NOTIFICATION_CHANNEL_NAME,
             NotificationManager.IMPORTANCE_HIGH
         ).apply {
             lightColor = Color.YELLOW
+            setSound(uri, attributes)
+            enableVibration(true)
             setShowBadge(true)
         }
         notificationManager.createNotificationChannel(channel)

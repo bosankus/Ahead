@@ -16,6 +16,8 @@ import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_task_edit.*
 import kotlinx.android.synthetic.main.layout_date_time.*
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.InternalCoroutinesApi
 import tech.androidplay.sonali.todo.R
 import tech.androidplay.sonali.todo.data.viewmodel.TaskViewModel
 import tech.androidplay.sonali.todo.ui.picker.DatePickerFragment
@@ -51,6 +53,8 @@ import javax.inject.Inject
  * Email: ankush@androidplay.in
  */
 
+@ExperimentalCoroutinesApi
+@InternalCoroutinesApi
 @SuppressLint("SetTextI18n")
 @AndroidEntryPoint
 class TaskEditFragment : Fragment(R.layout.fragment_task_edit) {

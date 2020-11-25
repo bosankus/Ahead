@@ -57,11 +57,6 @@ class ApplicationModule {
 
     @Singleton
     @Provides
-    fun provideUserDisplayImage(sharedPreferences: SharedPreferences) =
-        sharedPreferences.getString(USER_DISPLAY_IMAGE, "") ?: ""
-
-    @Singleton
-    @Provides
     fun providesCalender(): Calendar = Calendar.getInstance()
 
     @Singleton
@@ -113,4 +108,6 @@ class ApplicationModule {
         },
         PendingIntent.FLAG_UPDATE_CURRENT
     )
+
+
 }

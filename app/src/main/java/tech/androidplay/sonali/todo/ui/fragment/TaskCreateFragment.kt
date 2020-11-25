@@ -12,6 +12,8 @@ import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_task_create.*
 import kotlinx.android.synthetic.main.layout_date_time.*
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.InternalCoroutinesApi
 import tech.androidplay.sonali.todo.R
 import tech.androidplay.sonali.todo.data.viewmodel.TaskViewModel
 import tech.androidplay.sonali.todo.ui.picker.DatePickerFragment
@@ -35,7 +37,8 @@ import javax.inject.Inject
  * Author: Ankush
  * On: 5/3/2020, 12:22 PM
  */
-
+@ExperimentalCoroutinesApi
+@InternalCoroutinesApi
 @AndroidEntryPoint
 class TaskCreateFragment : Fragment(R.layout.fragment_task_create) {
 

@@ -16,6 +16,7 @@ import com.iammert.library.ui.multisearchviewlib.MultiSearchView
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_task.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.InternalCoroutinesApi
 import tech.androidplay.sonali.todo.R
 import tech.androidplay.sonali.todo.data.viewmodel.AuthViewModel
 import tech.androidplay.sonali.todo.data.viewmodel.TaskViewModel
@@ -33,6 +34,7 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 @ExperimentalCoroutinesApi
+@InternalCoroutinesApi
 class TaskFragment : Fragment(R.layout.fragment_task) {
 
     @Inject

@@ -12,6 +12,8 @@ object Constants {
 
     // For default log tag
     const val GLOBAL_TAG = "Androidplay"
+    const val DATABASE_NAME = "think_db"
+    const val BASE_URL = "https://pixabay.com/api/"
 
     // For firestore collection
     const val FIRESTORE_COLLECTION = "Tasks"
