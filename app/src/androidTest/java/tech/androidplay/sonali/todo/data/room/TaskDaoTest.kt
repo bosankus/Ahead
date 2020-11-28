@@ -86,4 +86,11 @@ class TaskDaoTest {
 
         assertThat(allTask).doesNotContain(newTask)
     }
+
+    @Test
+    fun fetchTaskItem() {
+        val allTask = dao.observeAllTaskItem().getOrAwaitValue()
+
+        assertThat(allTask).isEmpty()
+    }
 }

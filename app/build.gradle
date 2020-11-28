@@ -23,7 +23,7 @@ android {
 
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
@@ -65,6 +65,7 @@ dependencies {
     testImplementation 'junit:junit:4.13.1'
     testImplementation "com.google.truth:truth:1.1"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0"
+    testImplementation "android.arch.core:core-testing:1.1.1"
     androidTestImplementation "androidx.arch.core:core-testing:2.1.0"
     androidTestImplementation 'org.jetbrains.kotlinx:kotlinx-coroutines-test:1.4.1'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
@@ -78,6 +79,8 @@ dependencies {
     // Retrofit
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
+    implementation 'com.squareup.okhttp3:logging-interceptor:4.8.1'
 
     // Room
     implementation "androidx.room:room-runtime:2.2.5"
@@ -91,7 +94,7 @@ dependencies {
 
     // Kotlin components
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.3.0-beta01"
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.4.10"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.4.20"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.0-beta01"
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.3.0-beta01"
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.1'

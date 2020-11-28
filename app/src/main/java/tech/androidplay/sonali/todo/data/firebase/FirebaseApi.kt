@@ -12,7 +12,7 @@ import tech.androidplay.sonali.todo.utils.ResultData
  * On: 24/Nov/2020
  * Email: ankush@androidplay.in
  */
-interface FirebaseImpl {
+interface FirebaseApi {
 
     // For User authentication
     suspend fun logInUser(email: String, password: String): ResultData<FirebaseUser>
@@ -32,6 +32,7 @@ interface FirebaseImpl {
     suspend fun createTaskWithoutImage(
         todoBody: String, todoDesc: String, todoDate: String, todoTime: String,
     ): ResultData<String>
+    suspend fun provideFeedback(topic: String, description: String): ResultData<String>
 
     // For Firebase storage
     suspend fun uploadImage(uri: Uri, docRefId: String): ResultData<String>

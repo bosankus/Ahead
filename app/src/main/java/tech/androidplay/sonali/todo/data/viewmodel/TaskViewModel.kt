@@ -20,7 +20,9 @@ import tech.androidplay.sonali.todo.utils.UIHelper.getCurrentTimestamp
 
 @ExperimentalCoroutinesApi
 @InternalCoroutinesApi
-class TaskViewModel @ViewModelInject constructor(private val firebaseRepository: FirebaseRepository) :
+class TaskViewModel @ViewModelInject constructor(
+    private val firebaseRepository: FirebaseRepository
+) :
     ViewModel() {
 
     fun createTask(
@@ -45,16 +47,21 @@ class TaskViewModel @ViewModelInject constructor(private val firebaseRepository:
             }
         else liveData {
             emit(ResultData.Loading)
-            emit(firebaseRepository.createTaskWithoutImage(todoName, todoDesc, todoDate, todoTime))
+            emit(
+                firebaseRepository.createTaskWithoutImage(
+                    todoName,
+                    todoDesc,
+                    todoDate,
+                    todoTime
+                )
+            )
         }
     }
 
     fun fetchTasksRealtime(): MutableLiveData<ResultData<MutableList<Todo>>> {
         val response = MutableLiveData<ResultData<MutableList<Todo>>>()
         viewModelScope.launch {
-            firebaseRepository.fetchTaskRealtime().collect {
-                response.postValue(it)
-            }
+            firebaseRepository.fetchTaskRealtime().collect { response.value = it }
         }
         return response
     }
@@ -89,9 +96,12 @@ class TaskViewModel @ViewModelInject constructor(private val firebaseRepository:
     }!!
 
 
-    fun deleteTask(docId: String?) {
+    fun deleteTask(docId: String?) =
         docId?.let { viewModelScope.launch { firebaseRepository.deleteTask(docId) } }
-    }
 
+    fun provideFeedback(topic: String, description: String) = liveData {
+        emit(ResultData.Loading)
+        emit(firebaseRepository.provideFeedback(topic, description))
+    }
 }
 

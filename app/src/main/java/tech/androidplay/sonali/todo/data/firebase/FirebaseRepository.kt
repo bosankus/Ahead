@@ -4,6 +4,7 @@ import android.net.Uri
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.CollectionReference
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.google.firebase.storage.StorageReference
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -12,6 +13,8 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.tasks.await
 import tech.androidplay.sonali.todo.data.model.Todo
+import tech.androidplay.sonali.todo.utils.Constants.FEEDBACK_COLLECTION
+import tech.androidplay.sonali.todo.utils.Constants.FIRESTORE_COLLECTION
 import tech.androidplay.sonali.todo.utils.ResultData
 import tech.androidplay.sonali.todo.utils.UIHelper.getCurrentTimestamp
 import javax.inject.Inject
@@ -26,10 +29,12 @@ import javax.inject.Inject
 class FirebaseRepository @Inject constructor(
     private val firebaseAuth: FirebaseAuth,
     private val storageReference: StorageReference,
-    private val taskListRef: CollectionReference,
-) : FirebaseImpl {
+    private val firestore: FirebaseFirestore,
+) : FirebaseApi {
 
     private val userDetails = firebaseAuth.currentUser
+    private val taskListRef = firestore.collection(FIRESTORE_COLLECTION)
+    private val feedbackReference = firestore.collection(FEEDBACK_COLLECTION)
 
     private val query: Query = taskListRef
         .whereEqualTo("id", userDetails?.uid)
@@ -183,6 +188,22 @@ class FirebaseRepository @Inject constructor(
             ResultData.Success(docRef.id)
         } catch (e: Exception) {
             ResultData.Failed(false.toString())
+        }
+    }
+
+    override suspend fun provideFeedback(topic: String, description: String): ResultData<String> {
+        val feedbackMap = hashMapOf(
+            "user" to userDetails?.email,
+            "topic" to topic,
+            "description" to description
+        )
+        return try {
+            val feedback = feedbackReference
+                .add(feedbackMap)
+                .await()
+            ResultData.Success(feedback.id)
+        } catch (e: Exception) {
+            ResultData.Failed(e.message)
         }
     }
 }

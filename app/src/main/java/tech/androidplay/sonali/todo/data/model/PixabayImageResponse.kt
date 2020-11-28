@@ -3,9 +3,9 @@ package tech.androidplay.sonali.todo.data.model
 
 import com.google.gson.annotations.SerializedName
 
-data class ImageResponse(
+data class PixabayImageResponse(
     @SerializedName("imageResults")
-    val imageResults: List<ImageResults>?,
+    val imageResults: List<PixabayImageResults>?,
     @SerializedName("total")
     val total: Int?, // 206836
     @SerializedName("totalHits")

@@ -4,14 +4,17 @@ import android.os.Bundle
 import android.text.TextUtils
 import android.view.View
 import android.view.animation.AnimationUtils
+import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_auth.*
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import tech.androidplay.sonali.todo.R
 import tech.androidplay.sonali.todo.data.viewmodel.AuthViewModel
 import tech.androidplay.sonali.todo.utils.CacheManager
+import tech.androidplay.sonali.todo.utils.Extensions.hideKeyboard
 import tech.androidplay.sonali.todo.utils.ResultData
 import tech.androidplay.sonali.todo.utils.UIHelper.showSnack
 import tech.androidplay.sonali.todo.utils.UIHelper.showToast
@@ -24,12 +27,10 @@ import javax.inject.Inject
  * On: 24/Sep/2020
  * Email: ankush@androidplay.in
  */
-
+@ExperimentalCoroutinesApi
 @AndroidEntryPoint
 class AuthFragment : Fragment(R.layout.fragment_auth) {
 
-    @Inject
-    lateinit var cache: CacheManager
     private val authViewModel: AuthViewModel by viewModels()
     private var networkFlag: Boolean = false
     private val animFadeIn by lazy {
@@ -41,24 +42,30 @@ class AuthFragment : Fragment(R.layout.fragment_auth) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         setListeners()
+
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
+            activity?.finishAffinity()
+        }
     }
 
     private fun setListeners() {
         btnSignUpEmailPassword.setOnClickListener {
+            requireActivity().hideKeyboard()
             val userEmail = loginInputEmailTxt.text.toString()
             val userPassword = loginInputPasswordTxt.text.toString()
             signUpUser(userEmail, userPassword)
         }
 
         btnloginEmailPassword.setOnClickListener {
+            requireActivity().hideKeyboard()
             val userEmail = loginInputEmailTxt.text.toString()
             val userPassword = loginInputPasswordTxt.text.toString()
             login(userEmail, userPassword)
         }
 
         tvForgotPassword.setOnClickListener {
+            requireActivity().hideKeyboard()
             val userEmail = loginInputEmailTxt.text.toString()
             resetPassword(userEmail)
         }
@@ -100,17 +107,17 @@ class AuthFragment : Fragment(R.layout.fragment_auth) {
                     networkFlag = false
                 }
             )
-        } else showToast(requireContext(), "Please recheck your inputs")
+        } else showSnack(requireView(), "Please recheck your inputs")
     }
 
     private fun resetPassword(userEmail: String) {
-        if (validateInput(email = userEmail)) {
+        if (userEmail.isNotEmpty()) {
             authViewModel.resetPassword(userEmail)
             showSnack(
                 requireView(), "You will receive password " +
                         "reset mail if you are registered with us"
             )
-        }
+        } else loginInputEmailTxt.error = "Please put your login email"
     }
 
     private fun validateInput(email: String = "", password: String = ""): Boolean {
@@ -169,10 +176,5 @@ class AuthFragment : Fragment(R.layout.fragment_auth) {
             viewAnimation(btnloginEmailPassword, animFadeOut, true)
             viewAnimation(tvSignUpOption, animFadeOut, true)
         }
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        cache.clearCache(requireContext())
     }
 }

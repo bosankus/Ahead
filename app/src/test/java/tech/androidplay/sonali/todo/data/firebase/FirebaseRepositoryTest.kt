@@ -12,7 +12,7 @@ import tech.androidplay.sonali.todo.utils.ResultData
  * On: 25/Nov/2020
  * Email: ankush@androidplay.in
  */
-class FirebaseRepositoryTest : FirebaseImpl {
+class FirebaseRepositoryTest : FirebaseApi {
 
     override suspend fun logInUser(email: String, password: String): ResultData<FirebaseUser> {
         TODO("Not yet implemented")

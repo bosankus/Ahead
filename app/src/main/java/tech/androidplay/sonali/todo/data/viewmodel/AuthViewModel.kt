@@ -30,11 +30,11 @@ class AuthViewModel @ViewModelInject constructor(private val firebaseRepository:
         emit(firebaseRepository.logInUser(email, password))
     }
 
-    fun resetPassword(email: String) {
-        viewModelScope.launch { firebaseRepository.resetPassword(email) }
+    fun resetPassword(email: String) = viewModelScope.launch {
+        firebaseRepository.resetPassword(email)
     }
 
-    fun logoutUser() {
-        viewModelScope.launch { firebaseRepository.signOut() }
+    fun logoutUser() = viewModelScope.launch {
+        firebaseRepository.signOut()
     }
 }

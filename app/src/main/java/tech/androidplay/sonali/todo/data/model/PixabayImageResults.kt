@@ -3,7 +3,7 @@ package tech.androidplay.sonali.todo.data.model
 
 import com.google.gson.annotations.SerializedName
 
-data class ImageResults(
+data class PixabayImageResults(
     @SerializedName("comments")
     val comments: Int?, // 206
     @SerializedName("downloads")

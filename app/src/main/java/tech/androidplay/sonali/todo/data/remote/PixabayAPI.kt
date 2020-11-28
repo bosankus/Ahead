@@ -4,7 +4,7 @@ import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query
 import tech.androidplay.sonali.todo.BuildConfig
-import tech.androidplay.sonali.todo.data.model.ImageResponse
+import tech.androidplay.sonali.todo.data.model.PixabayImageResponse
 
 /**
  * Created by Androidplay
@@ -14,9 +14,9 @@ import tech.androidplay.sonali.todo.data.model.ImageResponse
  */
 interface PixabayAPI {
 
-    @GET("")
+    @GET("/api/")
     suspend fun searchForImage(
         @Query("q") searchQuery: String,
         @Query("key") apiKey: String = BuildConfig.PXB_API_KEY
-    ): Response<ImageResponse>
+    ): Response<PixabayImageResponse>
 }

@@ -1,0 +1,95 @@
+package tech.androidplay.sonali.todo.ui.fragment
+
+import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.view.animation.AnimationUtils
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.InternalCoroutinesApi
+import tech.androidplay.sonali.todo.R
+import tech.androidplay.sonali.todo.data.viewmodel.TaskViewModel
+import tech.androidplay.sonali.todo.databinding.FragmentFeedbackBinding
+import tech.androidplay.sonali.todo.utils.Extensions.hideKeyboard
+import tech.androidplay.sonali.todo.utils.ResultData
+import tech.androidplay.sonali.todo.utils.UIHelper.showSnack
+import tech.androidplay.sonali.todo.utils.UIHelper.showToast
+import tech.androidplay.sonali.todo.utils.UIHelper.viewAnimation
+
+/**
+ * Created by Androidplay
+ * Author: Ankush
+ * On: 28/Nov/2020
+ * Email: ankush@androidplay.in
+ */
+
+@ExperimentalCoroutinesApi
+@InternalCoroutinesApi
+@AndroidEntryPoint
+class FeedbackFragment : Fragment(R.layout.fragment_feedback) {
+
+    private lateinit var binding: FragmentFeedbackBinding
+    private val taskViewModel: TaskViewModel by viewModels()
+    private val animFadeIn by lazy {
+        AnimationUtils.loadAnimation(requireContext(), R.anim.fade_in_animation)
+    }
+    private val animFadeOut by lazy {
+        AnimationUtils.loadAnimation(requireContext(), R.anim.fade_out_animation)
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        binding = FragmentFeedbackBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        setListener()
+    }
+
+    private fun setListener() {
+        binding.btnProvideFeedback.setOnClickListener {
+            requireActivity().hideKeyboard()
+            val topic = binding.etFeedbackTopic.text.toString()
+            val description = binding.etFeedbackDescription.text.toString()
+            if (topic.isEmpty() || description.isEmpty()) showToast(
+                requireContext(),
+                "Fields can't be empty"
+            ) else sendFeedback(topic, description)
+        }
+    }
+
+    private fun sendFeedback(topic: String, description: String) {
+        taskViewModel.provideFeedback(topic, description).observe(viewLifecycleOwner, { result ->
+            result?.let {
+                when (it) {
+                    is ResultData.Loading -> showLoading()
+                    is ResultData.Success -> {
+                        binding.etFeedbackTopic.text = null
+                        binding.etFeedbackDescription.text = null
+                        hideLoading("Feedback submitted successfully")
+                    }
+                    is ResultData.Failed -> hideLoading(it.message.toString())
+                }
+            }
+        })
+    }
+
+    private fun showLoading() {
+        viewAnimation(binding.btnProvideFeedback, animFadeIn, false)
+        viewAnimation(binding.lottieFeedbackLoading, null, true)
+    }
+
+    private fun hideLoading(message: String = "") {
+        showSnack(requireView(), message)
+        viewAnimation(binding.btnProvideFeedback, animFadeOut, true)
+        viewAnimation(binding.lottieFeedbackLoading, null, false)
+    }
+}

@@ -8,7 +8,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.InternalCoroutinesApi
 import tech.androidplay.sonali.todo.data.model.Todo
 import tech.androidplay.sonali.todo.data.viewmodel.TaskViewModel
-import tech.androidplay.sonali.todo.databinding.LayoutMainTodoListBinding
+import tech.androidplay.sonali.todo.databinding.LayoutMainTaskListBinding
 import java.util.*
 import javax.inject.Inject
 
@@ -45,7 +45,7 @@ class TodoAdapter @Inject constructor(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TodoViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
-        val binding = LayoutMainTodoListBinding.inflate(layoutInflater, parent, false)
+        val binding = LayoutMainTaskListBinding.inflate(layoutInflater, parent, false)
         return TodoViewHolder(binding)
     }
 

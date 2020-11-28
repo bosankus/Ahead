@@ -22,6 +22,7 @@ import tech.androidplay.sonali.todo.utils.Constants.DATE_RESULT_CODE
 import tech.androidplay.sonali.todo.utils.Constants.EXTRA_DATE
 import tech.androidplay.sonali.todo.utils.Constants.EXTRA_TIME
 import tech.androidplay.sonali.todo.utils.Constants.TIME_RESULT_CODE
+import tech.androidplay.sonali.todo.utils.Extensions.hideKeyboard
 import tech.androidplay.sonali.todo.utils.Extensions.openDatePicker
 import tech.androidplay.sonali.todo.utils.Extensions.openTimePicker
 import tech.androidplay.sonali.todo.utils.Extensions.selectImage
@@ -66,6 +67,7 @@ class TaskCreateFragment : Fragment(R.layout.fragment_task_create) {
         layoutDateTime.setOnClickListener { openDatePicker(datePickerFragment) }
         tvSelectImage.setOnClickListener { selectImage(this) }
         btCreateTask.setOnClickListener {
+            requireActivity().hideKeyboard()
             if ((tvTaskInput.text.length) <= 0) tvTaskInput.error = "Cant't be empty!"
             else createTask()
         }
