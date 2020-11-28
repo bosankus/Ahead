@@ -4,10 +4,11 @@ import android.net.Uri
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import tech.androidplay.sonali.todo.data.firebase.FirebaseRepository
 import tech.androidplay.sonali.todo.data.model.Todo
-import tech.androidplay.sonali.todo.data.repository.TaskRepository
 import tech.androidplay.sonali.todo.utils.ResultData
 import tech.androidplay.sonali.todo.utils.UIHelper.getCurrentTimestamp
 
@@ -16,9 +17,13 @@ import tech.androidplay.sonali.todo.utils.UIHelper.getCurrentTimestamp
  * Author: Ankush
  * On: 5/6/2020, 1:39 AM
  */
-class TaskViewModel @ViewModelInject constructor(private val taskRepository: TaskRepository) :
-    ViewModel() {
 
+@ExperimentalCoroutinesApi
+@InternalCoroutinesApi
+class TaskViewModel @ViewModelInject constructor(
+    private val firebaseRepository: FirebaseRepository
+) :
+    ViewModel() {
 
     fun createTask(
         todoName: String,
@@ -31,7 +36,7 @@ class TaskViewModel @ViewModelInject constructor(private val taskRepository: Tas
             liveData {
                 emit(ResultData.Loading)
                 emit(
-                    taskRepository.createTaskWithImage(
+                    firebaseRepository.createTaskWithImage(
                         todoName,
                         todoDesc,
                         todoDate,
@@ -42,25 +47,28 @@ class TaskViewModel @ViewModelInject constructor(private val taskRepository: Tas
             }
         else liveData {
             emit(ResultData.Loading)
-            emit(taskRepository.createTaskWithoutImage(todoName, todoDesc, todoDate, todoTime))
+            emit(
+                firebaseRepository.createTaskWithoutImage(
+                    todoName,
+                    todoDesc,
+                    todoDate,
+                    todoTime
+                )
+            )
         }
     }
 
-    @ExperimentalCoroutinesApi
     fun fetchTasksRealtime(): MutableLiveData<ResultData<MutableList<Todo>>> {
         val response = MutableLiveData<ResultData<MutableList<Todo>>>()
         viewModelScope.launch {
-            taskRepository.fetchTasksRealtime()
-                .collect {
-                    response.postValue(it)
-                }
+            firebaseRepository.fetchTaskRealtime().collect { response.value = it }
         }
         return response
     }
 
     fun changeTaskStatus(taskId: String, status: Boolean) {
         val map: Map<String, Boolean> = mapOf("isCompleted" to status)
-        viewModelScope.launch { taskRepository.changeTaskStatus(taskId, map) }
+        viewModelScope.launch { firebaseRepository.changeTaskStatus(taskId, map) }
     }
 
     fun updateTask(
@@ -77,20 +85,23 @@ class TaskViewModel @ViewModelInject constructor(private val taskRepository: Tas
             "todoTime" to todoTime,
             "updatedOn" to getCurrentTimestamp()
         )
-        viewModelScope.launch { taskRepository.updateTask(taskId, map) }
+        viewModelScope.launch { firebaseRepository.updateTask(taskId, map) }
     }
 
     fun uploadImage(uri: Uri?, taskId: String) = uri?.let {
         liveData {
             emit(ResultData.Loading)
-            emit(taskRepository.uploadImage(uri, taskId))
+            emit(firebaseRepository.uploadImage(uri, taskId))
         }
     }!!
 
 
-    fun deleteTask(docId: String?) {
-        docId?.let { viewModelScope.launch { taskRepository.deleteTask(docId) } }
-    }
+    fun deleteTask(docId: String?) =
+        docId?.let { viewModelScope.launch { firebaseRepository.deleteTask(docId) } }
 
+    fun provideFeedback(topic: String, description: String) = liveData {
+        emit(ResultData.Loading)
+        emit(firebaseRepository.provideFeedback(topic, description))
+    }
 }
 

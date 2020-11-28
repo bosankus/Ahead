@@ -63,11 +63,4 @@ object UIHelper {
         textView.text = spannable
     }*/
 
-    /*fun FragmentActivity.selectImage() {
-        ImagePicker.with(this)
-            .crop()
-            .compress(1024)
-            .maxResultSize(1080, 1080)
-            .start()
-    }*/
 }

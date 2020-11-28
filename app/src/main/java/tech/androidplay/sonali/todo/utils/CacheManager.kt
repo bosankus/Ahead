@@ -1,6 +1,7 @@
 package tech.androidplay.sonali.todo.utils
 
 import android.content.Context
+import tech.androidplay.sonali.todo.utils.UIHelper.logMessage
 import java.io.File
 
 /**
@@ -16,10 +17,9 @@ class CacheManager {
             val dir: File? = context.cacheDir
             if (dir != null && dir.isDirectory) {
                 deleteDir(dir)
-//                logMessage("$dir")
             }
         } catch (e: Exception) {
-//            logMessage("${e.message}")
+            /*logMessage("Cache Manager Exception: ${e.message}")*/
         }
     }
 

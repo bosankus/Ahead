@@ -9,12 +9,15 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
+import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_task_edit.*
 import kotlinx.android.synthetic.main.layout_date_time.*
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.InternalCoroutinesApi
 import tech.androidplay.sonali.todo.R
 import tech.androidplay.sonali.todo.data.viewmodel.TaskViewModel
 import tech.androidplay.sonali.todo.ui.picker.DatePickerFragment
@@ -28,6 +31,7 @@ import tech.androidplay.sonali.todo.utils.Constants.TASK_DOC_ID
 import tech.androidplay.sonali.todo.utils.Constants.TASK_IMAGE_URL
 import tech.androidplay.sonali.todo.utils.Constants.TASK_TIME
 import tech.androidplay.sonali.todo.utils.Constants.TIME_RESULT_CODE
+import tech.androidplay.sonali.todo.utils.Extensions.compareWith
 import tech.androidplay.sonali.todo.utils.Extensions.loadImageCircleCropped
 import tech.androidplay.sonali.todo.utils.Extensions.openDatePicker
 import tech.androidplay.sonali.todo.utils.Extensions.openTimePicker
@@ -49,6 +53,8 @@ import javax.inject.Inject
  * Email: ankush@androidplay.in
  */
 
+@ExperimentalCoroutinesApi
+@InternalCoroutinesApi
 @SuppressLint("SetTextI18n")
 @AndroidEntryPoint
 class TaskEditFragment : Fragment(R.layout.fragment_task_edit) {
@@ -75,8 +81,8 @@ class TaskEditFragment : Fragment(R.layout.fragment_task_edit) {
 
     //    private var alarmId: String = ""
     private var taskId: String? = ""
-    private var taskBody: String? = ""
-    private var taskDesc: String? = ""
+    private var taskBody: String = ""
+    private var taskDesc: String = ""
     private var taskDate: String? = ""
     private var taskTime: String? = ""
     private var taskImage: String? = ""
@@ -91,8 +97,8 @@ class TaskEditFragment : Fragment(R.layout.fragment_task_edit) {
     private fun setUpScreen() {
         taskId = arguments?.getString(TASK_DOC_ID)
         logMessage(taskId!!)
-        taskBody = arguments?.getString(TASK_DOC_BODY)
-        taskDesc = arguments?.getString(TASK_DOC_DESC)
+        taskBody = arguments?.getString(TASK_DOC_BODY)!!
+        taskDesc = arguments?.getString(TASK_DOC_DESC)!!
         taskDate = arguments?.getString(TASK_DATE) ?: "Add Reminder"
         taskTime = arguments?.getString(TASK_TIME) ?: "Add Reminder"
         taskImage = arguments?.getString(TASK_IMAGE_URL)
@@ -101,7 +107,14 @@ class TaskEditFragment : Fragment(R.layout.fragment_task_edit) {
         etTaskDesc.setText(taskDesc)
         tvSelectDate.text = taskDate
         tvSelectTime.text = taskTime
-        taskImage?.let { imgTask.loadImageCircleCropped(it) }
+        if (!taskImage.isNullOrEmpty()) {
+            imgTask.loadImageCircleCropped(taskImage!!)
+            imgTaskNoImage.visibility = View.INVISIBLE
+            imgTask.visibility = View.VISIBLE
+        } else {
+            imgTaskNoImage.visibility = View.VISIBLE
+            imgTask.visibility = View.INVISIBLE
+        }
     }
 
     private fun setListener() {
@@ -109,18 +122,32 @@ class TaskEditFragment : Fragment(R.layout.fragment_task_edit) {
         btnSaveTask.setOnClickListener { saveTask() }
         btnDeleteTask.setOnClickListener { deleteTask(taskId) }
         imgTask.setOnClickListener { selectImage(this) }
+        imgTaskNoImage.setOnClickListener { selectImage(this) }
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
+            saveTask()
+            showSnack(requireView(), "Task Saved")
+            findNavController().navigate(R.id.action_taskEditFragment_to_taskFragment)
+        }
     }
 
 
     private fun saveTask() {
         val taskBody = etTaskBody.text.toString()
         val taskDesc = etTaskDesc.text.toString()
-        val todoDate = tvSelectDate.text.toString()
-        val todoTime = tvSelectTime.text.toString()
-        taskViewModel.updateTask(taskId!!, taskBody, taskDesc, todoDate, todoTime)
-        val requestCode = taskId!!.generateRequestCode()
-        startAlarmedNotification(requestCode, taskBody, taskDesc, calendar, alarmManager)
-        showSnack(requireView(), "Task Saved")
+        val taskDate = tvSelectDate.text.toString()
+        val taskTime = tvSelectTime.text.toString()
+        if (!this.taskBody.compareWith(taskBody) ||
+            !this.taskDesc.compareWith(taskDesc)
+        ) {
+            taskViewModel.updateTask(taskId!!, taskBody, taskDesc, taskDate, taskTime)
+        }
+        if (!this.taskDate?.compareWith(taskDate)!! ||
+            !this.taskTime?.compareWith(taskTime)!!
+        ) {
+            taskViewModel.updateTask(taskId!!, taskBody, taskDesc, taskDate, taskTime)
+            val requestCode = taskId!!.generateRequestCode()
+            startAlarmedNotification(requestCode, taskBody, taskDesc, calendar, alarmManager)
+        }
     }
 
 
@@ -131,12 +158,13 @@ class TaskEditFragment : Fragment(R.layout.fragment_task_edit) {
                 is ResultData.Success -> {
                     val url = imageUrl.data
                     url?.let { imgTask.loadImageCircleCropped(it) }
+                    imgTaskNoImage.visibility = View.INVISIBLE
+                    imgTask.visibility = View.VISIBLE
                 }
                 is ResultData.Failed -> showToast(requireContext(), "Something went wrong")
             }
         })
     }
-
 
     private fun deleteTask(docId: String?) {
         dialog.setPositiveButton("Yes") { dialogInterface, _ ->
@@ -175,4 +203,5 @@ class TaskEditFragment : Fragment(R.layout.fragment_task_edit) {
         var pickedTime = ""
         var pickedImage: Uri? = null
     }
+
 }

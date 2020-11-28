@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import androidx.core.app.NotificationCompat
+import androidx.room.Room
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
@@ -15,16 +16,27 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ApplicationComponent
 import dagger.hilt.android.qualifiers.ApplicationContext
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 import tech.androidplay.sonali.todo.R
 import tech.androidplay.sonali.todo.TodoApplication
+import tech.androidplay.sonali.todo.data.remote.PixabayAPI
+import tech.androidplay.sonali.todo.data.room.RoomApi
+import tech.androidplay.sonali.todo.data.room.RoomRepository
+import tech.androidplay.sonali.todo.data.room.TaskDao
+import tech.androidplay.sonali.todo.data.room.TaskDatabase
 import tech.androidplay.sonali.todo.ui.activity.MainActivity
 import tech.androidplay.sonali.todo.ui.picker.DatePickerFragment
 import tech.androidplay.sonali.todo.ui.picker.TimePickerFragment
 import tech.androidplay.sonali.todo.utils.CacheManager
 import tech.androidplay.sonali.todo.utils.Constants
+import tech.androidplay.sonali.todo.utils.Constants.BASE_URL
+import tech.androidplay.sonali.todo.utils.Constants.DATABASE_NAME
 import tech.androidplay.sonali.todo.utils.Constants.SHARED_PREFERENCE_NAME
-import tech.androidplay.sonali.todo.utils.Constants.USER_DISPLAY_IMAGE
 import java.util.*
+import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
 /**
@@ -47,18 +59,12 @@ class ApplicationModule {
 
     @Singleton
     @Provides
-    fun providesFireStoreReference() =
-        FirebaseFirestore.getInstance().collection(Constants.FIRESTORE_COLLECTION)
+    fun providesFirestoreInstance() = FirebaseFirestore.getInstance()
 
     @Singleton
     @Provides
     fun provideSharedPreference(@ApplicationContext app: Context): SharedPreferences =
         app.getSharedPreferences(SHARED_PREFERENCE_NAME, Context.MODE_PRIVATE)
-
-    @Singleton
-    @Provides
-    fun provideUserDisplayImage(sharedPreferences: SharedPreferences) =
-        sharedPreferences.getString(USER_DISPLAY_IMAGE, "") ?: ""
 
     @Singleton
     @Provides
@@ -113,4 +119,53 @@ class ApplicationModule {
         },
         PendingIntent.FLAG_UPDATE_CURRENT
     )
+
+    @Singleton
+    @Provides
+    fun providesTaskDatabase(@ApplicationContext context: Context) =
+        Room.databaseBuilder(context, TaskDatabase::class.java, DATABASE_NAME)
+            .build()
+
+    @Singleton
+    @Provides
+    fun providesTaskDao(database: TaskDatabase) =
+        database.taskDao()
+
+    @Singleton
+    @Provides
+    fun providesRoomRepository(
+        dao: TaskDao,
+        pixabayAPI: PixabayAPI
+    ) = RoomRepository(dao, pixabayAPI) as RoomApi
+
+
+    @Provides
+    fun providesLoggingInterceptor(): HttpLoggingInterceptor {
+        return HttpLoggingInterceptor().apply {
+            HttpLoggingInterceptor.Level.BODY
+        }
+    }
+
+    @Provides
+    fun provideOkHttpClient(
+        loggingInterceptor: HttpLoggingInterceptor,
+    ): OkHttpClient {
+        return OkHttpClient.Builder()
+            .addInterceptor(loggingInterceptor)
+            .callTimeout(60, TimeUnit.SECONDS)
+            .connectTimeout(60, TimeUnit.SECONDS)
+            .readTimeout(60, TimeUnit.SECONDS)
+            .build()
+    }
+
+    @Singleton
+    @Provides
+    fun providesPixabayApi(okHttpClient: OkHttpClient): PixabayAPI {
+        return Retrofit.Builder()
+            .baseUrl(BASE_URL)
+            .addConverterFactory(GsonConverterFactory.create())
+            .client(okHttpClient)
+            .build()
+            .create(PixabayAPI::class.java)
+    }
 }

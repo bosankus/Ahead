@@ -11,10 +11,14 @@ import android.os.Build
 object Constants {
 
     // For default log tag
+    const val PLAY_STORE_LINK = "https://play.google.com/store/apps/details?id=tech.androidplay.sonali.todo"
     const val GLOBAL_TAG = "Androidplay"
+    const val DATABASE_NAME = "think_db"
+    const val BASE_URL = "https://pixabay.com"
 
     // For firestore collection
     const val FIRESTORE_COLLECTION = "Tasks"
+    const val FEEDBACK_COLLECTION = "Feedbacks"
 
     // For shared preference
     const val SHARED_PREFERENCE_NAME = "SHARED_PREFERENCE_NAME"

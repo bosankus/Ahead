@@ -10,11 +10,15 @@ import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_main.*
 import tech.androidplay.sonali.todo.R
+import tech.androidplay.sonali.todo.utils.CacheManager
 import tech.androidplay.sonali.todo.utils.Constants.ACTION_SHOW_TASK_FRAGMENT
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
+    @Inject
+    lateinit var cache: CacheManager
 
     @SuppressLint("SimpleDateFormat")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,6 +34,11 @@ class MainActivity : AppCompatActivity() {
         intent?.let {
             navigateToGlobalFragment(it)
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        cache.clearCache(this)
     }
 
 

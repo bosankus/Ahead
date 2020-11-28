@@ -4,10 +4,12 @@ import android.app.AlertDialog
 import androidx.core.os.bundleOf
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.InternalCoroutinesApi
 import tech.androidplay.sonali.todo.R
 import tech.androidplay.sonali.todo.data.model.Todo
 import tech.androidplay.sonali.todo.data.viewmodel.TaskViewModel
-import tech.androidplay.sonali.todo.databinding.LayoutMainTodoListBinding
+import tech.androidplay.sonali.todo.databinding.LayoutMainTaskListBinding
 import tech.androidplay.sonali.todo.utils.Constants.TASK_DATE
 import tech.androidplay.sonali.todo.utils.Constants.TASK_DOC_BODY
 import tech.androidplay.sonali.todo.utils.Constants.TASK_DOC_DESC
@@ -24,8 +26,10 @@ import tech.androidplay.sonali.todo.utils.alarmutils.generateRequestCode
  * On: 8/11/2020, 4:54 PM
  */
 
+@ExperimentalCoroutinesApi
+@InternalCoroutinesApi
 class TodoViewHolder(
-    private val binding: LayoutMainTodoListBinding,
+    private val binding: LayoutMainTaskListBinding,
 ) : RecyclerView.ViewHolder(binding.root) {
 
     fun bind(

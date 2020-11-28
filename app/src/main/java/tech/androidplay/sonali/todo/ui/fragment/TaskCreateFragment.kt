@@ -12,6 +12,8 @@ import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_task_create.*
 import kotlinx.android.synthetic.main.layout_date_time.*
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.InternalCoroutinesApi
 import tech.androidplay.sonali.todo.R
 import tech.androidplay.sonali.todo.data.viewmodel.TaskViewModel
 import tech.androidplay.sonali.todo.ui.picker.DatePickerFragment
@@ -20,6 +22,7 @@ import tech.androidplay.sonali.todo.utils.Constants.DATE_RESULT_CODE
 import tech.androidplay.sonali.todo.utils.Constants.EXTRA_DATE
 import tech.androidplay.sonali.todo.utils.Constants.EXTRA_TIME
 import tech.androidplay.sonali.todo.utils.Constants.TIME_RESULT_CODE
+import tech.androidplay.sonali.todo.utils.Extensions.hideKeyboard
 import tech.androidplay.sonali.todo.utils.Extensions.openDatePicker
 import tech.androidplay.sonali.todo.utils.Extensions.openTimePicker
 import tech.androidplay.sonali.todo.utils.Extensions.selectImage
@@ -35,7 +38,8 @@ import javax.inject.Inject
  * Author: Ankush
  * On: 5/3/2020, 12:22 PM
  */
-
+@ExperimentalCoroutinesApi
+@InternalCoroutinesApi
 @AndroidEntryPoint
 class TaskCreateFragment : Fragment(R.layout.fragment_task_create) {
 
@@ -63,6 +67,7 @@ class TaskCreateFragment : Fragment(R.layout.fragment_task_create) {
         layoutDateTime.setOnClickListener { openDatePicker(datePickerFragment) }
         tvSelectImage.setOnClickListener { selectImage(this) }
         btCreateTask.setOnClickListener {
+            requireActivity().hideKeyboard()
             if ((tvTaskInput.text.length) <= 0) tvTaskInput.error = "Cant't be empty!"
             else createTask()
         }
@@ -74,6 +79,7 @@ class TaskCreateFragment : Fragment(R.layout.fragment_task_create) {
         val todoDesc = tvTaskDescInput.text.toString()
         val todoDate = tvSelectDate.text.toString()
         val todoTime = tvSelectTime.text.toString()
+
         taskViewModel.createTask(todoBody, todoDesc, todoDate, todoTime, taskImage)
             .observe(viewLifecycleOwner, {
                 it?.let {

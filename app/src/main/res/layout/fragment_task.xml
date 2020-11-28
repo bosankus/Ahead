@@ -25,6 +25,20 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <ImageView
+            android:id="@+id/imgAllTaskMenu"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="20dp"
+            android:background="?attr/selectableItemBackground"
+            android:padding="5dp"
+            android:src="@drawable/ic_menu"
+            app:layout_constraintBottom_toBottomOf="@+id/tvAllTasksHeader"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tvAllTasksHeader"
+            tools:ignore="ContentDescription" />
+
+
         <com.iammert.library.ui.multisearchviewlib.MultiSearchView
             android:id="@+id/searchTask"
             android:layout_width="match_parent"
@@ -57,24 +71,12 @@
             android:background="@color/white"
             android:orientation="vertical"
             android:visibility="gone"
-            app:shimmer_auto_start="true"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvTodayHeader">
+            app:layout_constraintTop_toBottomOf="@+id/tvTodayHeader"
+            app:shimmer_auto_start="true">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <include layout="@layout/layout_shimmer_fragment_task" />
-
-                <include layout="@layout/layout_shimmer_fragment_task" />
-
-                <include layout="@layout/layout_shimmer_fragment_task" />
-
-                <include layout="@layout/layout_shimmer_fragment_task" />
-            </LinearLayout>
+            <include layout="@layout/layout_shimmer_fragment_task" />
         </com.facebook.shimmer.ShimmerFrameLayout>
 
         <androidx.recyclerview.widget.RecyclerView
@@ -88,13 +90,13 @@
             android:orientation="vertical"
             android:overScrollMode="never"
             android:scrollbars="none"
+            tools:itemCount="2"
+            tools:listitem="@layout/layout_main_task_list"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvTodayHeader"
-            app:layout_constraintVertical_bias="0.0" />
+            app:layout_constraintTop_toBottomOf="@+id/tvTodayHeader" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/frameNoTodo"
@@ -135,14 +137,14 @@
         android:id="@+id/efabAddTask"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
         android:layout_margin="20sp"
         android:backgroundTint="@color/dribblePink"
         android:fontFamily="@font/jost_bold"
-        android:layout_gravity="bottom|end"
         android:minHeight="1dp"
         android:text="@string/add_task"
         android:textColor="@color/white"
-        android:textSize="13sp"
+        android:textSize="16sp"
         app:icon="@android:drawable/ic_input_add"
         app:iconPadding="0sp"
         app:iconTint="@color/white"
