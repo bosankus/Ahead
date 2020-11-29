@@ -3,6 +3,7 @@ package tech.androidplay.sonali.todo.data.viewmodel
 import android.net.Uri
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.*
+import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.flow.collect
@@ -21,40 +22,36 @@ import tech.androidplay.sonali.todo.utils.UIHelper.getCurrentTimestamp
 @ExperimentalCoroutinesApi
 @InternalCoroutinesApi
 class TaskViewModel @ViewModelInject constructor(
+    firebaseAuth: FirebaseAuth,
     private val firebaseRepository: FirebaseRepository
-) :
-    ViewModel() {
+) : ViewModel() {
+
+    private val currentUser = firebaseAuth.currentUser
 
     fun createTask(
-        todoName: String,
+        todoBody: String,
         todoDesc: String,
         todoDate: String,
         todoTime: String,
         uri: Uri?
     ): LiveData<ResultData<String>> {
-        return if (uri != null)
-            liveData {
+        val taskMap = hashMapOf(
+            "id" to currentUser?.uid,
+            "todoBody" to todoBody,
+            "todoDesc" to todoDesc,
+            "todoDate" to todoDate,
+            "todoTime" to todoTime,
+            "todoCreationTimeStamp" to getCurrentTimestamp(),
+            "isCompleted" to false
+        )
+        uri?.let {
+            return liveData {
                 emit(ResultData.Loading)
-                emit(
-                    firebaseRepository.createTaskWithImage(
-                        todoName,
-                        todoDesc,
-                        todoDate,
-                        todoTime,
-                        uri
-                    )
-                )
+                emit(firebaseRepository.createTaskWithImage(taskMap, it))
             }
-        else liveData {
+        } ?: return liveData {
             emit(ResultData.Loading)
-            emit(
-                firebaseRepository.createTaskWithoutImage(
-                    todoName,
-                    todoDesc,
-                    todoDate,
-                    todoTime
-                )
-            )
+            emit(firebaseRepository.createTaskWithoutImage(taskMap))
         }
     }
 
@@ -68,14 +65,11 @@ class TaskViewModel @ViewModelInject constructor(
 
     fun changeTaskStatus(taskId: String, status: Boolean) {
         val map: Map<String, Boolean> = mapOf("isCompleted" to status)
-        viewModelScope.launch { firebaseRepository.changeTaskStatus(taskId, map) }
+        viewModelScope.launch { firebaseRepository.updateTask(taskId, map) }
     }
 
     fun updateTask(
-        taskId: String,
-        todoBody: String? = "",
-        todoDesc: String? = "",
-        todoDate: String? = "",
+        taskId: String, todoBody: String? = "", todoDesc: String? = "", todoDate: String? = "",
         todoTime: String? = "",
     ) {
         val map: Map<String, Any?> = mapOf(
@@ -99,9 +93,16 @@ class TaskViewModel @ViewModelInject constructor(
     fun deleteTask(docId: String?) =
         docId?.let { viewModelScope.launch { firebaseRepository.deleteTask(docId) } }
 
-    fun provideFeedback(topic: String, description: String) = liveData {
-        emit(ResultData.Loading)
-        emit(firebaseRepository.provideFeedback(topic, description))
+    fun provideFeedback(topic: String, description: String): LiveData<ResultData<String>> {
+        val hashMap = hashMapOf(
+            "user" to currentUser?.email,
+            "topic" to topic,
+            "description" to description
+        )
+        return liveData {
+            emit(ResultData.Loading)
+            emit(firebaseRepository.provideFeedback(hashMap))
+        }
     }
 }
 

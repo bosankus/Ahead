@@ -23,9 +23,9 @@ class FakeRoomRepository : RoomApi, PixabayImageApi {
         observableTaskItem.postValue(taskItem)
     }
 
-    fun setShouldReturnNetworkError(value: Boolean) {
-        shouldReturnNetworkError = value
-    }
+//    fun setShouldReturnNetworkError(value: Boolean) {
+//        shouldReturnNetworkError = value
+//    }
 
     override suspend fun insertTask(task: Task) {
         taskItem.add(task)

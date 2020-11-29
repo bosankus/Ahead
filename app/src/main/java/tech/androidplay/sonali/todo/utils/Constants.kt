@@ -11,7 +11,7 @@ import android.os.Build
 object Constants {
 
     // For default log tag
-    const val PLAY_STORE_LINK = "https://play.google.com/store/apps/details?id=tech.androidplay.sonali.todo"
+    const val PLAY_STORE_LINK = "https://androidplay.in/29hQ"
     const val GLOBAL_TAG = "Androidplay"
     const val DATABASE_NAME = "think_db"
     const val BASE_URL = "https://pixabay.com"
@@ -22,7 +22,7 @@ object Constants {
 
     // For shared preference
     const val SHARED_PREFERENCE_NAME = "SHARED_PREFERENCE_NAME"
-    const val USER_DISPLAY_IMAGE = "USER_DISPLAY_IMAGE"
+    /*const val USER_DISPLAY_IMAGE = "USER_DISPLAY_IMAGE"*/
 
     // For navigation bundle
     const val TASK_DOC_ID = "TASK_DOC_ID"

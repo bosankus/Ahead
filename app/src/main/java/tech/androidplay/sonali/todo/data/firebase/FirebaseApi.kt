@@ -21,20 +21,13 @@ interface FirebaseApi {
     suspend fun signOut()
 
     // For Firestore
+    suspend fun createTaskWithImage(taskMap: HashMap<*, *>, uri: Uri): ResultData<String>
+    suspend fun createTaskWithoutImage(taskMap: HashMap<*, *>): ResultData<String>
     suspend fun fetchTaskRealtime(): Flow<ResultData<MutableList<Todo>>>
-    suspend fun changeTaskStatus(taskId: String, map: Map<String, Boolean>)
     suspend fun updateTask(taskId: String, map: Map<String, Any?>)
     suspend fun deleteTask(docId: String)
-    suspend fun createTaskWithImage(
-        todoBody: String, todoDesc: String, todoDate: String, todoTime: String, uri: Uri
-    ): ResultData<String>
-
-    suspend fun createTaskWithoutImage(
-        todoBody: String, todoDesc: String, todoDate: String, todoTime: String,
-    ): ResultData<String>
-    suspend fun provideFeedback(topic: String, description: String): ResultData<String>
+    suspend fun provideFeedback(hashMap: HashMap<String, String?>): ResultData<String>
 
     // For Firebase storage
     suspend fun uploadImage(uri: Uri, docRefId: String): ResultData<String>
-    suspend fun uploadFile(uri: Uri, docRefId: String): String
 }

@@ -45,7 +45,7 @@ class RoomViewModel @ViewModelInject constructor(private val api: RoomApi) :
         api.deleteTask(task)
     }
 
-    fun insertTaskToDb(task: Task) = viewModelScope.launch {
+    private fun insertTaskToDb(task: Task) = viewModelScope.launch {
         api.insertTask(task)
     }
 

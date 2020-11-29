@@ -1,7 +1,6 @@
 package tech.androidplay.sonali.todo.utils
 
 import android.content.Context
-import tech.androidplay.sonali.todo.utils.UIHelper.logMessage
 import java.io.File
 
 /**

@@ -3,7 +3,6 @@ package tech.androidplay.sonali.todo.data.firebase
 import android.net.Uri
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.google.firebase.storage.StorageReference
@@ -16,7 +15,6 @@ import tech.androidplay.sonali.todo.data.model.Todo
 import tech.androidplay.sonali.todo.utils.Constants.FEEDBACK_COLLECTION
 import tech.androidplay.sonali.todo.utils.Constants.FIRESTORE_COLLECTION
 import tech.androidplay.sonali.todo.utils.ResultData
-import tech.androidplay.sonali.todo.utils.UIHelper.getCurrentTimestamp
 import javax.inject.Inject
 
 /**
@@ -29,12 +27,12 @@ import javax.inject.Inject
 class FirebaseRepository @Inject constructor(
     private val firebaseAuth: FirebaseAuth,
     private val storageReference: StorageReference,
-    private val firestore: FirebaseFirestore,
+    fireStore: FirebaseFirestore,
 ) : FirebaseApi {
 
     private val userDetails = firebaseAuth.currentUser
-    private val taskListRef = firestore.collection(FIRESTORE_COLLECTION)
-    private val feedbackReference = firestore.collection(FEEDBACK_COLLECTION)
+    private val taskListRef = fireStore.collection(FIRESTORE_COLLECTION)
+    private val feedbackReference = fireStore.collection(FEEDBACK_COLLECTION)
 
     private val query: Query = taskListRef
         .whereEqualTo("id", userDetails?.uid)
@@ -63,16 +61,38 @@ class FirebaseRepository @Inject constructor(
     }
 
     override suspend fun resetPassword(email: String) {
-        try {
-            firebaseAuth
-                .sendPasswordResetEmail(email)
-        } catch (e: Exception) {
-            ResultData.Failed(e.message)
-        }
+        firebaseAuth.sendPasswordResetEmail(email)
     }
 
     override suspend fun signOut() {
         firebaseAuth.signOut()
+    }
+
+    override suspend fun createTaskWithImage(taskMap: HashMap<*, *>, uri: Uri): ResultData<String> {
+        return try {
+            val docRef = taskListRef
+                .add(taskMap)
+                .await()
+            when (val url: ResultData<String> = uploadImage(uri, docRef.id)) {
+                is ResultData.Success -> updateTask(docRef.id, mapOf("taskImage" to url.data))
+                is ResultData.Failed -> ResultData.Failed("Task Created. Image Upload Failed. Please retry.")
+                else -> ResultData.Failed("Something went wrong while uploading Image")
+            }
+            ResultData.Success(docRef.id)
+        } catch (e: Exception) {
+            ResultData.Failed(false.toString())
+        }
+    }
+
+    override suspend fun createTaskWithoutImage(taskMap: HashMap<*, *>): ResultData<String> {
+        return try {
+            val docRef = taskListRef
+                .add(taskMap)
+                .await()
+            ResultData.Success(docRef.id)
+        } catch (e: Exception) {
+            ResultData.Failed(false.toString())
+        }
     }
 
     override suspend fun fetchTaskRealtime(): Flow<ResultData<MutableList<Todo>>> = callbackFlow {
@@ -90,12 +110,6 @@ class FirebaseRepository @Inject constructor(
         }
     }
 
-    override suspend fun changeTaskStatus(taskId: String, map: Map<String, Boolean>) {
-        taskListRef.document(taskId)
-            .update(map)
-            .await()
-    }
-
     override suspend fun updateTask(taskId: String, map: Map<String, Any?>) {
         taskListRef.document(taskId)
             .update(map)
@@ -108,6 +122,17 @@ class FirebaseRepository @Inject constructor(
             .await()
     }
 
+    override suspend fun provideFeedback(hashMap: HashMap<String, String?>): ResultData<String> {
+        return try {
+            val feedback = feedbackReference
+                .add(hashMap)
+                .await()
+            ResultData.Success(feedback.id)
+        } catch (e: Exception) {
+            ResultData.Failed(e.message)
+        }
+    }
+
     override suspend fun uploadImage(uri: Uri, docRefId: String): ResultData<String> {
         val ref = storageReference
             .child("${userDetails?.email}/$docRefId")
@@ -117,91 +142,6 @@ class FirebaseRepository @Inject constructor(
             val newImgMap = mapOf("taskImage" to imageUrl)
             updateTask(docRefId, newImgMap)
             ResultData.Success(imageUrl)
-        } catch (e: Exception) {
-            ResultData.Failed(e.message)
-        }
-    }
-
-    override suspend fun uploadFile(uri: Uri, docRefId: String): String {
-        val ref = storageReference
-            .child("${userDetails?.email}/$docRefId")
-        return try {
-            ref.putFile(uri).await()
-            val imageUrl = ref.downloadUrl.await().toString()
-            imageUrl
-        } catch (e: Exception) {
-            ""
-        }
-    }
-
-    override suspend fun createTaskWithImage(
-        todoBody: String,
-        todoDesc: String,
-        todoDate: String,
-        todoTime: String,
-        uri: Uri
-    ): ResultData<String> {
-        val task = hashMapOf(
-            "id" to userDetails?.uid,
-            "todoBody" to todoBody,
-            "todoDesc" to todoDesc,
-            "todoDate" to todoDate,
-            "todoTime" to todoTime,
-            "todoCreationTimeStamp" to getCurrentTimestamp(),
-            "isCompleted" to false
-        )
-        return try {
-            // Network: Create task
-            val docRef = taskListRef
-                .add(task)
-                .await()
-            // Network: Upload Image for the task Id
-            val imageUrl = uploadFile(uri, docRef.id)
-            // Network: Store Image Url in the task
-            updateTask(docRef.id, mapOf("taskImage" to imageUrl))
-            // return image url
-            ResultData.Success(docRef.id)
-        } catch (e: Exception) {
-            ResultData.Failed(false.toString())
-        }
-    }
-
-    override suspend fun createTaskWithoutImage(
-        todoBody: String,
-        todoDesc: String,
-        todoDate: String,
-        todoTime: String
-    ): ResultData<String> {
-        val task = hashMapOf(
-            "id" to userDetails?.uid,
-            "todoBody" to todoBody,
-            "todoDesc" to todoDesc,
-            "todoDate" to todoDate,
-            "todoTime" to todoTime,
-            "todoCreationTimeStamp" to getCurrentTimestamp(),
-            "isCompleted" to false
-        )
-        return try {
-            val docRef = taskListRef
-                .add(task)
-                .await()
-            ResultData.Success(docRef.id)
-        } catch (e: Exception) {
-            ResultData.Failed(false.toString())
-        }
-    }
-
-    override suspend fun provideFeedback(topic: String, description: String): ResultData<String> {
-        val feedbackMap = hashMapOf(
-            "user" to userDetails?.email,
-            "topic" to topic,
-            "description" to description
-        )
-        return try {
-            val feedback = feedbackReference
-                .add(feedbackMap)
-                .await()
-            ResultData.Success(feedback.id)
         } catch (e: Exception) {
             ResultData.Failed(e.message)
         }

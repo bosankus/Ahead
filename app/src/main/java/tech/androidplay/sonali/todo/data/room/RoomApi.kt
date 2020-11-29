@@ -2,9 +2,7 @@ package tech.androidplay.sonali.todo.data.room
 
 import androidx.lifecycle.LiveData
 import tech.androidplay.sonali.todo.data.model.PixabayImageResponse
-import tech.androidplay.sonali.todo.utils.Event
 import tech.androidplay.sonali.todo.utils.Resource
-import tech.androidplay.sonali.todo.utils.ResultData
 
 /**
  * Created by Androidplay
