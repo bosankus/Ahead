@@ -13,7 +13,6 @@ import tech.androidplay.sonali.todo.utils.ResultData
  * Email: ankush@androidplay.in
  */
 class FirebaseRepositoryTest : FirebaseApi {
-
     override suspend fun logInUser(email: String, password: String): ResultData<FirebaseUser> {
         TODO("Not yet implemented")
     }
@@ -30,11 +29,15 @@ class FirebaseRepositoryTest : FirebaseApi {
         TODO("Not yet implemented")
     }
 
-    override suspend fun fetchTaskRealtime(): Flow<ResultData<MutableList<Todo>>> {
+    override suspend fun createTaskWithImage(taskMap: HashMap<*, *>, uri: Uri): ResultData<String> {
         TODO("Not yet implemented")
     }
 
-    override suspend fun changeTaskStatus(taskId: String, map: Map<String, Boolean>) {
+    override suspend fun createTaskWithoutImage(taskMap: HashMap<*, *>): ResultData<String> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun fetchTaskRealtime(): Flow<ResultData<MutableList<Todo>>> {
         TODO("Not yet implemented")
     }
 
@@ -46,22 +49,7 @@ class FirebaseRepositoryTest : FirebaseApi {
         TODO("Not yet implemented")
     }
 
-    override suspend fun createTaskWithImage(
-        todoBody: String,
-        todoDesc: String,
-        todoDate: String,
-        todoTime: String,
-        uri: Uri
-    ): ResultData<String> {
-        TODO("Not yet implemented")
-    }
-
-    override suspend fun createTaskWithoutImage(
-        todoBody: String,
-        todoDesc: String,
-        todoDate: String,
-        todoTime: String
-    ): ResultData<String> {
+    override suspend fun provideFeedback(hashMap: HashMap<String, String?>): ResultData<String> {
         TODO("Not yet implemented")
     }
 
@@ -69,8 +57,5 @@ class FirebaseRepositoryTest : FirebaseApi {
         TODO("Not yet implemented")
     }
 
-    override suspend fun uploadFile(uri: Uri, docRefId: String): String {
-        TODO("Not yet implemented")
-    }
 
 }

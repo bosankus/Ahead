@@ -2,7 +2,6 @@ package tech.androidplay.sonali.todo
 
 import android.app.Application
 import android.content.Context
-import android.net.Uri
 import androidx.multidex.MultiDex
 import dagger.hilt.android.HiltAndroidApp
 
