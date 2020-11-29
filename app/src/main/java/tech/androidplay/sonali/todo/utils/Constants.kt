@@ -73,4 +73,7 @@ object Constants {
     // For Android version check
     const val ANDROID_OREO = Build.VERSION_CODES.O
     /*const val ANDROID_10 = Build.VERSION_CODES.Q*/
+
+    // Firebase Analytics events
+    
 }

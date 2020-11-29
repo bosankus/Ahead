@@ -59,7 +59,7 @@ class TaskCreateFragment : Fragment(R.layout.fragment_task_create) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        
         clickListeners()
     }
 

@@ -30,13 +30,27 @@ class TimePickerFragment : DialogFragment(), TimePickerDialog.OnTimeSetListener 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val hour = calendar.get(Calendar.HOUR_OF_DAY)
         val minute = calendar.get(Calendar.MINUTE)
-        return TimePickerDialog(activity, this, hour, minute, true)
+        return activity?.let { TimePickerDialog(activity, this, hour, minute, true) }!!
     }
 
     override fun onTimeSet(p0: TimePicker?, hour: Int, minute: Int) {
         GLOBAL_HOUR = hour
         GLOBAL_MINUTE = minute
-        val time = "$GLOBAL_HOUR:$GLOBAL_MINUTE"
+
+        var time = ""
+        time = (when {
+            GLOBAL_MINUTE.toString().length == 1 -> {
+                "$GLOBAL_HOUR:0$GLOBAL_MINUTE"
+            }
+            GLOBAL_HOUR.toString().length == 1 -> {
+                "0$GLOBAL_HOUR:$GLOBAL_MINUTE"
+            }
+            GLOBAL_HOUR.toString().length == 1 && GLOBAL_MINUTE.toString().length == 1 -> {
+                "0$GLOBAL_HOUR:0$GLOBAL_MINUTE"
+            }
+            else -> "$GLOBAL_HOUR:$GLOBAL_MINUTE"
+        }).toString()
+
         targetFragment?.let {
             val intent = Intent().putExtra(EXTRA_TIME, time)
             it.onActivityResult(targetRequestCode, TIME_RESULT_CODE, intent)

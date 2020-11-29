@@ -33,7 +33,9 @@ class DatePickerFragment : DialogFragment(), DatePickerDialog.OnDateSetListener 
         val month = calendar.get(Calendar.MONTH)
         val day = calendar.get(Calendar.DAY_OF_WEEK)
         return activity?.let {
-            DatePickerDialog(it, this, year, month, day)
+            val picker = DatePickerDialog(it, this, year, month, day)
+            picker.datePicker.minDate = calendar.time.time
+            picker
         }!!
     }
 
@@ -41,7 +43,7 @@ class DatePickerFragment : DialogFragment(), DatePickerDialog.OnDateSetListener 
         GLOBAL_YEAR = year
         GLOBAL_MONTH = month
         GLOBAL_DAY = day
-        calendar.set(GLOBAL_YEAR, GLOBAL_MONTH + 1, GLOBAL_DAY)
+        calendar.set(GLOBAL_YEAR, GLOBAL_MONTH, GLOBAL_DAY)
         val date = "$GLOBAL_DAY.${GLOBAL_MONTH + 1}.$GLOBAL_YEAR"
         targetFragment?.let {
             val intent = Intent().putExtra(EXTRA_DATE, date)
