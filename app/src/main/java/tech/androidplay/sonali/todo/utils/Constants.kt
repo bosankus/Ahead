@@ -11,7 +11,7 @@ import android.os.Build
 object Constants {
 
     // For default log tag
-    const val PLAY_STORE_LINK = "https://play.google.com/store/apps/details?id=tech.androidplay.sonali.todo"
+    const val PLAY_STORE_LINK = "https://androidplay.in/29hQ"
     const val GLOBAL_TAG = "Androidplay"
     const val DATABASE_NAME = "think_db"
     const val BASE_URL = "https://pixabay.com"

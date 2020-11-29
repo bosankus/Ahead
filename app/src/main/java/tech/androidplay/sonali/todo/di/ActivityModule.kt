@@ -2,6 +2,7 @@ package tech.androidplay.sonali.todo.di
 
 import android.app.AlertDialog
 import android.content.Context
+import com.google.firebase.auth.FirebaseAuth
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -36,9 +37,10 @@ class ActivityModule {
 
     @Provides
     fun provideTaskViewModel(
+        firebaseAuth: FirebaseAuth,
         firebaseRepository: FirebaseRepository
     ): TaskViewModel {
-        return TaskViewModel(firebaseRepository)
+        return TaskViewModel(firebaseAuth, firebaseRepository)
     }
 
     @Provides
