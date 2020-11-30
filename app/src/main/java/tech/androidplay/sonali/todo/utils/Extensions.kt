@@ -22,6 +22,8 @@ import tech.androidplay.sonali.todo.ui.picker.TimePickerFragment
 
 object Extensions {
 
+    // View ext. functions
+
     fun Activity.hideKeyboard() {
         val inputMethodManager: InputMethodManager =
             this.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
@@ -66,8 +68,17 @@ object Extensions {
         }
     }
 
+    // Primitive Data ext. functions
+
     fun String.compareWith(newString: String): Boolean {
         return this.compareTo(newString) == 0
+    }
+
+    fun Int.zeroFill(): Int {
+        val num = this
+        return if (num >= 10)
+            num
+        else "0$num".toInt()
     }
 
 }

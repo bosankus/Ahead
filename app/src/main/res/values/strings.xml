@@ -20,6 +20,7 @@
     <string name="sign_up">Sign up</string>
     <string name="login">login</string>
     <string name="today">TODAY</string>
+    <string name="tomorrow">TOMORROW</string>
     <string name="all_tasks_completed_add_more">All tasks Completed. Add more</string>
     <string name="add_task">Add Task</string>
     <string name="edit">Edit</string>

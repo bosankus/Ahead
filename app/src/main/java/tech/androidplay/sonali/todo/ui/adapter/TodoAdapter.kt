@@ -9,6 +9,9 @@ import kotlinx.coroutines.InternalCoroutinesApi
 import tech.androidplay.sonali.todo.data.model.Todo
 import tech.androidplay.sonali.todo.data.viewmodel.TaskViewModel
 import tech.androidplay.sonali.todo.databinding.LayoutMainTaskListBinding
+import tech.androidplay.sonali.todo.utils.UIHelper.getCurrentDate
+import tech.androidplay.sonali.todo.utils.UIHelper.getTomorrowDate
+import tech.androidplay.sonali.todo.utils.UIHelper.logMessage
 import java.util.*
 import javax.inject.Inject
 
@@ -27,22 +30,6 @@ class TodoAdapter @Inject constructor(
 
     private var unfilteredList = listOf<Todo>()
 
-    fun modifyList(list: List<Todo>) {
-        unfilteredList = list
-        submitList(list)
-    }
-
-    fun filterList(query: CharSequence?) {
-        val list = mutableListOf<Todo>()
-        query?.let {
-            list.addAll(unfilteredList.filter {
-                it.todoBody.toLowerCase(Locale.getDefault())
-                    .contains(query.toString().toLowerCase(Locale.getDefault()))
-            })
-        } ?: list.addAll(unfilteredList)
-        submitList(list)
-    }
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TodoViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
         val binding = LayoutMainTaskListBinding.inflate(layoutInflater, parent, false)
@@ -56,4 +43,34 @@ class TodoAdapter @Inject constructor(
 
         }
     }
+
+    /*fun modifyList(list: List<Todo>) {
+        unfilteredList = list
+        submitList(list)
+    }
+
+    fun filterList(query: CharSequence?) {
+        val list = mutableListOf<Todo>()
+        query?.let {
+            list.addAll(unfilteredList.filter {
+                it.todoBody.toLowerCase(Locale.getDefault())
+                    .contains(query.toString().toLowerCase(Locale.getDefault()))
+            })
+        } ?: list.addAll(unfilteredList)
+        submitList(list)
+    }*/
+
+    fun showTodayTask(todoList: List<Todo>) {
+        val list = mutableListOf<Todo>()
+        list.addAll(todoList.filter { it.todoDate == getCurrentDate() })
+        submitList(list)
+    }
+
+    fun showTomorrowTask(todoList: List<Todo>) {
+        val list = mutableListOf<Todo>()
+        list.addAll(todoList.filter { it.todoDate == getTomorrowDate() })
+        submitList(list)
+    }
+
+    fun showUpcomingTask(list: List<Todo>) {}
 }

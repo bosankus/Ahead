@@ -12,6 +12,7 @@ import tech.androidplay.sonali.todo.TodoApplication.Companion.GLOBAL_MONTH
 import tech.androidplay.sonali.todo.TodoApplication.Companion.GLOBAL_YEAR
 import tech.androidplay.sonali.todo.utils.Constants.DATE_RESULT_CODE
 import tech.androidplay.sonali.todo.utils.Constants.EXTRA_DATE
+import tech.androidplay.sonali.todo.utils.Extensions.zeroFill
 import java.util.*
 import javax.inject.Inject
 
@@ -34,17 +35,21 @@ class DatePickerFragment : DialogFragment(), DatePickerDialog.OnDateSetListener 
         val day = calendar.get(Calendar.DAY_OF_WEEK)
         return activity?.let {
             val picker = DatePickerDialog(it, this, year, month, day)
-            picker.datePicker.minDate = calendar.time.time
+            picker.datePicker.init(year, month, day, null)
+            picker.datePicker.minDate = System.currentTimeMillis() - 1000
             picker
         }!!
     }
 
     override fun onDateSet(view: DatePicker?, year: Int, month: Int, day: Int) {
         GLOBAL_YEAR = year
-        GLOBAL_MONTH = month
+        GLOBAL_MONTH = month + 1
         GLOBAL_DAY = day
-        calendar.set(GLOBAL_YEAR, GLOBAL_MONTH, GLOBAL_DAY)
-        val date = "$GLOBAL_DAY.${GLOBAL_MONTH + 1}.$GLOBAL_YEAR"
+
+        val date = "${String.format("%02d", GLOBAL_DAY)}." +
+                "${String.format("%02d", GLOBAL_MONTH.zeroFill())}." +
+                "$GLOBAL_YEAR"
+
         targetFragment?.let {
             val intent = Intent().putExtra(EXTRA_DATE, date)
             it.onActivityResult(targetRequestCode, DATE_RESULT_CODE, intent)

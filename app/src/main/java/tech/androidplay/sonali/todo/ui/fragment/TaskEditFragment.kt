@@ -96,7 +96,6 @@ class TaskEditFragment : Fragment(R.layout.fragment_task_edit) {
 
     private fun setUpScreen() {
         taskId = arguments?.getString(TASK_DOC_ID)
-        logMessage(taskId!!)
         taskBody = arguments?.getString(TASK_DOC_BODY)!!
         taskDesc = arguments?.getString(TASK_DOC_DESC)!!
         taskDate = arguments?.getString(TASK_DATE) ?: "Add Reminder"

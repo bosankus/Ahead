@@ -9,6 +9,9 @@ import android.widget.Toast
 import com.google.android.material.snackbar.Snackbar
 import tech.androidplay.sonali.todo.utils.Constants.GLOBAL_TAG
 import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import java.time.temporal.ChronoUnit
 import java.util.*
 
 /**
@@ -17,16 +20,20 @@ import java.util.*
  * On: 4/26/2020, 10:51 AM
  */
 
+@SuppressLint("SimpleDateFormat")
 object UIHelper {
 
-    @SuppressLint("SimpleDateFormat")
     fun getCurrentTimestamp(): String =
-        SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss Z").format(Date())
+        SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss").format(Date())
+
+    fun getCurrentDate(): String = SimpleDateFormat("dd.MM.yyyy").format(Date())
+
+    fun getTomorrowDate(): String {
+        val tomorrow = LocalDate.now().plus(1, ChronoUnit.DAYS)
+        return tomorrow.format(DateTimeFormatter.ofPattern("dd.MM.yyyy"))
+    }
 
     /*@SuppressLint("SimpleDateFormat")
-    fun getCurrentDate(): String = SimpleDateFormat("EEE, MMM d, ''yy").format(Date())
-
-    @SuppressLint("SimpleDateFormat")
     fun getCalenderTime(calendar: Calendar): String =
         SimpleDateFormat("HH:mm").format(calendar.time).toString()*/
 

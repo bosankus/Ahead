@@ -36,20 +36,7 @@ class TimePickerFragment : DialogFragment(), TimePickerDialog.OnTimeSetListener 
     override fun onTimeSet(p0: TimePicker?, hour: Int, minute: Int) {
         GLOBAL_HOUR = hour
         GLOBAL_MINUTE = minute
-
-        var time = ""
-        time = (when {
-            GLOBAL_MINUTE.toString().length == 1 -> {
-                "$GLOBAL_HOUR:0$GLOBAL_MINUTE"
-            }
-            GLOBAL_HOUR.toString().length == 1 -> {
-                "0$GLOBAL_HOUR:$GLOBAL_MINUTE"
-            }
-            GLOBAL_HOUR.toString().length == 1 && GLOBAL_MINUTE.toString().length == 1 -> {
-                "0$GLOBAL_HOUR:0$GLOBAL_MINUTE"
-            }
-            else -> "$GLOBAL_HOUR:$GLOBAL_MINUTE"
-        }).toString()
+        val time = "${String.format("%02d", GLOBAL_HOUR)}:${String.format("%02d", GLOBAL_MINUTE)}"
 
         targetFragment?.let {
             val intent = Intent().putExtra(EXTRA_TIME, time)

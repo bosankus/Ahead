@@ -38,16 +38,6 @@
             app:layout_constraintTop_toTopOf="@+id/tvAllTasksHeader"
             tools:ignore="ContentDescription" />
 
-
-        <com.iammert.library.ui.multisearchviewlib.MultiSearchView
-            android:id="@+id/searchTask"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvAllTasksHeader" />
-
         <TextView
             android:id="@+id/tvTodayHeader"
             android:layout_width="wrap_content"
@@ -55,12 +45,13 @@
             android:layout_gravity="start"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
+            android:layout_marginTop="26dp"
             android:fontFamily="@font/calibre_semi"
             android:text="@string/today"
             android:textColor="@color/dribblePink"
             android:textSize="18sp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/searchTask" />
+            app:layout_constraintTop_toBottomOf="@+id/tvAllTasksHeader" />
 
         <com.facebook.shimmer.ShimmerFrameLayout
             android:id="@+id/shimmerFrameLayout"
@@ -80,9 +71,9 @@
         </com.facebook.shimmer.ShimmerFrameLayout>
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvTodoList"
+            android:id="@+id/rvTodoTodayList"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:background="@android:color/transparent"
             android:clipToPadding="false"
@@ -93,10 +84,42 @@
             tools:itemCount="2"
             tools:listitem="@layout/layout_main_task_list"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tvTodayHeader" />
+
+        <TextView
+            android:id="@+id/tvTomorrowHeader"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginTop="26dp"
+            android:fontFamily="@font/calibre_semi"
+            android:text="@string/tomorrow"
+            android:textColor="@color/dribblePink"
+            android:textSize="18sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/rvTodoTodayList" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvTodoTomorrowList"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:background="@android:color/transparent"
+            android:clipToPadding="false"
+            android:nestedScrollingEnabled="false"
+            android:orientation="vertical"
+            android:overScrollMode="never"
+            android:scrollbars="none"
+            tools:itemCount="2"
+            tools:listitem="@layout/layout_main_task_list"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvTomorrowHeader" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/frameNoTodo"
