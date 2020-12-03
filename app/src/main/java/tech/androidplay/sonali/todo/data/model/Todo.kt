@@ -21,8 +21,6 @@ data class Todo(
     var todoDesc: String = "",
     @SerializedName("todoDate")
     var todoDate: String = "",
-    @SerializedName("todoTime")
-    var todoTime: String = "",
     @SerializedName("todoCreationTimeStamp")
     var todoCreationTimeStamp: String = "",
     @JvmField

@@ -9,6 +9,7 @@ import kotlinx.coroutines.InternalCoroutinesApi
 import tech.androidplay.sonali.todo.data.model.Todo
 import tech.androidplay.sonali.todo.data.viewmodel.TaskViewModel
 import tech.androidplay.sonali.todo.databinding.LayoutMainTaskListBinding
+import tech.androidplay.sonali.todo.utils.Extensions.compareWithToday
 import tech.androidplay.sonali.todo.utils.UIHelper.getCurrentDate
 import tech.androidplay.sonali.todo.utils.UIHelper.getTomorrowDate
 import tech.androidplay.sonali.todo.utils.UIHelper.logMessage
@@ -44,12 +45,12 @@ class TodoAdapter @Inject constructor(
         }
     }
 
-    /*fun modifyList(list: List<Todo>) {
+    fun modifyList(list: List<Todo>) {
         unfilteredList = list
         submitList(list)
     }
 
-    fun filterList(query: CharSequence?) {
+    /*fun filterList(query: CharSequence?) {
         val list = mutableListOf<Todo>()
         query?.let {
             list.addAll(unfilteredList.filter {
@@ -60,17 +61,15 @@ class TodoAdapter @Inject constructor(
         submitList(list)
     }*/
 
-    fun showTodayTask(todoList: List<Todo>) {
+    fun showUpcomingTask(todoList: List<Todo>) {
         val list = mutableListOf<Todo>()
-        list.addAll(todoList.filter { it.todoDate == getCurrentDate() })
+        list.addAll(todoList.filter { it.todoDate.compareWithToday() == 1 })
         submitList(list)
     }
 
-    fun showTomorrowTask(todoList: List<Todo>) {
+    fun showPastTask(todoList: List<Todo>) {
         val list = mutableListOf<Todo>()
-        list.addAll(todoList.filter { it.todoDate == getTomorrowDate() })
+        list.addAll(todoList.filter { it.todoDate.compareWithToday() == -1 })
         submitList(list)
     }
-
-    fun showUpcomingTask(list: List<Todo>) {}
 }

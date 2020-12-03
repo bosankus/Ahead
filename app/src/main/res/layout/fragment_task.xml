@@ -38,21 +38,6 @@
             app:layout_constraintTop_toTopOf="@+id/tvAllTasksHeader"
             tools:ignore="ContentDescription" />
 
-        <TextView
-            android:id="@+id/tvTodayHeader"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="start"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginTop="26dp"
-            android:fontFamily="@font/calibre_semi"
-            android:text="@string/today"
-            android:textColor="@color/dribblePink"
-            android:textSize="18sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvAllTasksHeader" />
-
         <com.facebook.shimmer.ShimmerFrameLayout
             android:id="@+id/shimmerFrameLayout"
             android:layout_width="match_parent"
@@ -70,26 +55,8 @@
             <include layout="@layout/layout_shimmer_fragment_task" />
         </com.facebook.shimmer.ShimmerFrameLayout>
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvTodoTodayList"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:background="@android:color/transparent"
-            android:clipToPadding="false"
-            android:nestedScrollingEnabled="false"
-            android:orientation="vertical"
-            android:overScrollMode="never"
-            android:scrollbars="none"
-            tools:itemCount="2"
-            tools:listitem="@layout/layout_main_task_list"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvTodayHeader" />
-
         <TextView
-            android:id="@+id/tvTomorrowHeader"
+            android:id="@+id/tvUpcomingHeader"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="start"
@@ -97,14 +64,14 @@
             android:layout_marginEnd="16dp"
             android:layout_marginTop="26dp"
             android:fontFamily="@font/calibre_semi"
-            android:text="@string/tomorrow"
+            android:text="@string/upcoming"
             android:textColor="@color/dribblePink"
             android:textSize="18sp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/rvTodoTodayList" />
+            app:layout_constraintTop_toBottomOf="@+id/tvAllTasksHeader" />
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvTodoTomorrowList"
+            android:id="@+id/rvTodoUpcomingList"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
@@ -119,7 +86,40 @@
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvTomorrowHeader" />
+            app:layout_constraintTop_toBottomOf="@+id/tvUpcomingHeader" />
+
+        <TextView
+            android:id="@+id/tvPastHeader"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginTop="26dp"
+            android:fontFamily="@font/calibre_semi"
+            android:text="@string/past"
+            android:textColor="@color/dribblePink"
+            android:textSize="18sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/rvTodoUpcomingList" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvTodoPastList"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:background="@android:color/transparent"
+            android:clipToPadding="false"
+            android:nestedScrollingEnabled="false"
+            android:orientation="vertical"
+            android:overScrollMode="never"
+            android:scrollbars="none"
+            tools:itemCount="2"
+            tools:listitem="@layout/layout_main_task_list"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvPastHeader" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/frameNoTodo"

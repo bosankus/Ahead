@@ -15,35 +15,26 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_task_edit.*
-import kotlinx.android.synthetic.main.layout_date_time.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.InternalCoroutinesApi
 import tech.androidplay.sonali.todo.R
 import tech.androidplay.sonali.todo.data.viewmodel.TaskViewModel
-import tech.androidplay.sonali.todo.ui.picker.DatePickerFragment
-import tech.androidplay.sonali.todo.ui.picker.TimePickerFragment
-import tech.androidplay.sonali.todo.utils.Constants
-import tech.androidplay.sonali.todo.utils.Constants.DATE_RESULT_CODE
 import tech.androidplay.sonali.todo.utils.Constants.TASK_DATE
 import tech.androidplay.sonali.todo.utils.Constants.TASK_DOC_BODY
 import tech.androidplay.sonali.todo.utils.Constants.TASK_DOC_DESC
 import tech.androidplay.sonali.todo.utils.Constants.TASK_DOC_ID
 import tech.androidplay.sonali.todo.utils.Constants.TASK_IMAGE_URL
-import tech.androidplay.sonali.todo.utils.Constants.TASK_TIME
-import tech.androidplay.sonali.todo.utils.Constants.TIME_RESULT_CODE
-import tech.androidplay.sonali.todo.utils.Extensions.compareWith
+import tech.androidplay.sonali.todo.utils.Extensions.beautifyDateTime
 import tech.androidplay.sonali.todo.utils.Extensions.loadImageCircleCropped
-import tech.androidplay.sonali.todo.utils.Extensions.openDatePicker
-import tech.androidplay.sonali.todo.utils.Extensions.openTimePicker
 import tech.androidplay.sonali.todo.utils.Extensions.selectImage
+import tech.androidplay.sonali.todo.utils.Extensions.toLocalDateTime
 import tech.androidplay.sonali.todo.utils.ResultData
-import tech.androidplay.sonali.todo.utils.UIHelper.logMessage
 import tech.androidplay.sonali.todo.utils.UIHelper.showSnack
 import tech.androidplay.sonali.todo.utils.UIHelper.showToast
+import tech.androidplay.sonali.todo.utils.alarmutils.DateTimeUtil
 import tech.androidplay.sonali.todo.utils.alarmutils.cancelAlarmedNotification
 import tech.androidplay.sonali.todo.utils.alarmutils.generateRequestCode
 import tech.androidplay.sonali.todo.utils.alarmutils.startAlarmedNotification
-import java.util.*
 import javax.inject.Inject
 
 /**
@@ -63,33 +54,25 @@ class TaskEditFragment : Fragment(R.layout.fragment_task_edit) {
     lateinit var dialog: AlertDialog.Builder
 
     @Inject
-    lateinit var datePickerFragment: DatePickerFragment
-
-    @Inject
-    lateinit var timePickerFragment: TimePickerFragment
-
-    @Inject
     lateinit var alarmManager: AlarmManager
-
-    @Inject
-    lateinit var calendar: Calendar
 
     @Inject
     lateinit var pendingIntent: PendingIntent
 
+    @Inject
+    lateinit var dateTimeUtil: DateTimeUtil
+
     private val taskViewModel: TaskViewModel by viewModels()
 
-    //    private var alarmId: String = ""
     private var taskId: String? = ""
     private var taskBody: String = ""
     private var taskDesc: String = ""
-    private var taskDate: String? = ""
-    private var taskTime: String? = ""
+    private var taskTimeStamp: String? = ""
     private var taskImage: String? = ""
+    private var newTaskTimeStamp: String? = ""
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         setUpScreen()
         setListener()
     }
@@ -98,14 +81,14 @@ class TaskEditFragment : Fragment(R.layout.fragment_task_edit) {
         taskId = arguments?.getString(TASK_DOC_ID)
         taskBody = arguments?.getString(TASK_DOC_BODY)!!
         taskDesc = arguments?.getString(TASK_DOC_DESC)!!
-        taskDate = arguments?.getString(TASK_DATE) ?: "Add Reminder"
-        taskTime = arguments?.getString(TASK_TIME) ?: "Add Reminder"
+        taskTimeStamp = arguments?.getString(TASK_DATE)
         taskImage = arguments?.getString(TASK_IMAGE_URL)
+        newTaskTimeStamp = taskTimeStamp // setting initial value to same
 
         etTaskBody.setText(taskBody)
         etTaskDesc.setText(taskDesc)
-        tvSelectDate.text = taskDate
-        tvSelectTime.text = taskTime
+        tvSelectDate.text = taskTimeStamp?.toLocalDateTime()?.beautifyDateTime().toString()
+        /*tvSelectDate.text = dateTimeUtil.convertEpochMilliToDateTime(taskTimeStamp?.toLong())*/
         if (!taskImage.isNullOrEmpty()) {
             imgTask.loadImageCircleCropped(taskImage!!)
             imgTaskNoImage.visibility = View.INVISIBLE
@@ -117,9 +100,15 @@ class TaskEditFragment : Fragment(R.layout.fragment_task_edit) {
     }
 
     private fun setListener() {
-        layoutEditDateTime.setOnClickListener { openDatePicker(datePickerFragment) }
-        btnSaveTask.setOnClickListener { saveTask() }
-        btnDeleteTask.setOnClickListener { deleteTask(taskId) }
+        tvSelectDate.setOnClickListener { dateTimeUtil.openDateTimePicker(requireContext()) }
+        /*dateTimeUtil.dateTimeFormat.observe(viewLifecycleOwner, { tvSelectDate.text = it })*/
+        dateTimeUtil.epochFormat.observe(viewLifecycleOwner, {
+            newTaskTimeStamp = "$it"
+            tvSelectDate.text = it.toString().toLocalDateTime()?.beautifyDateTime()
+        })
+
+        /*btnDeleteTask.setOnClickListener { deleteTask(taskId) }*/
+
         imgTask.setOnClickListener { selectImage(this) }
         imgTaskNoImage.setOnClickListener { selectImage(this) }
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
@@ -130,23 +119,24 @@ class TaskEditFragment : Fragment(R.layout.fragment_task_edit) {
     }
 
 
+    // TODO: create alarm on change of date
     private fun saveTask() {
         val taskBody = etTaskBody.text.toString()
         val taskDesc = etTaskDesc.text.toString()
-        val taskDate = tvSelectDate.text.toString()
-        val taskTime = tvSelectTime.text.toString()
-        if (!this.taskBody.compareWith(taskBody) ||
-            !this.taskDesc.compareWith(taskDesc)
+        val taskDate = newTaskTimeStamp
+
+        if (this.taskBody.compareTo(taskBody) != 0 ||
+            this.taskDesc.compareTo(taskDesc) != 0
         ) {
-            taskViewModel.updateTask(taskId!!, taskBody, taskDesc, taskDate, taskTime)
-        }
-        if (!this.taskDate?.compareWith(taskDate)!! ||
-            !this.taskTime?.compareWith(taskTime)!!
-        ) {
-            taskViewModel.updateTask(taskId!!, taskBody, taskDesc, taskDate, taskTime)
+            taskViewModel.updateTask(taskId!!, taskBody, taskDesc, taskDate)
+        } else if (this.taskTimeStamp?.compareTo(taskDate!!) != 0) {
+            taskViewModel.updateTask(taskId!!, taskBody, taskDesc, taskDate)
+
             val requestCode = taskId!!.generateRequestCode()
-            startAlarmedNotification(requestCode, taskBody, taskDesc, calendar, alarmManager)
-        }
+            taskDate?.toLong()?.let {
+                startAlarmedNotification(requestCode, taskBody, taskDesc, it, alarmManager)
+            }
+        } else return
     }
 
 
@@ -178,28 +168,13 @@ class TaskEditFragment : Fragment(R.layout.fragment_task_edit) {
 
     @SuppressLint("SetTextI18n")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        when (resultCode) {
-            DATE_RESULT_CODE -> {
-                val date = data?.getSerializableExtra(Constants.EXTRA_DATE).toString()
-                pickedDate = date
-                tvSelectDate.text = pickedDate
-                openTimePicker(timePickerFragment)
-            }
-            TIME_RESULT_CODE -> {
-                val time = data?.getSerializableExtra(Constants.EXTRA_TIME).toString()
-                pickedTime = time
-                tvSelectTime.text = pickedTime
-            }
-            Activity.RESULT_OK -> {
-                pickedImage = data?.data
-                changeImage(pickedImage)
-            }
+        if (resultCode == Activity.RESULT_OK && data != null) {
+            pickedImage = data.data
+            changeImage(pickedImage)
         }
     }
 
     companion object {
-        var pickedDate = ""
-        var pickedTime = ""
         var pickedImage: Uri? = null
     }
 

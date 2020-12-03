@@ -40,15 +40,16 @@ import javax.inject.Inject
 @InternalCoroutinesApi
 class TaskFragment : Fragment(R.layout.fragment_task) {
 
-    private lateinit var binding: FragmentTaskBinding
+    @Inject
+    lateinit var todoUpcomingAdapter: TodoAdapter
 
     @Inject
-    lateinit var todoTodayAdapter: TodoAdapter
-    @Inject
-    lateinit var todoTomorrowAdapter: TodoAdapter
+    lateinit var todoPastAdapter: TodoAdapter
 
     @Inject
     lateinit var sharedPreferences: SharedPreferences
+
+    private lateinit var binding: FragmentTaskBinding
     private val taskViewModel: TaskViewModel by viewModels()
     private val authViewModel: AuthViewModel by viewModels()
     private lateinit var showFab: Animation
@@ -95,8 +96,8 @@ class TaskFragment : Fragment(R.layout.fragment_task) {
     }
 
     private fun loadTasks() {
-        binding.rvTodoTodayList.adapter = todoTodayAdapter
-        binding.rvTodoTomorrowList.adapter = todoTomorrowAdapter
+        binding.rvTodoUpcomingList.adapter = todoUpcomingAdapter
+        binding.rvTodoPastList.adapter = todoPastAdapter
         taskViewModel.fetchTasksRealtime().observe(viewLifecycleOwner, {
             it.let {
                 when (it) {
@@ -105,8 +106,8 @@ class TaskFragment : Fragment(R.layout.fragment_task) {
                         binding.shimmerFrameLayout.visibility = View.GONE
                         binding.frameNoTodo.visibility = View.GONE
                         it.data?.let { list ->
-                            todoTodayAdapter.showTodayTask(list)
-                            todoTomorrowAdapter.showTomorrowTask(list)
+                            todoUpcomingAdapter.showUpcomingTask(list)
+                            todoPastAdapter.showPastTask(list)
                         }
                     }
                     is ResultData.Failed -> {

@@ -26,7 +26,7 @@ object UIHelper {
     fun getCurrentTimestamp(): String =
         SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss").format(Date())
 
-    fun getCurrentDate(): String = SimpleDateFormat("dd.MM.yyyy").format(Date())
+    fun getCurrentDate(): String = SimpleDateFormat("dd-MM-yyyy HH:mm").format(Date())
 
     fun getTomorrowDate(): String {
         val tomorrow = LocalDate.now().plus(1, ChronoUnit.DAYS)
