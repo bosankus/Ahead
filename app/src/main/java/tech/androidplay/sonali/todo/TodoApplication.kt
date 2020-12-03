@@ -13,16 +13,6 @@ import dagger.hilt.android.HiltAndroidApp
 
 @HiltAndroidApp
 class TodoApplication : Application() {
-
-    companion object {
-        var GLOBAL_YEAR = 2020
-        var GLOBAL_MONTH = 1
-        var GLOBAL_DAY = 1
-        var GLOBAL_HOUR = 12
-        var GLOBAL_MINUTE = 12
-        var GLOBAL_SECOND = 0
-    }
-
     override fun attachBaseContext(base: Context?) {
         super.attachBaseContext(base)
         MultiDex.install(this)

@@ -14,8 +14,6 @@ import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.RecyclerView
-import com.iammert.library.ui.multisearchviewlib.MultiSearchView
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_task.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -26,7 +24,6 @@ import tech.androidplay.sonali.todo.data.viewmodel.TaskViewModel
 import tech.androidplay.sonali.todo.databinding.FragmentTaskBinding
 import tech.androidplay.sonali.todo.ui.adapter.TodoAdapter
 import tech.androidplay.sonali.todo.utils.Constants.PLAY_STORE_LINK
-import tech.androidplay.sonali.todo.utils.Extensions.hideKeyboard
 import tech.androidplay.sonali.todo.utils.ResultData
 import tech.androidplay.sonali.todo.utils.UIHelper.showToast
 import javax.inject.Inject
@@ -43,13 +40,16 @@ import javax.inject.Inject
 @InternalCoroutinesApi
 class TaskFragment : Fragment(R.layout.fragment_task) {
 
-    private lateinit var binding: FragmentTaskBinding
+    @Inject
+    lateinit var todoUpcomingAdapter: TodoAdapter
 
     @Inject
-    lateinit var todoAdapter: TodoAdapter
+    lateinit var todoPastAdapter: TodoAdapter
 
     @Inject
     lateinit var sharedPreferences: SharedPreferences
+
+    private lateinit var binding: FragmentTaskBinding
     private val taskViewModel: TaskViewModel by viewModels()
     private val authViewModel: AuthViewModel by viewModels()
     private lateinit var showFab: Animation
@@ -85,41 +85,19 @@ class TaskFragment : Fragment(R.layout.fragment_task) {
             findNavController().navigate(R.id.action_taskFragment_to_taskCreateFragment)
         }
 
-        binding.rvTodoList.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+        /*binding.rvTodoTodayList.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 if (dy > 0) efabAddTask.hide()
                 else if (dy < 0) efabAddTask.show()
             }
-        })
-
-        binding.searchTask.setSearchViewListener(object : MultiSearchView.MultiSearchViewListener {
-            override fun onItemSelected(index: Int, s: CharSequence) {
-                requireActivity().hideKeyboard()
-                todoAdapter.filterList(s)
-            }
-
-            override fun onSearchComplete(index: Int, s: CharSequence) {
-                requireActivity().hideKeyboard()
-                todoAdapter.filterList(s)
-            }
-
-            override fun onSearchItemRemoved(index: Int) {
-                requireActivity().hideKeyboard()
-                loadTasks()
-            }
-
-            override fun onTextChanged(index: Int, s: CharSequence) {
-                todoAdapter.filterList(s)
-            }
-        })
+        })*/
 
         binding.imgAllTaskMenu.setOnClickListener { showPopupMenu(imgAllTaskMenu) }
     }
 
     private fun loadTasks() {
-        binding.rvTodoList.apply {
-            adapter = todoAdapter
-        }
+        binding.rvTodoUpcomingList.adapter = todoUpcomingAdapter
+        binding.rvTodoPastList.adapter = todoPastAdapter
         taskViewModel.fetchTasksRealtime().observe(viewLifecycleOwner, {
             it.let {
                 when (it) {
@@ -127,7 +105,10 @@ class TaskFragment : Fragment(R.layout.fragment_task) {
                     is ResultData.Success -> {
                         binding.shimmerFrameLayout.visibility = View.GONE
                         binding.frameNoTodo.visibility = View.GONE
-                        it.data?.let { list -> todoAdapter.modifyList(list) }
+                        it.data?.let { list ->
+                            todoUpcomingAdapter.showUpcomingTask(list)
+                            todoPastAdapter.showPastTask(list)
+                        }
                     }
                     is ResultData.Failed -> {
                         binding.shimmerFrameLayout.visibility = View.GONE

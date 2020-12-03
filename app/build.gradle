@@ -149,7 +149,4 @@ dependencies {
     // Circular Imageview
     implementation 'de.hdodenhof:circleimageview:3.1.0'
 
-    // SearchView
-    implementation 'com.github.iammert:MultiSearchView:0.1'
-
 }

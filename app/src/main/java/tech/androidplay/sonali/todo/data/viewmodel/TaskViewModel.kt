@@ -31,8 +31,7 @@ class TaskViewModel @ViewModelInject constructor(
     fun createTask(
         todoBody: String,
         todoDesc: String,
-        todoDate: String,
-        todoTime: String,
+        todoDate: String?,
         uri: Uri?
     ): LiveData<ResultData<String>> {
         val taskMap = hashMapOf(
@@ -40,7 +39,6 @@ class TaskViewModel @ViewModelInject constructor(
             "todoBody" to todoBody,
             "todoDesc" to todoDesc,
             "todoDate" to todoDate,
-            "todoTime" to todoTime,
             "todoCreationTimeStamp" to getCurrentTimestamp(),
             "isCompleted" to false
         )
@@ -58,7 +56,9 @@ class TaskViewModel @ViewModelInject constructor(
     fun fetchTasksRealtime(): MutableLiveData<ResultData<MutableList<Todo>>> {
         val response = MutableLiveData<ResultData<MutableList<Todo>>>()
         viewModelScope.launch {
-            firebaseRepository.fetchTaskRealtime().collect { response.value = it }
+            firebaseRepository.fetchTaskRealtime().collect {
+                response.value = it
+            }
         }
         return response
     }
@@ -69,14 +69,12 @@ class TaskViewModel @ViewModelInject constructor(
     }
 
     fun updateTask(
-        taskId: String, todoBody: String? = "", todoDesc: String? = "", todoDate: String? = "",
-        todoTime: String? = "",
+        taskId: String, todoBody: String? = "", todoDesc: String? = "", todoDate: String? = ""
     ) {
         val map: Map<String, Any?> = mapOf(
             "todoBody" to todoBody,
             "todoDesc" to todoDesc,
             "todoDate" to todoDate,
-            "todoTime" to todoTime,
             "updatedOn" to getCurrentTimestamp()
         )
         viewModelScope.launch { firebaseRepository.updateTask(taskId, map) }

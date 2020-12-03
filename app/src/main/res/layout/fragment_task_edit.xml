@@ -28,8 +28,8 @@
             android:layout_width="45dp"
             android:layout_height="45dp"
             android:layout_marginEnd="@dimen/padding_16dp"
-            android:visibility="invisible"
             android:background="?attr/selectableItemBackground"
+            android:visibility="invisible"
             app:layout_constraintBottom_toBottomOf="@+id/tvEditTasksHeader"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/tvEditTasksHeader"
@@ -39,23 +39,31 @@
             android:id="@+id/imgTaskNoImage"
             android:layout_width="45dp"
             android:layout_height="45dp"
-            android:src="@drawable/ic_attach"
-            android:padding="8dp"
-            android:visibility="invisible"
-            android:background="?attr/selectableItemBackground"
             android:layout_marginEnd="@dimen/padding_16dp"
+            android:background="?attr/selectableItemBackground"
+            android:padding="8dp"
+            android:src="@drawable/ic_attach"
+            android:visibility="invisible"
             app:layout_constraintBottom_toBottomOf="@+id/tvEditTasksHeader"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/tvEditTasksHeader"
             tools:ignore="ContentDescription" />
 
-        <include
-            android:id="@+id/layoutEditDateTime"
-            layout="@layout/layout_date_time"
+        <TextView
+            android:id="@+id/tvSelectDate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/padding_16dp"
             android:layout_marginTop="10dp"
+            android:drawablePadding="5dp"
+            android:fontFamily="@font/calibre_semi"
+            android:paddingTop="6dp"
+            android:paddingBottom="6dp"
+            android:text="@string/hint_date_txt"
+            android:textColor="@color/dribblePink"
+            android:textSize="16sp"
+            app:drawableStartCompat="@drawable/ic_date"
+            app:drawableTint="@color/dribblePink"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tvEditTasksHeader" />
 
@@ -74,7 +82,7 @@
             android:transitionName="todoBody"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/layoutEditDateTime" />
+            app:layout_constraintTop_toBottomOf="@+id/tvSelectDate" />
 
         <androidx.appcompat.widget.AppCompatEditText
             android:id="@+id/etTaskDesc"
@@ -92,41 +100,5 @@
             app:layout_constraintTop_toBottomOf="@+id/etTaskBody" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="start|end|bottom"
-        android:orientation="horizontal"
-        android:weightSum="2">
-
-        <Button
-            android:id="@+id/btnDeleteTask"
-            style="?android:attr/borderlessButtonStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:backgroundTint="@color/white"
-            android:fontFamily="@font/jost_bold"
-            android:text="@string/delete_task"
-            android:textColor="@color/dribblePink"
-            android:textSize="13sp"
-            app:icon="@drawable/ic_delete"
-            app:iconTint="@color/dribblePink" />
-
-        <Button
-            android:id="@+id/btnSaveTask"
-            style="?android:attr/borderlessButtonStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@color/dribblePink"
-            android:fontFamily="@font/jost_bold"
-            android:text="@string/save_task"
-            android:textColor="@color/white"
-            android:textSize="13sp"
-            app:icon="@drawable/ic_check"
-            app:iconTint="@color/white" />
-    </LinearLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

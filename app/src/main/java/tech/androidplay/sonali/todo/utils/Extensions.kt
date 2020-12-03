@@ -1,5 +1,6 @@
 package tech.androidplay.sonali.todo.utils
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.view.View
 import android.view.inputmethod.InputMethodManager
@@ -10,8 +11,10 @@ import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.github.dhaval2404.imagepicker.ImagePicker
-import tech.androidplay.sonali.todo.ui.picker.DatePickerFragment
-import tech.androidplay.sonali.todo.ui.picker.TimePickerFragment
+import java.time.Instant
+import java.time.LocalDateTime
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
 
 /**
  * Created by Androidplay
@@ -20,7 +23,10 @@ import tech.androidplay.sonali.todo.ui.picker.TimePickerFragment
  * Email: ankush@androidplay.in
  */
 
+@SuppressLint("SimpleDateFormat")
 object Extensions {
+
+    // View ext. functions
 
     fun Activity.hideKeyboard() {
         val inputMethodManager: InputMethodManager =
@@ -52,22 +58,29 @@ object Extensions {
             .clearOnDetach()
     }
 
-    fun Fragment.openTimePicker(timePickerFragment: TimePickerFragment) {
-        if (!timePickerFragment.isAdded) {
-            timePickerFragment.setTargetFragment(this, Constants.TIME_REQUEST_CODE)
-            timePickerFragment.show(parentFragmentManager, "TIME PICKER")
+    // Primitive Data ext. functions
+
+    fun String.compareWithToday(): Int {
+        val taskDate = this.toLocalDateTime()
+        val currentDate = LocalDateTime.now()
+        taskDate?.let {
+            return when {
+                taskDate.isEqual(currentDate) -> 0
+                taskDate.isBefore(currentDate) -> -1
+                taskDate.isAfter(currentDate) -> 1
+                else -> 2
+            }
         }
+        return 2
     }
 
-    fun Fragment.openDatePicker(datePickerFragment: DatePickerFragment) {
-        if (!datePickerFragment.isAdded) {
-            datePickerFragment.setTargetFragment(this, Constants.DATE_REQUEST_CODE)
-            datePickerFragment.show(parentFragmentManager, "DATE PICKER")
-        }
+    fun String.toLocalDateTime(): LocalDateTime? {
+        val epoch = this
+        return Instant.ofEpochMilli(epoch.toLong()).atZone(ZoneId.systemDefault()).toLocalDateTime()
     }
 
-    fun String.compareWith(newString: String): Boolean {
-        return this.compareTo(newString) == 0
+    fun LocalDateTime.beautifyDateTime(): String {
+        val date = DateTimeFormatter.ofPattern("dd MMM yyyy hh:mm a")
+        return this.format(date)
     }
-
 }

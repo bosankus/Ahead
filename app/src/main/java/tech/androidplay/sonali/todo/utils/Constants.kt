@@ -1,6 +1,7 @@
 package tech.androidplay.sonali.todo.utils
 
 import android.os.Build
+import java.time.LocalDateTime
 
 /**
  * Created by Androidplay
@@ -30,16 +31,7 @@ object Constants {
     const val TASK_DOC_DESC = "TASK_DOC_DESC"
     const val TASK_STATUS = "TASK_STATUS"
     const val TASK_DATE = "TASK_DATE"
-    const val TASK_TIME = "TASK_TIME"
     const val TASK_IMAGE_URL = "TASK_IMAGE_URL"
-
-    // For pickers
-    const val EXTRA_DATE = "EXTRA_DATE"
-    const val EXTRA_TIME = "EXTRA_TIME"
-    const val DATE_REQUEST_CODE = 100
-    const val DATE_RESULT_CODE = 101
-    const val TIME_REQUEST_CODE = 200
-    const val TIME_RESULT_CODE = 201
 
     // For global navigation
     const val ACTION_SHOW_TASK_FRAGMENT = "ACTION_SHOW_TASK_FRAGMENT"
@@ -73,4 +65,7 @@ object Constants {
     // For Android version check
     const val ANDROID_OREO = Build.VERSION_CODES.O
     /*const val ANDROID_10 = Build.VERSION_CODES.Q*/
+
+    // Firebase Analytics events
+
 }

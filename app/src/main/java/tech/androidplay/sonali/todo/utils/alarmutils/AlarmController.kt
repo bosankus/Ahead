@@ -5,15 +5,8 @@ import android.app.PendingIntent
 import android.content.Intent
 import android.view.View
 import androidx.fragment.app.Fragment
-import tech.androidplay.sonali.todo.TodoApplication.Companion.GLOBAL_DAY
-import tech.androidplay.sonali.todo.TodoApplication.Companion.GLOBAL_HOUR
-import tech.androidplay.sonali.todo.TodoApplication.Companion.GLOBAL_MINUTE
-import tech.androidplay.sonali.todo.TodoApplication.Companion.GLOBAL_MONTH
-import tech.androidplay.sonali.todo.TodoApplication.Companion.GLOBAL_SECOND
-import tech.androidplay.sonali.todo.TodoApplication.Companion.GLOBAL_YEAR
 import tech.androidplay.sonali.todo.utils.Constants.ALARM_DESCRIPTION
 import tech.androidplay.sonali.todo.utils.Constants.ALARM_TEXT
-import java.util.*
 
 /**
  * Created by Androidplay
@@ -26,16 +19,9 @@ fun Fragment.startAlarmedNotification(
     requestCode: Int,
     notificationText: String,
     notificationBody: String,
-    calendar: Calendar,
+    dateTime: Long,
     alarmManager: AlarmManager
 ) {
-    val year = GLOBAL_YEAR
-    val day = GLOBAL_DAY
-    val month = GLOBAL_MONTH
-    val minute = GLOBAL_MINUTE
-    val hour = GLOBAL_HOUR
-    val second = GLOBAL_SECOND
-
     val intent = Intent(requireContext(), AlarmReceiver::class.java).apply {
         this.putExtra(ALARM_TEXT, notificationText)
         this.putExtra(ALARM_DESCRIPTION, notificationBody)
@@ -47,10 +33,9 @@ fun Fragment.startAlarmedNotification(
             intent,
             PendingIntent.FLAG_UPDATE_CURRENT
         )
-    calendar.set(year, month, day, hour, minute, second)
     alarmManager.setExact(
         AlarmManager.RTC_WAKEUP,
-        calendar.timeInMillis,
+        dateTime,
         pendingIntent
     )
 }

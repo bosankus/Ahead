@@ -16,7 +16,6 @@ import tech.androidplay.sonali.todo.utils.Constants.TASK_DOC_DESC
 import tech.androidplay.sonali.todo.utils.Constants.TASK_DOC_ID
 import tech.androidplay.sonali.todo.utils.Constants.TASK_IMAGE_URL
 import tech.androidplay.sonali.todo.utils.Constants.TASK_STATUS
-import tech.androidplay.sonali.todo.utils.Constants.TASK_TIME
 import tech.androidplay.sonali.todo.utils.alarmutils.cancelAlarmedNotification
 import tech.androidplay.sonali.todo.utils.alarmutils.generateRequestCode
 
@@ -56,7 +55,6 @@ class TodoViewHolder(
                 TASK_DOC_DESC to todoItem.todoDesc,
                 TASK_STATUS to todoItem.isCompleted,
                 TASK_DATE to todoItem.todoDate,
-                TASK_TIME to todoItem.todoTime,
                 TASK_IMAGE_URL to todoItem.taskImage
             )
             it?.findNavController()

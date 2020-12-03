@@ -28,13 +28,12 @@ import tech.androidplay.sonali.todo.data.room.RoomRepository
 import tech.androidplay.sonali.todo.data.room.TaskDao
 import tech.androidplay.sonali.todo.data.room.TaskDatabase
 import tech.androidplay.sonali.todo.ui.activity.MainActivity
-import tech.androidplay.sonali.todo.ui.picker.DatePickerFragment
-import tech.androidplay.sonali.todo.ui.picker.TimePickerFragment
 import tech.androidplay.sonali.todo.utils.CacheManager
 import tech.androidplay.sonali.todo.utils.Constants
 import tech.androidplay.sonali.todo.utils.Constants.BASE_URL
 import tech.androidplay.sonali.todo.utils.Constants.DATABASE_NAME
 import tech.androidplay.sonali.todo.utils.Constants.SHARED_PREFERENCE_NAME
+import tech.androidplay.sonali.todo.utils.alarmutils.DateTimeUtil
 import java.util.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
@@ -69,14 +68,6 @@ class ApplicationModule {
     @Singleton
     @Provides
     fun providesCalender(): Calendar = Calendar.getInstance()
-
-    @Singleton
-    @Provides
-    fun providesDatePickerFragment() = DatePickerFragment()
-
-    @Singleton
-    @Provides
-    fun providesTimePickerFragment() = TimePickerFragment()
 
     @Singleton
     @Provides
@@ -168,4 +159,5 @@ class ApplicationModule {
             .build()
             .create(PixabayAPI::class.java)
     }
+
 }

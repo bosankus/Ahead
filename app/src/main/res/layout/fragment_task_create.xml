@@ -77,15 +77,23 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tvAlarmHeader" />
 
-            <include
-                android:id="@+id/layoutDateTime"
-                layout="@layout/layout_date_time"
+            <TextView
+                android:id="@+id/tvSelectDate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:drawablePadding="5dp"
+                android:fontFamily="@font/calibre_semi"
+                android:paddingTop="6dp"
+                android:paddingBottom="6dp"
+                android:text="@string/hint_date_txt"
+                android:textColor="@color/dribblePink"
+                android:textSize="16sp"
                 android:layout_marginStart="26dp"
                 android:layout_marginTop="10dp"
+                app:drawableStartCompat="@drawable/ic_date"
+                app:drawableTint="@color/dribblePink"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tvAlarmDesc" />
+                app:layout_constraintTop_toBottomOf="@id/tvAlarmDesc"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
