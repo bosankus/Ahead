@@ -40,7 +40,8 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/cbTaskStatus"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:strike_text="@{todo.isCompleted}" />
 
             <CheckBox
                 android:id="@+id/cbTaskStatus"

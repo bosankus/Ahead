@@ -27,13 +27,13 @@ import tech.androidplay.sonali.todo.utils.Constants.TASK_IMAGE_URL
 import tech.androidplay.sonali.todo.utils.Extensions.beautifyDateTime
 import tech.androidplay.sonali.todo.utils.Extensions.loadImageCircleCropped
 import tech.androidplay.sonali.todo.utils.Extensions.selectImage
+import tech.androidplay.sonali.todo.utils.Extensions.setTint
 import tech.androidplay.sonali.todo.utils.Extensions.toLocalDateTime
 import tech.androidplay.sonali.todo.utils.ResultData
 import tech.androidplay.sonali.todo.utils.UIHelper.showSnack
 import tech.androidplay.sonali.todo.utils.UIHelper.showToast
 import tech.androidplay.sonali.todo.utils.alarmutils.DateTimeUtil
 import tech.androidplay.sonali.todo.utils.alarmutils.cancelAlarmedNotification
-import tech.androidplay.sonali.todo.utils.alarmutils.generateRequestCode
 import tech.androidplay.sonali.todo.utils.alarmutils.startAlarmedNotification
 import javax.inject.Inject
 
@@ -62,6 +62,7 @@ class TaskEditFragment : Fragment(R.layout.fragment_task_edit) {
     @Inject
     lateinit var dateTimeUtil: DateTimeUtil
 
+
     private val taskViewModel: TaskViewModel by viewModels()
 
     private var taskId: String? = ""
@@ -81,36 +82,34 @@ class TaskEditFragment : Fragment(R.layout.fragment_task_edit) {
         taskId = arguments?.getString(TASK_DOC_ID)
         taskBody = arguments?.getString(TASK_DOC_BODY)!!
         taskDesc = arguments?.getString(TASK_DOC_DESC)!!
+
         taskTimeStamp = arguments?.getString(TASK_DATE)
-        taskImage = arguments?.getString(TASK_IMAGE_URL)
         newTaskTimeStamp = taskTimeStamp // setting initial value to same
+
+        taskImage = arguments?.getString(TASK_IMAGE_URL)
+        handleTaskImage(taskImage)
 
         etTaskBody.setText(taskBody)
         etTaskDesc.setText(taskDesc)
         tvSelectDate.text = taskTimeStamp?.toLocalDateTime()?.beautifyDateTime().toString()
-        /*tvSelectDate.text = dateTimeUtil.convertEpochMilliToDateTime(taskTimeStamp?.toLong())*/
-        if (!taskImage.isNullOrEmpty()) {
-            imgTask.loadImageCircleCropped(taskImage!!)
-            imgTaskNoImage.visibility = View.INVISIBLE
-            imgTask.visibility = View.VISIBLE
-        } else {
-            imgTaskNoImage.visibility = View.VISIBLE
-            imgTask.visibility = View.INVISIBLE
-        }
+        tvSelectDate.text = "You will be notified on ${
+            taskTimeStamp?.toLocalDateTime()?.beautifyDateTime()
+        }. Tap here to change."
     }
 
     private fun setListener() {
+        imgUploadTaskImg.setOnClickListener { selectImage() }
+        tvDeleteTask.setOnClickListener { deleteTask(taskId) }
+
         tvSelectDate.setOnClickListener { dateTimeUtil.openDateTimePicker(requireContext()) }
-        /*dateTimeUtil.dateTimeFormat.observe(viewLifecycleOwner, { tvSelectDate.text = it })*/
-        dateTimeUtil.epochFormat.observe(viewLifecycleOwner, {
-            newTaskTimeStamp = "$it"
-            tvSelectDate.text = it.toString().toLocalDateTime()?.beautifyDateTime()
+        dateTimeUtil.epochFormat.observe(viewLifecycleOwner, { epoch ->
+            epoch?.let {
+                newTaskTimeStamp = "$it"
+                tvSelectDate.text = "You will be notified on ${
+                    it.toString().toLocalDateTime()?.beautifyDateTime()
+                }. Tap here to change."
+            }
         })
-
-        /*btnDeleteTask.setOnClickListener { deleteTask(taskId) }*/
-
-        imgTask.setOnClickListener { selectImage(this) }
-        imgTaskNoImage.setOnClickListener { selectImage(this) }
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
             saveTask()
             showSnack(requireView(), "Task Saved")
@@ -121,8 +120,8 @@ class TaskEditFragment : Fragment(R.layout.fragment_task_edit) {
 
     // TODO: create alarm on change of date
     private fun saveTask() {
-        val taskBody = etTaskBody.text.toString()
-        val taskDesc = etTaskDesc.text.toString()
+        val taskBody = etTaskBody.text.toString().trim()
+        val taskDesc = etTaskDesc.text.toString().trim()
         val taskDate = newTaskTimeStamp
 
         if (this.taskBody.compareTo(taskBody) != 0 ||
@@ -132,37 +131,49 @@ class TaskEditFragment : Fragment(R.layout.fragment_task_edit) {
         } else if (this.taskTimeStamp?.compareTo(taskDate!!) != 0) {
             taskViewModel.updateTask(taskId!!, taskBody, taskDesc, taskDate)
 
-            val requestCode = taskId!!.generateRequestCode()
             taskDate?.toLong()?.let {
-                startAlarmedNotification(requestCode, taskBody, taskDesc, it, alarmManager)
+                startAlarmedNotification(taskId!!, taskBody, taskDesc, it, alarmManager)
             }
         } else return
     }
 
-
     private fun changeImage(pickedImage: Uri?) {
         taskViewModel.uploadImage(pickedImage, taskId!!).observe(viewLifecycleOwner, { imageUrl ->
             when (imageUrl) {
-                is ResultData.Loading -> showToast(requireContext(), "Uploading Image")
+                is ResultData.Loading -> {
+                    tvNoTaskImg.text = "Uploading Image..."
+                    showToast(requireContext(), "Uploading Image")
+                }
                 is ResultData.Success -> {
                     val url = imageUrl.data
-                    url?.let { imgTask.loadImageCircleCropped(it) }
-                    imgTaskNoImage.visibility = View.INVISIBLE
-                    imgTask.visibility = View.VISIBLE
+                    handleTaskImage(url)
+                    showToast(requireContext(), "Great! Image uploaded")
                 }
                 is ResultData.Failed -> showToast(requireContext(), "Something went wrong")
             }
         })
     }
 
+    private fun handleTaskImage(url: String?) {
+        if (!url.isNullOrEmpty()) {
+            tvNoTaskImg.visibility = View.GONE
+            imgTask.visibility = View.VISIBLE
+            imgTask.loadImageCircleCropped(url)
+            imgUploadTaskImg.setTint(R.color.white)
+        } else {
+            tvNoTaskImg.visibility = View.VISIBLE
+            imgTask.visibility = View.GONE
+            imgUploadTaskImg.setTint(R.color.dribblePink)
+        }
+    }
+
     private fun deleteTask(docId: String?) {
         dialog.setPositiveButton("Yes") { dialogInterface, _ ->
-            val requestCode = docId!!.generateRequestCode()
             taskViewModel.deleteTask(docId)
-            cancelAlarmedNotification(requestCode)
+            cancelAlarmedNotification(docId!!)
             findNavController().navigate(R.id.action_taskEditFragment_to_taskFragment)
             dialogInterface.dismiss()
-            showToast(requireContext(), "Task deleted.")
+            showToast(requireContext(), "Task deleted")
         }.create().show()
     }
 

@@ -17,7 +17,6 @@ import tech.androidplay.sonali.todo.utils.Constants.TASK_DOC_ID
 import tech.androidplay.sonali.todo.utils.Constants.TASK_IMAGE_URL
 import tech.androidplay.sonali.todo.utils.Constants.TASK_STATUS
 import tech.androidplay.sonali.todo.utils.alarmutils.cancelAlarmedNotification
-import tech.androidplay.sonali.todo.utils.alarmutils.generateRequestCode
 
 /**
  * Created by Androidplay
@@ -63,9 +62,8 @@ class TodoViewHolder(
 
         binding.clItemListContainer.setOnLongClickListener {
             dialog.setPositiveButton("Yes") { dialogInterface, _ ->
-                val requestCode = todoItem.docId.generateRequestCode()
                 viewModel.deleteTask(todoItem.docId)
-                it.cancelAlarmedNotification(requestCode)
+                it.cancelAlarmedNotification(todoItem.docId)
                 dialogInterface.dismiss()
             }.create().show()
             true

@@ -12,6 +12,7 @@ import tech.androidplay.sonali.todo.data.firebase.FirebaseRepository
 import tech.androidplay.sonali.todo.data.model.Todo
 import tech.androidplay.sonali.todo.utils.ResultData
 import tech.androidplay.sonali.todo.utils.UIHelper.getCurrentTimestamp
+import tech.androidplay.sonali.todo.utils.UIHelper.logMessage
 
 /**
  * Created by Androidplay
@@ -81,6 +82,7 @@ class TaskViewModel @ViewModelInject constructor(
     }
 
     fun uploadImage(uri: Uri?, taskId: String) = uri?.let {
+        logMessage("$it.")
         liveData {
             emit(ResultData.Loading)
             emit(firebaseRepository.uploadImage(uri, taskId))

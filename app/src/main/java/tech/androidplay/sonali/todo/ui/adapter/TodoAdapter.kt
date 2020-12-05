@@ -10,10 +10,6 @@ import tech.androidplay.sonali.todo.data.model.Todo
 import tech.androidplay.sonali.todo.data.viewmodel.TaskViewModel
 import tech.androidplay.sonali.todo.databinding.LayoutMainTaskListBinding
 import tech.androidplay.sonali.todo.utils.Extensions.compareWithToday
-import tech.androidplay.sonali.todo.utils.UIHelper.getCurrentDate
-import tech.androidplay.sonali.todo.utils.UIHelper.getTomorrowDate
-import tech.androidplay.sonali.todo.utils.UIHelper.logMessage
-import java.util.*
 import javax.inject.Inject
 
 /**
@@ -29,8 +25,6 @@ class TodoAdapter @Inject constructor(
     private val dialog: AlertDialog.Builder
 ) : ListAdapter<Todo, TodoViewHolder>(TodoDiffUtilCallback()) {
 
-    private var unfilteredList = listOf<Todo>()
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TodoViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
         val binding = LayoutMainTaskListBinding.inflate(layoutInflater, parent, false)
@@ -44,22 +38,6 @@ class TodoAdapter @Inject constructor(
 
         }
     }
-
-    fun modifyList(list: List<Todo>) {
-        unfilteredList = list
-        submitList(list)
-    }
-
-    /*fun filterList(query: CharSequence?) {
-        val list = mutableListOf<Todo>()
-        query?.let {
-            list.addAll(unfilteredList.filter {
-                it.todoBody.toLowerCase(Locale.getDefault())
-                    .contains(query.toString().toLowerCase(Locale.getDefault()))
-            })
-        } ?: list.addAll(unfilteredList)
-        submitList(list)
-    }*/
 
     fun showUpcomingTask(todoList: List<Todo>) {
         val list = mutableListOf<Todo>()
