@@ -2,9 +2,15 @@ package tech.androidplay.sonali.todo.utils
 
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.content.res.ColorStateList
+import android.text.SpannableString
+import android.text.style.StrikethroughSpan
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.ImageView
+import android.widget.TextView
+import androidx.core.content.ContextCompat
+import androidx.core.widget.ImageViewCompat
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
@@ -40,7 +46,7 @@ object Extensions {
         inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
     }
 
-    fun Fragment.selectImage(context: Fragment) {
+    fun Fragment.selectImage() {
         ImagePicker.with(this)
             .crop()
             .compress(1024)
@@ -51,14 +57,35 @@ object Extensions {
     fun ImageView.loadImageCircleCropped(url: String) {
         Glide.with(this.context)
             .load(url)
-            .circleCrop()
             .transform(CenterCrop(), RoundedCorners(20))
             .transition(DrawableTransitionOptions.withCrossFade())
             .into(this)
-            .clearOnDetach()
+
     }
 
-    // Primitive Data ext. functions
+    fun ImageView.setTint(colorId: Int) {
+        ImageViewCompat.setImageTintList(
+            this, ColorStateList.valueOf(
+                ContextCompat.getColor(this.context, colorId)
+            )
+        )
+    }
+
+    fun TextView.strikeThroughText() {
+        val text = this.text.toString()
+        val spannable = SpannableString(text)
+        spannable.setSpan(StrikethroughSpan(), 0, text.length, 0)
+        this.text = spannable
+    }
+
+    fun TextView.removeStrikeThroughText() {
+        val text = this.text.toString()
+        val spannable = SpannableString(text)
+        spannable.removeSpan(StrikethroughSpan())
+        this.text = spannable
+    }
+
+    // Other Ext. functions
 
     fun String.compareWithToday(): Int {
         val taskDate = this.toLocalDateTime()

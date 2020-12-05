@@ -1,12 +1,10 @@
 package tech.androidplay.sonali.todo.utils.alarmutils
 
-import android.annotation.SuppressLint
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
 
@@ -17,10 +15,6 @@ import javax.inject.Inject
  * Email: ankush@androidplay.in
  */
 class DateTimeUtil @Inject constructor(private val currentDateTime: Calendar) {
-
-    private var _dateTimeFormat = MutableLiveData<String>()
-    val dateTimeFormat: LiveData<String>
-        get() = _dateTimeFormat
 
     private var _epochFormat = MutableLiveData<Long>()
     val epochFormat: LiveData<Long>
@@ -38,19 +32,7 @@ class DateTimeUtil @Inject constructor(private val currentDateTime: Calendar) {
                 val pickDateTime = Calendar.getInstance()
                 pickDateTime.set(year, month, day, hour, minute)
                 _epochFormat.value = pickDateTime.time.time
-                _dateTimeFormat.value = convertEpochMilliToDateTime(pickDateTime.time.time)
-
             }, startHour, startMin, true).show()
         }, startYear, startMonth, startDay).show()
-    }
-
-    // For UI: Showing epoch to correct format.
-    @SuppressLint("SimpleDateFormat")
-    fun convertEpochMilliToDateTime(epoch: Long?): String {
-        epoch?.let {
-            val date = Date(epoch)
-            val formatter = SimpleDateFormat("dd-MM-yyyy HH:mm")
-            return formatter.format(date)
-        } ?: return "Error!"
     }
 }

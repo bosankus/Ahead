@@ -16,7 +16,7 @@ import tech.androidplay.sonali.todo.utils.Constants.ALARM_TEXT
  */
 
 fun Fragment.startAlarmedNotification(
-    requestCode: Int,
+    requestCode: String,
     notificationText: String,
     notificationBody: String,
     dateTime: Long,
@@ -29,7 +29,7 @@ fun Fragment.startAlarmedNotification(
     val pendingIntent =
         PendingIntent.getBroadcast(
             requireContext(),
-            requestCode,
+            requestCode.generateRequestCode(),
             intent,
             PendingIntent.FLAG_UPDATE_CURRENT
         )
@@ -40,26 +40,37 @@ fun Fragment.startAlarmedNotification(
     )
 }
 
-fun Fragment.cancelAlarmedNotification(requestCode: Int) {
+fun Fragment.cancelAlarmedNotification(requestCode: String) {
     val intent = Intent(requireContext(), AlarmReceiver::class.java)
     val pendingIntent =
         PendingIntent.getBroadcast(
             requireContext(),
-            requestCode,
+            requestCode.generateRequestCode(),
             intent,
             PendingIntent.FLAG_UPDATE_CURRENT
         )
     pendingIntent.cancel()
 }
 
-fun View.cancelAlarmedNotification(requestCode: Int) {
+fun View.cancelAlarmedNotification(requestCode: String) {
     val intent = Intent(this.context, AlarmReceiver::class.java)
     val pendingIntent =
         PendingIntent.getBroadcast(
             this.context,
-            requestCode,
+            requestCode.generateRequestCode(),
             intent,
             PendingIntent.FLAG_UPDATE_CURRENT
         )
     pendingIntent.cancel()
+}
+
+@Suppress("UNUSED_CHANGED_VALUE")
+private fun String.generateRequestCode(): Int {
+    var ascii: Int
+    var code = 0
+    for (i in this.indices - 1) {
+        ascii = this[i].toInt()
+        code += ascii
+    }
+    return code
 }

@@ -40,4 +40,7 @@
     <string name="feedback_story">We are always <font color="#E94D88">thinking Ahead</font> to make your experience better. Please share with us how you felt while being ap our platform.</string>
     <string name="suggest_the_developers">Suggest the Developers</string>
     <string name="past">PAST</string>
+    <string name="upload_img_txt">Upload your task image</string>
+    <string name="task_title">Task title:</string>
+    <string name="task_details">Task Details:</string>
 </resources>

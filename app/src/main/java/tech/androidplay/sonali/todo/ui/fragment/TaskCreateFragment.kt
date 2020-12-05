@@ -15,12 +15,13 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.InternalCoroutinesApi
 import tech.androidplay.sonali.todo.R
 import tech.androidplay.sonali.todo.data.viewmodel.TaskViewModel
+import tech.androidplay.sonali.todo.utils.Extensions.beautifyDateTime
 import tech.androidplay.sonali.todo.utils.Extensions.hideKeyboard
 import tech.androidplay.sonali.todo.utils.Extensions.selectImage
+import tech.androidplay.sonali.todo.utils.Extensions.toLocalDateTime
 import tech.androidplay.sonali.todo.utils.ResultData
 import tech.androidplay.sonali.todo.utils.UIHelper.showToast
 import tech.androidplay.sonali.todo.utils.alarmutils.DateTimeUtil
-import tech.androidplay.sonali.todo.utils.alarmutils.generateRequestCode
 import tech.androidplay.sonali.todo.utils.alarmutils.startAlarmedNotification
 import javax.inject.Inject
 
@@ -45,15 +46,18 @@ class TaskCreateFragment : Fragment(R.layout.fragment_task_create) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        clickListeners()
+        setListeners()
     }
 
-    private fun clickListeners() {
-        tvSelectDate.setOnClickListener { dateTimeUtil.openDateTimePicker(requireContext()) }
-        dateTimeUtil.dateTimeFormat.observe(viewLifecycleOwner, { tvSelectDate.text = it })
-        dateTimeUtil.epochFormat.observe(viewLifecycleOwner, { taskTimeStamp = it.toString() })
+    private fun setListeners() {
+        tvSelectImage.setOnClickListener { selectImage() }
 
-        tvSelectImage.setOnClickListener { selectImage(this) }
+        tvSelectDate.setOnClickListener { dateTimeUtil.openDateTimePicker(requireContext()) }
+        dateTimeUtil.epochFormat.observe(viewLifecycleOwner, {
+            taskTimeStamp = it.toString()
+            tvSelectDate.text = taskTimeStamp?.toLocalDateTime()?.beautifyDateTime()
+        })
+
         btCreateTask.setOnClickListener {
             requireActivity().hideKeyboard()
             if ((tvTaskInput.text.length) <= 0) tvTaskInput.error = "Cant't be empty!"
@@ -63,8 +67,8 @@ class TaskCreateFragment : Fragment(R.layout.fragment_task_create) {
 
 
     private fun createTask() {
-        val todoBody = tvTaskInput.text.toString()
-        val todoDesc = tvTaskDescInput.text.toString()
+        val todoBody = tvTaskInput.text.toString().trim()
+        val todoDesc = tvTaskDescInput.text.toString().trim()
         val todoDate = taskTimeStamp
 
         taskViewModel.createTask(todoBody, todoDesc, todoDate, taskImage)
@@ -91,10 +95,9 @@ class TaskCreateFragment : Fragment(R.layout.fragment_task_create) {
         todoDesc: String
     ) {
         taskImage = null
-        val requestCode = taskId.generateRequestCode()
         taskTimeStamp?.let {
             startAlarmedNotification(
-                requestCode,
+                taskId,
                 todoBody,
                 todoDesc,
                 it.toLong(),

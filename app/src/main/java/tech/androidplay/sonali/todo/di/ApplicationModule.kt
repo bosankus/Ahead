@@ -34,6 +34,7 @@ import tech.androidplay.sonali.todo.utils.Constants.BASE_URL
 import tech.androidplay.sonali.todo.utils.Constants.DATABASE_NAME
 import tech.androidplay.sonali.todo.utils.Constants.SHARED_PREFERENCE_NAME
 import tech.androidplay.sonali.todo.utils.alarmutils.DateTimeUtil
+import java.lang.StringBuilder
 import java.util.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
@@ -64,6 +65,10 @@ class ApplicationModule {
     @Provides
     fun provideSharedPreference(@ApplicationContext app: Context): SharedPreferences =
         app.getSharedPreferences(SHARED_PREFERENCE_NAME, Context.MODE_PRIVATE)
+
+    @Singleton
+    @Provides
+    fun providesStringBuilder() = StringBuilder()
 
     @Singleton
     @Provides
