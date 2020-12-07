@@ -1,9 +1,7 @@
 package tech.androidplay.sonali.todo.ui.fragment
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -18,6 +16,7 @@ import tech.androidplay.sonali.todo.utils.ResultData
 import tech.androidplay.sonali.todo.utils.UIHelper.showSnack
 import tech.androidplay.sonali.todo.utils.UIHelper.showToast
 import tech.androidplay.sonali.todo.utils.UIHelper.viewAnimation
+import tech.androidplay.sonali.todo.utils.viewLifecycleLazy
 
 /**
  * Created by Androidplay
@@ -31,22 +30,13 @@ import tech.androidplay.sonali.todo.utils.UIHelper.viewAnimation
 @AndroidEntryPoint
 class FeedbackFragment : Fragment(R.layout.fragment_feedback) {
 
-    private lateinit var binding: FragmentFeedbackBinding
+    private val binding by viewLifecycleLazy { FragmentFeedbackBinding.bind(requireView()) }
     private val taskViewModel: TaskViewModel by viewModels()
     private val animFadeIn by lazy {
         AnimationUtils.loadAnimation(requireContext(), R.anim.fade_in_animation)
     }
     private val animFadeOut by lazy {
         AnimationUtils.loadAnimation(requireContext(), R.anim.fade_out_animation)
-    }
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        binding = FragmentFeedbackBinding.inflate(inflater, container, false)
-        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

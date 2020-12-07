@@ -8,6 +8,7 @@
     tools:context=".ui.activity.MainActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/clTaskContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -38,31 +39,14 @@
             app:layout_constraintTop_toTopOf="@+id/tvAllTasksHeader"
             tools:ignore="ContentDescription" />
 
-        <com.facebook.shimmer.ShimmerFrameLayout
-            android:id="@+id/shimmerFrameLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="16sp"
-            android:background="@color/white"
-            android:orientation="vertical"
-            android:visibility="gone"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvTodayHeader"
-            app:shimmer_auto_start="true">
-
-            <include layout="@layout/layout_shimmer_fragment_task" />
-        </com.facebook.shimmer.ShimmerFrameLayout>
-
         <TextView
             android:id="@+id/tvUpcomingHeader"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="start"
             android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
             android:layout_marginTop="26dp"
+            android:layout_marginEnd="16dp"
             android:fontFamily="@font/calibre_semi"
             android:text="@string/upcoming"
             android:textColor="@color/dribblePink"
@@ -78,15 +62,15 @@
             android:background="@android:color/transparent"
             android:clipToPadding="false"
             android:nestedScrollingEnabled="false"
-            android:orientation="vertical"
+            android:orientation="horizontal"
             android:overScrollMode="never"
             android:scrollbars="none"
-            tools:itemCount="2"
-            tools:listitem="@layout/layout_main_task_list"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvUpcomingHeader" />
+            app:layout_constraintTop_toBottomOf="@+id/tvUpcomingHeader"
+            tools:itemCount="2"
+            tools:listitem="@layout/layout_main_horizontal_task_list" />
 
         <TextView
             android:id="@+id/tvPastHeader"
@@ -94,8 +78,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="start"
             android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
             android:layout_marginTop="26dp"
+            android:layout_marginEnd="16dp"
             android:fontFamily="@font/calibre_semi"
             android:text="@string/past"
             android:textColor="@color/dribblePink"
@@ -114,12 +98,12 @@
             android:orientation="vertical"
             android:overScrollMode="never"
             android:scrollbars="none"
-            tools:itemCount="2"
-            tools:listitem="@layout/layout_main_task_list"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvPastHeader" />
+            app:layout_constraintTop_toBottomOf="@+id/tvPastHeader"
+            tools:itemCount="2"
+            tools:listitem="@layout/layout_main_task_list" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/frameNoTodo"
@@ -153,6 +137,32 @@
                 app:layout_constraintTop_toBottomOf="@+id/imgNoTodo" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/clShimmerContainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:visibility="gone">
+
+        <com.facebook.shimmer.ShimmerFrameLayout
+            android:id="@+id/shimmerFrameLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="@dimen/padding_26dp"
+            android:background="@color/white"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:shimmer_auto_start="true">
+
+            <include layout="@layout/layout_shimmer_fragment_task" />
+        </com.facebook.shimmer.ShimmerFrameLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

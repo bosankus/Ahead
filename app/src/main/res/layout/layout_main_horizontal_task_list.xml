@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="todo"
+            type="tech.androidplay.sonali.todo.data.model.Todo" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_margin="@dimen/padding_8dp"
+        android:background="@drawable/bg_rounded">
+
+        <TextView
+            android:id="@+id/tvTodoBody"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_margin="@dimen/padding_8dp"
+            android:ellipsize="end"
+            android:fontFamily="@font/calibre_bold"
+            android:maxLines="5"
+            android:text="We have to go tomorrow at market and buy some fishes too cook and make something."
+            android:textSize="@dimen/text_18sp"
+            app:layout_constraintBottom_toTopOf="@+id/tvTodoTime"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tvTodoTime"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/padding_8dp"
+            android:fontFamily="@font/calibre_black"
+            android:text="9:30 AM"
+            android:textColor="@color/dribblePink"
+            android:textSize="@dimen/text_16sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

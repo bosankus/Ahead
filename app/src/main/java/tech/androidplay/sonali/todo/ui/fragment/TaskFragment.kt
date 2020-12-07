@@ -4,9 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.PopupMenu
@@ -26,6 +24,7 @@ import tech.androidplay.sonali.todo.ui.adapter.TodoAdapter
 import tech.androidplay.sonali.todo.utils.Constants.PLAY_STORE_LINK
 import tech.androidplay.sonali.todo.utils.ResultData
 import tech.androidplay.sonali.todo.utils.UIHelper.showToast
+import tech.androidplay.sonali.todo.utils.viewLifecycleLazy
 import javax.inject.Inject
 
 /**
@@ -40,6 +39,8 @@ import javax.inject.Inject
 @InternalCoroutinesApi
 class TaskFragment : Fragment(R.layout.fragment_task) {
 
+    private val binding by viewLifecycleLazy { FragmentTaskBinding.bind(requireView()) }
+
     @Inject
     lateinit var todoUpcomingAdapter: TodoAdapter
 
@@ -49,19 +50,9 @@ class TaskFragment : Fragment(R.layout.fragment_task) {
     @Inject
     lateinit var sharedPreferences: SharedPreferences
 
-    private lateinit var binding: FragmentTaskBinding
     private val taskViewModel: TaskViewModel by viewModels()
     private val authViewModel: AuthViewModel by viewModels()
     private lateinit var showFab: Animation
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        binding = FragmentTaskBinding.inflate(inflater, container, false)
-        return binding.root
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -101,9 +92,9 @@ class TaskFragment : Fragment(R.layout.fragment_task) {
         taskViewModel.fetchTasksRealtime().observe(viewLifecycleOwner, {
             it.let {
                 when (it) {
-                    is ResultData.Loading -> shimmerFrameLayout.visibility = View.VISIBLE
+                    is ResultData.Loading -> binding.clShimmerContainer.visibility = View.VISIBLE
                     is ResultData.Success -> {
-                        binding.shimmerFrameLayout.visibility = View.GONE
+                        binding.clShimmerContainer.visibility = View.GONE
                         binding.frameNoTodo.visibility = View.GONE
                         it.data?.let { list ->
                             todoUpcomingAdapter.showUpcomingTask(list)
@@ -111,7 +102,7 @@ class TaskFragment : Fragment(R.layout.fragment_task) {
                         }
                     }
                     is ResultData.Failed -> {
-                        binding.shimmerFrameLayout.visibility = View.GONE
+                        binding.clShimmerContainer.visibility = View.GONE
                         binding.frameNoTodo.visibility = View.VISIBLE
                     }
                 }
