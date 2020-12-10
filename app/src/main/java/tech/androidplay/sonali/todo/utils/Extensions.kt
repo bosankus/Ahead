@@ -2,6 +2,7 @@ package tech.androidplay.sonali.todo.utils
 
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.content.Intent
 import android.content.res.ColorStateList
 import android.text.SpannableString
 import android.text.style.StrikethroughSpan
@@ -12,10 +13,8 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.core.widget.ImageViewCompat
 import androidx.fragment.app.Fragment
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.resource.bitmap.CenterCrop
-import com.bumptech.glide.load.resource.bitmap.RoundedCorners
-import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
+import coil.load
+import coil.transform.RoundedCornersTransformation
 import com.github.dhaval2404.imagepicker.ImagePicker
 import java.time.Instant
 import java.time.LocalDateTime
@@ -37,30 +36,30 @@ object Extensions {
     fun Activity.hideKeyboard() {
         val inputMethodManager: InputMethodManager =
             this.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
-        //Find the currently focused view, so we can grab the correct window token from it.
         var view: View? = this.currentFocus
-        //If no view currently has focus, create a new one, just so we can grab a window token from it
-        if (view == null) {
-            view = View(this)
-        }
+        if (view == null) view = View(this)
         inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
     }
 
     fun Fragment.selectImage() {
         ImagePicker.with(this)
             .crop()
-            .compress(1024)
-            .maxResultSize(1080, 1080)
+            .compress(500)
+            .maxResultSize(500, 500)
             .start()
     }
 
-    fun ImageView.loadImageCircleCropped(url: String) {
-        Glide.with(this.context)
-            .load(url)
-            .transform(CenterCrop(), RoundedCorners(20))
-            .transition(DrawableTransitionOptions.withCrossFade())
-            .into(this)
-
+    fun ImageView.loadImageCircleCropped(url: String?) {
+        url.let {
+            this.load(it) {
+                crossfade(true)
+                transformations(
+                    RoundedCornersTransformation(
+                        20.0F, 20.0F, 20.0F, 20.0F
+                    )
+                )
+            }
+        }
     }
 
     fun ImageView.setTint(colorId: Int) {
@@ -109,5 +108,19 @@ object Extensions {
     fun LocalDateTime.beautifyDateTime(): String {
         val date = DateTimeFormatter.ofPattern("dd MMM yyyy hh:mm a")
         return this.format(date)
+    }
+
+    // General ext. functions
+    fun Fragment.shareApp() {
+        val sharingIntent = Intent(Intent.ACTION_SEND)
+        val shareText =
+            "Let's get your tasks noted and reminded to you, just with little ease. Download now ${Constants.PLAY_STORE_LINK}"
+        val shareSubText = "Think Ahead - Personal Task Tracker"
+        sharingIntent.apply {
+            type = "text/plain"
+            putExtra(Intent.EXTRA_SUBJECT, shareSubText)
+            putExtra(Intent.EXTRA_TEXT, shareText)
+            startActivity(Intent.createChooser(this, "Share via"))
+        }
     }
 }

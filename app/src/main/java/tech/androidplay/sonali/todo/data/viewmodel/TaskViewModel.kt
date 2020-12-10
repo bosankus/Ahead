@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import tech.androidplay.sonali.todo.data.firebase.FirebaseRepository
 import tech.androidplay.sonali.todo.data.model.Todo
+import tech.androidplay.sonali.todo.utils.Extensions.compareWithToday
 import tech.androidplay.sonali.todo.utils.ResultData
 import tech.androidplay.sonali.todo.utils.UIHelper.getCurrentTimestamp
 import tech.androidplay.sonali.todo.utils.UIHelper.logMessage
@@ -28,6 +29,23 @@ class TaskViewModel @ViewModelInject constructor(
 ) : ViewModel() {
 
     private val currentUser = firebaseAuth.currentUser
+
+    private var _loadingState = MutableLiveData<Boolean>()
+    val loadingState get() = _loadingState
+
+    private var _incompleteTaskListSize = MutableLiveData<Int>()
+    val incompleteTaskListSize get() = _incompleteTaskListSize
+
+    private var _todayTaskList = MutableLiveData<List<Todo>>()
+    val todayTaskList get() = _todayTaskList
+
+    private var _overdueTaskList = MutableLiveData<List<Todo>>()
+    val overdueTaskList get() = _overdueTaskList
+
+    init {
+        getAllTasks()
+
+    }
 
     fun createTask(
         todoBody: String,
@@ -54,14 +72,26 @@ class TaskViewModel @ViewModelInject constructor(
         }
     }
 
-    fun fetchTasksRealtime(): MutableLiveData<ResultData<MutableList<Todo>>> {
-        val response = MutableLiveData<ResultData<MutableList<Todo>>>()
+    private fun getAllTasks() {
         viewModelScope.launch {
-            firebaseRepository.fetchTaskRealtime().collect {
-                response.value = it
+            try {
+                _loadingState.value = true
+                firebaseRepository.fetchTaskRealtime().collect { allTodoList ->
+                    // set value for all tasks
+                    _incompleteTaskListSize.value = allTodoList.size
+                    // set value for all incomplete tasks for today
+                    _todayTaskList.value =
+                        allTodoList.filter { it.todoDate.compareWithToday() == 1 }
+                    // set value for all incomplete tasks which are overdue
+                    _overdueTaskList.value =
+                        allTodoList.filter { it.todoDate.compareWithToday() == -1 }
+                    _loadingState.value = false
+                }
+            } catch (e: Exception) {
+                _loadingState.value = false
+                logMessage("Flow: ${e.message}")
             }
         }
-        return response
     }
 
     fun changeTaskStatus(taskId: String, status: Boolean) {

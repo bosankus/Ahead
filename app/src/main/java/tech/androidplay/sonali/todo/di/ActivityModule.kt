@@ -15,7 +15,6 @@ import tech.androidplay.sonali.todo.data.viewmodel.TaskViewModel
 import tech.androidplay.sonali.todo.ui.adapter.TodoAdapter
 import tech.androidplay.sonali.todo.utils.alarmutils.DateTimeUtil
 import java.util.*
-import javax.inject.Singleton
 
 /**
  * Created by Androidplay

@@ -23,6 +23,7 @@ import javax.inject.Inject
  * On: 5/6/2020, 4:54 AM
  */
 
+@Suppress("UNCHECKED_CAST")
 @ExperimentalCoroutinesApi
 class FirebaseRepository @Inject constructor(
     private val firebaseAuth: FirebaseAuth,
@@ -95,20 +96,21 @@ class FirebaseRepository @Inject constructor(
         }
     }
 
-    override suspend fun fetchTaskRealtime(): Flow<ResultData<MutableList<Todo>>> = callbackFlow {
-        offer(ResultData.Loading)
-        val querySnapshot = query
-            .addSnapshotListener { value, error ->
-                if (error != null) return@addSnapshotListener
-                else if (!value?.isEmpty!!) {
-                    val todo = value.toObjects(Todo::class.java)
-                    offer(ResultData.Success(todo))
-                } else offer(ResultData.Failed())
+    override suspend fun fetchTaskRealtime(): Flow<MutableList<Todo>> =
+        callbackFlow {
+            val querySnapshot = query
+                .addSnapshotListener { value, error ->
+                    if (error != null) return@addSnapshotListener
+                    else {
+                        val todo: MutableList<Todo> = value!!.toObjects(Todo::class.java)
+                        offer(todo)
+                    }
+                }
+            awaitClose {
+                querySnapshot.remove()
             }
-        awaitClose {
-            querySnapshot.remove()
-        }
-    }
+        } as Flow<MutableList<Todo>>
+
 
     override suspend fun updateTask(taskId: String, map: Map<String, Any?>) {
         taskListRef.document(taskId)
