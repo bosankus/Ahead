@@ -11,4 +11,5 @@
     <dimen name="text_16sp">16sp</dimen>
     <dimen name="text_18sp">18sp</dimen>
     <dimen name="text_22sp">22sp</dimen>
+    <dimen name="text_55sp">55sp</dimen>
 </resources>

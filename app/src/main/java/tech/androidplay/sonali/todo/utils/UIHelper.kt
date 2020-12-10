@@ -50,4 +50,18 @@ object UIHelper {
         else view.visibility = View.INVISIBLE
     }
 
+    fun hideViews(hideList: List<View>? = null) {
+        hideList?.let {
+            for (i in it)
+                i.visibility = View.GONE
+        }
+    }
+
+    fun showViews(showList: List<View>? = null) {
+        showList?.let {
+            for (i in it)
+                i.visibility = View.VISIBLE
+        }
+    }
+
 }

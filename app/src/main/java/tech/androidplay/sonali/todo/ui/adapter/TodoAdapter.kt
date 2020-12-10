@@ -34,20 +34,5 @@ class TodoAdapter @Inject constructor(
     override fun onBindViewHolder(holder: TodoViewHolder, position: Int) {
         val todoItem = getItem(position)
         holder.bind(viewModel, todoItem, dialog)
-        holder.itemView.setOnClickListener {
-
-        }
-    }
-
-    fun showUpcomingTask(todoList: List<Todo>) {
-        val list = mutableListOf<Todo>()
-        list.addAll(todoList.filter { it.todoDate.compareWithToday() == 1 })
-        submitList(list)
-    }
-
-    fun showPastTask(todoList: List<Todo>) {
-        val list = mutableListOf<Todo>()
-        list.addAll(todoList.filter { it.todoDate.compareWithToday() == -1 })
-        submitList(list)
     }
 }

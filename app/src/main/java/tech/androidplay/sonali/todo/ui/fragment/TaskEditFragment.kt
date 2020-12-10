@@ -112,7 +112,6 @@ class TaskEditFragment : Fragment(R.layout.fragment_task_edit) {
         })
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
             saveTask()
-            showSnack(requireView(), "Task Saved")
             findNavController().navigate(R.id.action_taskEditFragment_to_taskFragment)
         }
     }
@@ -128,12 +127,13 @@ class TaskEditFragment : Fragment(R.layout.fragment_task_edit) {
             this.taskDesc.compareTo(taskDesc) != 0
         ) {
             taskViewModel.updateTask(taskId!!, taskBody, taskDesc, taskDate)
+            showToast(requireContext(), "Task Saved")
         } else if (this.taskTimeStamp?.compareTo(taskDate!!) != 0) {
             taskViewModel.updateTask(taskId!!, taskBody, taskDesc, taskDate)
-
             taskDate?.toLong()?.let {
                 startAlarmedNotification(taskId!!, taskBody, taskDesc, it, alarmManager)
             }
+            showToast(requireContext(), "Task Saved")
         } else return
     }
 

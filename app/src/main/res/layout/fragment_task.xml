@@ -1,186 +1,91 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/taskFragment"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".ui.activity.MainActivity">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/clTaskContainer"
+    <data>
+
+        <variable
+            name="viewmodel"
+            type="tech.androidplay.sonali.todo.data.viewmodel.TaskViewModel" />
+    </data>
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:id="@+id/taskFragment"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <TextView
-            android:id="@+id/tvAllTasksHeader"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="35dp"
-            android:fontFamily="@font/calibre"
-            android:text="@string/task"
-            android:textAllCaps="false"
-            android:textColor="@color/grey3"
-            android:textSize="55sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <ImageView
-            android:id="@+id/imgAllTaskMenu"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="20dp"
-            android:background="?attr/selectableItemBackground"
-            android:padding="5dp"
-            android:src="@drawable/ic_menu"
-            app:layout_constraintBottom_toBottomOf="@+id/tvAllTasksHeader"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/tvAllTasksHeader"
-            tools:ignore="ContentDescription" />
-
-        <TextView
-            android:id="@+id/tvUpcomingHeader"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="start"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="26dp"
-            android:layout_marginEnd="16dp"
-            android:fontFamily="@font/calibre_semi"
-            android:text="@string/upcoming"
-            android:textColor="@color/dribblePink"
-            android:textSize="18sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvAllTasksHeader" />
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvTodoUpcomingList"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:background="@android:color/transparent"
-            android:clipToPadding="false"
-            android:nestedScrollingEnabled="false"
-            android:orientation="horizontal"
-            android:overScrollMode="never"
-            android:scrollbars="none"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvUpcomingHeader"
-            tools:itemCount="2"
-            tools:listitem="@layout/layout_main_horizontal_task_list" />
-
-        <TextView
-            android:id="@+id/tvPastHeader"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="start"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="26dp"
-            android:layout_marginEnd="16dp"
-            android:fontFamily="@font/calibre_semi"
-            android:text="@string/past"
-            android:textColor="@color/dribblePink"
-            android:textSize="18sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/rvTodoUpcomingList" />
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvTodoPastList"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:background="@android:color/transparent"
-            android:clipToPadding="false"
-            android:nestedScrollingEnabled="false"
-            android:orientation="vertical"
-            android:overScrollMode="never"
-            android:scrollbars="none"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvPastHeader"
-            tools:itemCount="2"
-            tools:listitem="@layout/layout_main_task_list" />
+        android:layout_height="match_parent"
+        tools:context=".ui.activity.MainActivity">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/frameNoTodo"
+            android:id="@+id/clTaskListContainer"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/white"
-            android:visibility="gone">
+            android:layout_height="match_parent">
 
-            <ImageView
-                android:id="@+id/imgNoTodo"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:src="@drawable/ic_note"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:ignore="ContentDescription" />
-
-            <TextView
-                android:layout_width="wrap_content"
+            <include
+                android:id="@+id/layoutTaskBar"
+                layout="@layout/layout_task_app_bar"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="start"
-                android:layout_marginTop="16sp"
-                android:fontFamily="@font/jost_semi"
-                android:text="@string/all_tasks_completed_add_more"
-                android:textColor="@color/grey3"
-                android:textSize="16sp"
+                android:layout_marginTop="@dimen/padding_26dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/imgNoTodo" />
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <include
+                android:id="@+id/layoutTodayTask"
+                layout="@layout/layout_task_today"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/padding_16dp"
+                app:listSize="@{viewmodel.todayTaskList.size()}"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/layoutTaskBar" />
+
+            <include
+                android:id="@+id/layoutOverdueTask"
+                layout="@layout/layout_task_overdue"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/padding_16dp"
+                app:listSize="@{viewmodel.overdueTaskList.size()}"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/layoutTodayTask" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/clShimmerContainer"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/white"
-        android:visibility="gone">
-
-        <com.facebook.shimmer.ShimmerFrameLayout
-            android:id="@+id/shimmerFrameLayout"
-            android:layout_width="match_parent"
+        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+            android:id="@+id/efabAddTask"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_margin="@dimen/padding_26dp"
-            android:background="@color/white"
-            android:orientation="vertical"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:shimmer_auto_start="true">
+            android:layout_gravity="bottom|end"
+            android:layout_margin="20sp"
+            android:backgroundTint="@color/dribblePink"
+            android:fontFamily="@font/jost_bold"
+            android:minHeight="1dp"
+            android:text="@string/add_task"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            app:icon="@android:drawable/ic_input_add"
+            app:iconPadding="0sp"
+            app:iconTint="@color/white"
+            app:rippleColor="@color/white" />
 
-            <include layout="@layout/layout_shimmer_fragment_task" />
-        </com.facebook.shimmer.ShimmerFrameLayout>
+        <include
+            android:id="@+id/layoutNoTask"
+            layout="@layout/layout_task_empty"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:listSize="@{viewmodel.incompleteTaskListSize}"/>
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        <include
+            android:id="@+id/layoutLoadingTask"
+            layout="@layout/layout_task_loading"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:loadingState="@{viewmodel.loadingState}"/>
 
-    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-        android:id="@+id/efabAddTask"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="20sp"
-        android:backgroundTint="@color/dribblePink"
-        android:fontFamily="@font/jost_bold"
-        android:minHeight="1dp"
-        android:text="@string/add_task"
-        android:textColor="@color/white"
-        android:textSize="16sp"
-        app:icon="@android:drawable/ic_input_add"
-        app:iconPadding="0sp"
-        app:iconTint="@color/white"
-        app:rippleColor="@color/white" />
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+</layout>

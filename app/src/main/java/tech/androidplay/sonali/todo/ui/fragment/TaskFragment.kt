@@ -1,7 +1,6 @@
 package tech.androidplay.sonali.todo.ui.fragment
 
 import android.annotation.SuppressLint
-import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.View
@@ -13,7 +12,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.android.synthetic.main.fragment_task.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.InternalCoroutinesApi
 import tech.androidplay.sonali.todo.R
@@ -21,8 +19,7 @@ import tech.androidplay.sonali.todo.data.viewmodel.AuthViewModel
 import tech.androidplay.sonali.todo.data.viewmodel.TaskViewModel
 import tech.androidplay.sonali.todo.databinding.FragmentTaskBinding
 import tech.androidplay.sonali.todo.ui.adapter.TodoAdapter
-import tech.androidplay.sonali.todo.utils.Constants.PLAY_STORE_LINK
-import tech.androidplay.sonali.todo.utils.ResultData
+import tech.androidplay.sonali.todo.utils.Extensions.shareApp
 import tech.androidplay.sonali.todo.utils.UIHelper.showToast
 import tech.androidplay.sonali.todo.utils.viewLifecycleLazy
 import javax.inject.Inject
@@ -42,10 +39,10 @@ class TaskFragment : Fragment(R.layout.fragment_task) {
     private val binding by viewLifecycleLazy { FragmentTaskBinding.bind(requireView()) }
 
     @Inject
-    lateinit var todoUpcomingAdapter: TodoAdapter
+    lateinit var overdueTodoAdapter: TodoAdapter
 
     @Inject
-    lateinit var todoPastAdapter: TodoAdapter
+    lateinit var todayTodoAdapter: TodoAdapter
 
     @Inject
     lateinit var sharedPreferences: SharedPreferences
@@ -58,7 +55,7 @@ class TaskFragment : Fragment(R.layout.fragment_task) {
         super.onViewCreated(view, savedInstanceState)
         setUpScreen()
         setListeners()
-        loadTasks()
+        setObservers()
 
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
             activity?.finishAffinity()
@@ -66,47 +63,32 @@ class TaskFragment : Fragment(R.layout.fragment_task) {
     }
 
     private fun setUpScreen() {
+        binding.viewmodel = taskViewModel
+        binding.lifecycleOwner = viewLifecycleOwner
+
         showFab = AnimationUtils.loadAnimation(requireContext(), R.anim.btn_up_animation)
         binding.efabAddTask.startAnimation(showFab)
     }
 
     private fun setListeners() {
+        binding.layoutTaskBar.imgTaskMenu.setOnClickListener {
+            showPopupMenu(binding.layoutTaskBar.imgTaskMenu)
+        }
 
         binding.efabAddTask.setOnClickListener {
             findNavController().navigate(R.id.action_taskFragment_to_taskCreateFragment)
         }
-
-        /*binding.rvTodoTodayList.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                if (dy > 0) efabAddTask.hide()
-                else if (dy < 0) efabAddTask.show()
-            }
-        })*/
-
-        binding.imgAllTaskMenu.setOnClickListener { showPopupMenu(imgAllTaskMenu) }
     }
 
-    private fun loadTasks() {
-        binding.rvTodoUpcomingList.adapter = todoUpcomingAdapter
-        binding.rvTodoPastList.adapter = todoPastAdapter
-        taskViewModel.fetchTasksRealtime().observe(viewLifecycleOwner, {
-            it.let {
-                when (it) {
-                    is ResultData.Loading -> binding.clShimmerContainer.visibility = View.VISIBLE
-                    is ResultData.Success -> {
-                        binding.clShimmerContainer.visibility = View.GONE
-                        binding.frameNoTodo.visibility = View.GONE
-                        it.data?.let { list ->
-                            todoUpcomingAdapter.showUpcomingTask(list)
-                            todoPastAdapter.showPastTask(list)
-                        }
-                    }
-                    is ResultData.Failed -> {
-                        binding.clShimmerContainer.visibility = View.GONE
-                        binding.frameNoTodo.visibility = View.VISIBLE
-                    }
-                }
-            }
+    private fun setObservers() {
+        binding.layoutTodayTask.rvTodayList.adapter = todayTodoAdapter
+        binding.layoutOverdueTask.rvOverdueList.adapter = overdueTodoAdapter
+        taskViewModel.todayTaskList.observe(viewLifecycleOwner, {
+            todayTodoAdapter.submitList(it)
+        })
+
+        taskViewModel.overdueTaskList.observe(viewLifecycleOwner, {
+            overdueTodoAdapter.submitList(it)
         })
     }
 
@@ -117,10 +99,7 @@ class TaskFragment : Fragment(R.layout.fragment_task) {
 
         popupMenu.setOnMenuItemClickListener {
             when (it.itemId) {
-                R.id.menu_logout -> {
-                    showToast(requireContext(), "You are logged out.")
-                    logOutUser()
-                }
+                R.id.menu_logout -> logOutUser()
                 R.id.menu_share_app -> shareApp()
                 R.id.menu_feedback -> findNavController().navigate(R.id.action_taskFragment_to_feedbackFragment)
             }
@@ -128,23 +107,12 @@ class TaskFragment : Fragment(R.layout.fragment_task) {
         }
     }
 
-    private fun shareApp() {
-        val sharingIntent = Intent(Intent.ACTION_SEND)
-        val shareText =
-            "Let's get your tasks noted and reminded to you, just with little ease. Download now $PLAY_STORE_LINK"
-        val shareSubText = "Think Ahead - Personal Task Tracker"
-        sharingIntent.apply {
-            type = "text/plain"
-            putExtra(Intent.EXTRA_SUBJECT, shareSubText)
-            putExtra(Intent.EXTRA_TEXT, shareText)
-            startActivity(Intent.createChooser(this, "Share via"))
-        }
-    }
-
     @SuppressLint("CommitPrefEdits")
     private fun logOutUser() {
         sharedPreferences.edit().clear()
         authViewModel.logoutUser()
+        showToast(requireContext(), "You are logged out.")
         findNavController().navigate(R.id.action_taskFragment_to_authFragment)
     }
+
 }
