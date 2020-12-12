@@ -3,6 +3,7 @@ package tech.androidplay.sonali.todo.ui.adapter
 import android.view.View
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
+import tech.androidplay.sonali.todo.utils.Extensions.convertFromEpochTime
 import tech.androidplay.sonali.todo.utils.Extensions.removeStrikeThroughText
 import tech.androidplay.sonali.todo.utils.Extensions.strikeThroughText
 
@@ -22,4 +23,10 @@ fun TextView.strikeText(status: Boolean) {
 @BindingAdapter("show")
 fun View.visibility(status: Boolean) {
     if (status) this.visibility = View.VISIBLE else this.visibility = View.GONE
+}
+
+// TODO
+@BindingAdapter("day_name")
+fun TextView.showDayName(date: String) {
+    this.text = date.toLong().convertFromEpochTime()
 }

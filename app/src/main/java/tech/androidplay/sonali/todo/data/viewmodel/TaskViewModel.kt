@@ -10,7 +10,9 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import tech.androidplay.sonali.todo.data.firebase.FirebaseRepository
 import tech.androidplay.sonali.todo.data.model.Todo
+import tech.androidplay.sonali.todo.utils.Extensions.beautifyDateTime
 import tech.androidplay.sonali.todo.utils.Extensions.compareWithToday
+import tech.androidplay.sonali.todo.utils.Extensions.toLocalDateTime
 import tech.androidplay.sonali.todo.utils.ResultData
 import tech.androidplay.sonali.todo.utils.UIHelper.getCurrentTimestamp
 import tech.androidplay.sonali.todo.utils.UIHelper.logMessage
@@ -42,10 +44,13 @@ class TaskViewModel @ViewModelInject constructor(
     private var _overdueTaskList = MutableLiveData<List<Todo>>()
     val overdueTaskList get() = _overdueTaskList
 
+
     init {
         getAllTasks()
 
     }
+
+    /* Network Call methods */
 
     fun createTask(
         todoBody: String,
@@ -119,7 +124,6 @@ class TaskViewModel @ViewModelInject constructor(
         }
     }!!
 
-
     fun deleteTask(docId: String?) =
         docId?.let { viewModelScope.launch { firebaseRepository.deleteTask(docId) } }
 
@@ -134,5 +138,7 @@ class TaskViewModel @ViewModelInject constructor(
             emit(firebaseRepository.provideFeedback(hashMap))
         }
     }
+
+
 }
 

@@ -5,6 +5,7 @@ import android.app.Activity
 import android.content.Intent
 import android.content.res.ColorStateList
 import android.text.SpannableString
+import android.text.format.DateUtils
 import android.text.style.StrikethroughSpan
 import android.view.View
 import android.view.inputmethod.InputMethodManager
@@ -16,6 +17,7 @@ import androidx.fragment.app.Fragment
 import coil.load
 import coil.transform.RoundedCornersTransformation
 import com.github.dhaval2404.imagepicker.ImagePicker
+import java.text.SimpleDateFormat
 import java.time.Instant
 import java.time.LocalDateTime
 import java.time.ZoneId
@@ -84,6 +86,19 @@ object Extensions {
         this.text = spannable
     }
 
+    fun Fragment.shareApp() {
+        val sharingIntent = Intent(Intent.ACTION_SEND)
+        val shareText =
+            "Let's get your tasks noted and reminded to you, just with little ease. Download now ${Constants.PLAY_STORE_LINK}"
+        val shareSubText = "Think Ahead - Personal Task Tracker"
+        sharingIntent.apply {
+            type = "text/plain"
+            putExtra(Intent.EXTRA_SUBJECT, shareSubText)
+            putExtra(Intent.EXTRA_TEXT, shareText)
+            startActivity(Intent.createChooser(this, "Share via"))
+        }
+    }
+
     // Other Ext. functions
 
     fun String.compareWithToday(): Int {
@@ -106,21 +121,27 @@ object Extensions {
     }
 
     fun LocalDateTime.beautifyDateTime(): String {
-        val date = DateTimeFormatter.ofPattern("dd MMM yyyy hh:mm a")
-        return this.format(date)
+        val dateTime = DateTimeFormatter.ofPattern("dd MMM yyyy hh:mm a")
+        return this.format(dateTime)
     }
 
-    // General ext. functions
-    fun Fragment.shareApp() {
-        val sharingIntent = Intent(Intent.ACTION_SEND)
-        val shareText =
-            "Let's get your tasks noted and reminded to you, just with little ease. Download now ${Constants.PLAY_STORE_LINK}"
-        val shareSubText = "Think Ahead - Personal Task Tracker"
-        sharingIntent.apply {
-            type = "text/plain"
-            putExtra(Intent.EXTRA_SUBJECT, shareSubText)
-            putExtra(Intent.EXTRA_TEXT, shareText)
-            startActivity(Intent.createChooser(this, "Share via"))
-        }
+    fun LocalDateTime.beautifyTime(): String {
+        val time = DateTimeFormatter.ofPattern("hh:mm a")
+        return this.format(time)
     }
+
+    fun Long.convertFromEpochTime(): String {
+        val timeNow = System.currentTimeMillis()
+        val giveTime = this
+        val timeDayRelative = DateUtils.getRelativeTimeSpanString(
+            giveTime,
+            timeNow,
+            DateUtils.DAY_IN_MILLIS,
+            DateUtils.FORMAT_ABBREV_RELATIVE
+        )
+        val hourFormatter = SimpleDateFormat("HH:mm a")
+        val timeHour = hourFormatter.format(giveTime)
+        return "$timeDayRelative at $timeHour"
+    }
+
 }
