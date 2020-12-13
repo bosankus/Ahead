@@ -110,10 +110,10 @@ class TaskEditFragment : Fragment(R.layout.fragment_task_edit) {
                 }. Tap here to change."
             }
         })
-        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
+        /*requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
             saveTask()
             findNavController().navigate(R.id.action_taskEditFragment_to_taskFragment)
-        }
+        }*/
     }
 
 

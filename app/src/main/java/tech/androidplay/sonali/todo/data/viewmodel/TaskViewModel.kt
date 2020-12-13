@@ -10,9 +10,7 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import tech.androidplay.sonali.todo.data.firebase.FirebaseRepository
 import tech.androidplay.sonali.todo.data.model.Todo
-import tech.androidplay.sonali.todo.utils.Extensions.beautifyDateTime
 import tech.androidplay.sonali.todo.utils.Extensions.compareWithToday
-import tech.androidplay.sonali.todo.utils.Extensions.toLocalDateTime
 import tech.androidplay.sonali.todo.utils.ResultData
 import tech.androidplay.sonali.todo.utils.UIHelper.getCurrentTimestamp
 import tech.androidplay.sonali.todo.utils.UIHelper.logMessage
@@ -37,6 +35,9 @@ class TaskViewModel @ViewModelInject constructor(
 
     private var _incompleteTaskListSize = MutableLiveData<Int>()
     val incompleteTaskListSize get() = _incompleteTaskListSize
+
+    private var _completedTaskList = MutableLiveData<List<Todo>>()
+    val completedTaskList get() = _completedTaskList
 
     private var _todayTaskList = MutableLiveData<List<Todo>>()
     val todayTaskList get() = _todayTaskList
@@ -82,14 +83,19 @@ class TaskViewModel @ViewModelInject constructor(
             try {
                 _loadingState.value = true
                 firebaseRepository.fetchTaskRealtime().collect { allTodoList ->
-                    // set value for all tasks
+                    // set value for all incomplete task list size
                     _incompleteTaskListSize.value = allTodoList.size
+                    // set value for all completed tasks
+                    _completedTaskList.value =
+                        allTodoList.filter { it.isCompleted }.sortedByDescending { it.todoDate }
                     // set value for all incomplete tasks for today
                     _todayTaskList.value =
-                        allTodoList.filter { it.todoDate.compareWithToday() == 1 }
+                        allTodoList.filter { it.todoDate.compareWithToday() == 1 && !it.isCompleted }
+                            .sortedByDescending { it.todoDate }
                     // set value for all incomplete tasks which are overdue
                     _overdueTaskList.value =
-                        allTodoList.filter { it.todoDate.compareWithToday() == -1 }
+                        allTodoList.filter { it.todoDate.compareWithToday() == -1 && !it.isCompleted }
+                            .sortedByDescending { it.todoDate }
                     _loadingState.value = false
                 }
             } catch (e: Exception) {

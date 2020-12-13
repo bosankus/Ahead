@@ -57,7 +57,7 @@ class TodoViewHolder(
                 TASK_IMAGE_URL to todoItem.taskImage
             )
             it?.findNavController()
-                ?.navigate(R.id.action_taskFragment_to_taskEditFragment, bundle)
+                ?.navigate(R.id.action_global_taskEditFragment, bundle)
         }
 
         binding.clItemListContainer.setOnLongClickListener {
