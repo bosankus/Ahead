@@ -84,7 +84,7 @@ class TaskViewModel @ViewModelInject constructor(
                 _loadingState.value = true
                 firebaseRepository.fetchTaskRealtime().collect { allTodoList ->
                     // set value for all incomplete task list size
-                    _incompleteTaskListSize.value = allTodoList.size
+                    _incompleteTaskListSize.value = allTodoList.filter { !it.isCompleted }.size
                     // set value for all completed tasks
                     _completedTaskList.value =
                         allTodoList.filter { it.isCompleted }.sortedByDescending { it.todoDate }
