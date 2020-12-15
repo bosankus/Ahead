@@ -11,6 +11,7 @@ import android.net.Uri
 import android.os.Build
 import androidx.core.app.NotificationCompat
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import tech.androidplay.sonali.todo.R
 import tech.androidplay.sonali.todo.di.HiltBroadcastReceiver
 import tech.androidplay.sonali.todo.utils.Constants
@@ -18,6 +19,7 @@ import tech.androidplay.sonali.todo.utils.Constants.ALARM_DESCRIPTION
 import tech.androidplay.sonali.todo.utils.Constants.ALARM_TEXT
 import tech.androidplay.sonali.todo.utils.Constants.ANDROID_OREO
 import tech.androidplay.sonali.todo.utils.Constants.NOTIFICATION_ID
+import tech.androidplay.sonali.todo.utils.Constants.TASK_DOC_ID
 import javax.inject.Inject
 
 /**
@@ -28,40 +30,62 @@ import javax.inject.Inject
  */
 
 @AndroidEntryPoint
+@ExperimentalCoroutinesApi
 class AlarmReceiver : HiltBroadcastReceiver() {
 
     @Inject
-    lateinit var notificationBuilder: NotificationCompat.Builder
+    lateinit var baseNotificationBuilder: NotificationCompat.Builder
 
     @Inject
-    lateinit var pendingIntent: PendingIntent
+    lateinit var notificationManager: NotificationManager
+    private var alarmText = ""
+    private var alarmDescription = ""
+    private var taskId = ""
 
     override fun onReceive(context: Context?, intent: Intent?) {
         super.onReceive(context, intent)
         intent?.let {
             alarmText = "${it.extras?.get(ALARM_TEXT)}"
             alarmDescription = "${it.extras?.get(ALARM_DESCRIPTION)}"
+            taskId = "${it.extras?.get(TASK_DOC_ID)}"
+        } ?: return
+        context?.let {
+            showNotification(it, alarmText, alarmDescription, taskId)
         }
-        showNotification(context, alarmText, alarmDescription)
     }
 
-    private fun showNotification(context: Context?, alarmText: String, alarmDescription: String) {
-        val notificationManager =
+
+    private fun showNotification(
+        context: Context,
+        alarmText: String,
+        alarmDescription: String,
+        taskId: String
+    ) {
+        val intent = Intent(context, NotificationReceiver::class.java).also {
+            it.putExtra(TASK_DOC_ID, taskId)
+            it.putExtra("notificationId", NOTIFICATION_ID)
+        }
+        val pendingIntent = PendingIntent.getService(
+            context, 1, intent,
+            PendingIntent.FLAG_UPDATE_CURRENT
+        )
+
+        /*val notificationManager =
             context?.getSystemService(Context.NOTIFICATION_SERVICE)
-                    as NotificationManager
+                    as NotificationManager*/
 
         if (Build.VERSION.SDK_INT >= ANDROID_OREO)
             createNotification(context, notificationManager)
 
         // Notification button
-        notificationBuilder.apply {
+        baseNotificationBuilder.apply {
             setContentTitle(alarmText)
             setContentText(alarmDescription)
             setStyle(NotificationCompat.BigTextStyle().bigText(alarmDescription))
-            /*addAction(R.drawable.ic_snooze, "Mark as Completed", pendingIntent)*/
+            addAction(R.drawable.ic_notification, "Mark Complete", pendingIntent)
         }
 
-        notificationManager.notify(NOTIFICATION_ID, notificationBuilder.build())
+        notificationManager.notify(NOTIFICATION_ID, baseNotificationBuilder.build())
     }
 
     private fun createNotification(context: Context, notificationManager: NotificationManager) {
@@ -82,11 +106,5 @@ class AlarmReceiver : HiltBroadcastReceiver() {
             setShowBadge(true)
         }
         notificationManager.createNotificationChannel(channel)
-    }
-
-    companion object {
-        /*var alarmId = ""*/
-        var alarmText = ""
-        var alarmDescription = ""
     }
 }

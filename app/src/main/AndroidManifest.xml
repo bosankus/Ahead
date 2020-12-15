@@ -33,6 +33,7 @@
         </activity>
 
         <receiver android:name=".utils.alarmutils.AlarmReceiver" />
+        <service android:name=".utils.alarmutils.NotificationReceiver"/>
     </application>
 
 </manifest>

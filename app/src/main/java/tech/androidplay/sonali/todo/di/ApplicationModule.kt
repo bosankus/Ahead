@@ -1,6 +1,7 @@
 package tech.androidplay.sonali.todo.di
 
 import android.app.AlarmManager
+import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
@@ -20,6 +21,7 @@ import tech.androidplay.sonali.todo.TodoApplication
 import tech.androidplay.sonali.todo.ui.activity.MainActivity
 import tech.androidplay.sonali.todo.utils.CacheManager
 import tech.androidplay.sonali.todo.utils.Constants
+import tech.androidplay.sonali.todo.utils.Constants.ACTION_SHOW_TASK_FRAGMENT
 import tech.androidplay.sonali.todo.utils.Constants.SHARED_PREFERENCE_NAME
 import java.util.*
 import javax.inject.Singleton
@@ -77,6 +79,18 @@ class ApplicationModule {
     }
 
     @Provides
+    fun providesPendingIntent(
+        @ApplicationContext context: Context
+    ): PendingIntent = PendingIntent.getActivity(
+        context,
+        0,
+        Intent(context, MainActivity::class.java).also {
+            it.action = ACTION_SHOW_TASK_FRAGMENT
+        },
+        PendingIntent.FLAG_UPDATE_CURRENT
+    )
+
+    @Provides
     fun provideBaseNotificationBuilder(
         @ApplicationContext context: Context,
         pendingIntent: PendingIntent
@@ -84,21 +98,11 @@ class ApplicationModule {
         context,
         Constants.NOTIFICATION_CHANNEL_ID
     )
-        .setContentIntent(pendingIntent)
         .setAutoCancel(true)
-        .setSmallIcon(R.drawable.ic_time)
-
+        .setSmallIcon(R.drawable.ic_notification)
+        .setContentIntent(pendingIntent)
 
     @Provides
-    fun providesPendingIntent(
-        @ApplicationContext context: Context
-    ): PendingIntent = PendingIntent.getActivity(
-        context,
-        0,
-        Intent(context, MainActivity::class.java).also {
-            it.action = Constants.ACTION_SHOW_TASK_FRAGMENT
-        },
-        PendingIntent.FLAG_UPDATE_CURRENT
-    )
-
+    fun providesNotificationManager(@ApplicationContext context: Context) =
+        context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 }

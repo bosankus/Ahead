@@ -30,7 +30,6 @@ import tech.androidplay.sonali.todo.utils.Extensions.selectImage
 import tech.androidplay.sonali.todo.utils.Extensions.setTint
 import tech.androidplay.sonali.todo.utils.Extensions.toLocalDateTime
 import tech.androidplay.sonali.todo.utils.ResultData
-import tech.androidplay.sonali.todo.utils.UIHelper.showSnack
 import tech.androidplay.sonali.todo.utils.UIHelper.showToast
 import tech.androidplay.sonali.todo.utils.alarmutils.DateTimeUtil
 import tech.androidplay.sonali.todo.utils.alarmutils.cancelAlarmedNotification
@@ -110,10 +109,10 @@ class TaskEditFragment : Fragment(R.layout.fragment_task_edit) {
                 }. Tap here to change."
             }
         })
-        /*requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
             saveTask()
             findNavController().navigate(R.id.action_taskEditFragment_to_taskFragment)
-        }*/
+        }
     }
 
 
