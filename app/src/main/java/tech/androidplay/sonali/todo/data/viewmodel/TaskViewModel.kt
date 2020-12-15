@@ -79,9 +79,9 @@ class TaskViewModel @ViewModelInject constructor(
     }
 
     private fun getAllTasks() {
+        _loadingState.value = true
         viewModelScope.launch {
             try {
-                _loadingState.value = true
                 firebaseRepository.fetchTaskRealtime().collect { allTodoList ->
                     // set value for all incomplete task list size
                     _incompleteTaskListSize.value = allTodoList.filter { !it.isCompleted }.size

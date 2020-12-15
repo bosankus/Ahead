@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.text.TextUtils
 import android.view.View
 import android.view.animation.AnimationUtils
+import android.widget.Button
 import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -80,9 +81,12 @@ class AuthFragment : Fragment(R.layout.fragment_auth) {
                 {
                     it?.let {
                         when (it) {
-                            is ResultData.Loading -> showLoading()
+                            is ResultData.Loading -> showLoading(btnSignUpEmailPassword)
                             is ResultData.Success -> goToMainActivity()
-                            is ResultData.Failed -> hideLoading(it.message.toString())
+                            is ResultData.Failed -> hideLoading(
+                                btnSignUpEmailPassword,
+                                it.message.toString()
+                            )
                         }
                     }
                 })
@@ -97,9 +101,12 @@ class AuthFragment : Fragment(R.layout.fragment_auth) {
                 {
                     it?.let {
                         when (it) {
-                            is ResultData.Loading -> showLoading()
+                            is ResultData.Loading -> showLoading(btnloginEmailPassword)
                             is ResultData.Success -> goToMainActivity()
-                            is ResultData.Failed -> hideLoading(it.message.toString())
+                            is ResultData.Failed -> hideLoading(
+                                btnloginEmailPassword,
+                                it.message.toString()
+                            )
                         }
                     }
                     networkFlag = false
@@ -143,14 +150,14 @@ class AuthFragment : Fragment(R.layout.fragment_auth) {
         findNavController().navigate(R.id.action_authFragment_to_taskFragment)
     }
 
-    private fun showLoading() {
-        viewAnimation(btnloginEmailPassword, animFadeIn, false)
+    private fun showLoading(button: Button) {
+        viewAnimation(button, animFadeIn, false)
         viewAnimation(lottieAuthLoading, null, true)
     }
 
-    private fun hideLoading(message: String = "") {
+    private fun hideLoading(button: Button, message: String = "") {
         showSnack(requireView(), message)
-        viewAnimation(btnloginEmailPassword, animFadeOut, true)
+        viewAnimation(button, animFadeOut, true)
         viewAnimation(lottieAuthLoading, null, false)
     }
 

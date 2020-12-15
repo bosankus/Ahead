@@ -44,6 +44,7 @@
                 app:layout_constraintEnd_toStartOf="@+id/cbTaskStatus"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toTopOf="@+id/tvTodoDayName"
                 app:strike_text="@{todo.isCompleted}" />
 
             <TextView
@@ -58,8 +59,7 @@
                 app:day_name="@{todo.todoDate}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/cbTaskStatus"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tvTodoListItem" />
+                app:layout_constraintStart_toStartOf="parent"/>
 
             <CheckBox
                 android:id="@+id/cbTaskStatus"
