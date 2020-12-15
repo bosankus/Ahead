@@ -9,7 +9,6 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
-import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -99,7 +98,7 @@ class TaskEditFragment : Fragment(R.layout.fragment_task_edit) {
     private fun setListener() {
         imgUploadTaskImg.setOnClickListener { selectImage() }
         tvDeleteTask.setOnClickListener { deleteTask(taskId) }
-
+        btnSaveTasks.setOnClickListener { saveTask() }
         tvSelectDate.setOnClickListener { dateTimeUtil.openDateTimePicker(requireContext()) }
         dateTimeUtil.epochFormat.observe(viewLifecycleOwner, { epoch ->
             epoch?.let {
@@ -109,10 +108,10 @@ class TaskEditFragment : Fragment(R.layout.fragment_task_edit) {
                 }. Tap here to change."
             }
         })
-        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
+        /*requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
             saveTask()
             findNavController().navigate(R.id.action_taskEditFragment_to_taskFragment)
-        }
+        }*/
     }
 
 
@@ -133,7 +132,10 @@ class TaskEditFragment : Fragment(R.layout.fragment_task_edit) {
                 startAlarmedNotification(taskId!!, taskBody, taskDesc, it, alarmManager)
             }
             showToast(requireContext(), "Task Saved")
-        } else return
+        } else {
+            showToast(requireContext(), "You didn't make any change yet.")
+            return
+        }
     }
 
     private fun changeImage(pickedImage: Uri?) {

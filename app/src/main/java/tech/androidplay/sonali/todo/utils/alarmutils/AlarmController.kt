@@ -69,7 +69,7 @@ fun View.cancelAlarmedNotification(requestCode: String) {
 }
 
 @Suppress("UNUSED_CHANGED_VALUE")
-private fun String.generateRequestCode(): Int {
+fun String.generateRequestCode(): Int {
     var ascii: Int
     var code = 0
     for (i in this.indices - 1) {

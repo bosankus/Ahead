@@ -45,7 +45,7 @@ object Constants {
     // For notification channel
     const val NOTIFICATION_CHANNEL_ID = "think_channel"
     const val NOTIFICATION_CHANNEL_NAME = "think"
-    const val NOTIFICATION_ID = 1
+    const val NOTIFICATION_ID = "NOTIFICATION_ID"
 
     // For notification group
     /*const val NOTIFICATION_GROUP_ID = "111"

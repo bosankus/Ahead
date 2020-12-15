@@ -91,7 +91,7 @@ class TaskViewModel @ViewModelInject constructor(
                     // set value for all incomplete tasks for today
                     _todayTaskList.value =
                         allTodoList.filter { it.todoDate.compareWithToday() == 1 && !it.isCompleted }
-                            .sortedByDescending { it.todoDate }
+                            .sortedBy { it.todoDate }
                     // set value for all incomplete tasks which are overdue
                     _overdueTaskList.value =
                         allTodoList.filter { it.todoDate.compareWithToday() == -1 && !it.isCompleted }
@@ -100,7 +100,6 @@ class TaskViewModel @ViewModelInject constructor(
                 }
             } catch (e: Exception) {
                 _loadingState.value = false
-                logMessage("Flow: ${e.message}")
             }
         }
     }

@@ -126,8 +126,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/padding_16dp"
-            android:layout_marginEnd="@dimen/padding_16dp"
             android:layout_marginTop="@dimen/padding_5dp"
+            android:layout_marginEnd="@dimen/padding_16dp"
             android:background="@android:color/transparent"
             android:fontFamily="@font/calibre_semi"
             android:hint="@string/task"
@@ -156,8 +156,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/padding_16dp"
-            android:layout_marginEnd="@dimen/padding_16dp"
             android:layout_marginTop="@dimen/padding_5dp"
+            android:layout_marginEnd="@dimen/padding_16dp"
             android:background="@android:color/transparent"
             android:fontFamily="@font/calibre_semi"
             android:hint="@string/task_description"
@@ -170,6 +170,25 @@
             tools:ignore="Autofill" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btnSaveTasks"
+        style="?android:attr/borderlessButtonStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="16dp"
+        android:background="@drawable/bg_rounded"
+        android:backgroundTint="@color/dribblePink"
+        android:fontFamily="@font/calibre_black"
+        android:text="@string/save_task"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:textSize="@dimen/text_18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/clTaskInput" />
 
     <TextView
         android:id="@+id/tvDeleteTask"
