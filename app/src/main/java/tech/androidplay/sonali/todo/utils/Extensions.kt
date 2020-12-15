@@ -125,22 +125,22 @@ object Extensions {
         return this.format(dateTime)
     }
 
-    fun LocalDateTime.beautifyTime(): String {
+    /*fun LocalDateTime.beautifyTime(): String {
         val time = DateTimeFormatter.ofPattern("hh:mm a")
         return this.format(time)
-    }
+    }*/
 
     fun Long.convertFromEpochTime(): String {
         val timeNow = System.currentTimeMillis()
-        val giveTime = this
+        val givenTime = this
         val timeDayRelative = DateUtils.getRelativeTimeSpanString(
-            giveTime,
+            givenTime,
             timeNow,
             DateUtils.DAY_IN_MILLIS,
             DateUtils.FORMAT_ABBREV_RELATIVE
         )
         val hourFormatter = SimpleDateFormat("HH:mm a")
-        val timeHour = hourFormatter.format(giveTime)
+        val timeHour = hourFormatter.format(givenTime)
         return "$timeDayRelative at $timeHour"
     }
 

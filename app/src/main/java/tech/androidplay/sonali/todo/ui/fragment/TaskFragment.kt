@@ -34,6 +34,7 @@ import javax.inject.Inject
 @AndroidEntryPoint
 @ExperimentalCoroutinesApi
 @InternalCoroutinesApi
+@SuppressLint("SetTextI18n")
 class TaskFragment : Fragment(R.layout.fragment_task) {
 
     private val binding by viewLifecycleLazy { FragmentTaskBinding.bind(requireView()) }
@@ -65,14 +66,14 @@ class TaskFragment : Fragment(R.layout.fragment_task) {
     private fun setUpScreen() {
         binding.viewmodel = taskViewModel
         binding.lifecycleOwner = viewLifecycleOwner
-
+        binding.layoutTaskBar.tvTaskHeader.text = "Tasks"
         showFab = AnimationUtils.loadAnimation(requireContext(), R.anim.btn_up_animation)
         binding.efabAddTask.startAnimation(showFab)
     }
 
     private fun setListeners() {
-        binding.layoutTaskBar.imgTaskMenu.setOnClickListener {
-            showPopupMenu(binding.layoutTaskBar.imgTaskMenu)
+        binding.layoutTaskBar.imgMenu.setOnClickListener {
+            showPopupMenu(binding.layoutTaskBar.imgMenu)
         }
 
         binding.efabAddTask.setOnClickListener {
@@ -101,7 +102,10 @@ class TaskFragment : Fragment(R.layout.fragment_task) {
             when (it.itemId) {
                 R.id.menu_logout -> logOutUser()
                 R.id.menu_share_app -> shareApp()
-                R.id.menu_feedback -> findNavController().navigate(R.id.action_taskFragment_to_feedbackFragment)
+                R.id.menu_feedback ->
+                    findNavController().navigate(R.id.action_taskFragment_to_feedbackFragment)
+                R.id.menu_task_history ->
+                    findNavController().navigate(R.id.action_taskFragment_to_taskCompletedFragment)
             }
             true
         }

@@ -43,4 +43,5 @@
     <string name="upload_img_txt">Upload your task image</string>
     <string name="task_title">Task title:</string>
     <string name="task_details">Task Details:</string>
+    <string name="completed_tasks"><b>Completed Tasks</b></string>
 </resources>

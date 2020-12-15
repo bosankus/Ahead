@@ -32,15 +32,24 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <include
+                android:id="@+id/layoutNoTask"
+                layout="@layout/layout_task_empty"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/layoutTaskBar"
+                app:listSize="@{viewmodel.incompleteTaskListSize}" />
+
+            <include
                 android:id="@+id/layoutTodayTask"
                 layout="@layout/layout_task_today"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/padding_16dp"
-                app:listSize="@{viewmodel.todayTaskList.size()}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/layoutTaskBar" />
+                app:layout_constraintTop_toBottomOf="@+id/layoutTaskBar"
+                app:listSize="@{viewmodel.todayTaskList.size()}" />
 
             <include
                 android:id="@+id/layoutOverdueTask"
@@ -48,10 +57,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/padding_16dp"
-                app:listSize="@{viewmodel.overdueTaskList.size()}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/layoutTodayTask" />
+                app:layout_constraintTop_toBottomOf="@+id/layoutTodayTask"
+                app:listSize="@{viewmodel.overdueTaskList.size()}" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -73,18 +82,11 @@
             app:rippleColor="@color/white" />
 
         <include
-            android:id="@+id/layoutNoTask"
-            layout="@layout/layout_task_empty"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:listSize="@{viewmodel.incompleteTaskListSize}"/>
-
-        <include
             android:id="@+id/layoutLoadingTask"
             layout="@layout/layout_task_loading"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:loadingState="@{viewmodel.loadingState}"/>
+            app:loadingState="@{viewmodel.loadingState}" /> 
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

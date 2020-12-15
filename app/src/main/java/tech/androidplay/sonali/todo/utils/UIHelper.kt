@@ -8,11 +8,7 @@ import android.view.animation.Animation
 import android.widget.Toast
 import com.google.android.material.snackbar.Snackbar
 import tech.androidplay.sonali.todo.utils.Constants.GLOBAL_TAG
-import java.lang.StringBuilder
 import java.text.SimpleDateFormat
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
-import java.time.temporal.ChronoUnit
 import java.util.*
 
 /**
@@ -35,10 +31,6 @@ object UIHelper {
         Toast.makeText(context, toastMessage, Toast.LENGTH_SHORT).show()
     }
 
-    fun showToast(context: Context, toastMessage: StringBuilder) {
-        Toast.makeText(context, toastMessage, Toast.LENGTH_SHORT).show()
-    }
-
     fun showSnack(view: View, message: String) {
         Snackbar.make(view, message, Snackbar.LENGTH_LONG)
             .show()
@@ -49,19 +41,4 @@ object UIHelper {
         if (visibility) view.visibility = View.VISIBLE
         else view.visibility = View.INVISIBLE
     }
-
-    fun hideViews(hideList: List<View>? = null) {
-        hideList?.let {
-            for (i in it)
-                i.visibility = View.GONE
-        }
-    }
-
-    fun showViews(showList: List<View>? = null) {
-        showList?.let {
-            for (i in it)
-                i.visibility = View.VISIBLE
-        }
-    }
-
 }

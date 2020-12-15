@@ -2,8 +2,8 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/menu_logout"
-        android:title="@string/logout" />
+        android:id="@+id/menu_task_history"
+        android:title="@string/completed_tasks" />
 
     <item
         android:id="@+id/menu_share_app"
@@ -12,4 +12,8 @@
     <item
         android:id="@+id/menu_feedback"
         android:title="@string/feedback"/>
+
+    <item
+        android:id="@+id/menu_logout"
+        android:title="@string/logout" />
 </menu>

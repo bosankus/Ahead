@@ -5,8 +5,10 @@ import android.app.PendingIntent
 import android.content.Intent
 import android.view.View
 import androidx.fragment.app.Fragment
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import tech.androidplay.sonali.todo.utils.Constants.ALARM_DESCRIPTION
 import tech.androidplay.sonali.todo.utils.Constants.ALARM_TEXT
+import tech.androidplay.sonali.todo.utils.Constants.TASK_DOC_ID
 
 /**
  * Created by Androidplay
@@ -15,6 +17,7 @@ import tech.androidplay.sonali.todo.utils.Constants.ALARM_TEXT
  * Email: ankush@androidplay.in
  */
 
+@ExperimentalCoroutinesApi
 fun Fragment.startAlarmedNotification(
     requestCode: String,
     notificationText: String,
@@ -25,6 +28,7 @@ fun Fragment.startAlarmedNotification(
     val intent = Intent(requireContext(), AlarmReceiver::class.java).apply {
         this.putExtra(ALARM_TEXT, notificationText)
         this.putExtra(ALARM_DESCRIPTION, notificationBody)
+        this.putExtra(TASK_DOC_ID, requestCode)
     }
     val pendingIntent =
         PendingIntent.getBroadcast(
