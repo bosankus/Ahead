@@ -7,6 +7,7 @@ import android.os.IBinder
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.*
 import tech.androidplay.sonali.todo.data.firebase.FirebaseRepository
+import tech.androidplay.sonali.todo.utils.Constants.NOTIFICATION_ID
 import tech.androidplay.sonali.todo.utils.Constants.TASK_DOC_ID
 import javax.inject.Inject
 
@@ -38,7 +39,7 @@ class NotificationReceiver : Service() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         intent?.let {
             taskId = "${it.getStringExtra(TASK_DOC_ID)}"
-            notificationId = it.getIntExtra("notificationId", 0)
+            notificationId = it.getIntExtra(NOTIFICATION_ID, 0)
             notificationManager.cancel(notificationId)
         }
         changeTaskStatus(taskId)

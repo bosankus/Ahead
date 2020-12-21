@@ -61,23 +61,25 @@ class AlarmReceiver : HiltBroadcastReceiver() {
         alarmDescription: String,
         taskId: String
     ) {
+        val uniqueNotificationId = taskId.generateRequestCode()
         val intent = Intent(context, NotificationReceiver::class.java).also {
             it.putExtra(TASK_DOC_ID, taskId)
-            it.putExtra("notificationId", NOTIFICATION_ID)
+            it.putExtra(NOTIFICATION_ID, uniqueNotificationId)
         }
+
+        /*
+         We will user uniqueNotificationId for request code for creating new pending intent
+         each time when multiple notifications are send. So that on action click, the pending
+         intent hits related extras.
+         */
         val pendingIntent = PendingIntent.getService(
-            context, 1, intent,
+            context, uniqueNotificationId, intent,
             PendingIntent.FLAG_UPDATE_CURRENT
         )
-
-        /*val notificationManager =
-            context?.getSystemService(Context.NOTIFICATION_SERVICE)
-                    as NotificationManager*/
 
         if (Build.VERSION.SDK_INT >= ANDROID_OREO)
             createNotification(context, notificationManager)
 
-        // Notification button
         baseNotificationBuilder.apply {
             setContentTitle(alarmText)
             setContentText(alarmDescription)
@@ -85,7 +87,7 @@ class AlarmReceiver : HiltBroadcastReceiver() {
             addAction(R.drawable.ic_notification, "Mark Complete", pendingIntent)
         }
 
-        notificationManager.notify(NOTIFICATION_ID, baseNotificationBuilder.build())
+        notificationManager.notify(uniqueNotificationId, baseNotificationBuilder.build())
     }
 
     private fun createNotification(context: Context, notificationManager: NotificationManager) {

@@ -9,7 +9,6 @@ import kotlinx.coroutines.InternalCoroutinesApi
 import tech.androidplay.sonali.todo.data.model.Todo
 import tech.androidplay.sonali.todo.data.viewmodel.TaskViewModel
 import tech.androidplay.sonali.todo.databinding.LayoutMainTaskListBinding
-import tech.androidplay.sonali.todo.utils.Extensions.compareWithToday
 import javax.inject.Inject
 
 /**

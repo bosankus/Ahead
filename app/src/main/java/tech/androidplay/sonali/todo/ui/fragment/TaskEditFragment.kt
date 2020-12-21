@@ -9,14 +9,13 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
-import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_task_edit.*
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.InternalCoroutinesApi
+import kotlinx.coroutines.*
 import tech.androidplay.sonali.todo.R
 import tech.androidplay.sonali.todo.data.viewmodel.TaskViewModel
 import tech.androidplay.sonali.todo.utils.Constants.TASK_DATE
@@ -25,11 +24,13 @@ import tech.androidplay.sonali.todo.utils.Constants.TASK_DOC_DESC
 import tech.androidplay.sonali.todo.utils.Constants.TASK_DOC_ID
 import tech.androidplay.sonali.todo.utils.Constants.TASK_IMAGE_URL
 import tech.androidplay.sonali.todo.utils.Extensions.beautifyDateTime
+import tech.androidplay.sonali.todo.utils.Extensions.compressImage
 import tech.androidplay.sonali.todo.utils.Extensions.loadImageCircleCropped
 import tech.androidplay.sonali.todo.utils.Extensions.selectImage
 import tech.androidplay.sonali.todo.utils.Extensions.setTint
 import tech.androidplay.sonali.todo.utils.Extensions.toLocalDateTime
 import tech.androidplay.sonali.todo.utils.ResultData
+import tech.androidplay.sonali.todo.utils.UIHelper.showSnack
 import tech.androidplay.sonali.todo.utils.UIHelper.showToast
 import tech.androidplay.sonali.todo.utils.alarmutils.DateTimeUtil
 import tech.androidplay.sonali.todo.utils.alarmutils.cancelAlarmedNotification
@@ -99,7 +100,7 @@ class TaskEditFragment : Fragment(R.layout.fragment_task_edit) {
     private fun setListener() {
         imgUploadTaskImg.setOnClickListener { selectImage() }
         tvDeleteTask.setOnClickListener { deleteTask(taskId) }
-
+        btnSaveTasks.setOnClickListener { saveTask() }
         tvSelectDate.setOnClickListener { dateTimeUtil.openDateTimePicker(requireContext()) }
         dateTimeUtil.epochFormat.observe(viewLifecycleOwner, { epoch ->
             epoch?.let {
@@ -109,10 +110,6 @@ class TaskEditFragment : Fragment(R.layout.fragment_task_edit) {
                 }. Tap here to change."
             }
         })
-        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
-            saveTask()
-            findNavController().navigate(R.id.action_taskEditFragment_to_taskFragment)
-        }
     }
 
 
@@ -133,24 +130,36 @@ class TaskEditFragment : Fragment(R.layout.fragment_task_edit) {
                 startAlarmedNotification(taskId!!, taskBody, taskDesc, it, alarmManager)
             }
             showToast(requireContext(), "Task Saved")
-        } else return
+        } else {
+            showToast(requireContext(), "You didn't make any change yet.")
+            return
+        }
     }
 
     private fun changeImage(pickedImage: Uri?) {
-        taskViewModel.uploadImage(pickedImage, taskId!!).observe(viewLifecycleOwner, { imageUrl ->
-            when (imageUrl) {
-                is ResultData.Loading -> {
-                    tvNoTaskImg.text = "Uploading Image..."
-                    showToast(requireContext(), "Uploading Image")
-                }
-                is ResultData.Success -> {
-                    val url = imageUrl.data
-                    handleTaskImage(url)
-                    showToast(requireContext(), "Great! Image uploaded")
-                }
-                is ResultData.Failed -> showToast(requireContext(), "Something went wrong")
+        lifecycleScope.launch {
+            val compressedImage = pickedImage?.compressImage(requireContext())
+            withContext(Dispatchers.Main) {
+                taskViewModel.uploadImage(compressedImage, taskId!!)
+                    .observe(viewLifecycleOwner, { imageUrl ->
+                        when (imageUrl) {
+                            is ResultData.Loading -> {
+                                tvNoTaskImg.text = "Uploading Image..."
+                                showToast(requireContext(), "Uploading Image")
+                            }
+                            is ResultData.Success -> {
+                                val url = imageUrl.data
+                                handleTaskImage(url)
+                                showToast(requireContext(), "Great! Image uploaded")
+                            }
+                            is ResultData.Failed -> showToast(
+                                requireContext(),
+                                "Something went wrong"
+                            )
+                        }
+                    })
             }
-        })
+        }
     }
 
     private fun handleTaskImage(url: String?) {
@@ -168,11 +177,18 @@ class TaskEditFragment : Fragment(R.layout.fragment_task_edit) {
 
     private fun deleteTask(docId: String?) {
         dialog.setPositiveButton("Yes") { dialogInterface, _ ->
-            taskViewModel.deleteTask(docId)
-            cancelAlarmedNotification(docId!!)
-            findNavController().navigate(R.id.action_taskEditFragment_to_taskFragment)
-            dialogInterface.dismiss()
-            showToast(requireContext(), "Task deleted")
+            taskViewModel.deleteTask(docId)?.observe(viewLifecycleOwner, {
+                when (it) {
+                    is ResultData.Loading -> {}
+                    is ResultData.Success -> {
+                        cancelAlarmedNotification(docId!!)
+                        findNavController().navigate(R.id.action_taskEditFragment_to_taskFragment)
+                        dialogInterface.dismiss()
+                        showToast(requireContext(), "Task deleted")
+                    }
+                    is ResultData.Failed -> showSnack(requireView(), it.toString())
+                }
+            })
         }.create().show()
     }
 
@@ -180,6 +196,7 @@ class TaskEditFragment : Fragment(R.layout.fragment_task_edit) {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (resultCode == Activity.RESULT_OK && data != null) {
             pickedImage = data.data
+            imgTask.loadImageCircleCropped(pickedImage.toString())
             changeImage(pickedImage)
         }
     }

@@ -23,7 +23,7 @@ object Constants {
 
     // For shared preference
     const val SHARED_PREFERENCE_NAME = "SHARED_PREFERENCE_NAME"
-    /*const val USER_DISPLAY_IMAGE = "USER_DISPLAY_IMAGE"*/
+    const val IS_FIRST_TIME = "SHARED_PREFERENCE_NAME"
 
     // For navigation bundle
     const val TASK_DOC_ID = "TASK_DOC_ID"
@@ -45,7 +45,7 @@ object Constants {
     // For notification channel
     const val NOTIFICATION_CHANNEL_ID = "think_channel"
     const val NOTIFICATION_CHANNEL_NAME = "think"
-    const val NOTIFICATION_ID = 1
+    const val NOTIFICATION_ID = "NOTIFICATION_ID"
 
     // For notification group
     /*const val NOTIFICATION_GROUP_ID = "111"

@@ -13,6 +13,6 @@
         android:fontFamily="@font/calibre_black"
         android:text="@string/think"
         android:textColor="@color/dribblePink"
-        android:textSize="55sp" />
+        android:textSize="@dimen/text_55sp" />
 
 </FrameLayout>

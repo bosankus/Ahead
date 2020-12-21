@@ -1,8 +1,11 @@
 package tech.androidplay.sonali.todo.ui.adapter
 
 import android.view.View
+import android.view.animation.AnimationUtils
 import android.widget.TextView
+import androidx.core.view.isVisible
 import androidx.databinding.BindingAdapter
+import tech.androidplay.sonali.todo.R
 import tech.androidplay.sonali.todo.utils.Extensions.convertFromEpochTime
 import tech.androidplay.sonali.todo.utils.Extensions.removeStrikeThroughText
 import tech.androidplay.sonali.todo.utils.Extensions.strikeThroughText
@@ -13,6 +16,7 @@ import tech.androidplay.sonali.todo.utils.Extensions.strikeThroughText
  * On: 04/Dec/2020
  * Email: ankush@androidplay.in
  */
+
 
 @BindingAdapter("strike_text")
 fun TextView.strikeText(status: Boolean) {

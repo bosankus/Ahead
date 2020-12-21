@@ -8,14 +8,15 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_task_create.*
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.InternalCoroutinesApi
+import kotlinx.coroutines.*
 import tech.androidplay.sonali.todo.R
 import tech.androidplay.sonali.todo.data.viewmodel.TaskViewModel
 import tech.androidplay.sonali.todo.utils.Extensions.beautifyDateTime
+import tech.androidplay.sonali.todo.utils.Extensions.compressImage
 import tech.androidplay.sonali.todo.utils.Extensions.hideKeyboard
 import tech.androidplay.sonali.todo.utils.Extensions.selectImage
 import tech.androidplay.sonali.todo.utils.Extensions.toLocalDateTime
@@ -71,16 +72,21 @@ class TaskCreateFragment : Fragment(R.layout.fragment_task_create) {
         val todoDesc = tvTaskDescInput.text.toString().trim()
         val todoDate = taskTimeStamp
 
-        taskViewModel.createTask(todoBody, todoDesc, todoDate, taskImage)
-            .observe(viewLifecycleOwner, {
-                it?.let {
-                    when (it) {
-                        is ResultData.Loading -> handleLoading()
-                        is ResultData.Success -> handleSuccess(it.data!!, todoBody, todoDesc)
-                        is ResultData.Failed -> handleFailure()
-                    }
-                }
-            })
+        lifecycleScope.launch {
+            val compressedImage = taskImage?.compressImage(requireContext())
+            withContext(Dispatchers.Main) {
+                taskViewModel.createTask(todoBody, todoDesc, todoDate, compressedImage)
+                    .observe(viewLifecycleOwner, {
+                        it?.let {
+                            when (it) {
+                                is ResultData.Loading -> handleLoading()
+                                is ResultData.Success -> handleSuccess(it.data!!, todoBody, todoDesc)
+                                is ResultData.Failed -> handleFailure()
+                            }
+                        }
+                    })
+            }
+        }
     }
 
     private fun handleLoading() {
