@@ -109,7 +109,7 @@ class FirebaseRepository @Inject constructor(
             awaitClose {
                 querySnapshot.remove()
             }
-        } as Flow<MutableList<Todo>>
+        }
 
 
     override suspend fun updateTask(taskId: String, map: Map<String, Any?>) {
@@ -118,10 +118,14 @@ class FirebaseRepository @Inject constructor(
             .await()
     }
 
-    override suspend fun deleteTask(docId: String) {
-        taskListRef.document(docId)
-            .delete()
-            .await()
+    override suspend fun deleteTask(docId: String): ResultData<Boolean> {
+        return try {
+            taskListRef.document(docId).delete().await()
+            storageReference.child("${userDetails?.email}/$docId").delete().await()
+            ResultData.Success(true)
+        } catch (e: Exception) {
+            ResultData.Failed(e.message)
+        }
     }
 
     override suspend fun provideFeedback(hashMap: HashMap<String, String?>): ResultData<String> {

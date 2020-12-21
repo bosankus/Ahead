@@ -11,10 +11,8 @@ import kotlinx.coroutines.launch
 import tech.androidplay.sonali.todo.data.firebase.FirebaseRepository
 import tech.androidplay.sonali.todo.data.model.Todo
 import tech.androidplay.sonali.todo.utils.Extensions.compareWithToday
-import tech.androidplay.sonali.todo.utils.Extensions.compressImage
 import tech.androidplay.sonali.todo.utils.ResultData
 import tech.androidplay.sonali.todo.utils.UIHelper.getCurrentTimestamp
-import tech.androidplay.sonali.todo.utils.UIHelper.logMessage
 
 /**
  * Created by Androidplay
@@ -129,8 +127,12 @@ class TaskViewModel @ViewModelInject constructor(
         }
     }!!
 
-    fun deleteTask(docId: String?) =
-        docId?.let { viewModelScope.launch { firebaseRepository.deleteTask(docId) } }
+    fun deleteTask(docId: String?) = docId?.let {
+        liveData {
+            emit(ResultData.Loading)
+            emit(firebaseRepository.deleteTask(it))
+        }
+    }
 
     fun provideFeedback(topic: String, description: String): LiveData<ResultData<String>> {
         val hashMap = hashMapOf(

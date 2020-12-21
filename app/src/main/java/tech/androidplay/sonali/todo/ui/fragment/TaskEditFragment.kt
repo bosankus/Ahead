@@ -30,6 +30,7 @@ import tech.androidplay.sonali.todo.utils.Extensions.selectImage
 import tech.androidplay.sonali.todo.utils.Extensions.setTint
 import tech.androidplay.sonali.todo.utils.Extensions.toLocalDateTime
 import tech.androidplay.sonali.todo.utils.ResultData
+import tech.androidplay.sonali.todo.utils.UIHelper.showSnack
 import tech.androidplay.sonali.todo.utils.UIHelper.showToast
 import tech.androidplay.sonali.todo.utils.alarmutils.DateTimeUtil
 import tech.androidplay.sonali.todo.utils.alarmutils.cancelAlarmedNotification
@@ -176,11 +177,18 @@ class TaskEditFragment : Fragment(R.layout.fragment_task_edit) {
 
     private fun deleteTask(docId: String?) {
         dialog.setPositiveButton("Yes") { dialogInterface, _ ->
-            taskViewModel.deleteTask(docId)
-            cancelAlarmedNotification(docId!!)
-            findNavController().navigate(R.id.action_taskEditFragment_to_taskFragment)
-            dialogInterface.dismiss()
-            showToast(requireContext(), "Task deleted")
+            taskViewModel.deleteTask(docId)?.observe(viewLifecycleOwner, {
+                when (it) {
+                    is ResultData.Loading -> {}
+                    is ResultData.Success -> {
+                        cancelAlarmedNotification(docId!!)
+                        findNavController().navigate(R.id.action_taskEditFragment_to_taskFragment)
+                        dialogInterface.dismiss()
+                        showToast(requireContext(), "Task deleted")
+                    }
+                    is ResultData.Failed -> showSnack(requireView(), it.toString())
+                }
+            })
         }.create().show()
     }
 
