@@ -26,6 +26,7 @@ import tech.androidplay.sonali.todo.utils.UIHelper.viewAnimation
  * On: 24/Sep/2020
  * Email: ankush@androidplay.in
  */
+
 @ExperimentalCoroutinesApi
 @AndroidEntryPoint
 class AuthFragment : Fragment(R.layout.fragment_auth) {

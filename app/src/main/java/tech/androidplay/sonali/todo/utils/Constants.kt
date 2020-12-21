@@ -23,7 +23,7 @@ object Constants {
 
     // For shared preference
     const val SHARED_PREFERENCE_NAME = "SHARED_PREFERENCE_NAME"
-    /*const val USER_DISPLAY_IMAGE = "USER_DISPLAY_IMAGE"*/
+    const val IS_FIRST_TIME = "SHARED_PREFERENCE_NAME"
 
     // For navigation bundle
     const val TASK_DOC_ID = "TASK_DOC_ID"

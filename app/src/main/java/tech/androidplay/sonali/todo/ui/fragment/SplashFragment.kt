@@ -1,11 +1,14 @@
 package tech.androidplay.sonali.todo.ui.fragment
 
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.google.firebase.auth.FirebaseAuth
+import dagger.hilt.android.AndroidEntryPoint
 import tech.androidplay.sonali.todo.R
+import javax.inject.Inject
 
 /**
  * Created by Androidplay
@@ -13,21 +16,38 @@ import tech.androidplay.sonali.todo.R
  * On: 24/Sep/2020
  * Email: ankush@androidplay.in
  */
+
+@AndroidEntryPoint
 class SplashFragment : Fragment(R.layout.fragment_splash) {
 
-    private lateinit var firebaseAuth: FirebaseAuth
+    @Inject
+    lateinit var sharedPreferences: SharedPreferences
+
+    @Inject
+    lateinit var firebaseAuth: FirebaseAuth
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        firebaseAuth = FirebaseAuth.getInstance()
-        checkAuth()
+        checkDestination()
     }
 
-    private fun checkAuth() {
-        if (firebaseAuth.currentUser != null) {
-            goToTaskFragment()
-        } else goToAuthFragment()
+    private fun checkDestination() {
+        /*if (firebaseAuth.currentUser == null &&
+            sharedPreferences.getBoolean(IS_FIRST_TIME, true)
+        )
+            goToIntroFragment()*/
+        /*if (firebaseAuth.currentUser != null &&
+            !sharedPreferences.getBoolean(IS_FIRST_TIME, true)
+        )
+            goToTaskFragment()*/
+
+        if (firebaseAuth.currentUser != null) goToTaskFragment()
+        else goToAuthFragment()
     }
+
+    /*private fun goToIntroFragment() {
+        findNavController().navigate(R.id.action_splashFragment_to_introFragment)
+    }*/
 
     private fun goToTaskFragment() {
         findNavController().navigate(R.id.action_splashFragment_to_taskFragment)
