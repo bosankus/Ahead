@@ -1,9 +1,13 @@
+@file:Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
+
 package tech.androidplay.sonali.todo.utils
 
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.content.res.ColorStateList
+import android.net.Uri
 import android.text.SpannableString
 import android.text.format.DateUtils
 import android.text.style.StrikethroughSpan
@@ -12,11 +16,15 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
+import androidx.core.net.toUri
 import androidx.core.widget.ImageViewCompat
 import androidx.fragment.app.Fragment
 import coil.load
 import coil.transform.RoundedCornersTransformation
 import com.github.dhaval2404.imagepicker.ImagePicker
+import id.zelory.compressor.Compressor
+import id.zelory.compressor.constraint.quality
+import java.io.File
 import java.text.SimpleDateFormat
 import java.time.Instant
 import java.time.LocalDateTime
@@ -125,11 +133,6 @@ object Extensions {
         return this.format(dateTime)
     }
 
-    /*fun LocalDateTime.beautifyTime(): String {
-        val time = DateTimeFormatter.ofPattern("hh:mm a")
-        return this.format(time)
-    }*/
-
     fun Long.convertFromEpochTime(): String {
         val timeNow = System.currentTimeMillis()
         val givenTime = this
@@ -144,4 +147,9 @@ object Extensions {
         return "$timeDayRelative at $timeHour"
     }
 
+    suspend fun Uri.compressImage(context: Context): Uri {
+        return Compressor.compress(context, File(this.path)) {
+            quality(80)
+        }.toUri()
+    }
 }

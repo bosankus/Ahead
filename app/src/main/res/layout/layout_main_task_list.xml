@@ -41,6 +41,7 @@
                 android:text="@{todo.todoBody}"
                 android:textColor="@color/grey3"
                 android:textSize="@dimen/text_18sp"
+                android:maxLines="1"
                 app:layout_constraintEnd_toStartOf="@+id/cbTaskStatus"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"

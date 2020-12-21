@@ -61,7 +61,7 @@ dependencies {
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation "androidx.multidex:multidex:2.0.1"
 
-    // Test
+    /*// Test
     testImplementation 'junit:junit:4.13.1'
     testImplementation "com.google.truth:truth:1.1"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0"
@@ -70,36 +70,42 @@ dependencies {
     androidTestImplementation 'org.jetbrains.kotlinx:kotlinx-coroutines-test:1.4.1'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
-    androidTestImplementation "com.google.truth:truth:1.1"
+    androidTestImplementation "com.google.truth:truth:1.1"*/
 
+    implementation 'com.google.android.material:material:1.2.1'
 
-    // Work Manager
-    implementation "androidx.work:work-runtime-ktx:$work_version"
-
-    // Retrofit
-    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
-    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
-    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
-    implementation 'com.squareup.okhttp3:logging-interceptor:4.8.1'
+    // Kotlin
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
     // Room
     implementation "androidx.room:room-runtime:$room_version"
     implementation "androidx.room:room-ktx:$room_version"
     kapt "androidx.room:room-compiler:$room_version"
 
-    // ViewModel and LiveData
-    implementation "androidx.lifecycle:lifecycle-extensions:2.2.0"
-    implementation "androidx.lifecycle:lifecycle-common-java8:2.3.0-beta01"
-    //noinspection LifecycleAnnotationProcessorWithJava8
-    kapt "androidx.lifecycle:lifecycle-compiler:2.2.0"
+    // Work Manager
+    implementation "androidx.work:work-runtime-ktx:$work_version"
 
-    // Kotlin components
-    implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.3.0-beta01"
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.4.20"
-    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.0-beta01"
-    implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.3.0-beta01"
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.1'
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.1.1'
+    // Retrofit
+    implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
+    implementation "com.squareup.retrofit2:converter-gson:$retrofit_version"
+    implementation "com.squareup.retrofit2:converter-gson:$retrofit_version"
+    implementation "com.squareup.okhttp3:logging-interceptor:$interceptor_version"
+
+
+    // Lifecycle Components
+    implementation "androidx.lifecycle:lifecycle-extensions:$lifecycle_version"
+    implementation "androidx.lifecycle:lifecycle-common-java8:$lifecycle_java8_version"
+    //noinspection LifecycleAnnotationProcessorWithJava8
+    kapt "androidx.lifecycle:lifecycle-compiler:$lifecycle_version"
+
+    // LiveData
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_java8_version"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_java8_version"
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycle_java8_version"
+
+    // Coroutines
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutine_version"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-play-services:$coroutine_play_version"
 
     // Firebase
     implementation 'com.google.firebase:firebase-database:19.5.1'
@@ -118,32 +124,26 @@ dependencies {
     implementation "androidx.paging:paging-runtime-ktx:2.1.2"*/
 
     // DI - Hilt
-    implementation 'androidx.hilt:hilt-lifecycle-viewmodel:1.0.0-alpha02'
+    implementation "androidx.hilt:hilt-lifecycle-viewmodel:$hilt_jetpack_version"
     implementation "com.google.dagger:hilt-android:$hilt_version"
     kapt "com.google.dagger:hilt-android-compiler:$hilt_version"
-    kapt 'androidx.hilt:hilt-compiler:1.0.0-alpha02'
+    kapt "androidx.hilt:hilt-compiler:$hilt_jetpack_version"
 
     /*UI Libraries*/
 
-    // UI
-    implementation 'com.google.android.material:material:1.2.1'
-
-    /*// photo compressor
-    implementation 'id.zelory:compressor:3.0.0'*/
+    // photo compressor
+    implementation "id.zelory:compressor:$zelory_version"
 
     // Lottie Animation
-    implementation "com.airbnb.android:lottie:3.4.1"
+    implementation "com.airbnb.android:lottie:$lottie_version"
 
     // Shimmer effect
-    implementation 'com.facebook.shimmer:shimmer:0.5.0'
+    implementation "com.facebook.shimmer:shimmer:$shimmer_version"
 
     // COIL - Image Loader
-    implementation("io.coil-kt:coil:1.1.0")
+    implementation "io.coil-kt:coil:$coil_version"
 
     // Image Picker
-    implementation 'com.github.dhaval2404:imagepicker:1.7.1'
-
-    // Circular Imageview
-    implementation 'de.hdodenhof:circleimageview:3.1.0'
+    implementation "com.github.dhaval2404:imagepicker:$picker_version"
 
 }

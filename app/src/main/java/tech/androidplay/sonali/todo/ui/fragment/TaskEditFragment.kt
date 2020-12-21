@@ -11,11 +11,11 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_task_edit.*
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.InternalCoroutinesApi
+import kotlinx.coroutines.*
 import tech.androidplay.sonali.todo.R
 import tech.androidplay.sonali.todo.data.viewmodel.TaskViewModel
 import tech.androidplay.sonali.todo.utils.Constants.TASK_DATE
@@ -24,6 +24,7 @@ import tech.androidplay.sonali.todo.utils.Constants.TASK_DOC_DESC
 import tech.androidplay.sonali.todo.utils.Constants.TASK_DOC_ID
 import tech.androidplay.sonali.todo.utils.Constants.TASK_IMAGE_URL
 import tech.androidplay.sonali.todo.utils.Extensions.beautifyDateTime
+import tech.androidplay.sonali.todo.utils.Extensions.compressImage
 import tech.androidplay.sonali.todo.utils.Extensions.loadImageCircleCropped
 import tech.androidplay.sonali.todo.utils.Extensions.selectImage
 import tech.androidplay.sonali.todo.utils.Extensions.setTint
@@ -108,10 +109,6 @@ class TaskEditFragment : Fragment(R.layout.fragment_task_edit) {
                 }. Tap here to change."
             }
         })
-        /*requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
-            saveTask()
-            findNavController().navigate(R.id.action_taskEditFragment_to_taskFragment)
-        }*/
     }
 
 
@@ -139,20 +136,29 @@ class TaskEditFragment : Fragment(R.layout.fragment_task_edit) {
     }
 
     private fun changeImage(pickedImage: Uri?) {
-        taskViewModel.uploadImage(pickedImage, taskId!!).observe(viewLifecycleOwner, { imageUrl ->
-            when (imageUrl) {
-                is ResultData.Loading -> {
-                    tvNoTaskImg.text = "Uploading Image..."
-                    showToast(requireContext(), "Uploading Image")
-                }
-                is ResultData.Success -> {
-                    val url = imageUrl.data
-                    handleTaskImage(url)
-                    showToast(requireContext(), "Great! Image uploaded")
-                }
-                is ResultData.Failed -> showToast(requireContext(), "Something went wrong")
+        lifecycleScope.launch {
+            val compressedImage = pickedImage?.compressImage(requireContext())
+            withContext(Dispatchers.Main) {
+                taskViewModel.uploadImage(compressedImage, taskId!!)
+                    .observe(viewLifecycleOwner, { imageUrl ->
+                        when (imageUrl) {
+                            is ResultData.Loading -> {
+                                tvNoTaskImg.text = "Uploading Image..."
+                                showToast(requireContext(), "Uploading Image")
+                            }
+                            is ResultData.Success -> {
+                                val url = imageUrl.data
+                                handleTaskImage(url)
+                                showToast(requireContext(), "Great! Image uploaded")
+                            }
+                            is ResultData.Failed -> showToast(
+                                requireContext(),
+                                "Something went wrong"
+                            )
+                        }
+                    })
             }
-        })
+        }
     }
 
     private fun handleTaskImage(url: String?) {
@@ -182,6 +188,7 @@ class TaskEditFragment : Fragment(R.layout.fragment_task_edit) {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (resultCode == Activity.RESULT_OK && data != null) {
             pickedImage = data.data
+            imgTask.loadImageCircleCropped(pickedImage.toString())
             changeImage(pickedImage)
         }
     }
