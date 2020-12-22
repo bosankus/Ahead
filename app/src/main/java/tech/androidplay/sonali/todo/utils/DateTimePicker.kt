@@ -1,4 +1,4 @@
-package tech.androidplay.sonali.todo.utils.alarmutils
+package tech.androidplay.sonali.todo.utils
 
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
@@ -14,7 +14,7 @@ import javax.inject.Inject
  * On: 03/Dec/2020
  * Email: ankush@androidplay.in
  */
-class DateTimeUtil @Inject constructor(private val currentDateTime: Calendar) {
+class DateTimePicker @Inject constructor(private val currentDateTime: Calendar) {
 
     private var _epochFormat = MutableLiveData<Long>()
     val epochFormat: LiveData<Long>

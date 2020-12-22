@@ -1,7 +1,6 @@
 package tech.androidplay.sonali.todo.utils
 
 import android.os.Build
-import java.time.LocalDateTime
 
 /**
  * Created by Androidplay
@@ -63,6 +62,7 @@ object Constants {
     const val STORAGE_PERMISSION_REQUEST_CODE = 101*/
 
     // For Android version check
+    val DEVICE_ANDROID_VERSION = Build.VERSION.SDK_INT
     const val ANDROID_OREO = Build.VERSION_CODES.O
     /*const val ANDROID_10 = Build.VERSION_CODES.Q*/
 

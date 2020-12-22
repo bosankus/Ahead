@@ -1,4 +1,4 @@
-package tech.androidplay.sonali.todo.di
+package tech.androidplay.sonali.todo.receiver
 
 import android.content.BroadcastReceiver
 import android.content.Context
