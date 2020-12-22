@@ -15,15 +15,17 @@ import kotlinx.android.synthetic.main.fragment_task_create.*
 import kotlinx.coroutines.*
 import tech.androidplay.sonali.todo.R
 import tech.androidplay.sonali.todo.data.viewmodel.TaskViewModel
+import tech.androidplay.sonali.todo.utils.DateTimePicker
 import tech.androidplay.sonali.todo.utils.Extensions.beautifyDateTime
 import tech.androidplay.sonali.todo.utils.Extensions.compressImage
 import tech.androidplay.sonali.todo.utils.Extensions.hideKeyboard
 import tech.androidplay.sonali.todo.utils.Extensions.selectImage
 import tech.androidplay.sonali.todo.utils.Extensions.toLocalDateTime
 import tech.androidplay.sonali.todo.utils.ResultData
+import tech.androidplay.sonali.todo.utils.UIHelper.showSnack
 import tech.androidplay.sonali.todo.utils.UIHelper.showToast
-import tech.androidplay.sonali.todo.utils.alarmutils.DateTimeUtil
 import tech.androidplay.sonali.todo.utils.alarmutils.startAlarmedNotification
+import tech.androidplay.sonali.todo.utils.isNetworkAvailable
 import javax.inject.Inject
 
 /**
@@ -40,7 +42,7 @@ class TaskCreateFragment : Fragment(R.layout.fragment_task_create) {
     lateinit var alarmManager: AlarmManager
 
     @Inject
-    lateinit var dateTimeUtil: DateTimeUtil
+    lateinit var dateTimePicker: DateTimePicker
 
     private val taskViewModel: TaskViewModel by viewModels()
     private var taskTimeStamp: String? = null
@@ -53,15 +55,17 @@ class TaskCreateFragment : Fragment(R.layout.fragment_task_create) {
     private fun setListeners() {
         tvSelectImage.setOnClickListener { selectImage() }
 
-        tvSelectDate.setOnClickListener { dateTimeUtil.openDateTimePicker(requireContext()) }
-        dateTimeUtil.epochFormat.observe(viewLifecycleOwner, {
+        tvSelectDate.setOnClickListener { dateTimePicker.openDateTimePicker(requireContext()) }
+        dateTimePicker.epochFormat.observe(viewLifecycleOwner, {
             taskTimeStamp = it.toString()
             tvSelectDate.text = taskTimeStamp?.toLocalDateTime()?.beautifyDateTime()
         })
 
         btCreateTask.setOnClickListener {
             requireActivity().hideKeyboard()
-            if ((tvTaskInput.text.length) <= 0) tvTaskInput.error = "Cant't be empty!"
+            if ((tvTaskInput.text.length) <= 0 && (tvTaskDescInput.text.length) <= 0) tvTaskInput.error =
+                "Cant't be empty!"
+            else if (!isNetworkAvailable()) showSnack(requireView(), "No Internet!")
             else createTask()
         }
     }
@@ -80,7 +84,11 @@ class TaskCreateFragment : Fragment(R.layout.fragment_task_create) {
                         it?.let {
                             when (it) {
                                 is ResultData.Loading -> handleLoading()
-                                is ResultData.Success -> handleSuccess(it.data!!, todoBody, todoDesc)
+                                is ResultData.Success -> handleSuccess(
+                                    it.data!!,
+                                    todoBody,
+                                    todoDesc
+                                )
                                 is ResultData.Failed -> handleFailure()
                             }
                         }

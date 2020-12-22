@@ -23,6 +23,7 @@ import tech.androidplay.sonali.todo.utils.Constants.TASK_DOC_BODY
 import tech.androidplay.sonali.todo.utils.Constants.TASK_DOC_DESC
 import tech.androidplay.sonali.todo.utils.Constants.TASK_DOC_ID
 import tech.androidplay.sonali.todo.utils.Constants.TASK_IMAGE_URL
+import tech.androidplay.sonali.todo.utils.DateTimePicker
 import tech.androidplay.sonali.todo.utils.Extensions.beautifyDateTime
 import tech.androidplay.sonali.todo.utils.Extensions.compressImage
 import tech.androidplay.sonali.todo.utils.Extensions.loadImageCircleCropped
@@ -32,9 +33,9 @@ import tech.androidplay.sonali.todo.utils.Extensions.toLocalDateTime
 import tech.androidplay.sonali.todo.utils.ResultData
 import tech.androidplay.sonali.todo.utils.UIHelper.showSnack
 import tech.androidplay.sonali.todo.utils.UIHelper.showToast
-import tech.androidplay.sonali.todo.utils.alarmutils.DateTimeUtil
 import tech.androidplay.sonali.todo.utils.alarmutils.cancelAlarmedNotification
 import tech.androidplay.sonali.todo.utils.alarmutils.startAlarmedNotification
+import tech.androidplay.sonali.todo.utils.isNetworkAvailable
 import javax.inject.Inject
 
 /**
@@ -60,7 +61,7 @@ class TaskEditFragment : Fragment(R.layout.fragment_task_edit) {
     lateinit var pendingIntent: PendingIntent
 
     @Inject
-    lateinit var dateTimeUtil: DateTimeUtil
+    lateinit var dateTimePicker: DateTimePicker
 
 
     private val taskViewModel: TaskViewModel by viewModels()
@@ -98,11 +99,16 @@ class TaskEditFragment : Fragment(R.layout.fragment_task_edit) {
     }
 
     private fun setListener() {
-        imgUploadTaskImg.setOnClickListener { selectImage() }
+        imgUploadTaskImg.setOnClickListener {
+            if (isNetworkAvailable()) selectImage() else showSnack(
+                requireView(),
+                "Check Internet!"
+            )
+        }
         tvDeleteTask.setOnClickListener { deleteTask(taskId) }
         btnSaveTasks.setOnClickListener { saveTask() }
-        tvSelectDate.setOnClickListener { dateTimeUtil.openDateTimePicker(requireContext()) }
-        dateTimeUtil.epochFormat.observe(viewLifecycleOwner, { epoch ->
+        tvSelectDate.setOnClickListener { dateTimePicker.openDateTimePicker(requireContext()) }
+        dateTimePicker.epochFormat.observe(viewLifecycleOwner, { epoch ->
             epoch?.let {
                 newTaskTimeStamp = "$it"
                 tvSelectDate.text = "You will be notified on ${
@@ -119,8 +125,8 @@ class TaskEditFragment : Fragment(R.layout.fragment_task_edit) {
         val taskDesc = etTaskDesc.text.toString().trim()
         val taskDate = newTaskTimeStamp
 
-        if (this.taskBody.compareTo(taskBody) != 0 ||
-            this.taskDesc.compareTo(taskDesc) != 0
+        if ((this.taskBody.compareTo(taskBody) != 0 || this.taskDesc.compareTo(taskDesc) != 0) &&
+            isNetworkAvailable()
         ) {
             taskViewModel.updateTask(taskId!!, taskBody, taskDesc, taskDate)
             showToast(requireContext(), "Task Saved")
@@ -179,7 +185,8 @@ class TaskEditFragment : Fragment(R.layout.fragment_task_edit) {
         dialog.setPositiveButton("Yes") { dialogInterface, _ ->
             taskViewModel.deleteTask(docId)?.observe(viewLifecycleOwner, {
                 when (it) {
-                    is ResultData.Loading -> {}
+                    is ResultData.Loading -> {
+                    }
                     is ResultData.Success -> {
                         cancelAlarmedNotification(docId!!)
                         findNavController().navigate(R.id.action_taskEditFragment_to_taskFragment)
@@ -197,7 +204,10 @@ class TaskEditFragment : Fragment(R.layout.fragment_task_edit) {
         if (resultCode == Activity.RESULT_OK && data != null) {
             pickedImage = data.data
             imgTask.loadImageCircleCropped(pickedImage.toString())
-            changeImage(pickedImage)
+            if (isNetworkAvailable()) changeImage(pickedImage) else showSnack(
+                requireView(),
+                "Connection lost!"
+            )
         }
     }
 

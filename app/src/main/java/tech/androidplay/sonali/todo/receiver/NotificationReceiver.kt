@@ -1,4 +1,4 @@
-package tech.androidplay.sonali.todo.utils.alarmutils
+package tech.androidplay.sonali.todo.receiver
 
 import android.app.NotificationManager
 import android.app.Service

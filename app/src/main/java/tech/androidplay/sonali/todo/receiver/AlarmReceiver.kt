@@ -1,4 +1,4 @@
-package tech.androidplay.sonali.todo.utils.alarmutils
+package tech.androidplay.sonali.todo.receiver
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -13,13 +13,14 @@ import androidx.core.app.NotificationCompat
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import tech.androidplay.sonali.todo.R
-import tech.androidplay.sonali.todo.di.HiltBroadcastReceiver
 import tech.androidplay.sonali.todo.utils.Constants
 import tech.androidplay.sonali.todo.utils.Constants.ALARM_DESCRIPTION
 import tech.androidplay.sonali.todo.utils.Constants.ALARM_TEXT
 import tech.androidplay.sonali.todo.utils.Constants.ANDROID_OREO
+import tech.androidplay.sonali.todo.utils.Constants.DEVICE_ANDROID_VERSION
 import tech.androidplay.sonali.todo.utils.Constants.NOTIFICATION_ID
 import tech.androidplay.sonali.todo.utils.Constants.TASK_DOC_ID
+import tech.androidplay.sonali.todo.utils.alarmutils.generateRequestCode
 import javax.inject.Inject
 
 /**
@@ -77,7 +78,7 @@ class AlarmReceiver : HiltBroadcastReceiver() {
             PendingIntent.FLAG_UPDATE_CURRENT
         )
 
-        if (Build.VERSION.SDK_INT >= ANDROID_OREO)
+        if (DEVICE_ANDROID_VERSION >= ANDROID_OREO)
             createNotification(context, notificationManager)
 
         baseNotificationBuilder.apply {

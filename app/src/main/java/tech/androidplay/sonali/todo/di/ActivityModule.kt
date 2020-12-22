@@ -13,7 +13,7 @@ import kotlinx.coroutines.InternalCoroutinesApi
 import tech.androidplay.sonali.todo.data.firebase.FirebaseRepository
 import tech.androidplay.sonali.todo.data.viewmodel.TaskViewModel
 import tech.androidplay.sonali.todo.ui.adapter.TodoAdapter
-import tech.androidplay.sonali.todo.utils.alarmutils.DateTimeUtil
+import tech.androidplay.sonali.todo.utils.DateTimePicker
 import java.util.*
 
 /**
@@ -30,7 +30,7 @@ import java.util.*
 class ActivityModule {
 
     @Provides
-    fun provideDatetimeUtil(calendar: Calendar) = DateTimeUtil(calendar)
+    fun provideDatetimePicker(calendar: Calendar) = DateTimePicker(calendar)
 
     @Provides
     fun providesTodoAdapter(

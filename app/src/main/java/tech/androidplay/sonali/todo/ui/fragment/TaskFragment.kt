@@ -20,7 +20,9 @@ import tech.androidplay.sonali.todo.data.viewmodel.TaskViewModel
 import tech.androidplay.sonali.todo.databinding.FragmentTaskBinding
 import tech.androidplay.sonali.todo.ui.adapter.TodoAdapter
 import tech.androidplay.sonali.todo.utils.Extensions.shareApp
+import tech.androidplay.sonali.todo.utils.UIHelper.showSnack
 import tech.androidplay.sonali.todo.utils.UIHelper.showToast
+import tech.androidplay.sonali.todo.utils.isNetworkAvailable
 import tech.androidplay.sonali.todo.utils.viewLifecycleLazy
 import javax.inject.Inject
 
@@ -77,7 +79,9 @@ class TaskFragment : Fragment(R.layout.fragment_task) {
         }
 
         binding.efabAddTask.setOnClickListener {
+            if (isNetworkAvailable())
             findNavController().navigate(R.id.action_taskFragment_to_taskCreateFragment)
+            else showSnack(requireView(), "Check Internet!")
         }
     }
 
