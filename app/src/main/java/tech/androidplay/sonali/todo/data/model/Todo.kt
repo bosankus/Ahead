@@ -27,5 +27,5 @@ data class Todo(
     @SerializedName("isCompleted")
     var isCompleted: Boolean = false,
     @SerializedName("taskImage")
-    var taskImage: String? = null
+    var taskImage: String? = ""
 ) : Serializable

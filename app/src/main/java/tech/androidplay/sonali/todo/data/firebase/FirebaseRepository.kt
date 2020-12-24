@@ -13,8 +13,10 @@ import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.tasks.await
 import tech.androidplay.sonali.todo.data.model.Todo
 import tech.androidplay.sonali.todo.utils.Constants.FEEDBACK_COLLECTION
-import tech.androidplay.sonali.todo.utils.Constants.FIRESTORE_COLLECTION
+import tech.androidplay.sonali.todo.utils.Constants.TASK_COLLECTION
+import tech.androidplay.sonali.todo.utils.Constants.USER_COLLECTION
 import tech.androidplay.sonali.todo.utils.ResultData
+import tech.androidplay.sonali.todo.utils.UIHelper.getCurrentTimestamp
 import javax.inject.Inject
 
 /**
@@ -32,7 +34,8 @@ class FirebaseRepository @Inject constructor(
 ) : FirebaseApi {
 
     private val userDetails = firebaseAuth.currentUser
-    private val taskListRef = fireStore.collection(FIRESTORE_COLLECTION)
+    private val taskListRef = fireStore.collection(TASK_COLLECTION)
+    private val userListRef = fireStore.collection(USER_COLLECTION)
     private val feedbackReference = fireStore.collection(FEEDBACK_COLLECTION)
 
     private val query: Query = taskListRef
@@ -55,6 +58,12 @@ class FirebaseRepository @Inject constructor(
             val response = firebaseAuth
                 .createUserWithEmailAndPassword(email, password)
                 .await()
+            val userMap = mapOf(
+                "uid" to response.user?.uid,
+                "email" to response.user?.email,
+                "createdOn" to getCurrentTimestamp()
+            )
+            userListRef.add(userMap).await()
             ResultData.Success(response.user)
         } catch (e: Exception) {
             ResultData.Failed(e.message)
