@@ -63,8 +63,10 @@ class TaskCreateFragment : Fragment(R.layout.fragment_task_create) {
 
         btCreateTask.setOnClickListener {
             requireActivity().hideKeyboard()
-            if ((tvTaskInput.text.length) <= 0 && (tvTaskDescInput.text.length) <= 0) tvTaskInput.error =
-                "Cant't be empty!"
+            if ((tvTaskInput.text.length) <= 0 || (tvTaskDescInput.text.length) <= 0)
+                showSnack(requireView(), "Fields can not be empty!")
+            else if (taskTimeStamp.isNullOrEmpty())
+                showSnack(requireView(), "Please select notification time")
             else if (!isNetworkAvailable()) showSnack(requireView(), "No Internet!")
             else createTask()
         }
