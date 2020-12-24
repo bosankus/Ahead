@@ -5,6 +5,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
+import com.google.firebase.firestore.SetOptions
 import com.google.firebase.storage.StorageReference
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.awaitClose
@@ -58,12 +59,14 @@ class FirebaseRepository @Inject constructor(
             val response = firebaseAuth
                 .createUserWithEmailAndPassword(email, password)
                 .await()
-            val userMap = mapOf(
+            val userMap = hashMapOf(
                 "uid" to response.user?.uid,
                 "email" to response.user?.email,
                 "createdOn" to getCurrentTimestamp()
             )
-            userListRef.add(userMap).await()
+            response?.user?.let {
+                userListRef.document("${it.email}").set(userMap, SetOptions.merge()).await()
+            } ?: return ResultData.Failed("Failed to create user")
             ResultData.Success(response.user)
         } catch (e: Exception) {
             ResultData.Failed(e.message)
