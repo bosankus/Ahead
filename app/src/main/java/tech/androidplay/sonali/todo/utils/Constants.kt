@@ -17,7 +17,8 @@ object Constants {
     const val BASE_URL = "https://pixabay.com"
 
     // For firestore collection
-    const val FIRESTORE_COLLECTION = "Tasks"
+    const val TASK_COLLECTION = "Tasks"
+    const val USER_COLLECTION = "Users"
     const val FEEDBACK_COLLECTION = "Feedbacks"
 
     // For shared preference

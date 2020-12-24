@@ -16,4 +16,7 @@
     <color name="dribblePink">#E94D88</color>
     <color name="dribblePinkLight">#F998BD</color>
     <color name="shimmerColor">#dddddd</color>
+
+    <!-- Colors for intro indicators -->
+    <color name="tab_indicator_grey">#C0C0C0</color>
 </resources>

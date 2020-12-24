@@ -16,9 +16,9 @@ data class Todo(
     @DocumentId
     var docId: String = "",
     @SerializedName("todoBody")
-    var todoBody: String = "",
+    var todoBody: String? = "",
     @SerializedName("todoDesc")
-    var todoDesc: String = "",
+    var todoDesc: String? = "",
     @SerializedName("todoDate")
     var todoDate: String = "",
     @SerializedName("todoCreationTimeStamp")
@@ -27,5 +27,5 @@ data class Todo(
     @SerializedName("isCompleted")
     var isCompleted: Boolean = false,
     @SerializedName("taskImage")
-    var taskImage: String? = null
+    var taskImage: String? = ""
 ) : Serializable
