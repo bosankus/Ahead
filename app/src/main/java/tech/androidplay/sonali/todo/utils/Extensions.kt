@@ -24,6 +24,10 @@ import coil.transform.RoundedCornersTransformation
 import com.github.dhaval2404.imagepicker.ImagePicker
 import id.zelory.compressor.Compressor
 import id.zelory.compressor.constraint.quality
+import tech.androidplay.sonali.todo.utils.Constants.IS_AFTER
+import tech.androidplay.sonali.todo.utils.Constants.IS_BEFORE
+import tech.androidplay.sonali.todo.utils.Constants.IS_EQUAL
+import tech.androidplay.sonali.todo.utils.Constants.IS_ERROR
 import java.io.File
 import java.text.SimpleDateFormat
 import java.time.Instant
@@ -114,18 +118,18 @@ object Extensions {
         val currentDate = LocalDateTime.now()
         taskDate?.let {
             return when {
-                taskDate.isEqual(currentDate) -> 0
-                taskDate.isBefore(currentDate) -> -1
-                taskDate.isAfter(currentDate) -> 1
-                else -> 2
+                taskDate.isEqual(currentDate) -> IS_EQUAL
+                taskDate.isBefore(currentDate) -> IS_BEFORE
+                taskDate.isAfter(currentDate) -> IS_AFTER
+                else -> IS_ERROR
             }
         }
         return 2
     }
 
     fun String.toLocalDateTime(): LocalDateTime? {
-        val epoch = this
-        return Instant.ofEpochMilli(epoch.toLong()).atZone(ZoneId.systemDefault()).toLocalDateTime()
+        val epochValue = this.toLong()
+        return Instant.ofEpochMilli(epochValue).atZone(ZoneId.systemDefault()).toLocalDateTime()
     }
 
     fun LocalDateTime.beautifyDateTime(): String {
