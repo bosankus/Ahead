@@ -42,6 +42,12 @@ object Constants {
     const val ALARM_TEXT = "ALARM_TEXT"
     const val ALARM_DESCRIPTION = "ALARM_DESCRIPTION"
 
+    // Return value for Date comparision
+    const val IS_EQUAL = 0
+    const val IS_BEFORE = -1
+    const val IS_AFTER = 1
+    const val IS_ERROR = 2
+
     // For notification channel
     const val NOTIFICATION_CHANNEL_ID = "think_channel"
     const val NOTIFICATION_CHANNEL_NAME = "think"

@@ -18,6 +18,9 @@ import kotlinx.android.synthetic.main.fragment_task_edit.*
 import kotlinx.coroutines.*
 import tech.androidplay.sonali.todo.R
 import tech.androidplay.sonali.todo.data.viewmodel.TaskViewModel
+import tech.androidplay.sonali.todo.utils.Constants.IS_AFTER
+import tech.androidplay.sonali.todo.utils.Constants.IS_BEFORE
+import tech.androidplay.sonali.todo.utils.Constants.IS_EQUAL
 import tech.androidplay.sonali.todo.utils.Constants.TASK_DATE
 import tech.androidplay.sonali.todo.utils.Constants.TASK_DOC_BODY
 import tech.androidplay.sonali.todo.utils.Constants.TASK_DOC_DESC
@@ -25,6 +28,7 @@ import tech.androidplay.sonali.todo.utils.Constants.TASK_DOC_ID
 import tech.androidplay.sonali.todo.utils.Constants.TASK_IMAGE_URL
 import tech.androidplay.sonali.todo.utils.DateTimePicker
 import tech.androidplay.sonali.todo.utils.Extensions.beautifyDateTime
+import tech.androidplay.sonali.todo.utils.Extensions.compareWithToday
 import tech.androidplay.sonali.todo.utils.Extensions.compressImage
 import tech.androidplay.sonali.todo.utils.Extensions.loadImageCircleCropped
 import tech.androidplay.sonali.todo.utils.Extensions.selectImage
@@ -92,10 +96,13 @@ class TaskEditFragment : Fragment(R.layout.fragment_task_edit) {
 
         etTaskBody.setText(taskBody)
         etTaskDesc.setText(taskDesc)
+        // Need to change
         tvSelectDate.text = taskTimeStamp?.toLocalDateTime()?.beautifyDateTime().toString()
-        tvSelectDate.text = "You will be notified on ${
-            taskTimeStamp?.toLocalDateTime()?.beautifyDateTime()
-        }. Tap here to change."
+        if (taskTimeStamp?.compareWithToday() == IS_BEFORE)
+            tvSelectDate.text = "You were notified on " +
+                    "${taskTimeStamp?.toLocalDateTime()?.beautifyDateTime()}. Tap here to change."
+        else tvSelectDate.text = "You will be notified on " +
+                "${taskTimeStamp?.toLocalDateTime()?.beautifyDateTime()}. Tap here to change."
     }
 
     private fun setListener() {
@@ -121,25 +128,33 @@ class TaskEditFragment : Fragment(R.layout.fragment_task_edit) {
 
     // TODO: create alarm on change of date
     private fun saveTask() {
-        val taskBody = etTaskBody.text.toString().trim()
-        val taskDesc = etTaskDesc.text.toString().trim()
-        val taskDate = newTaskTimeStamp
+        if (isNetworkAvailable()) {
+            val taskBody = etTaskBody.text.toString().trim()
+            val taskDesc = etTaskDesc.text.toString().trim()
+            val taskDate = newTaskTimeStamp
 
-        if ((this.taskBody.compareTo(taskBody) != 0 || this.taskDesc.compareTo(taskDesc) != 0) &&
-            isNetworkAvailable()
-        ) {
-            taskViewModel.updateTask(taskId!!, taskBody, taskDesc, taskDate)
-            showToast(requireContext(), "Task Saved")
-        } else if (this.taskTimeStamp?.compareTo(taskDate!!) != 0) {
-            taskViewModel.updateTask(taskId!!, taskBody, taskDesc, taskDate)
-            taskDate?.toLong()?.let {
-                startAlarmedNotification(taskId!!, taskBody, taskDesc, it, alarmManager)
-            }
-            showToast(requireContext(), "Task Saved")
-        } else {
-            showToast(requireContext(), "You didn't make any change yet.")
-            return
-        }
+            if ((this.taskBody.compareTo(taskBody) != 0 || this.taskDesc.compareTo(taskDesc) != 0)) {
+                taskViewModel.updateTask(taskId!!, taskBody, taskDesc, taskDate)
+                showToast(requireContext(), "Task Saved")
+            } else if (taskDate?.compareTo(this.taskTimeStamp.toString()) != 0 &&
+                taskDate?.compareWithToday() == IS_AFTER
+            ) {
+                taskViewModel.updateTask(taskId!!, taskBody, taskDesc, taskDate)
+                startAlarmedNotification(
+                    taskId!!,
+                    taskBody,
+                    taskDesc,
+                    taskDate.toLong(),
+                    alarmManager
+                )
+                showToast(requireContext(), "Task Saved")
+            } else if (taskDate?.compareTo(this.taskTimeStamp.toString()) != 0
+                && (taskDate?.compareWithToday() == IS_BEFORE || taskDate?.compareWithToday() == IS_EQUAL)
+            ) {
+                taskViewModel.updateTask(taskId!!, taskBody, taskDesc, taskDate)
+                showToast(requireContext(), "Task Saved")
+            } else showToast(requireContext(), "You didn't make any change yet.")
+        } else showSnack(requireView(), "Check internet connection.")
     }
 
     private fun changeImage(pickedImage: Uri?) {

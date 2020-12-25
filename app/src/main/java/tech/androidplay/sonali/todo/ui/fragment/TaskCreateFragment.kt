@@ -15,13 +15,16 @@ import kotlinx.android.synthetic.main.fragment_task_create.*
 import kotlinx.coroutines.*
 import tech.androidplay.sonali.todo.R
 import tech.androidplay.sonali.todo.data.viewmodel.TaskViewModel
+import tech.androidplay.sonali.todo.utils.Constants.IS_AFTER
 import tech.androidplay.sonali.todo.utils.DateTimePicker
 import tech.androidplay.sonali.todo.utils.Extensions.beautifyDateTime
+import tech.androidplay.sonali.todo.utils.Extensions.compareWithToday
 import tech.androidplay.sonali.todo.utils.Extensions.compressImage
 import tech.androidplay.sonali.todo.utils.Extensions.hideKeyboard
 import tech.androidplay.sonali.todo.utils.Extensions.selectImage
 import tech.androidplay.sonali.todo.utils.Extensions.toLocalDateTime
 import tech.androidplay.sonali.todo.utils.ResultData
+import tech.androidplay.sonali.todo.utils.UIHelper.logMessage
 import tech.androidplay.sonali.todo.utils.UIHelper.showSnack
 import tech.androidplay.sonali.todo.utils.UIHelper.showToast
 import tech.androidplay.sonali.todo.utils.alarmutils.startAlarmedNotification
@@ -110,16 +113,15 @@ class TaskCreateFragment : Fragment(R.layout.fragment_task_create) {
         todoBody: String,
         todoDesc: String
     ) {
+        logMessage("$taskTimeStamp")
+        logMessage("$taskImage")
+        // clearing taskImage value
         taskImage = null
-        taskTimeStamp?.let {
-            startAlarmedNotification(
-                taskId,
-                todoBody,
-                todoDesc,
-                it.toLong(),
-                alarmManager
-            )
-        }
+        // checking if taskTimeStamp is after the current time
+        if (taskTimeStamp?.compareWithToday() == IS_AFTER)
+            taskTimeStamp?.let {
+                startAlarmedNotification(taskId, todoBody, todoDesc, it.toLong(), alarmManager)
+            }
         lottiCreateTaskLoading.cancelAnimation()
         findNavController().navigate(R.id.action_taskCreateFragment_to_taskFragment)
     }
