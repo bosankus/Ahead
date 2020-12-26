@@ -33,11 +33,8 @@ class ActivityModule {
     fun provideDatetimePicker(calendar: Calendar) = DateTimePicker(calendar)
 
     @Provides
-    fun providesTodoAdapter(
-        alertDialog: AlertDialog.Builder,
-        viewModel: TaskViewModel
-    ): TodoAdapter {
-        return TodoAdapter(viewModel, alertDialog)
+    fun providesTodoAdapter(viewModel: TaskViewModel): TodoAdapter {
+        return TodoAdapter(viewModel)
     }
 
     @Provides

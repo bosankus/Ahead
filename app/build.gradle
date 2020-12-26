@@ -4,6 +4,7 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'dagger.hilt.android.plugin'
 apply plugin: 'com.google.gms.google-services'
+apply plugin: 'com.google.firebase.crashlytics'
 apply plugin: "androidx.navigation.safeargs.kotlin"
 
 android {
@@ -72,6 +73,12 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
     androidTestImplementation "com.google.truth:truth:1.1"*/
 
+    // Crashlytics
+    implementation platform("com.google.firebase:firebase-bom:$firebase_bom_version")
+    implementation 'com.google.firebase:firebase-crashlytics-ktx'
+    implementation 'com.google.firebase:firebase-analytics-ktx'
+
+    // Material Library
     implementation 'com.google.android.material:material:1.2.1'
 
     // Kotlin
@@ -108,13 +115,13 @@ dependencies {
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-play-services:$coroutine_play_version"
 
     // Firebase
-    implementation 'com.google.firebase:firebase-database:19.5.1'
+    implementation 'com.google.firebase:firebase-database:19.6.0'
     implementation 'com.google.firebase:firebase-analytics:18.0.0'
     implementation 'com.google.firebase:firebase-auth:20.0.1'
     implementation 'com.google.android.gms:play-services-auth:19.0.0'
-    implementation 'com.google.firebase:firebase-firestore-ktx:22.0.0'
+    implementation 'com.google.firebase:firebase-firestore-ktx:22.0.1'
     implementation 'com.firebaseui:firebase-ui-firestore:6.2.0'
-    implementation 'com.google.firebase:firebase-storage-ktx:19.2.0'
+    implementation 'com.google.firebase:firebase-storage-ktx:19.2.1'
 
     // Navigation Component
     implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"

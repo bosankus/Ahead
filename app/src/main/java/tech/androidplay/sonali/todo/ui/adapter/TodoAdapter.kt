@@ -19,10 +19,8 @@ import javax.inject.Inject
 
 @ExperimentalCoroutinesApi
 @InternalCoroutinesApi
-class TodoAdapter @Inject constructor(
-    private val viewModel: TaskViewModel,
-    private val dialog: AlertDialog.Builder
-) : ListAdapter<Todo, TodoViewHolder>(TodoDiffUtilCallback()) {
+class TodoAdapter @Inject constructor(private val viewModel: TaskViewModel) :
+    ListAdapter<Todo, TodoViewHolder>(TodoDiffUtilCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TodoViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
@@ -32,6 +30,6 @@ class TodoAdapter @Inject constructor(
 
     override fun onBindViewHolder(holder: TodoViewHolder, position: Int) {
         val todoItem = getItem(position)
-        holder.bind(viewModel, todoItem, dialog)
+        holder.bind(viewModel, todoItem)
     }
 }

@@ -79,7 +79,7 @@
             app:icon="@android:drawable/ic_input_add"
             app:iconPadding="0sp"
             app:iconTint="@color/white"
-            app:rippleColor="@color/white" />
+            app:rippleColor="@color/colorPrimary" />
 
         <include
             android:id="@+id/layoutLoadingTask"

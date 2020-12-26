@@ -3,6 +3,7 @@ package tech.androidplay.sonali.todo.data.firebase
 import android.net.Uri
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.SetOptions
@@ -29,9 +30,10 @@ import javax.inject.Inject
 @Suppress("UNCHECKED_CAST")
 @ExperimentalCoroutinesApi
 class FirebaseRepository @Inject constructor(
+    private val crashReport: FirebaseCrashlytics,
     private val firebaseAuth: FirebaseAuth,
     private val storageReference: StorageReference,
-    fireStore: FirebaseFirestore,
+    fireStore: FirebaseFirestore
 ) : FirebaseApi {
 
     private val userDetails = firebaseAuth.currentUser
@@ -50,6 +52,7 @@ class FirebaseRepository @Inject constructor(
                 .await()
             ResultData.Success(response.user)
         } catch (e: Exception) {
+            crashReport.log(e.message.toString())
             ResultData.Failed(e.message)
         }
     }
@@ -66,9 +69,10 @@ class FirebaseRepository @Inject constructor(
             )
             response?.user?.let {
                 userListRef.document("${it.email}").set(userMap, SetOptions.merge()).await()
-            } ?: return ResultData.Failed("Failed to create user")
+            }
             ResultData.Success(response.user)
         } catch (e: Exception) {
+            crashReport.log(e.message.toString())
             ResultData.Failed(e.message)
         }
     }
@@ -86,13 +90,13 @@ class FirebaseRepository @Inject constructor(
             val docRef = taskListRef
                 .add(taskMap)
                 .await()
-            when (val url: ResultData<String> = uploadImage(uri, docRef.id)) {
-                is ResultData.Success -> updateTask(docRef.id, mapOf("taskImage" to url.data))
+            when (uploadImage(uri, docRef.id)) {
+                is ResultData.Success -> ResultData.Success(docRef.id)
                 is ResultData.Failed -> ResultData.Failed("Task Created. Image Upload Failed. Please retry.")
                 else -> ResultData.Failed("Something went wrong while uploading Image")
             }
-            ResultData.Success(docRef.id)
         } catch (e: Exception) {
+            crashReport.log(e.message.toString())
             ResultData.Failed(false.toString())
         }
     }
@@ -112,8 +116,10 @@ class FirebaseRepository @Inject constructor(
         callbackFlow {
             val querySnapshot = query
                 .addSnapshotListener { value, error ->
-                    if (error != null) return@addSnapshotListener
-                    else {
+                    if (error != null) {
+                        crashReport.log(error.message.toString())
+                        return@addSnapshotListener
+                    } else {
                         val todo: MutableList<Todo> = value!!.toObjects(Todo::class.java)
                         offer(todo)
                     }
@@ -125,17 +131,24 @@ class FirebaseRepository @Inject constructor(
 
 
     override suspend fun updateTask(taskId: String, map: Map<String, Any?>) {
-        taskListRef.document(taskId)
-            .update(map)
-            .await()
+        try {
+            taskListRef.document(taskId)
+                .update(map)
+                .await()
+        } catch (e: Exception) {
+            crashReport.log(e.message.toString())
+        }
     }
 
-    override suspend fun deleteTask(docId: String): ResultData<Boolean> {
+    override suspend fun deleteTask(docId: String, hasImage: Boolean): ResultData<Boolean> {
         return try {
             taskListRef.document(docId).delete().await()
-            storageReference.child("${userDetails?.email}/$docId").delete().await()
+            if (hasImage)
+                storageReference.child("${userDetails?.email}/$docId").delete().await()
+            else ResultData.Success(true)
             ResultData.Success(true)
         } catch (e: Exception) {
+            crashReport.log(e.message.toString())
             ResultData.Failed(e.message)
         }
     }
@@ -147,6 +160,7 @@ class FirebaseRepository @Inject constructor(
                 .await()
             ResultData.Success(feedback.id)
         } catch (e: Exception) {
+            crashReport.log(e.message.toString())
             ResultData.Failed(e.message)
         }
     }
@@ -161,6 +175,7 @@ class FirebaseRepository @Inject constructor(
             updateTask(docRefId, newImgMap)
             ResultData.Success(imageUrl)
         } catch (e: Exception) {
+            crashReport.log(e.message.toString())
             ResultData.Failed(e.message)
         }
     }

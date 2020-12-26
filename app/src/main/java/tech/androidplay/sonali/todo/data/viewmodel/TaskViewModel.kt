@@ -127,10 +127,10 @@ class TaskViewModel @ViewModelInject constructor(
         }
     }!!
 
-    fun deleteTask(docId: String?) = docId?.let {
+    fun deleteTask(docId: String?, hasImage: Boolean) = docId?.let {
         liveData {
             emit(ResultData.Loading)
-            emit(firebaseRepository.deleteTask(it))
+            emit(firebaseRepository.deleteTask(it, hasImage))
         }
     }
 

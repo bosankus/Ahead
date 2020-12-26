@@ -25,7 +25,7 @@ interface FirebaseApi {
     suspend fun createTaskWithoutImage(taskMap: HashMap<*, *>): ResultData<String>
     suspend fun fetchTaskRealtime(): Flow<MutableList<Todo>>
     suspend fun updateTask(taskId: String, map: Map<String, Any?>)
-    suspend fun deleteTask(docId: String): ResultData<Boolean>
+    suspend fun deleteTask(docId: String, hasImage: Boolean): ResultData<Boolean>
     suspend fun provideFeedback(hashMap: HashMap<String, String?>): ResultData<String>
 
     // For Firebase storage
