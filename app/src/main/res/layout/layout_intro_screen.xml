@@ -4,47 +4,16 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/introScreenItemGuideline"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_begin="426dp" />
-
-    <ImageView
-        android:layout_width="150dp"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_intro_logo"
-        app:layout_constraintBottom_toTopOf="@+id/introScreenItemHeader"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
     <TextView
-        android:id="@+id/introScreenItemHeader"
-        android:layout_width="wrap_content"
+        android:id="@+id/introScreenTextItem"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/padding_26dp"
+        android:layout_marginEnd="@dimen/padding_26dp"
         android:fontFamily="@font/calibre_black"
-        android:text="Complete task with ease"
+        android:gravity="center"
         android:textSize="@dimen/text_22sp"
-        app:layout_constraintBottom_toTopOf="@+id/introScreenItemGuideline"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/introScreenItemGuideline" />
-
-    <Button
-        android:id="@+id/btnNext"
-        style="?android:attr/borderlessButtonStyle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/padding_18dp"
-        android:background="@drawable/bg_rounded"
-        android:fontFamily="@font/calibre_bold"
-        android:minHeight="0dp"
-        android:text="@string/get_started"
-        android:textAllCaps="false"
-        android:textColor="@color/white"
-        android:textSize="@dimen/text_18sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/introScreenItemHeader" />
+        app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -138,6 +138,9 @@ dependencies {
 
     /*UI Libraries*/
 
+    // Circular indicator
+    implementation "me.relex:circleindicator:$circular_indicator_version"
+
     // photo compressor
     implementation "id.zelory:compressor:$zelory_version"
 
