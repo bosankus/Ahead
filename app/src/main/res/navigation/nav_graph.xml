@@ -47,6 +47,9 @@
         <action
             android:id="@+id/action_taskFragment_to_taskCompletedFragment"
             app:destination="@id/taskCompletedFragment" />
+        <action
+            android:id="@+id/action_taskFragment_to_splashFragment"
+            app:destination="@id/splashFragment" />
     </fragment>
     <fragment
         android:id="@+id/splashFragment"

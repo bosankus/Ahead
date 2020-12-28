@@ -14,7 +14,6 @@ import tech.androidplay.sonali.todo.databinding.FragmentFeedbackBinding
 import tech.androidplay.sonali.todo.utils.Extensions.hideKeyboard
 import tech.androidplay.sonali.todo.utils.ResultData
 import tech.androidplay.sonali.todo.utils.UIHelper.showSnack
-import tech.androidplay.sonali.todo.utils.UIHelper.showToast
 import tech.androidplay.sonali.todo.utils.UIHelper.viewAnimation
 import tech.androidplay.sonali.todo.utils.viewLifecycleLazy
 
@@ -49,8 +48,8 @@ class FeedbackFragment : Fragment(R.layout.fragment_feedback) {
             requireActivity().hideKeyboard()
             val topic = binding.etFeedbackTopic.text.toString()
             val description = binding.etFeedbackDescription.text.toString()
-            if (topic.isEmpty() || description.isEmpty()) showToast(
-                requireContext(),
+            if (topic.isEmpty() || description.isEmpty()) showSnack(
+                requireView(),
                 "Fields can't be empty"
             ) else sendFeedback(topic, description)
         }
@@ -66,7 +65,7 @@ class FeedbackFragment : Fragment(R.layout.fragment_feedback) {
                         binding.etFeedbackDescription.text = null
                         hideLoading("Feedback submitted successfully")
                     }
-                    is ResultData.Failed -> hideLoading(it.message.toString())
+                    is ResultData.Failed -> hideLoading("Oops! Please resubmit")
                 }
             }
         })

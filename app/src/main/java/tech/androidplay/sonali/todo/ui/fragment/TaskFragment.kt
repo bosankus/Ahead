@@ -1,6 +1,7 @@
 package tech.androidplay.sonali.todo.ui.fragment
 
 import android.annotation.SuppressLint
+import android.app.AlertDialog
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.View
@@ -19,6 +20,7 @@ import tech.androidplay.sonali.todo.data.viewmodel.AuthViewModel
 import tech.androidplay.sonali.todo.data.viewmodel.TaskViewModel
 import tech.androidplay.sonali.todo.databinding.FragmentTaskBinding
 import tech.androidplay.sonali.todo.ui.adapter.TodoAdapter
+import tech.androidplay.sonali.todo.utils.Constants.IS_FIRST_TIME
 import tech.androidplay.sonali.todo.utils.Extensions.shareApp
 import tech.androidplay.sonali.todo.utils.UIHelper.showSnack
 import tech.androidplay.sonali.todo.utils.UIHelper.showToast
@@ -42,6 +44,9 @@ class TaskFragment : Fragment(R.layout.fragment_task) {
     private val binding by viewLifecycleLazy { FragmentTaskBinding.bind(requireView()) }
 
     @Inject
+    lateinit var dialog: AlertDialog.Builder
+
+    @Inject
     lateinit var overdueTodoAdapter: TodoAdapter
 
     @Inject
@@ -56,6 +61,7 @@ class TaskFragment : Fragment(R.layout.fragment_task) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        sharedPreferences.edit().putBoolean(IS_FIRST_TIME, false).apply()
         setUpScreen()
         setListeners()
         setObservers()
@@ -71,6 +77,8 @@ class TaskFragment : Fragment(R.layout.fragment_task) {
         binding.layoutTaskBar.tvTaskHeader.text = "Tasks"
         showFab = AnimationUtils.loadAnimation(requireContext(), R.anim.btn_up_animation)
         binding.efabAddTask.startAnimation(showFab)
+        binding.layoutTodayTask.rvTodayList.adapter = todayTodoAdapter
+        binding.layoutOverdueTask.rvOverdueList.adapter = overdueTodoAdapter
     }
 
     private fun setListeners() {
@@ -80,14 +88,12 @@ class TaskFragment : Fragment(R.layout.fragment_task) {
 
         binding.efabAddTask.setOnClickListener {
             if (isNetworkAvailable())
-            findNavController().navigate(R.id.action_taskFragment_to_taskCreateFragment)
+                findNavController().navigate(R.id.action_taskFragment_to_taskCreateFragment)
             else showSnack(requireView(), "Check Internet!")
         }
     }
 
     private fun setObservers() {
-        binding.layoutTodayTask.rvTodayList.adapter = todayTodoAdapter
-        binding.layoutOverdueTask.rvOverdueList.adapter = overdueTodoAdapter
         taskViewModel.todayTaskList.observe(viewLifecycleOwner, {
             todayTodoAdapter.submitList(it)
         })
@@ -117,10 +123,14 @@ class TaskFragment : Fragment(R.layout.fragment_task) {
 
     @SuppressLint("CommitPrefEdits")
     private fun logOutUser() {
-        sharedPreferences.edit().clear()
-        authViewModel.logoutUser()
-        showToast(requireContext(), "You are logged out.")
-        findNavController().navigate(R.id.action_taskFragment_to_authFragment)
+        dialog.setMessage("Are you sure you want to logout?")
+            .setPositiveButton("Yes") { dialogInterface, _ ->
+                sharedPreferences.edit().putBoolean(IS_FIRST_TIME, true).apply()
+                authViewModel.logoutUser()
+                dialogInterface.dismiss()
+                showToast(requireContext(), "You are logged out")
+                findNavController().navigate(R.id.action_taskFragment_to_splashFragment)
+            }.create().show()
     }
 
 }

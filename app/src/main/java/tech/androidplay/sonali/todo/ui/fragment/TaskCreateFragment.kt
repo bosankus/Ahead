@@ -24,7 +24,6 @@ import tech.androidplay.sonali.todo.utils.Extensions.hideKeyboard
 import tech.androidplay.sonali.todo.utils.Extensions.selectImage
 import tech.androidplay.sonali.todo.utils.Extensions.toLocalDateTime
 import tech.androidplay.sonali.todo.utils.ResultData
-import tech.androidplay.sonali.todo.utils.UIHelper.logMessage
 import tech.androidplay.sonali.todo.utils.UIHelper.showSnack
 import tech.androidplay.sonali.todo.utils.UIHelper.showToast
 import tech.androidplay.sonali.todo.utils.alarmutils.startAlarmedNotification
@@ -108,13 +107,7 @@ class TaskCreateFragment : Fragment(R.layout.fragment_task_create) {
         lottiCreateTaskLoading.playAnimation()
     }
 
-    private fun handleSuccess(
-        taskId: String,
-        todoBody: String,
-        todoDesc: String
-    ) {
-        logMessage("$taskTimeStamp")
-        logMessage("$taskImage")
+    private fun handleSuccess(taskId: String, todoBody: String, todoDesc: String) {
         // clearing taskImage value
         taskImage = null
         // checking if taskTimeStamp is after the current time
