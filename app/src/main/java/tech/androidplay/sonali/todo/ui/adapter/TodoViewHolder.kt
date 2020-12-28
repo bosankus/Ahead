@@ -1,6 +1,5 @@
 package tech.androidplay.sonali.todo.ui.adapter
 
-import android.app.AlertDialog
 import androidx.core.os.bundleOf
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
@@ -16,7 +15,6 @@ import tech.androidplay.sonali.todo.utils.Constants.TASK_DOC_DESC
 import tech.androidplay.sonali.todo.utils.Constants.TASK_DOC_ID
 import tech.androidplay.sonali.todo.utils.Constants.TASK_IMAGE_URL
 import tech.androidplay.sonali.todo.utils.Constants.TASK_STATUS
-import tech.androidplay.sonali.todo.utils.alarmutils.cancelAlarmedNotification
 
 /**
  * Created by Androidplay
@@ -30,16 +28,10 @@ class TodoViewHolder(
     private val binding: LayoutMainTaskListBinding,
 ) : RecyclerView.ViewHolder(binding.root) {
 
-    fun bind(
-        viewModel: TaskViewModel,
-        todoItem: Todo,
-        dialog: AlertDialog.Builder
-    ) {
+    fun bind(viewModel: TaskViewModel, todoItem: Todo) {
         binding.todo = todoItem
         binding.executePendingBindings()
-        binding.tvTodoListItem.apply {
-            transitionName = "todoBody"
-        }
+        binding.tvTodoListItem.transitionName = "todoBody"
 
         binding.cbTaskStatus.setOnClickListener {
             if (todoItem.isCompleted)
@@ -58,15 +50,6 @@ class TodoViewHolder(
             )
             it?.findNavController()
                 ?.navigate(R.id.action_global_taskEditFragment, bundle)
-        }
-
-        binding.clItemListContainer.setOnLongClickListener {
-            dialog.setPositiveButton("Yes") { dialogInterface, _ ->
-                viewModel.deleteTask(todoItem.docId)
-                it.cancelAlarmedNotification(todoItem.docId)
-                dialogInterface.dismiss()
-            }.create().show()
-            true
         }
 
     }

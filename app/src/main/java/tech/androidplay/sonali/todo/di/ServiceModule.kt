@@ -1,6 +1,7 @@
 package tech.androidplay.sonali.todo.di
 
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.StorageReference
 import dagger.Module
@@ -26,8 +27,9 @@ class ServiceModule {
     @ServiceScoped
     @Provides
     fun providesFirebaseRepository(
+        firebaseCrashReport: FirebaseCrashlytics,
         firebaseAuth: FirebaseAuth,
         storageReference: StorageReference,
         fireStore: FirebaseFirestore
-    ) = FirebaseRepository(firebaseAuth, storageReference, fireStore)
+    ) = FirebaseRepository(firebaseCrashReport, firebaseAuth, storageReference, fireStore)
 }

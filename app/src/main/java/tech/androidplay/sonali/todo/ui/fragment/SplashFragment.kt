@@ -8,6 +8,7 @@ import androidx.navigation.fragment.findNavController
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
 import tech.androidplay.sonali.todo.R
+import tech.androidplay.sonali.todo.utils.Constants.IS_FIRST_TIME
 import javax.inject.Inject
 
 /**
@@ -32,22 +33,15 @@ class SplashFragment : Fragment(R.layout.fragment_splash) {
     }
 
     private fun checkDestination() {
-        /*if (firebaseAuth.currentUser == null &&
-            sharedPreferences.getBoolean(IS_FIRST_TIME, true)
-        )
-            goToIntroFragment()*/
-        /*if (firebaseAuth.currentUser != null &&
-            !sharedPreferences.getBoolean(IS_FIRST_TIME, true)
-        )
-            goToTaskFragment()*/
-
-        if (firebaseAuth.currentUser != null) goToTaskFragment()
+        if (firebaseAuth.currentUser == null || sharedPreferences.getBoolean(IS_FIRST_TIME, true))
+            goToIntroFragment()
+        else if (firebaseAuth.currentUser != null) goToTaskFragment()
         else goToAuthFragment()
     }
 
-    /*private fun goToIntroFragment() {
+    private fun goToIntroFragment() {
         findNavController().navigate(R.id.action_splashFragment_to_introFragment)
-    }*/
+    }
 
     private fun goToTaskFragment() {
         findNavController().navigate(R.id.action_splashFragment_to_taskFragment)

@@ -174,7 +174,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/padding_18dp"
-            android:background="@drawable/bg_rounded"
+            android:background="@drawable/bg_rounded_btn"
             android:backgroundTint="@color/dribblePink"
             android:fontFamily="@font/calibre_bold"
             android:text="@string/create_task"

@@ -76,6 +76,12 @@ object Extensions {
         }
     }
 
+    suspend fun Uri.compressImage(context: Context): Uri {
+        return Compressor.compress(context, File(this.path)) {
+            quality(80)
+        }.toUri()
+    }
+
     fun ImageView.setTint(colorId: Int) {
         ImageViewCompat.setImageTintList(
             this, ColorStateList.valueOf(
@@ -149,11 +155,5 @@ object Extensions {
         val hourFormatter = SimpleDateFormat("HH:mm a")
         val timeHour = hourFormatter.format(givenTime)
         return "$timeDayRelative at $timeHour"
-    }
-
-    suspend fun Uri.compressImage(context: Context): Uri {
-        return Compressor.compress(context, File(this.path)) {
-            quality(80)
-        }.toUri()
     }
 }

@@ -112,15 +112,21 @@ class TaskEditFragment : Fragment(R.layout.fragment_task_edit) {
                 "Check Internet!"
             )
         }
-        tvDeleteTask.setOnClickListener { deleteTask(taskId) }
+        tvDeleteTask.setOnClickListener {
+           if (taskImage.isNullOrEmpty()) deleteTask(taskId, false)
+           else deleteTask(taskId, true)
+        }
         btnSaveTasks.setOnClickListener { saveTask() }
         tvSelectDate.setOnClickListener { dateTimePicker.openDateTimePicker(requireContext()) }
         dateTimePicker.epochFormat.observe(viewLifecycleOwner, { epoch ->
             epoch?.let {
                 newTaskTimeStamp = "$it"
-                tvSelectDate.text = "You will be notified on ${
-                    it.toString().toLocalDateTime()?.beautifyDateTime()
-                }. Tap here to change."
+                if (newTaskTimeStamp?.compareWithToday() == IS_AFTER)
+                    tvSelectDate.text = "You will be notified on ${
+                        it.toString().toLocalDateTime()?.beautifyDateTime()
+                    }. Tap here to change."
+                else tvSelectDate.text = "Alarm won't ring for time which has passed " +
+                        "${it.toString().toLocalDateTime()?.beautifyDateTime()}."
             }
         })
     }
@@ -196,17 +202,16 @@ class TaskEditFragment : Fragment(R.layout.fragment_task_edit) {
         }
     }
 
-    private fun deleteTask(docId: String?) {
+    private fun deleteTask(docId: String?, hasImage: Boolean) {
         dialog.setPositiveButton("Yes") { dialogInterface, _ ->
-            taskViewModel.deleteTask(docId)?.observe(viewLifecycleOwner, {
+            taskViewModel.deleteTask(docId, hasImage)?.observe(viewLifecycleOwner, {
                 when (it) {
-                    is ResultData.Loading -> {
-                    }
+                    is ResultData.Loading -> showSnack(requireView(), "Deleting...")
                     is ResultData.Success -> {
                         cancelAlarmedNotification(docId!!)
                         findNavController().navigate(R.id.action_taskEditFragment_to_taskFragment)
                         dialogInterface.dismiss()
-                        showToast(requireContext(), "Task deleted")
+                        showSnack(requireView(), "Task deleted")
                     }
                     is ResultData.Failed -> showSnack(requireView(), it.toString())
                 }

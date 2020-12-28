@@ -43,13 +43,12 @@ class AuthFragment : Fragment(R.layout.fragment_auth) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setListeners()
-
-        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
-            activity?.finishAffinity()
-        }
     }
 
     private fun setListeners() {
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
+            activity?.finishAffinity()
+        }
         btnSignUpEmailPassword.setOnClickListener {
             requireActivity().hideKeyboard()
             val userEmail = loginInputEmailTxt.text.toString()

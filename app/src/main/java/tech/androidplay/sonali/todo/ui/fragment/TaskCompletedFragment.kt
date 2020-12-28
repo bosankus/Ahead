@@ -46,7 +46,7 @@ class TaskCompletedFragment : Fragment(R.layout.fragment_task_completed) {
         binding.layoutTaskBar.tvTaskHeader.text = "Tasks"
         binding.layoutTaskBar.imgMenu.visibility = View.GONE
         binding.layoutNoTask.tvEmptyTask.text = "Oh boi! No Completed task"
-        binding.layoutCompletedTask.tvTodayHeader.text = "Completed"
+        binding.layoutCompletedTask.tvTodayHeader.text = "COMPLETED TASK"
     }
 
     private fun setObservers() {

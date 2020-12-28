@@ -23,9 +23,9 @@ object UIHelper {
     fun getCurrentTimestamp(): String =
         SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss").format(Date())
 
-    fun logMessage(message: String) {
+    /*fun logMessage(message: String) {
         Log.d(GLOBAL_TAG, message)
-    }
+    }*/
 
     fun showToast(context: Context, toastMessage: String) {
         Toast.makeText(context, toastMessage, Toast.LENGTH_SHORT).show()
