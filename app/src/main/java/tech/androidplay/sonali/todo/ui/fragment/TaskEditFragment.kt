@@ -17,7 +17,8 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_task_edit.*
 import kotlinx.coroutines.*
 import tech.androidplay.sonali.todo.R
-import tech.androidplay.sonali.todo.data.viewmodel.TaskViewModel
+import tech.androidplay.sonali.todo.data.viewmodel.EditTaskViewModel
+import tech.androidplay.sonali.todo.utils.*
 import tech.androidplay.sonali.todo.utils.Constants.IS_AFTER
 import tech.androidplay.sonali.todo.utils.Constants.IS_BEFORE
 import tech.androidplay.sonali.todo.utils.Constants.IS_EQUAL
@@ -26,20 +27,10 @@ import tech.androidplay.sonali.todo.utils.Constants.TASK_DOC_BODY
 import tech.androidplay.sonali.todo.utils.Constants.TASK_DOC_DESC
 import tech.androidplay.sonali.todo.utils.Constants.TASK_DOC_ID
 import tech.androidplay.sonali.todo.utils.Constants.TASK_IMAGE_URL
-import tech.androidplay.sonali.todo.utils.DateTimePicker
-import tech.androidplay.sonali.todo.utils.Extensions.beautifyDateTime
-import tech.androidplay.sonali.todo.utils.Extensions.compareWithToday
-import tech.androidplay.sonali.todo.utils.Extensions.compressImage
-import tech.androidplay.sonali.todo.utils.Extensions.loadImageCircleCropped
-import tech.androidplay.sonali.todo.utils.Extensions.selectImage
-import tech.androidplay.sonali.todo.utils.Extensions.setTint
-import tech.androidplay.sonali.todo.utils.Extensions.toLocalDateTime
-import tech.androidplay.sonali.todo.utils.ResultData
 import tech.androidplay.sonali.todo.utils.UIHelper.showSnack
 import tech.androidplay.sonali.todo.utils.UIHelper.showToast
 import tech.androidplay.sonali.todo.utils.alarmutils.cancelAlarmedNotification
 import tech.androidplay.sonali.todo.utils.alarmutils.startAlarmedNotification
-import tech.androidplay.sonali.todo.utils.isNetworkAvailable
 import javax.inject.Inject
 
 /**
@@ -68,7 +59,7 @@ class TaskEditFragment : Fragment(R.layout.fragment_task_edit) {
     lateinit var dateTimePicker: DateTimePicker
 
 
-    private val taskViewModel: TaskViewModel by viewModels()
+    private val viewModel: EditTaskViewModel by viewModels()
 
     private var taskId: String? = ""
     private var taskBody: String = ""
@@ -113,8 +104,8 @@ class TaskEditFragment : Fragment(R.layout.fragment_task_edit) {
             )
         }
         tvDeleteTask.setOnClickListener {
-           if (taskImage.isNullOrEmpty()) deleteTask(taskId, false)
-           else deleteTask(taskId, true)
+            if (taskImage.isNullOrEmpty()) deleteTask(taskId, false)
+            else deleteTask(taskId, true)
         }
         btnSaveTasks.setOnClickListener { saveTask() }
         tvSelectDate.setOnClickListener { dateTimePicker.openDateTimePicker(requireContext()) }
@@ -140,12 +131,12 @@ class TaskEditFragment : Fragment(R.layout.fragment_task_edit) {
             val taskDate = newTaskTimeStamp
 
             if ((this.taskBody.compareTo(taskBody) != 0 || this.taskDesc.compareTo(taskDesc) != 0)) {
-                taskViewModel.updateTask(taskId!!, taskBody, taskDesc, taskDate)
+                viewModel.updateTask(taskId!!, taskBody, taskDesc, taskDate)
                 showToast(requireContext(), "Task Saved")
             } else if (taskDate?.compareTo(this.taskTimeStamp.toString()) != 0 &&
                 taskDate?.compareWithToday() == IS_AFTER
             ) {
-                taskViewModel.updateTask(taskId!!, taskBody, taskDesc, taskDate)
+                viewModel.updateTask(taskId!!, taskBody, taskDesc, taskDate)
                 startAlarmedNotification(
                     taskId!!,
                     taskBody,
@@ -157,7 +148,7 @@ class TaskEditFragment : Fragment(R.layout.fragment_task_edit) {
             } else if (taskDate?.compareTo(this.taskTimeStamp.toString()) != 0
                 && (taskDate?.compareWithToday() == IS_BEFORE || taskDate?.compareWithToday() == IS_EQUAL)
             ) {
-                taskViewModel.updateTask(taskId!!, taskBody, taskDesc, taskDate)
+                viewModel.updateTask(taskId!!, taskBody, taskDesc, taskDate)
                 showToast(requireContext(), "Task Saved")
             } else showToast(requireContext(), "You didn't make any change yet.")
         } else showSnack(requireView(), "Check internet connection.")
@@ -167,8 +158,8 @@ class TaskEditFragment : Fragment(R.layout.fragment_task_edit) {
         lifecycleScope.launch {
             val compressedImage = pickedImage?.compressImage(requireContext())
             withContext(Dispatchers.Main) {
-                taskViewModel.uploadImage(compressedImage, taskId!!)
-                    .observe(viewLifecycleOwner, { imageUrl ->
+                viewModel.uploadImage(compressedImage, taskId!!)
+                    ?.observe(viewLifecycleOwner, { imageUrl ->
                         when (imageUrl) {
                             is ResultData.Loading -> {
                                 tvNoTaskImg.text = "Uploading Image..."
@@ -204,7 +195,7 @@ class TaskEditFragment : Fragment(R.layout.fragment_task_edit) {
 
     private fun deleteTask(docId: String?, hasImage: Boolean) {
         dialog.setPositiveButton("Yes") { dialogInterface, _ ->
-            taskViewModel.deleteTask(docId, hasImage)?.observe(viewLifecycleOwner, {
+            viewModel.deleteTask(docId, hasImage)?.observe(viewLifecycleOwner, {
                 when (it) {
                     is ResultData.Loading -> showSnack(requireView(), "Deleting...")
                     is ResultData.Success -> {

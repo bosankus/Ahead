@@ -1,11 +1,16 @@
 package tech.androidplay.sonali.todo.ui.fragment
 
 import android.os.Bundle
+import android.os.Handler
 import android.view.View
 import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.viewpager2.widget.ViewPager2
 import kotlinx.android.synthetic.main.fragment_intro.*
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import tech.androidplay.sonali.todo.R
 import tech.androidplay.sonali.todo.databinding.FragmentIntroBinding
 import tech.androidplay.sonali.todo.ui.adapter.ViewPagerAdapter
@@ -47,7 +52,7 @@ class IntroFragment : Fragment(R.layout.fragment_intro) {
     private fun addToList(text: String) = introText.add(text)
 
     private fun postToList() {
-        addToList("Sometimes we forget important things in our life...\uD83D\uDE25 We aren't perfect \uD83D\uDE04")
+        addToList("Sometimes we forget important things in our life... We aren't perfect \uD83D\uDE04")
         addToList("And I am there to make you remember things, which matters to you...\uD83E\uDD17")
         addToList("Click the button below to check me out \uD83E\uDD70")
         addToList("Make life a little better \uD83D\uDE4C")

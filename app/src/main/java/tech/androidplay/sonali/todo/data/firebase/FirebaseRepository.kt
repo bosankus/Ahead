@@ -77,8 +77,14 @@ class FirebaseRepository @Inject constructor(
         }
     }
 
-    override suspend fun resetPassword(email: String) {
-        firebaseAuth.sendPasswordResetEmail(email)
+    override suspend fun resetPassword(email: String): ResultData<String> {
+        return try {
+            firebaseAuth.sendPasswordResetEmail(email).await()
+            ResultData.Success("Reset link is sent to your mail ID")
+        } catch (e: Exception) {
+            crashReport.log(e.message.toString())
+            ResultData.Failed(e.message.toString())
+        }
     }
 
     override suspend fun signOut() {

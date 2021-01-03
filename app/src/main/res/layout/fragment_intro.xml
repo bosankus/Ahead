@@ -6,22 +6,15 @@
     android:layout_height="match_parent"
     android:background="@color/white">
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/introScreenGuideline"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_begin="365dp" />
-
     <ImageView
         android:id="@+id/introScreenAppLogo"
         android:layout_width="180dp"
         android:layout_height="wrap_content"
         android:src="@drawable/ic_intro_logo"
-        app:layout_constraintBottom_toTopOf="@+id/introScreenGuideline"
+       app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/introScreenGuideline"
+        app:layout_constraintTop_toTopOf="parent"
         tools:ignore="ContentDescription" />
 
     <androidx.viewpager2.widget.ViewPager2
@@ -30,10 +23,9 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="50dp"
         android:orientation="horizontal"
-        app:layout_constraintBottom_toTopOf="@+id/btnNext"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/introScreenGuideline" />
+        app:layout_constraintTop_toBottomOf="@+id/introScreenAppLogo" />
 
     <me.relex.circleindicator.CircleIndicator3
         android:id="@+id/introScreenViewpagerIndicator"
@@ -58,6 +50,7 @@
         android:textAllCaps="false"
         android:textColor="@color/white"
         android:textSize="@dimen/text_18sp"
+        android:foreground="?attr/selectableItemBackground"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

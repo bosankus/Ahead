@@ -17,7 +17,7 @@ interface FirebaseApi {
     // For User authentication
     suspend fun logInUser(email: String, password: String): ResultData<FirebaseUser>
     suspend fun createAccount(email: String, password: String): ResultData<FirebaseUser>
-    suspend fun resetPassword(email: String)
+    suspend fun resetPassword(email: String): ResultData<String>
     suspend fun signOut()
 
     // For Firestore

@@ -49,7 +49,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/layoutTaskBar"
-                app:listSize="@{viewmodel.todayTaskList.size()}" />
+                app:listSize="@{viewmodel.upcomingTaskList.size()}" />
 
             <include
                 android:id="@+id/layoutOverdueTask"

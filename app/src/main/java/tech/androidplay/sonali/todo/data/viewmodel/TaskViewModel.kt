@@ -1,18 +1,18 @@
 package tech.androidplay.sonali.todo.data.viewmodel
 
-import android.net.Uri
 import androidx.hilt.lifecycle.ViewModelInject
-import androidx.lifecycle.*
-import com.google.firebase.auth.FirebaseAuth
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import tech.androidplay.sonali.todo.data.firebase.FirebaseRepository
 import tech.androidplay.sonali.todo.data.model.Todo
-import tech.androidplay.sonali.todo.utils.Extensions.compareWithToday
-import tech.androidplay.sonali.todo.utils.ResultData
-import tech.androidplay.sonali.todo.utils.UIHelper.getCurrentTimestamp
+import tech.androidplay.sonali.todo.utils.Constants.IS_AFTER
+import tech.androidplay.sonali.todo.utils.Constants.IS_BEFORE
+import tech.androidplay.sonali.todo.utils.compareWithToday
 
 /**
  * Created by Androidplay
@@ -22,12 +22,8 @@ import tech.androidplay.sonali.todo.utils.UIHelper.getCurrentTimestamp
 
 @ExperimentalCoroutinesApi
 @InternalCoroutinesApi
-class TaskViewModel @ViewModelInject constructor(
-    firebaseAuth: FirebaseAuth,
-    private val firebaseRepository: FirebaseRepository
-) : ViewModel() {
-
-    private val currentUser = firebaseAuth.currentUser
+class TaskViewModel @ViewModelInject constructor(private val dataSource: FirebaseRepository) :
+    ViewModel() {
 
     private var _loadingState = MutableLiveData<Boolean>()
     val loadingState get() = _loadingState
@@ -38,8 +34,8 @@ class TaskViewModel @ViewModelInject constructor(
     private var _completedTaskList = MutableLiveData<List<Todo>>()
     val completedTaskList get() = _completedTaskList
 
-    private var _todayTaskList = MutableLiveData<List<Todo>>()
-    val todayTaskList get() = _todayTaskList
+    private var _upcomingTaskList = MutableLiveData<List<Todo>>()
+    val upcomingTaskList get() = _upcomingTaskList
 
     private var _overdueTaskList = MutableLiveData<List<Todo>>()
     val overdueTaskList get() = _overdueTaskList
@@ -50,50 +46,23 @@ class TaskViewModel @ViewModelInject constructor(
 
     }
 
-    /* Network Call methods */
-
-    fun createTask(
-        todoBody: String,
-        todoDesc: String,
-        todoDate: String?,
-        uri: Uri?
-    ): LiveData<ResultData<String>> {
-        val taskMap = hashMapOf(
-            "id" to currentUser?.uid,
-            "todoBody" to todoBody,
-            "todoDesc" to todoDesc,
-            "todoDate" to todoDate,
-            "todoCreationTimeStamp" to getCurrentTimestamp(),
-            "isCompleted" to false
-        )
-        uri?.let {
-            return liveData {
-                emit(ResultData.Loading)
-                emit(firebaseRepository.createTaskWithImage(taskMap, it))
-            }
-        } ?: return liveData {
-            emit(ResultData.Loading)
-            emit(firebaseRepository.createTaskWithoutImage(taskMap))
-        }
-    }
-
     private fun getAllTasks() {
         _loadingState.value = true
         viewModelScope.launch {
             try {
-                firebaseRepository.fetchTaskRealtime().collect { allTodoList ->
+                dataSource.fetchTaskRealtime().collect { allTodoList ->
                     // set value for all incomplete task list size
                     _incompleteTaskListSize.value = allTodoList.filter { !it.isCompleted }.size
                     // set value for all completed tasks
                     _completedTaskList.value =
                         allTodoList.filter { it.isCompleted }.sortedByDescending { it.todoDate }
                     // set value for all incomplete tasks for today
-                    _todayTaskList.value =
-                        allTodoList.filter { it.todoDate.compareWithToday() == 1 && !it.isCompleted }
-                            .sortedBy { it.todoDate }
+                    _upcomingTaskList.value =
+                        allTodoList.filter { it.todoDate.compareWithToday() == IS_AFTER && !it.isCompleted }
+                            .sortedByDescending { it.todoDate }
                     // set value for all incomplete tasks which are overdue
                     _overdueTaskList.value =
-                        allTodoList.filter { it.todoDate.compareWithToday() == -1 && !it.isCompleted }
+                        allTodoList.filter { it.todoDate.compareWithToday() == IS_BEFORE && !it.isCompleted }
                             .sortedByDescending { it.todoDate }
                     _loadingState.value = false
                 }
@@ -105,47 +74,13 @@ class TaskViewModel @ViewModelInject constructor(
 
     fun changeTaskStatus(taskId: String, status: Boolean) {
         val map: Map<String, Boolean> = mapOf("isCompleted" to status)
-        viewModelScope.launch { firebaseRepository.updateTask(taskId, map) }
+        viewModelScope.launch { dataSource.updateTask(taskId, map) }
     }
 
-    fun updateTask(
-        taskId: String, todoBody: String? = "", todoDesc: String? = "", todoDate: String? = ""
-    ) {
-        val map: Map<String, Any?> = mapOf(
-            "todoBody" to todoBody,
-            "todoDesc" to todoDesc,
-            "todoDate" to todoDate,
-            "updatedOn" to getCurrentTimestamp()
-        )
-        viewModelScope.launch { firebaseRepository.updateTask(taskId, map) }
+
+    fun logoutUser() = viewModelScope.launch {
+        dataSource.signOut()
     }
-
-    fun uploadImage(uri: Uri?, taskId: String) = uri?.let {
-        liveData {
-            emit(ResultData.Loading)
-            emit(firebaseRepository.uploadImage(it, taskId))
-        }
-    }!!
-
-    fun deleteTask(docId: String?, hasImage: Boolean) = docId?.let {
-        liveData {
-            emit(ResultData.Loading)
-            emit(firebaseRepository.deleteTask(it, hasImage))
-        }
-    }
-
-    fun provideFeedback(topic: String, description: String): LiveData<ResultData<String>> {
-        val hashMap = hashMapOf(
-            "user" to currentUser?.email,
-            "topic" to topic,
-            "description" to description
-        )
-        return liveData {
-            emit(ResultData.Loading)
-            emit(firebaseRepository.provideFeedback(hashMap))
-        }
-    }
-
 
 }
 

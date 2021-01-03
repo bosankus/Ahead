@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/padding_16dp"
         android:fontFamily="@font/calibre_semi"
-        android:text="@string/edit_task"
+        android:text="@string/details"
         android:textColor="@color/grey3"
         android:textSize="@dimen/text_18sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -198,15 +198,14 @@
         android:background="?attr/selectableItemBackground"
         android:drawablePadding="@dimen/padding_5dp"
         android:fontFamily="@font/calibre_semi"
-        android:paddingTop="@dimen/padding_5dp"
-        android:paddingBottom="@dimen/padding_5dp"
+        android:padding="@dimen/padding_5dp"
         android:text="@string/delete_task"
-        android:textColor="@color/dribblePink"
+        android:textColor="@color/grey2"
         android:textSize="@dimen/text_16sp"
         app:drawableStartCompat="@drawable/ic_delete"
-        app:drawableTint="@color/dribblePink"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:drawableTint="@color/grey2"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnSaveTasks" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
