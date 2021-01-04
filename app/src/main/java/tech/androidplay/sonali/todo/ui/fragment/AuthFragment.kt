@@ -1,7 +1,6 @@
 package tech.androidplay.sonali.todo.ui.fragment
 
 import android.os.Bundle
-import android.text.TextUtils
 import android.view.View
 import android.view.animation.AnimationUtils
 import android.widget.Button
@@ -14,11 +13,13 @@ import kotlinx.android.synthetic.main.fragment_auth.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import tech.androidplay.sonali.todo.R
 import tech.androidplay.sonali.todo.data.viewmodel.AuthViewModel
-import tech.androidplay.sonali.todo.utils.Extensions.hideKeyboard
+import tech.androidplay.sonali.todo.databinding.FragmentAuthBinding
 import tech.androidplay.sonali.todo.utils.ResultData
+import tech.androidplay.sonali.todo.utils.UIHelper.hideKeyboard
 import tech.androidplay.sonali.todo.utils.UIHelper.showSnack
 import tech.androidplay.sonali.todo.utils.UIHelper.showToast
 import tech.androidplay.sonali.todo.utils.UIHelper.viewAnimation
+import tech.androidplay.sonali.todo.utils.viewLifecycleLazy
 
 /**
  * Created by Androidplay
@@ -31,6 +32,7 @@ import tech.androidplay.sonali.todo.utils.UIHelper.viewAnimation
 @AndroidEntryPoint
 class AuthFragment : Fragment(R.layout.fragment_auth) {
 
+    private val binding by viewLifecycleLazy { FragmentAuthBinding.bind(requireView()) }
     private val authViewModel: AuthViewModel by viewModels()
     private var networkFlag: Boolean = false
     private val animFadeIn by lazy {
@@ -49,101 +51,75 @@ class AuthFragment : Fragment(R.layout.fragment_auth) {
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
             activity?.finishAffinity()
         }
-        btnSignUpEmailPassword.setOnClickListener {
+        binding.btnSignUpEmailPassword.setOnClickListener {
             requireActivity().hideKeyboard()
-            val userEmail = loginInputEmailTxt.text.toString()
-            val userPassword = loginInputPasswordTxt.text.toString()
-            signUpUser(userEmail, userPassword)
+            val userEmail = binding.loginInputEmailTxt.text.toString()
+            val userPassword = binding.loginInputPasswordTxt.text.toString()
+            createAccount(userEmail, userPassword)
         }
 
-        btnloginEmailPassword.setOnClickListener {
+        binding.btnloginEmailPassword.setOnClickListener {
             requireActivity().hideKeyboard()
-            val userEmail = loginInputEmailTxt.text.toString()
-            val userPassword = loginInputPasswordTxt.text.toString()
+            val userEmail = binding.loginInputEmailTxt.text.toString()
+            val userPassword = binding.loginInputPasswordTxt.text.toString()
             login(userEmail, userPassword)
         }
 
-        tvForgotPassword.setOnClickListener {
+        binding.tvForgotPassword.setOnClickListener {
             requireActivity().hideKeyboard()
-            val userEmail = loginInputEmailTxt.text.toString()
+            val userEmail = binding.loginInputEmailTxt.text.toString()
             resetPassword(userEmail)
         }
 
-        tvSignUpOption.setOnClickListener { setSignUpUI() }
+        binding.tvSignUpOption.setOnClickListener { setSignUpUI() }
 
-        tvLoginOption.setOnClickListener { setLoginUi() }
+        binding.tvLoginOption.setOnClickListener { setLoginUi() }
     }
 
-    private fun signUpUser(userEmail: String, userPassword: String) {
-        if (validateInput(userEmail, userPassword)) {
-            authViewModel.createAccount(userEmail, userPassword).observe(
-                viewLifecycleOwner,
-                {
-                    it?.let {
-                        when (it) {
-                            is ResultData.Loading -> showLoading(btnSignUpEmailPassword)
-                            is ResultData.Success -> goToMainActivity()
-                            is ResultData.Failed -> hideLoading(
-                                btnSignUpEmailPassword,
-                                it.message.toString()
-                            )
-                        }
+    private fun createAccount(userEmail: String, userPassword: String) {
+        authViewModel.createAccount(userEmail, userPassword).observe(
+            viewLifecycleOwner,
+            {
+                it?.let {
+                    when (it) {
+                        is ResultData.Loading -> showLoading(btnSignUpEmailPassword)
+                        is ResultData.Success -> goToMainActivity()
+                        is ResultData.Failed -> hideLoading(
+                            btnSignUpEmailPassword,
+                            it.message.toString()
+                        )
                     }
-                })
-        } else showSnack(requireView(), "Please recheck your inputs")
+                }
+            })
     }
 
     private fun login(userEmail: String, userPassword: String) {
-        if (validateInput(userEmail, userPassword)) {
-            networkFlag = true
-            authViewModel.loginUser(userEmail, userPassword).observe(
-                viewLifecycleOwner,
-                {
-                    it?.let {
-                        when (it) {
-                            is ResultData.Loading -> showLoading(btnloginEmailPassword)
-                            is ResultData.Success -> goToMainActivity()
-                            is ResultData.Failed -> hideLoading(
-                                btnloginEmailPassword,
-                                it.message.toString()
-                            )
-                        }
-                    }
-                    networkFlag = false
+        networkFlag = true
+        authViewModel.loginUser(userEmail, userPassword).observe(viewLifecycleOwner, {
+            it?.let {
+                when (it) {
+                    is ResultData.Loading -> showLoading(btnloginEmailPassword)
+                    is ResultData.Success -> goToMainActivity()
+                    is ResultData.Failed -> hideLoading(
+                        btnloginEmailPassword,
+                        it.message.toString()
+                    )
                 }
-            )
-        } else showSnack(requireView(), "Please recheck your inputs")
+            }
+            networkFlag = false
+        })
     }
 
     private fun resetPassword(userEmail: String) {
-        if (userEmail.isNotEmpty()) {
-            authViewModel.resetPassword(userEmail)
-            showSnack(
-                requireView(), "You will receive password " +
-                        "reset mail if you are registered with us"
-            )
-        } else loginInputEmailTxt.error = "Please put your login email"
-    }
-
-    private fun validateInput(email: String = "", password: String = ""): Boolean {
-        var valid = true
-
-        if (TextUtils.isEmpty(email)) {
-            loginInputEmailTxt.error = "Required"
-            valid = false
-        } else loginEmailTxtLayout.error = null
-
-        if (TextUtils.isEmpty(password)) {
-            loginInputPasswordTxt.error = "Required"
-            valid = false
-        }
-
-        if (password.length < 6) {
-            loginInputPasswordTxt.error = "Minimum 6 characters"
-            valid = false
-        } else loginInputPasswordTxt.error = null
-
-        return valid
+        authViewModel.resetPassword(userEmail).observe(viewLifecycleOwner, {
+            it?.let {
+                when (it) {
+                    is ResultData.Loading -> showSnack(requireView(), "Please wait")
+                    is ResultData.Success -> showSnack(requireView(), it.data.toString())
+                    is ResultData.Failed -> showSnack(requireView(), it.message.toString())
+                }
+            }
+        })
     }
 
     private fun goToMainActivity() {

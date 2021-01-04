@@ -9,10 +9,11 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.InternalCoroutinesApi
 import tech.androidplay.sonali.todo.R
+import tech.androidplay.sonali.todo.data.viewmodel.FeedbackViewModel
 import tech.androidplay.sonali.todo.data.viewmodel.TaskViewModel
 import tech.androidplay.sonali.todo.databinding.FragmentFeedbackBinding
-import tech.androidplay.sonali.todo.utils.Extensions.hideKeyboard
 import tech.androidplay.sonali.todo.utils.ResultData
+import tech.androidplay.sonali.todo.utils.UIHelper.hideKeyboard
 import tech.androidplay.sonali.todo.utils.UIHelper.showSnack
 import tech.androidplay.sonali.todo.utils.UIHelper.viewAnimation
 import tech.androidplay.sonali.todo.utils.viewLifecycleLazy
@@ -30,7 +31,7 @@ import tech.androidplay.sonali.todo.utils.viewLifecycleLazy
 class FeedbackFragment : Fragment(R.layout.fragment_feedback) {
 
     private val binding by viewLifecycleLazy { FragmentFeedbackBinding.bind(requireView()) }
-    private val taskViewModel: TaskViewModel by viewModels()
+    private val viewModel: FeedbackViewModel by viewModels()
     private val animFadeIn by lazy {
         AnimationUtils.loadAnimation(requireContext(), R.anim.fade_in_animation)
     }
@@ -56,7 +57,7 @@ class FeedbackFragment : Fragment(R.layout.fragment_feedback) {
     }
 
     private fun sendFeedback(topic: String, description: String) {
-        taskViewModel.provideFeedback(topic, description).observe(viewLifecycleOwner, { result ->
+        viewModel.provideFeedback(topic, description).observe(viewLifecycleOwner, { result ->
             result?.let {
                 when (it) {
                     is ResultData.Loading -> showLoading()

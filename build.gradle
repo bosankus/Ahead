@@ -22,6 +22,7 @@ buildscript {
     ext.zelory_version = "3.0.0"
     ext.crashlytics_version = "2.4.1"
     ext.firebase_bom_version = "26.2.0"
+    ext.circular_indicator_version = "2.1.4"
     repositories {
         google()
         jcenter()

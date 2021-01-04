@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">think Ahead</string>
-    <string name="login_header_txt">Hello \nThere<font color="#E94D88">.</font></string>
+    <string name="login_header_txt">Get \nStarted<font color="#E94D88">.</font></string>
     <string name="signup_create_acc_txt">Create account for <font color="#E94D88"><b>thinking Ahead</b></font></string>
     <string name="login_create_acc_txt">Have account? <font color="#E94D88"><b>Get in</b></font></string>
     <string name="think">think.</string>
@@ -43,4 +43,7 @@
     <string name="task_details">Task Details:</string>
     <string name="completed_tasks"><b>Completed Tasks</b></string>
     <string name="get_started">Let\'s create</string>
+    <string name="details">Details</string>
+    <string name="assign_task">Assign Task</string>
+    <string name="username">Username (Email ID)</string>
 </resources>

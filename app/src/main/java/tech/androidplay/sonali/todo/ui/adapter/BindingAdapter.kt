@@ -3,12 +3,13 @@ package tech.androidplay.sonali.todo.ui.adapter
 import android.view.View
 import android.view.animation.AnimationUtils
 import android.widget.TextView
-import androidx.core.view.isVisible
 import androidx.databinding.BindingAdapter
 import tech.androidplay.sonali.todo.R
-import tech.androidplay.sonali.todo.utils.Extensions.convertFromEpochTime
-import tech.androidplay.sonali.todo.utils.Extensions.removeStrikeThroughText
-import tech.androidplay.sonali.todo.utils.Extensions.strikeThroughText
+import tech.androidplay.sonali.todo.utils.UIHelper.removeStrikeThroughText
+import tech.androidplay.sonali.todo.utils.UIHelper.strikeThroughText
+import tech.androidplay.sonali.todo.utils.UIHelper.viewAnimation
+import tech.androidplay.sonali.todo.utils.convertFromEpochTime
+
 
 /**
  * Created by Androidplay
@@ -29,8 +30,20 @@ fun View.visibility(status: Boolean) {
     if (status) this.visibility = View.VISIBLE else this.visibility = View.GONE
 }
 
-// TODO
 @BindingAdapter("day_name")
 fun TextView.showDayName(date: String) {
     this.text = date.toLong().convertFromEpochTime()
+}
+
+@BindingAdapter("animation_view")
+fun View.animateButton(status: Boolean) {
+    val fadeInAnim = AnimationUtils.loadAnimation(this.context, R.anim.fade_in_animation)
+    val fadeOutAnim = AnimationUtils.loadAnimation(this.context, R.anim.fade_out_animation)
+    if (status) viewAnimation(this, fadeInAnim, false)
+    else viewAnimation(this, fadeOutAnim, true)
+}
+
+@BindingAdapter("lottie_animation")
+fun View.animateLottie(status: Boolean) {
+    viewAnimation(this, null, status)
 }

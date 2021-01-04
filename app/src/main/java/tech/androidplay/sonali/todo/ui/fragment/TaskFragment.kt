@@ -16,15 +16,13 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.InternalCoroutinesApi
 import tech.androidplay.sonali.todo.R
-import tech.androidplay.sonali.todo.data.viewmodel.AuthViewModel
 import tech.androidplay.sonali.todo.data.viewmodel.TaskViewModel
 import tech.androidplay.sonali.todo.databinding.FragmentTaskBinding
 import tech.androidplay.sonali.todo.ui.adapter.TodoAdapter
 import tech.androidplay.sonali.todo.utils.Constants.IS_FIRST_TIME
-import tech.androidplay.sonali.todo.utils.Extensions.shareApp
 import tech.androidplay.sonali.todo.utils.UIHelper.showSnack
-import tech.androidplay.sonali.todo.utils.UIHelper.showToast
 import tech.androidplay.sonali.todo.utils.isNetworkAvailable
+import tech.androidplay.sonali.todo.utils.shareApp
 import tech.androidplay.sonali.todo.utils.viewLifecycleLazy
 import javax.inject.Inject
 
@@ -55,8 +53,7 @@ class TaskFragment : Fragment(R.layout.fragment_task) {
     @Inject
     lateinit var sharedPreferences: SharedPreferences
 
-    private val taskViewModel: TaskViewModel by viewModels()
-    private val authViewModel: AuthViewModel by viewModels()
+    private val viewModel: TaskViewModel by viewModels()
     private lateinit var showFab: Animation
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -72,7 +69,7 @@ class TaskFragment : Fragment(R.layout.fragment_task) {
     }
 
     private fun setUpScreen() {
-        binding.viewmodel = taskViewModel
+        binding.viewmodel = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
         binding.layoutTaskBar.tvTaskHeader.text = "Tasks"
         showFab = AnimationUtils.loadAnimation(requireContext(), R.anim.btn_up_animation)
@@ -94,11 +91,11 @@ class TaskFragment : Fragment(R.layout.fragment_task) {
     }
 
     private fun setObservers() {
-        taskViewModel.todayTaskList.observe(viewLifecycleOwner, {
+        viewModel.upcomingTaskList.observe(viewLifecycleOwner, {
             todayTodoAdapter.submitList(it)
         })
 
-        taskViewModel.overdueTaskList.observe(viewLifecycleOwner, {
+        viewModel.overdueTaskList.observe(viewLifecycleOwner, {
             overdueTodoAdapter.submitList(it)
         })
     }
@@ -126,9 +123,8 @@ class TaskFragment : Fragment(R.layout.fragment_task) {
         dialog.setMessage("Are you sure you want to logout?")
             .setPositiveButton("Yes") { dialogInterface, _ ->
                 sharedPreferences.edit().putBoolean(IS_FIRST_TIME, true).apply()
-                authViewModel.logoutUser()
+                viewModel.logoutUser()
                 dialogInterface.dismiss()
-                showToast(requireContext(), "You are logged out")
                 findNavController().navigate(R.id.action_taskFragment_to_splashFragment)
             }.create().show()
     }

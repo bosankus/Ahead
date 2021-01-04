@@ -2,6 +2,7 @@ package tech.androidplay.sonali.todo.ui.activity
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.content.pm.ActivityInfo
 import android.graphics.Color
 import android.os.Bundle
 import android.view.View
@@ -12,6 +13,8 @@ import kotlinx.android.synthetic.main.activity_main.*
 import tech.androidplay.sonali.todo.R
 import tech.androidplay.sonali.todo.utils.CacheManager
 import tech.androidplay.sonali.todo.utils.Constants.ACTION_SHOW_TASK_FRAGMENT
+import tech.androidplay.sonali.todo.utils.Constants.ANDROID_OREO
+import tech.androidplay.sonali.todo.utils.Constants.DEVICE_ANDROID_VERSION
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -49,6 +52,11 @@ class MainActivity : AppCompatActivity() {
         window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
         window.statusBarColor = Color.WHITE
         window.navigationBarColor = Color.WHITE
+
+        // To support portrait view in API 26
+        if (DEVICE_ANDROID_VERSION != ANDROID_OREO) {
+            requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+        }
     }
 
     private fun navigateToGlobalFragment(intent: Intent) {

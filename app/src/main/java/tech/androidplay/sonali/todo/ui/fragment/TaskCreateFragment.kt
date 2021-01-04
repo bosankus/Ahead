@@ -14,20 +14,14 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_task_create.*
 import kotlinx.coroutines.*
 import tech.androidplay.sonali.todo.R
+import tech.androidplay.sonali.todo.data.viewmodel.TaskCreateViewModel
 import tech.androidplay.sonali.todo.data.viewmodel.TaskViewModel
+import tech.androidplay.sonali.todo.utils.*
 import tech.androidplay.sonali.todo.utils.Constants.IS_AFTER
-import tech.androidplay.sonali.todo.utils.DateTimePicker
-import tech.androidplay.sonali.todo.utils.Extensions.beautifyDateTime
-import tech.androidplay.sonali.todo.utils.Extensions.compareWithToday
-import tech.androidplay.sonali.todo.utils.Extensions.compressImage
-import tech.androidplay.sonali.todo.utils.Extensions.hideKeyboard
-import tech.androidplay.sonali.todo.utils.Extensions.selectImage
-import tech.androidplay.sonali.todo.utils.Extensions.toLocalDateTime
-import tech.androidplay.sonali.todo.utils.ResultData
+import tech.androidplay.sonali.todo.utils.UIHelper.hideKeyboard
 import tech.androidplay.sonali.todo.utils.UIHelper.showSnack
 import tech.androidplay.sonali.todo.utils.UIHelper.showToast
 import tech.androidplay.sonali.todo.utils.alarmutils.startAlarmedNotification
-import tech.androidplay.sonali.todo.utils.isNetworkAvailable
 import javax.inject.Inject
 
 /**
@@ -46,7 +40,7 @@ class TaskCreateFragment : Fragment(R.layout.fragment_task_create) {
     @Inject
     lateinit var dateTimePicker: DateTimePicker
 
-    private val taskViewModel: TaskViewModel by viewModels()
+    private val viewModel: TaskCreateViewModel by viewModels()
     private var taskTimeStamp: String? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -65,7 +59,7 @@ class TaskCreateFragment : Fragment(R.layout.fragment_task_create) {
 
         btCreateTask.setOnClickListener {
             requireActivity().hideKeyboard()
-            if ((tvTaskInput.text.length) <= 0 || (tvTaskDescInput.text.length) <= 0)
+            if ((tvTaskInput.text.length) <= 0)
                 showSnack(requireView(), "Fields can not be empty!")
             else if (taskTimeStamp.isNullOrEmpty())
                 showSnack(requireView(), "Please select notification time")
@@ -83,7 +77,7 @@ class TaskCreateFragment : Fragment(R.layout.fragment_task_create) {
         lifecycleScope.launch {
             val compressedImage = taskImage?.compressImage(requireContext())
             withContext(Dispatchers.Main) {
-                taskViewModel.createTask(todoBody, todoDesc, todoDate, compressedImage)
+                viewModel.createTask(todoBody, todoDesc, todoDate, compressedImage)
                     .observe(viewLifecycleOwner, {
                         it?.let {
                             when (it) {
