@@ -15,8 +15,8 @@ android {
         applicationId "tech.androidplay.sonali.todo"
         minSdkVersion 26
         targetSdkVersion 30
-        versionCode 1
-        versionName "1.0"
+        versionCode 11
+        versionName "1.1"
         buildConfigField "String", "PXB_API_KEY", "\" API_KEY\""
         multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"

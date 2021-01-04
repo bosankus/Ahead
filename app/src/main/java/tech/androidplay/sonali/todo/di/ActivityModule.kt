@@ -39,10 +39,9 @@ class ActivityModule {
 
     @Provides
     fun provideTaskViewModel(
-        firebaseAuth: FirebaseAuth,
         firebaseRepository: FirebaseRepository
     ): TaskViewModel {
-        return TaskViewModel(firebaseAuth, firebaseRepository)
+        return TaskViewModel(firebaseRepository)
     }
 
     @Provides

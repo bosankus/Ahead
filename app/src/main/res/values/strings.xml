@@ -44,4 +44,6 @@
     <string name="completed_tasks"><b>Completed Tasks</b></string>
     <string name="get_started">Let\'s create</string>
     <string name="details">Details</string>
+    <string name="assign_task">Assign Task</string>
+    <string name="username">Username (Email ID)</string>
 </resources>
