@@ -8,16 +8,17 @@ import android.content.Intent
 import android.graphics.Color
 import android.media.AudioAttributes
 import android.net.Uri
-import android.os.Build
 import androidx.core.app.NotificationCompat
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import tech.androidplay.sonali.todo.R
-import tech.androidplay.sonali.todo.utils.Constants
+import tech.androidplay.sonali.todo.service.NotificationService
 import tech.androidplay.sonali.todo.utils.Constants.ALARM_DESCRIPTION
 import tech.androidplay.sonali.todo.utils.Constants.ALARM_TEXT
 import tech.androidplay.sonali.todo.utils.Constants.ANDROID_OREO
 import tech.androidplay.sonali.todo.utils.Constants.DEVICE_ANDROID_VERSION
+import tech.androidplay.sonali.todo.utils.Constants.NOTIFICATION_CHANNEL_ID
+import tech.androidplay.sonali.todo.utils.Constants.NOTIFICATION_CHANNEL_NAME
 import tech.androidplay.sonali.todo.utils.Constants.NOTIFICATION_ID
 import tech.androidplay.sonali.todo.utils.Constants.TASK_DOC_ID
 import tech.androidplay.sonali.todo.utils.alarmutils.generateRequestCode
@@ -63,7 +64,7 @@ class AlarmReceiver : HiltBroadcastReceiver() {
         taskId: String
     ) {
         val uniqueNotificationId = taskId.generateRequestCode()
-        val intent = Intent(context, NotificationReceiver::class.java).also {
+        val intent = Intent(context, NotificationService::class.java).also {
             it.putExtra(TASK_DOC_ID, taskId)
             it.putExtra(NOTIFICATION_ID, uniqueNotificationId)
         }
@@ -99,8 +100,7 @@ class AlarmReceiver : HiltBroadcastReceiver() {
             .build()
 
         val channel = NotificationChannel(
-            Constants.NOTIFICATION_CHANNEL_ID,
-            Constants.NOTIFICATION_CHANNEL_NAME,
+            NOTIFICATION_CHANNEL_ID, NOTIFICATION_CHANNEL_NAME,
             NotificationManager.IMPORTANCE_HIGH
         ).apply {
             lightColor = Color.YELLOW

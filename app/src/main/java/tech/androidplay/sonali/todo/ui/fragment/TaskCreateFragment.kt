@@ -1,10 +1,13 @@
 package tech.androidplay.sonali.todo.ui.fragment
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.AlarmManager
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -12,13 +15,15 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_task_create.*
+import kotlinx.android.synthetic.main.layout_assign_user.*
+import kotlinx.android.synthetic.main.layout_assign_user.view.*
 import kotlinx.coroutines.*
 import tech.androidplay.sonali.todo.R
 import tech.androidplay.sonali.todo.data.viewmodel.TaskCreateViewModel
-import tech.androidplay.sonali.todo.data.viewmodel.TaskViewModel
 import tech.androidplay.sonali.todo.utils.*
 import tech.androidplay.sonali.todo.utils.Constants.IS_AFTER
 import tech.androidplay.sonali.todo.utils.UIHelper.hideKeyboard
+import tech.androidplay.sonali.todo.utils.UIHelper.isEmailValid
 import tech.androidplay.sonali.todo.utils.UIHelper.showSnack
 import tech.androidplay.sonali.todo.utils.UIHelper.showToast
 import tech.androidplay.sonali.todo.utils.alarmutils.startAlarmedNotification
@@ -66,6 +71,41 @@ class TaskCreateFragment : Fragment(R.layout.fragment_task_create) {
             else if (!isNetworkAvailable()) showSnack(requireView(), "No Internet!")
             else createTask()
         }
+
+        layoutAssigneeUser.etAssigneeUsername.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(charSequence: CharSequence?, p1: Int, p2: Int, p3: Int) {
+
+            }
+
+            override fun onTextChanged(charSequence: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                charSequence?.let { if (it.isEmailValid()) checkAssigneeAvailability(it.toString()) }
+            }
+
+            override fun afterTextChanged(p0: Editable?) {
+
+            }
+        })
+    }
+
+    @SuppressLint("SetTextI18n")
+    private fun checkAssigneeAvailability(email: String) {
+        viewModel.checkAssigneeAvailability(email).observe(viewLifecycleOwner, { result ->
+            result?.let {
+                when (it) {
+                    is ResultData.Loading -> lottieAvailabilityLoading.visibility = View.VISIBLE
+                    is ResultData.Success -> {
+                        lottieAvailabilityLoading.visibility = View.INVISIBLE
+                        layoutAssigneeUser.tvAssigneeAvailability.text = "User is available"
+                        assigneeId = it.data
+                    }
+                    is ResultData.Failed -> {
+                        lottieAvailabilityLoading.visibility = View.INVISIBLE
+                        layoutAssigneeUser.tvAssigneeAvailability.text = "No user found"
+                        assigneeId = null
+                    }
+                }
+            }
+        })
     }
 
 
@@ -73,11 +113,11 @@ class TaskCreateFragment : Fragment(R.layout.fragment_task_create) {
         val todoBody = tvTaskInput.text.toString().trim()
         val todoDesc = tvTaskDescInput.text.toString().trim()
         val todoDate = taskTimeStamp
-
+        val assignee = assigneeId
         lifecycleScope.launch {
             val compressedImage = taskImage?.compressImage(requireContext())
             withContext(Dispatchers.Main) {
-                viewModel.createTask(todoBody, todoDesc, todoDate, compressedImage)
+                viewModel.createTask(todoBody, todoDesc, todoDate, assignee, compressedImage)
                     .observe(viewLifecycleOwner, {
                         it?.let {
                             when (it) {
@@ -127,5 +167,6 @@ class TaskCreateFragment : Fragment(R.layout.fragment_task_create) {
 
     companion object {
         var taskImage: Uri? = null
+        var assigneeId: String? = null
     }
 }

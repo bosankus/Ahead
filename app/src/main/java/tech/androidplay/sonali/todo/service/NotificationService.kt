@@ -1,4 +1,4 @@
-package tech.androidplay.sonali.todo.receiver
+package tech.androidplay.sonali.todo.service
 
 import android.app.NotificationManager
 import android.app.Service
@@ -20,7 +20,7 @@ import javax.inject.Inject
 
 @ExperimentalCoroutinesApi
 @AndroidEntryPoint
-class NotificationReceiver : Service() {
+class NotificationService : Service() {
 
     @Inject
     lateinit var repository: FirebaseRepository

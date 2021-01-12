@@ -47,6 +47,7 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/calibre_semi"
                 android:imeOptions="actionNext"
+                android:inputType="textEmailAddress"
                 android:textSize="18sp" />
 
         </com.google.android.material.textfield.TextInputLayout>

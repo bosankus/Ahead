@@ -30,24 +30,27 @@ class TaskCreateViewModel @ViewModelInject constructor(
         todoBody: String,
         todoDesc: String,
         todoDate: String?,
+        assignee: String?,
         uri: Uri?
     ): LiveData<ResultData<String>> {
+
         val taskMap = hashMapOf(
-            "id" to currentUser?.uid,
+            "creator" to currentUser?.uid,
             "todoBody" to todoBody,
             "todoDesc" to todoDesc,
             "todoDate" to todoDate,
             "todoCreationTimeStamp" to UIHelper.getCurrentTimestamp(),
-            "isCompleted" to false
+            "isCompleted" to false,
         )
-        uri?.let {
-            return liveData {
-                emit(ResultData.Loading)
-                emit(dataSource.createTaskWithImage(taskMap, it))
-            }
-        } ?: return liveData {
+
+        return liveData {
             emit(ResultData.Loading)
-            emit(dataSource.createTaskWithoutImage(taskMap))
+            emit(dataSource.createTask(taskMap, assignee, uri))
         }
+    }
+
+    fun checkAssigneeAvailability(email: String) = liveData {
+        emit(ResultData.Loading)
+        emit(dataSource.checkAssigneeAvailability(email))
     }
 }

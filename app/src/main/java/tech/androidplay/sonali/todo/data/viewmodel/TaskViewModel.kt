@@ -1,13 +1,16 @@
 package tech.androidplay.sonali.todo.data.viewmodel
 
+import android.app.Application
 import androidx.hilt.lifecycle.ViewModelInject
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.firebase.messaging.FirebaseMessaging
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 import tech.androidplay.sonali.todo.data.firebase.FirebaseRepository
 import tech.androidplay.sonali.todo.data.model.Todo
 import tech.androidplay.sonali.todo.utils.Constants.IS_AFTER
@@ -22,8 +25,11 @@ import tech.androidplay.sonali.todo.utils.compareWithToday
 
 @ExperimentalCoroutinesApi
 @InternalCoroutinesApi
-class TaskViewModel @ViewModelInject constructor(private val dataSource: FirebaseRepository) :
-    ViewModel() {
+class TaskViewModel @ViewModelInject constructor(
+    private val dataSource: FirebaseRepository,
+    private val messaging: FirebaseMessaging
+) :
+    AndroidViewModel(Application()) {
 
     private var _loadingState = MutableLiveData<Boolean>()
     val loadingState get() = _loadingState
@@ -43,7 +49,7 @@ class TaskViewModel @ViewModelInject constructor(private val dataSource: Firebas
 
     init {
         getAllTasks()
-
+        updateDeviceToken()
     }
 
     private fun getAllTasks() {
@@ -82,5 +88,11 @@ class TaskViewModel @ViewModelInject constructor(private val dataSource: Firebas
         dataSource.signOut()
     }
 
+    private fun updateDeviceToken() {
+        viewModelScope.launch {
+            val token = messaging.token.await()
+            dataSource.sendTokenToSever(token)
+        }
+    }
 }
 

@@ -22,8 +22,7 @@
         android:windowSoftInputMode="adjustResize|stateHidden"
         tools:ignore="AllowBackup,UnusedAttribute">
 
-        <activity
-            android:name=".ui.activity.MainActivity">
+        <activity android:name=".ui.activity.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -32,7 +31,15 @@
         </activity>
 
         <receiver android:name=".receiver.AlarmReceiver" />
-        <service android:name=".receiver.NotificationReceiver" />
+
+        <service android:name=".service.NotificationService" />
+        <service
+            android:name=".service.FirebaseNotificationService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
     </application>
 
 </manifest>

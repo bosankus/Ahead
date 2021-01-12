@@ -14,39 +14,64 @@
             android:layout_marginTop="@dimen/padding_26dp"
             android:fontFamily="@font/calibre_semi"
             android:text="@string/assign_task"
-            android:textColor="@color/grey2"
+            android:textColor="@color/grey3"
             android:textSize="@dimen/text_18sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <LinearLayout
-            android:id="@+id/clAssignUser"
+            android:id="@+id/llAssignee"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/padding_16dp"
+            android:layout_marginStart="@dimen/padding_16dp"
+            android:layout_marginEnd="@dimen/padding_16dp"
+            android:orientation="horizontal"
             android:background="@drawable/bg_rounded"
-            android:orientation="vertical"
-            android:padding="@dimen/padding_16dp"
+            android:layout_marginTop="@dimen/text_16sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tvTaskAssignHeader">
 
             <EditText
-                android:id="@+id/etAssignUsername"
+                android:id="@+id/etAssigneeUsername"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@android:color/transparent"
+                android:layout_height="55dp"
+                android:layout_weight="1"
                 android:fontFamily="@font/calibre_semi"
                 android:hint="@string/username"
                 android:inputType="text"
                 android:maxLines="1"
+                android:background="@android:color/transparent"
+                android:padding="@dimen/padding_10dp"
                 android:textColor="@color/grey3"
-                android:textSize="@dimen/text_18sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/etTaskBodyHeader"/>
+                android:textSize="@dimen/text_18sp" />
+
+            <com.airbnb.lottie.LottieAnimationView
+                android:id="@+id/lottieAvailabilityLoading"
+                android:layout_width="60dp"
+                android:layout_height="30dp"
+                android:layout_margin="@dimen/padding_10dp"
+                android:visibility="invisible"
+                app:lottie_autoPlay="true"
+                android:layout_weight="0"
+                app:lottie_fileName="lottie_auth.json"
+                app:lottie_loop="true" />
 
         </LinearLayout>
+
+        <TextView
+            android:id="@+id/tvAssigneeAvailability"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/padding_26dp"
+            android:layout_marginTop="@dimen/padding_5dp"
+            android:fontFamily="@font/calibre_semi"
+            android:text=""
+            android:textColor="@color/grey3"
+            android:textSize="@dimen/text_14sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/llAssignee" />
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
