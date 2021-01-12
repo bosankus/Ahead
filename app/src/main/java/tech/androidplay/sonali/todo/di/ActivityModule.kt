@@ -3,6 +3,7 @@ package tech.androidplay.sonali.todo.di
 import android.app.AlertDialog
 import android.content.Context
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.messaging.FirebaseMessaging
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -39,9 +40,10 @@ class ActivityModule {
 
     @Provides
     fun provideTaskViewModel(
-        firebaseRepository: FirebaseRepository
+        firebaseRepository: FirebaseRepository,
+        messaging: FirebaseMessaging
     ): TaskViewModel {
-        return TaskViewModel(firebaseRepository)
+        return TaskViewModel(firebaseRepository, messaging)
     }
 
     @Provides

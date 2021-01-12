@@ -5,12 +5,14 @@ import android.app.Activity
 import android.content.Context
 import android.text.SpannableString
 import android.text.style.StrikethroughSpan
+import android.util.Log
 import android.view.View
 import android.view.animation.Animation
 import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
 import android.widget.Toast
 import com.google.android.material.snackbar.Snackbar
+import tech.androidplay.sonali.todo.utils.Constants.GLOBAL_TAG
 import java.time.Instant
 
 /**
@@ -24,9 +26,9 @@ object UIHelper {
 
     fun getCurrentTimestamp(): String = Instant.now().toEpochMilli().toString()
 
-    /*fun logMessage(message: String) {
+    fun logMessage(message: String) {
         Log.d(GLOBAL_TAG, message)
-    }*/
+    }
 
     fun showToast(context: Context, toastMessage: String) {
         Toast.makeText(context, toastMessage, Toast.LENGTH_SHORT).show()
@@ -63,5 +65,9 @@ object UIHelper {
         val spannable = SpannableString(text)
         spannable.removeSpan(StrikethroughSpan())
         this.text = spannable
+    }
+
+    fun CharSequence.isEmailValid(): Boolean {
+        return android.util.Patterns.EMAIL_ADDRESS.matcher(this).matches()
     }
 }

@@ -15,8 +15,8 @@ android {
         applicationId "tech.androidplay.sonali.todo"
         minSdkVersion 26
         targetSdkVersion 30
-        versionCode 11
-        versionName "1.1"
+        versionCode 12
+        versionName "1.2"
         buildConfigField "String", "PXB_API_KEY", "\" API_KEY\""
         multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -114,14 +114,17 @@ dependencies {
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutine_version"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-play-services:$coroutine_play_version"
 
+    implementation "io.reactivex.rxjava2:rxjava:$rxjava_core"
+    implementation "io.reactivex.rxjava2:rxandroid:$rxjava_android"
+
     // Firebase
-    implementation 'com.google.firebase:firebase-database:19.6.0'
     implementation 'com.google.firebase:firebase-analytics:18.0.0'
     implementation 'com.google.firebase:firebase-auth:20.0.1'
     implementation 'com.google.android.gms:play-services-auth:19.0.0'
     implementation 'com.google.firebase:firebase-firestore-ktx:22.0.1'
     implementation 'com.firebaseui:firebase-ui-firestore:6.2.0'
     implementation 'com.google.firebase:firebase-storage-ktx:19.2.1'
+    implementation 'com.google.firebase:firebase-messaging'
 
     // Navigation Component
     implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"

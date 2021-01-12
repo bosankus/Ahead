@@ -1,6 +1,7 @@
 package tech.androidplay.sonali.todo.data.model
 
 import com.google.gson.annotations.SerializedName
+import java.io.Serializable
 
 /**
  * Created by Androidplay
@@ -10,15 +11,13 @@ import com.google.gson.annotations.SerializedName
  */
 data class User(
     @SerializedName("uid")
-    var uid: String,
+    var uid: String = "",
     @SerializedName("email")
-    var email: String,
-    @SerializedName("fName")
-    var fName: String? = "",
-    @SerializedName("lName")
-    var lName: String? = "",
-    @SerializedName("profileImg")
-    var profileImg: String = "",
+    var email: String = "",
+    @SerializedName("fname")
+    var fname: String = "",
+    @SerializedName("lname")
+    var lname: String = "",
     @SerializedName("createdOn")
-    var createdOn: String
-)
+    var createdOn: String = "",
+) : Serializable

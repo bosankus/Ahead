@@ -10,6 +10,7 @@ import androidx.core.app.NotificationCompat
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import dagger.Module
@@ -52,6 +53,10 @@ class ApplicationModule {
     @Singleton
     @Provides
     fun providesFirebaseCrashlytics() = FirebaseCrashlytics.getInstance()
+
+    @Singleton
+    @Provides
+    fun providesFirebaseMessaging() = FirebaseMessaging.getInstance()
 
     @Singleton
     @Provides

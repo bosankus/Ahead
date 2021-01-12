@@ -14,12 +14,20 @@ object Constants {
     const val PLAY_STORE_LINK = "https://androidplay.in/29hQ"
     const val GLOBAL_TAG = "Androidplay"
     const val DATABASE_NAME = "think_db"
-    const val BASE_URL = "https://pixabay.com"
 
-    // For firestore collection
+    // For firestore collection - Production
     const val TASK_COLLECTION = "Tasks"
     const val USER_COLLECTION = "Users"
+    const val ASSIGNEE_COLLECTION = "assignee"
     const val FEEDBACK_COLLECTION = "Feedbacks"
+
+    const val TASK_ASSIGNED = 1
+    const val TASK_ASSIGNED_ON_HOLD = 0
+
+    /*// For firestore collection - Test
+    const val TASK_COLLECTION_TEST = "test_Tasks"
+    const val USER_COLLECTION_TEST = "test_Users"
+    const val FEEDBACK_COLLECTION_TEST = "test_Feedbacks"*/
 
     // For shared preference
     const val SHARED_PREFERENCE_NAME = "SHARED_PREFERENCE_NAME"

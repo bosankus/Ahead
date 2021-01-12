@@ -21,8 +21,12 @@ interface FirebaseApi {
     suspend fun signOut()
 
     // For Firestore
-    suspend fun createTaskWithImage(taskMap: HashMap<*, *>, uri: Uri): ResultData<String>
-    suspend fun createTaskWithoutImage(taskMap: HashMap<*, *>): ResultData<String>
+    suspend fun createTask(
+        taskMap: HashMap<*, *>,
+        assignee: String?,
+        uri: Uri?
+    ): ResultData<String>
+
     suspend fun fetchTaskRealtime(): Flow<MutableList<Todo>>
     suspend fun updateTask(taskId: String, map: Map<String, Any?>)
     suspend fun deleteTask(docId: String, hasImage: Boolean): ResultData<Boolean>
@@ -30,4 +34,7 @@ interface FirebaseApi {
 
     // For Firebase storage
     suspend fun uploadImage(uri: Uri, docRefId: String): ResultData<String>
+
+    // For updating new token
+    suspend fun sendTokenToSever(token: String)
 }

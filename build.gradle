@@ -19,6 +19,8 @@ buildscript {
     ext.coil_version = "1.1.0"
     ext.coroutine_version = "1.4.1"
     ext.coroutine_play_version = "1.1.1"
+    ext.rxjava_core = "2.2.9"
+    ext.rxjava_android = "2.1.1"
     ext.zelory_version = "3.0.0"
     ext.crashlytics_version = "2.4.1"
     ext.firebase_bom_version = "26.2.0"
