@@ -29,23 +29,34 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvTodayList"
+        <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/padding_16dp"
             android:layout_marginTop="@dimen/padding_8dp"
-            android:background="@android:color/transparent"
-            android:clipToPadding="false"
-            android:nestedScrollingEnabled="false"
-            android:orientation="vertical"
-            android:overScrollMode="never"
-            android:scrollbars="none"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            android:layout_marginEnd="@dimen/padding_16dp"
+            android:background="@color/white"
+            app:cardCornerRadius="10dp"
+            app:cardElevation="0dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvTodayHeader"
-            tools:itemCount="2"
-            tools:listitem="@layout/layout_main_task_list" />
+            app:layout_constraintTop_toBottomOf="@+id/tvTodayHeader">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvTodayList"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:clipToPadding="false"
+                android:nestedScrollingEnabled="true"
+                android:orientation="vertical"
+                android:overScrollMode="never"
+                style="@style/scrollbar_shape_style"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:itemCount="2"
+                tools:listitem="@layout/layout_main_task_list" />
+
+        </androidx.cardview.widget.CardView>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

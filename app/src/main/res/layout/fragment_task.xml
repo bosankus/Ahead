@@ -10,10 +10,12 @@
             type="tech.androidplay.sonali.todo.data.viewmodel.TaskViewModel" />
     </data>
 
+
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:id="@+id/taskFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/page_background"
         tools:context=".ui.activity.MainActivity">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -25,11 +27,20 @@
                 android:id="@+id/layoutTaskBar"
                 layout="@layout/layout_task_app_bar"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/padding_26dp"
+                android:layout_height="80dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
+
+            <include
+                android:id="@+id/layoutTaskTabOptions"
+                layout="@layout/layout_task_tab_options"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/layoutTaskBar"
+                app:listSize="@{viewmodel.taskListSize}" />
 
             <include
                 android:id="@+id/layoutNoTask"
@@ -38,29 +49,18 @@
                 android:layout_height="0dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/layoutTaskBar"
-                app:listSize="@{viewmodel.incompleteTaskListSize}" />
+                app:listSize="@{viewmodel.taskListSize}" />
 
             <include
-                android:id="@+id/layoutTodayTask"
-                layout="@layout/layout_task_today"
+                layout="@layout/layout_daily_quote"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/padding_16dp"
+                app:author="@{viewmodel.author}"
+                android:layout_margin="@dimen/padding_18dp"
+                app:layout_constraintTop_toBottomOf="@+id/layoutTaskTabOptions"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/layoutTaskBar"
-                app:listSize="@{viewmodel.upcomingTaskList.size()}" />
-
-            <include
-                android:id="@+id/layoutOverdueTask"
-                layout="@layout/layout_task_overdue"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/padding_16dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/layoutTodayTask"
-                app:listSize="@{viewmodel.overdueTaskList.size()}" />
+                app:quote="@{viewmodel.quote}" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -86,7 +86,8 @@
             layout="@layout/layout_task_loading"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:loadingState="@{viewmodel.loadingState}" /> 
+            android:visibility="gone"
+            app:loadingState="@{viewmodel.loadingState}" />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

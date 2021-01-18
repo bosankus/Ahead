@@ -15,6 +15,16 @@
         <item name="android:colorForeground">@color/grey1</item>
         <item name="android:textColorPrimary">@color/grey3</item>
         <item name="android:textColorSecondary">@color/grey2</item>
-        <item name="fontFamily">@font/calibre</item>
+    </style>
+
+    <style name="scrollbar_shape_style">
+        <item name="android:scrollbarAlwaysDrawVerticalTrack">true</item>
+        <item name="android:scrollbarStyle">outsideOverlay</item>
+        <item name="android:scrollbars">vertical</item>
+        <item name="android:fadeScrollbars">true</item>
+        <item name="android:scrollbarThumbVertical">@drawable/ic_scroll_thumb</item>
+        <item name="android:scrollbarSize">3dp</item>
+        <item name="android:scrollbarFadeDuration">2000</item>
+        <item name="android:scrollbarDefaultDelayBeforeFade">1000</item>
     </style>
 </resources>

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="quote"
+            type="String" />
+
+        <variable
+            name="author"
+            type="String" />
+    </data>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingBottom="@dimen/padding_8dp">
+
+        <TextView
+            android:id="@+id/tvAppBarQuotes"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/padding_8dp"
+            android:layout_marginTop="@dimen/padding_8dp"
+            android:layout_marginEnd="@dimen/padding_16dp"
+            android:fontFamily="@font/calibre"
+            android:text="@{quote}"
+            android:textColor="@color/grey2"
+            android:textSize="@dimen/text_18sp"
+            android:drawablePadding="@dimen/padding_8dp"
+            app:drawableTint="@color/grey2"
+            android:textAlignment="center"
+            app:drawableEndCompat="@drawable/ic_quote"
+            app:drawableStartCompat="@drawable/ic_quote" />
+
+        <TextView
+            android:id="@+id/tvAppBarAuthor"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/padding_8dp"
+            android:layout_marginTop="@dimen/padding_8dp"
+            android:layout_marginEnd="@dimen/padding_16dp"
+            android:fontFamily="@font/calibre"
+            android:text="@{author}"
+            android:textAlignment="center"
+            android:textColor="@color/grey2"
+            android:textSize="@dimen/text_18sp"
+            app:show="@{(author != null) ? true : false}" />
+
+    </LinearLayout>
+
+
+</layout>

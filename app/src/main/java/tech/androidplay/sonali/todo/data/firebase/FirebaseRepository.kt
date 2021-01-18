@@ -42,7 +42,7 @@ class FirebaseRepository @Inject constructor(
     @Inject
     lateinit var messaging: FirebaseMessaging
 
-    private val userDetails = firebaseAuth.currentUser
+    val userDetails = firebaseAuth.currentUser
     private val taskListRef = fireStore.collection(TASK_COLLECTION)
     private val userListRef = fireStore.collection(USER_COLLECTION)
     private val feedbackReference = fireStore.collection(FEEDBACK_COLLECTION)
@@ -99,6 +99,7 @@ class FirebaseRepository @Inject constructor(
     override suspend fun signOut() {
         firebaseAuth.signOut()
     }
+
 
     override suspend fun createTask(
         taskMap: HashMap<*, *>,

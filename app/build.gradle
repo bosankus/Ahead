@@ -18,6 +18,7 @@ android {
         versionCode 12
         versionName "1.2"
         buildConfigField "String", "PXB_API_KEY", "\" API_KEY\""
+        buildConfigField "String", "QUOTE_API_KEY", "\"API-KEY\""
         multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }

@@ -11,6 +11,7 @@ import dagger.hilt.android.components.ActivityComponent
 import dagger.hilt.android.qualifiers.ActivityContext
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.InternalCoroutinesApi
+import tech.androidplay.sonali.todo.data.firebase.DataRepository
 import tech.androidplay.sonali.todo.data.firebase.FirebaseRepository
 import tech.androidplay.sonali.todo.data.viewmodel.TaskViewModel
 import tech.androidplay.sonali.todo.ui.adapter.TodoAdapter
@@ -41,9 +42,10 @@ class ActivityModule {
     @Provides
     fun provideTaskViewModel(
         firebaseRepository: FirebaseRepository,
+        dataRepository: DataRepository,
         messaging: FirebaseMessaging
     ): TaskViewModel {
-        return TaskViewModel(firebaseRepository, messaging)
+        return TaskViewModel(firebaseRepository, dataRepository, messaging)
     }
 
     @Provides

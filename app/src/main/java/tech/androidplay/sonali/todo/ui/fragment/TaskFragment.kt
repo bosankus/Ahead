@@ -12,14 +12,16 @@ import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.InternalCoroutinesApi
 import tech.androidplay.sonali.todo.R
 import tech.androidplay.sonali.todo.data.viewmodel.TaskViewModel
 import tech.androidplay.sonali.todo.databinding.FragmentTaskBinding
-import tech.androidplay.sonali.todo.ui.adapter.TodoAdapter
+import tech.androidplay.sonali.todo.ui.adapter.TaskTabAdapter
 import tech.androidplay.sonali.todo.utils.Constants.IS_FIRST_TIME
+import tech.androidplay.sonali.todo.utils.UIHelper.decoratePages
 import tech.androidplay.sonali.todo.utils.UIHelper.showSnack
 import tech.androidplay.sonali.todo.utils.isNetworkAvailable
 import tech.androidplay.sonali.todo.utils.shareApp
@@ -44,11 +46,7 @@ class TaskFragment : Fragment(R.layout.fragment_task) {
     @Inject
     lateinit var dialog: AlertDialog.Builder
 
-    @Inject
-    lateinit var overdueTodoAdapter: TodoAdapter
-
-    @Inject
-    lateinit var todayTodoAdapter: TodoAdapter
+    lateinit var taskTabAdapter: TaskTabAdapter
 
     @Inject
     lateinit var sharedPreferences: SharedPreferences
@@ -61,7 +59,6 @@ class TaskFragment : Fragment(R.layout.fragment_task) {
         sharedPreferences.edit().putBoolean(IS_FIRST_TIME, false).apply()
         setUpScreen()
         setListeners()
-        setObservers()
 
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
             activity?.finishAffinity()
@@ -71,11 +68,32 @@ class TaskFragment : Fragment(R.layout.fragment_task) {
     private fun setUpScreen() {
         binding.viewmodel = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
-        binding.layoutTaskBar.tvTaskHeader.text = "Tasks"
+
         showFab = AnimationUtils.loadAnimation(requireContext(), R.anim.btn_up_animation)
         binding.efabAddTask.startAnimation(showFab)
-        binding.layoutTodayTask.rvTodayList.adapter = todayTodoAdapter
-        binding.layoutOverdueTask.rvOverdueList.adapter = overdueTodoAdapter
+
+        // Setting viewpager - swipe action
+        taskTabAdapter = TaskTabAdapter(this)
+        binding.layoutTaskTabOptions.taskTabViewpager.adapter = taskTabAdapter
+
+        // Tab layout
+        binding.layoutTaskTabOptions.taskTabViewpager.apply {
+            decoratePages()
+            setPadding(16, 0, 16, 0)
+            currentItem = 2
+        }
+        TabLayoutMediator(
+            binding.layoutTaskTabOptions.taskTabOptions,
+            binding.layoutTaskTabOptions.taskTabViewpager
+        ) { tab, position ->
+            when (position) {
+                0 -> tab.text = "Assigned"
+                1 -> tab.text = "In Progress"
+                2 -> tab.text = "Completed"
+                3 -> tab.text = "Overdue"
+            }
+        }.attach()
+
     }
 
     private fun setListeners() {
@@ -88,16 +106,6 @@ class TaskFragment : Fragment(R.layout.fragment_task) {
                 findNavController().navigate(R.id.action_taskFragment_to_taskCreateFragment)
             else showSnack(requireView(), "Check Internet!")
         }
-    }
-
-    private fun setObservers() {
-        viewModel.upcomingTaskList.observe(viewLifecycleOwner, {
-            todayTodoAdapter.submitList(it)
-        })
-
-        viewModel.overdueTaskList.observe(viewLifecycleOwner, {
-            overdueTodoAdapter.submitList(it)
-        })
     }
 
     private fun showPopupMenu(view: View) {

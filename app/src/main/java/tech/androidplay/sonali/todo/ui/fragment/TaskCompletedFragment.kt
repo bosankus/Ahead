@@ -43,7 +43,6 @@ class TaskCompletedFragment : Fragment(R.layout.fragment_task_completed) {
     private fun setScreen() {
         binding.viewmodel = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
-        binding.layoutTaskBar.tvTaskHeader.text = "Tasks"
         binding.layoutTaskBar.imgMenu.visibility = View.GONE
         binding.layoutNoTask.tvEmptyTask.text = "Oh boi! No Completed task"
         binding.layoutCompletedTask.tvTodayHeader.text = "COMPLETED TASK"
