@@ -17,7 +17,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_task_edit.*
 import kotlinx.coroutines.*
 import tech.androidplay.sonali.todo.R
-import tech.androidplay.sonali.todo.data.viewmodel.EditTaskViewModel
+import tech.androidplay.sonali.todo.viewmodel.EditTaskViewModel
 import tech.androidplay.sonali.todo.utils.*
 import tech.androidplay.sonali.todo.utils.Constants.IS_AFTER
 import tech.androidplay.sonali.todo.utils.Constants.IS_BEFORE

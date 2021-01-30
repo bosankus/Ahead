@@ -4,28 +4,27 @@ import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
-import android.view.animation.Animation
-import android.view.animation.AnimationUtils
+import android.view.ViewGroup
 import android.widget.PopupMenu
 import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.InternalCoroutinesApi
 import tech.androidplay.sonali.todo.R
-import tech.androidplay.sonali.todo.data.viewmodel.TaskViewModel
 import tech.androidplay.sonali.todo.databinding.FragmentTaskBinding
-import tech.androidplay.sonali.todo.ui.adapter.TaskTabAdapter
+import tech.androidplay.sonali.todo.ui.adapter.TodoAdapter
 import tech.androidplay.sonali.todo.utils.Constants.IS_FIRST_TIME
-import tech.androidplay.sonali.todo.utils.UIHelper.decoratePages
+import tech.androidplay.sonali.todo.utils.UIHelper.logMessage
 import tech.androidplay.sonali.todo.utils.UIHelper.showSnack
 import tech.androidplay.sonali.todo.utils.isNetworkAvailable
 import tech.androidplay.sonali.todo.utils.shareApp
 import tech.androidplay.sonali.todo.utils.viewLifecycleLazy
+import tech.androidplay.sonali.todo.viewmodel.TaskViewModel
 import javax.inject.Inject
 
 /**
@@ -46,19 +45,36 @@ class TaskFragment : Fragment(R.layout.fragment_task) {
     @Inject
     lateinit var dialog: AlertDialog.Builder
 
-    lateinit var taskTabAdapter: TaskTabAdapter
+    @Inject
+    lateinit var assignedTaskAdapter: TodoAdapter
+
+    @Inject
+    lateinit var overdueAdapter: TodoAdapter
+
+    @Inject
+    lateinit var upcomingAdapter: TodoAdapter
 
     @Inject
     lateinit var sharedPreferences: SharedPreferences
 
     private val viewModel: TaskViewModel by viewModels()
-    private lateinit var showFab: Animation
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        logMessage("onCreateView: Called")
+        return super.onCreateView(inflater, container, savedInstanceState)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         sharedPreferences.edit().putBoolean(IS_FIRST_TIME, false).apply()
+        logMessage("onViewCreated: Called")
         setUpScreen()
         setListeners()
+        setObservers()
 
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
             activity?.finishAffinity()
@@ -69,43 +85,30 @@ class TaskFragment : Fragment(R.layout.fragment_task) {
         binding.viewmodel = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
 
-        showFab = AnimationUtils.loadAnimation(requireContext(), R.anim.btn_up_animation)
-        binding.efabAddTask.startAnimation(showFab)
-
-        // Setting viewpager - swipe action
-        taskTabAdapter = TaskTabAdapter(this)
-        binding.layoutTaskTabOptions.taskTabViewpager.adapter = taskTabAdapter
-
-        // Tab layout
-        binding.layoutTaskTabOptions.taskTabViewpager.apply {
-            decoratePages()
-            setPadding(16, 0, 16, 0)
-            currentItem = 2
-        }
-        TabLayoutMediator(
-            binding.layoutTaskTabOptions.taskTabOptions,
-            binding.layoutTaskTabOptions.taskTabViewpager
-        ) { tab, position ->
-            when (position) {
-                0 -> tab.text = "Assigned"
-                1 -> tab.text = "In Progress"
-                2 -> tab.text = "Completed"
-                3 -> tab.text = "Overdue"
-            }
-        }.attach()
+        binding.layoutAssignedTask.rvAssignedTaskList.adapter = assignedTaskAdapter
+        binding.layoutUpcomingTask.rvUpcomingTaskList.adapter = upcomingAdapter
+        binding.layoutOverdueTask.rvOverdueTaskList.adapter = overdueAdapter
 
     }
 
     private fun setListeners() {
-        binding.layoutTaskBar.imgMenu.setOnClickListener {
-            showPopupMenu(binding.layoutTaskBar.imgMenu)
-        }
+        binding.layoutTaskBar.imgMenu.setOnClickListener { showPopupMenu(binding.layoutTaskBar.imgMenu) }
+        binding.layoutTaskBar.imgCreate.setOnClickListener { showCreateMenu(binding.layoutTaskBar.imgCreate) }
+        binding.layoutNoTask.btnAddTask.setOnClickListener { goToCreateTaskFragment() }
+    }
 
-        binding.efabAddTask.setOnClickListener {
-            if (isNetworkAvailable())
-                findNavController().navigate(R.id.action_taskFragment_to_taskCreateFragment)
-            else showSnack(requireView(), "Check Internet!")
-        }
+    private fun setObservers() {
+        viewModel.assignedTaskList.observe(viewLifecycleOwner, {
+            assignedTaskAdapter.submitList(it)
+        })
+
+        viewModel.overdueTaskList.observe(viewLifecycleOwner, {
+            overdueAdapter.submitList(it)
+        })
+
+        viewModel.upcomingTaskList.observe(viewLifecycleOwner, {
+            upcomingAdapter.submitList(it)
+        })
     }
 
     private fun showPopupMenu(view: View) {
@@ -124,6 +127,25 @@ class TaskFragment : Fragment(R.layout.fragment_task) {
             }
             true
         }
+    }
+
+    private fun showCreateMenu(view: View) {
+        val popupMenu = PopupMenu(requireContext(), view)
+        popupMenu.menuInflater.inflate(R.menu.menu_create_options, popupMenu.menu)
+        popupMenu.show()
+
+        popupMenu.setOnMenuItemClickListener {
+            when (it.itemId) {
+                R.id.menu_create_task -> goToCreateTaskFragment()
+            }
+            true
+        }
+    }
+
+    private fun goToCreateTaskFragment() {
+        if (isNetworkAvailable())
+            findNavController().navigate(R.id.action_taskFragment_to_taskCreateFragment)
+        else showSnack(requireView(), "Check Internet!")
     }
 
     @SuppressLint("CommitPrefEdits")

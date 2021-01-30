@@ -22,7 +22,12 @@
             android:layout_height="wrap_content"
             android:paddingStart="@dimen/padding_8dp"
             android:paddingEnd="@dimen/padding_8dp"
+            app:tabTextColor="@color/grey2"
+            app:tabSelectedTextColor="@color/grey3"
+            app:tabIndicator="@drawable/bg_tab_indicator"
             android:background="@android:color/transparent"
+            app:tabIndicatorFullWidth="false"
+            app:tabIndicatorHeight="3dp"
             app:tabMode="scrollable" />
 
         <androidx.viewpager2.widget.ViewPager2

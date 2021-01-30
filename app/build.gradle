@@ -119,8 +119,8 @@ dependencies {
     implementation "io.reactivex.rxjava2:rxandroid:$rxjava_android"
 
     // Firebase
-    implementation 'com.google.firebase:firebase-analytics:18.0.0'
-    implementation 'com.google.firebase:firebase-auth:20.0.1'
+    implementation 'com.google.firebase:firebase-analytics:18.0.1'
+    implementation 'com.google.firebase:firebase-auth:20.0.2'
     implementation 'com.google.android.gms:play-services-auth:19.0.0'
     implementation 'com.google.firebase:firebase-firestore-ktx:22.0.1'
     implementation 'com.firebaseui:firebase-ui-firestore:6.2.0'
@@ -159,5 +159,8 @@ dependencies {
 
     // Image Picker
     implementation "com.github.dhaval2404:imagepicker:$picker_version"
+
+    implementation 'com.google.guava:guava:27.0.1-android'
+    implementation 'com.github.YablokovDmitry:StateViewPager:v1.1'
 
 }

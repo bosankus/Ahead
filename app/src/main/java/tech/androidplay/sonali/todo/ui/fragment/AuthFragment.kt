@@ -12,7 +12,6 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_auth.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import tech.androidplay.sonali.todo.R
-import tech.androidplay.sonali.todo.data.viewmodel.AuthViewModel
 import tech.androidplay.sonali.todo.databinding.FragmentAuthBinding
 import tech.androidplay.sonali.todo.utils.ResultData
 import tech.androidplay.sonali.todo.utils.UIHelper.hideKeyboard
@@ -20,6 +19,7 @@ import tech.androidplay.sonali.todo.utils.UIHelper.showSnack
 import tech.androidplay.sonali.todo.utils.UIHelper.showToast
 import tech.androidplay.sonali.todo.utils.UIHelper.viewAnimation
 import tech.androidplay.sonali.todo.utils.viewLifecycleLazy
+import tech.androidplay.sonali.todo.viewmodel.AuthViewModel
 
 /**
  * Created by Androidplay

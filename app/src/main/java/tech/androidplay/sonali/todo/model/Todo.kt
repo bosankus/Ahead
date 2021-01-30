@@ -1,4 +1,4 @@
-package tech.androidplay.sonali.todo.data.model
+package tech.androidplay.sonali.todo.model
 
 import com.google.firebase.firestore.DocumentId
 import com.google.gson.annotations.SerializedName
@@ -28,4 +28,6 @@ data class Todo(
     var isCompleted: Boolean = false,
     @SerializedName("taskImage")
     var taskImage: String? = "",
-) : Serializable {}
+    @SerializedName("assignee")
+    var assigneeList: List<String>? = null,
+) : Serializable

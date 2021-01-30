@@ -1,4 +1,4 @@
-package tech.androidplay.sonali.todo.data.firebase
+package tech.androidplay.sonali.todo.data.repository
 
 import android.net.Uri
 import com.google.firebase.auth.FirebaseAuth
@@ -12,11 +12,9 @@ import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.tasks.await
-import tech.androidplay.sonali.todo.data.model.Todo
-import tech.androidplay.sonali.todo.data.model.User
-import tech.androidplay.sonali.todo.utils.Constants.ASSIGNEE_COLLECTION
+import tech.androidplay.sonali.todo.model.Todo
+import tech.androidplay.sonali.todo.model.User
 import tech.androidplay.sonali.todo.utils.Constants.FEEDBACK_COLLECTION
-import tech.androidplay.sonali.todo.utils.Constants.TASK_ASSIGNED
 import tech.androidplay.sonali.todo.utils.Constants.TASK_COLLECTION
 import tech.androidplay.sonali.todo.utils.Constants.USER_COLLECTION
 import tech.androidplay.sonali.todo.utils.ResultData
@@ -50,6 +48,11 @@ class FirebaseRepository @Inject constructor(
     private val query: Query = taskListRef
         .whereEqualTo("creator", userDetails?.uid)
         .orderBy("todoCreationTimeStamp", Query.Direction.ASCENDING)
+
+    private val assignedTaskQuery: Query = taskListRef
+        .whereArrayContains("assignee", userDetails?.uid!!)
+        .orderBy("todoCreationTimeStamp", Query.Direction.ASCENDING)
+
 
     override suspend fun logInUser(email: String, password: String): ResultData<FirebaseUser> {
         return try {
@@ -108,7 +111,6 @@ class FirebaseRepository @Inject constructor(
     ): ResultData<String> {
         return try {
             val docRef = taskListRef.add(taskMap).await()
-            assignee?.let { withContext(Dispatchers.IO) { addAssignee(docRef, it) } }
 
             uri?.let {
                 when (uploadImage(uri, docRef.id)) {
@@ -124,12 +126,6 @@ class FirebaseRepository @Inject constructor(
         }
     }
 
-    private suspend fun addAssignee(docRef: DocumentReference, assignee: String) {
-        val assigneeMap = hashMapOf("status" to TASK_ASSIGNED)
-        taskListRef.document(docRef.id).collection(ASSIGNEE_COLLECTION)
-            .document(assignee).set(assigneeMap, SetOptions.merge()).await()
-    }
-
     suspend fun checkAssigneeAvailability(email: String): ResultData<String> {
         return try {
             val query: Query = userListRef.whereEqualTo("email", email)
@@ -141,10 +137,6 @@ class FirebaseRepository @Inject constructor(
             ResultData.Failed()
         }
     }
-
-    /*suspend fun checkAssigneeAvailabilityRx(email: String): ResultData<String> {
-
-    }*/
 
     override suspend fun fetchTaskRealtime(): Flow<MutableList<Todo>> =
         callbackFlow {
@@ -165,10 +157,34 @@ class FirebaseRepository @Inject constructor(
                     querySnapshot.remove()
                 }
             } catch (e: Exception) {
+                logMessage("Fetch: ${e.message}")
                 crashReport.log(e.message.toString())
             }
         }
 
+    suspend fun fetchAssignedTaskRealtime(): Flow<MutableList<Todo>> =
+        callbackFlow {
+            try {
+                val querySnapshot = assignedTaskQuery
+                    .addSnapshotListener { value, error ->
+                        if (error != null) {
+                            crashReport.log(error.message.toString())
+                            return@addSnapshotListener
+                        } else {
+                            value?.let {
+                                val todo: MutableList<Todo> = it.toObjects(Todo::class.java)
+                                offer(todo)
+                            } ?: offer(mutableListOf<Todo>())
+                        }
+                    }
+                awaitClose {
+                    querySnapshot.remove()
+                }
+            } catch (e: Exception) {
+                logMessage("Fetch: ${e.message}")
+                crashReport.log(e.message.toString())
+            }
+        }
 
     override suspend fun updateTask(taskId: String, map: Map<String, Any?>) {
         try {

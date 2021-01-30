@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <dimen name="padding_3dp">3dp</dimen>
     <dimen name="padding_5dp">5dp</dimen>
     <dimen name="padding_8dp">8dp</dimen>
     <dimen name="padding_10dp">10dp</dimen>

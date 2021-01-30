@@ -10,7 +10,7 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ServiceComponent
 import dagger.hilt.android.scopes.ServiceScoped
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import tech.androidplay.sonali.todo.data.firebase.FirebaseRepository
+import tech.androidplay.sonali.todo.data.repository.FirebaseRepository
 
 /**
  * Created by Androidplay

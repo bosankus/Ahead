@@ -1,4 +1,4 @@
-package tech.androidplay.sonali.todo.data.model
+package tech.androidplay.sonali.todo.model
 
 
 import com.google.gson.annotations.SerializedName

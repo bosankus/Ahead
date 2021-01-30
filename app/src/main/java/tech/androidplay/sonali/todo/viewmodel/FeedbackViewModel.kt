@@ -1,4 +1,4 @@
-package tech.androidplay.sonali.todo.data.viewmodel
+package tech.androidplay.sonali.todo.viewmodel
 
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import tech.androidplay.sonali.todo.data.firebase.FirebaseRepository
+import tech.androidplay.sonali.todo.data.repository.FirebaseRepository
 import tech.androidplay.sonali.todo.utils.ResultData
 
 /**

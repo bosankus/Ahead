@@ -1,9 +1,9 @@
-package tech.androidplay.sonali.todo.data.firebase
+package tech.androidplay.sonali.todo.data.repository
 
 import android.net.Uri
 import com.google.firebase.auth.FirebaseUser
 import kotlinx.coroutines.flow.Flow
-import tech.androidplay.sonali.todo.data.model.Todo
+import tech.androidplay.sonali.todo.model.Todo
 import tech.androidplay.sonali.todo.utils.ResultData
 
 /**

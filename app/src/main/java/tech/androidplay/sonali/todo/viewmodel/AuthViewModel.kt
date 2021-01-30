@@ -1,12 +1,10 @@
-package tech.androidplay.sonali.todo.data.viewmodel
+package tech.androidplay.sonali.todo.viewmodel
 
-import androidx.databinding.ObservableField
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.*
 import com.google.firebase.auth.FirebaseUser
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.launch
-import tech.androidplay.sonali.todo.data.firebase.FirebaseRepository
+import tech.androidplay.sonali.todo.data.repository.FirebaseRepository
 import tech.androidplay.sonali.todo.utils.ResultData
 
 /**

@@ -11,10 +11,7 @@ import android.view.animation.Animation
 import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
 import android.widget.Toast
-import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.snackbar.Snackbar
-import tech.androidplay.sonali.todo.R
-import tech.androidplay.sonali.todo.ui.HorizontalMarginItemDecoration
 import tech.androidplay.sonali.todo.utils.Constants.GLOBAL_TAG
 import java.time.Instant
 
@@ -74,22 +71,4 @@ object UIHelper {
         return android.util.Patterns.EMAIL_ADDRESS.matcher(this).matches()
     }
 
-    fun ViewPager2.decoratePages() {
-        this.offscreenPageLimit = 1
-        val nextItemVisiblePx = resources.getDimension(R.dimen.viewpager_next_item_visible)
-        val currentItemHorizontalMarginPx =
-            resources.getDimension(R.dimen.viewpager_current_item_horizontal_margin)
-        val pageTranslationX = nextItemVisiblePx + currentItemHorizontalMarginPx
-        val pageTransformer = ViewPager2.PageTransformer { page: View, position: Float ->
-            page.translationX = -pageTranslationX * position
-            page.scaleY = 1 - (0.10f * kotlin.math.abs(position))
-            /*page.alpha = 0.10f + (1 - kotlin.math.abs(position))*/
-        }
-        this.setPageTransformer(pageTransformer)
-        val itemDecoration = HorizontalMarginItemDecoration(
-            this.context,
-            R.dimen.viewpager_current_item_horizontal_margin
-        )
-        this.addItemDecoration(itemDecoration)
-    }
 }

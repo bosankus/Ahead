@@ -19,7 +19,7 @@ import kotlinx.android.synthetic.main.layout_assign_user.*
 import kotlinx.android.synthetic.main.layout_assign_user.view.*
 import kotlinx.coroutines.*
 import tech.androidplay.sonali.todo.R
-import tech.androidplay.sonali.todo.data.viewmodel.TaskCreateViewModel
+import tech.androidplay.sonali.todo.viewmodel.TaskCreateViewModel
 import tech.androidplay.sonali.todo.utils.*
 import tech.androidplay.sonali.todo.utils.Constants.IS_AFTER
 import tech.androidplay.sonali.todo.utils.UIHelper.hideKeyboard

@@ -6,8 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.InternalCoroutinesApi
 import tech.androidplay.sonali.todo.R
-import tech.androidplay.sonali.todo.data.model.Todo
-import tech.androidplay.sonali.todo.data.viewmodel.TaskViewModel
+import tech.androidplay.sonali.todo.model.Todo
 import tech.androidplay.sonali.todo.databinding.LayoutMainTaskListBinding
 import tech.androidplay.sonali.todo.utils.Constants.TASK_DATE
 import tech.androidplay.sonali.todo.utils.Constants.TASK_DOC_BODY
@@ -28,16 +27,10 @@ class TodoViewHolder(
     private val binding: LayoutMainTaskListBinding,
 ) : RecyclerView.ViewHolder(binding.root) {
 
-    fun bind(viewModel: TaskViewModel, todoItem: Todo) {
+    fun bind(todoItem: Todo) {
         binding.todo = todoItem
         binding.executePendingBindings()
         binding.tvTodoListItem.transitionName = "todoBody"
-
-        binding.cbTaskStatus.setOnClickListener {
-            if (todoItem.isCompleted)
-                viewModel.changeTaskStatus(todoItem.docId, false)
-            else viewModel.changeTaskStatus(todoItem.docId, true)
-        }
 
         binding.clItemListContainer.setOnClickListener {
             val bundle = bundleOf(

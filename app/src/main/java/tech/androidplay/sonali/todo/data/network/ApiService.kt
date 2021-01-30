@@ -2,7 +2,7 @@ package tech.androidplay.sonali.todo.data.network
 
 import retrofit2.http.GET
 import retrofit2.http.Headers
-import tech.androidplay.sonali.todo.data.model.Quote
+import tech.androidplay.sonali.todo.model.Quote
 
 /**
  * Created by Androidplay

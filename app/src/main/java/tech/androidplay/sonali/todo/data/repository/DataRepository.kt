@@ -1,4 +1,4 @@
-package tech.androidplay.sonali.todo.data.firebase
+package tech.androidplay.sonali.todo.data.repository
 
 import tech.androidplay.sonali.todo.data.network.ApiService
 import javax.inject.Inject

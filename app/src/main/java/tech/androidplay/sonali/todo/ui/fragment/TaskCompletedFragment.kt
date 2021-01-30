@@ -9,7 +9,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.InternalCoroutinesApi
 import tech.androidplay.sonali.todo.R
-import tech.androidplay.sonali.todo.data.viewmodel.TaskViewModel
+import tech.androidplay.sonali.todo.viewmodel.TaskViewModel
 import tech.androidplay.sonali.todo.databinding.FragmentTaskCompletedBinding
 import tech.androidplay.sonali.todo.ui.adapter.TodoAdapter
 import tech.androidplay.sonali.todo.utils.viewLifecycleLazy
@@ -43,18 +43,14 @@ class TaskCompletedFragment : Fragment(R.layout.fragment_task_completed) {
     private fun setScreen() {
         binding.viewmodel = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
-        binding.layoutTaskBar.imgMenu.visibility = View.GONE
-        binding.layoutNoTask.tvEmptyTask.text = "Oh boi! No Completed task"
-        binding.layoutCompletedTask.tvTodayHeader.text = "COMPLETED TASK"
+        binding.layoutTaskBar.imgMenu.visibility = View.INVISIBLE
+        binding.layoutNoTask.btnAddTask.text = "It's empty here!"
     }
 
     private fun setObservers() {
-        binding.layoutCompletedTask.rvTodayList.adapter = adapter
+        binding.layoutCompletedTask.rvUpcomingTaskList.adapter = adapter
         viewModel.completedTaskList.observe(viewLifecycleOwner, { list ->
-            list?.let {
-                adapter.submitList(it)
-                // Crashing: If clicked on items as no direction is present from this fragment to edit fragment
-            }
+            list?.let { adapter.submitList(it) }
         })
     }
 }

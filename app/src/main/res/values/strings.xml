@@ -18,7 +18,7 @@
     <string name="login">login</string>
     <string name="today">Today</string>
     <string name="upcoming">Upcoming</string>
-    <string name="all_tasks_completed_add_more">All tasks Completed. Add more</string>
+    <string name="all_tasks_completed_add_more">Create new task</string>
     <string name="add_task">Add Task</string>
     <string name="edit">Edit</string>
     <string name="save_task">Save Task</string>
@@ -36,7 +36,7 @@
     <string name="topic_hint">What change you want to see?</string>
     <string name="description_hint">Describe to make us understand</string>
     <string name="feedback_story">We are always <font color="#E94D88">thinking Ahead</font> to make your experience better. Please share with us how you felt while using the app.</string>
-    <string name="suggest_the_developers">Suggest the Developers</string>
+    <string name="suggest_the_developers">Suggest</string>
     <string name="past">Overdue</string>
     <string name="upload_img_txt">Upload your task image</string>
     <string name="task_title">Task title:</string>
@@ -44,7 +44,9 @@
     <string name="completed_tasks">Completed Tasks</string>
     <string name="get_started">Let\'s create</string>
     <string name="details">Details</string>
-    <string name="assign_task">Assign Task</string>
+    <string name="assign_task">Assigned</string>
     <string name="username">Username (Email ID)</string>
     <string name="today_s_quote">Today\'s quote</string>
+    <string name="overdue">Overdue</string>
+    <string name="add_note">Add note</string>
 </resources>

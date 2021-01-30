@@ -7,6 +7,7 @@
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:windowContentTransitions">true</item>
         <item name="colorAccent">@color/dribblePink</item>
+        <item name="textAllCaps">false</item>
         <item name="radioButtonStyle">@style/Widget.MaterialComponents.CompoundButton.RadioButton
         </item>
         <item name="textInputStyle">@style/Widget.Design.TextInputLayout</item>
@@ -15,6 +16,8 @@
         <item name="android:colorForeground">@color/grey1</item>
         <item name="android:textColorPrimary">@color/grey3</item>
         <item name="android:textColorSecondary">@color/grey2</item>
+        <item name="android:textSize">@dimen/text_18sp</item>
+        <item name="fontFamily">@font/calibre_semi</item>
     </style>
 
     <style name="scrollbar_shape_style">
@@ -26,5 +29,9 @@
         <item name="android:scrollbarSize">3dp</item>
         <item name="android:scrollbarFadeDuration">2000</item>
         <item name="android:scrollbarDefaultDelayBeforeFade">1000</item>
+    </style>
+
+    <style name="action_menu_style">
+        <item name="fontFamily">@font/calibre_semi</item>
     </style>
 </resources>

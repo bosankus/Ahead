@@ -1,9 +1,9 @@
-package tech.androidplay.sonali.todo.data.viewmodel
+package tech.androidplay.sonali.todo.viewmodel
 
-import android.app.Application
+import android.content.SharedPreferences
 import androidx.hilt.lifecycle.ViewModelInject
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.messaging.FirebaseMessaging
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -11,12 +11,13 @@ import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
-import tech.androidplay.sonali.todo.data.firebase.DataRepository
-import tech.androidplay.sonali.todo.data.firebase.FirebaseRepository
-import tech.androidplay.sonali.todo.data.model.Todo
+import tech.androidplay.sonali.todo.data.repository.DataRepository
+import tech.androidplay.sonali.todo.data.repository.FirebaseRepository
+import tech.androidplay.sonali.todo.model.Todo
 import tech.androidplay.sonali.todo.utils.Constants.IS_AFTER
 import tech.androidplay.sonali.todo.utils.Constants.IS_BEFORE
 import tech.androidplay.sonali.todo.utils.compareWithToday
+import javax.inject.Inject
 
 /**
  * Created by Androidplay
@@ -30,8 +31,10 @@ class TaskViewModel @ViewModelInject constructor(
     private val firebaseSource: FirebaseRepository,
     private val dataSource: DataRepository,
     private val messaging: FirebaseMessaging
-) :
-    AndroidViewModel(Application()) {
+) : ViewModel() {
+
+    @Inject
+    lateinit var sharedPreferences: SharedPreferences
 
     private var _userId = firebaseSource.userDetails?.uid
     val userId get() = _userId
@@ -41,6 +44,9 @@ class TaskViewModel @ViewModelInject constructor(
 
     private var _taskListSize = MutableLiveData<Int>()
     val taskListSize get() = _taskListSize
+
+    private var _assignedTaskList = MutableLiveData<List<Todo>>()
+    val assignedTaskList get() = _assignedTaskList
 
     private var _completedTaskList = MutableLiveData<List<Todo>>()
     val completedTaskList get() = _completedTaskList
@@ -58,17 +64,18 @@ class TaskViewModel @ViewModelInject constructor(
     val author get() = _quoteAuthor
 
     init {
-        getQuote()
+        _loadingState.value = true
         getAllTasks()
+        getAllAssignedTasks()
         updateDeviceToken()
     }
 
     private fun getQuote() {
-        _loadingState.value = true
         viewModelScope.launch {
             val todayQuote = dataSource.fetchQuote()
-            _quoteText.value = todayQuote.text
+            _quoteText.value = "${todayQuote.text}"
             _quoteAuthor.value = "- ${todayQuote.author}"
+            _loadingState.value = false
         }
     }
 
@@ -76,16 +83,13 @@ class TaskViewModel @ViewModelInject constructor(
         viewModelScope.launch {
             try {
                 firebaseSource.fetchTaskRealtime().collect { allTodoList ->
-                    // set value for all incomplete task list size
                     _taskListSize.value = allTodoList.size
-                    // set value for all completed tasks
+                    if (allTodoList.size == 0) getQuote()
                     _completedTaskList.value =
                         allTodoList.filter { it.isCompleted }.sortedByDescending { it.todoDate }
-                    // set value for all incomplete tasks for today
                     _upcomingTaskList.value =
                         allTodoList.filter { it.todoDate.compareWithToday() == IS_AFTER && !it.isCompleted }
                             .sortedByDescending { it.todoDate }
-                    // set value for all incomplete tasks which are overdue
                     _overdueTaskList.value =
                         allTodoList.filter { it.todoDate.compareWithToday() == IS_BEFORE && !it.isCompleted }
                             .sortedByDescending { it.todoDate }
@@ -97,10 +101,24 @@ class TaskViewModel @ViewModelInject constructor(
         }
     }
 
-    fun changeTaskStatus(taskId: String, status: Boolean) {
+    private fun getAllAssignedTasks() {
+        viewModelScope.launch {
+            try {
+                firebaseSource.fetchAssignedTaskRealtime().collect { assignedTask ->
+                    _assignedTaskList.value =
+                        assignedTask.sortedByDescending { it.todoDate }
+                }
+            } catch (e: Exception) {
+                _loadingState.value = false
+            }
+        }
+    }
+
+    // Implement using data Binding
+    /*fun changeTaskStatus(taskId: String, status: Boolean) {
         val map: Map<String, Boolean> = mapOf("isCompleted" to status)
         viewModelScope.launch { firebaseSource.updateTask(taskId, map) }
-    }
+    }*/
 
 
     fun logoutUser() = viewModelScope.launch {

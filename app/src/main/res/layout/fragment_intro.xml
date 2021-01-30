@@ -45,7 +45,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/colorPrimary"
-        android:fontFamily="@font/calibre_bold"
+        android:fontFamily="@font/calibre_semi"
         android:text="@string/get_started"
         android:textAllCaps="false"
         android:textColor="@color/white"

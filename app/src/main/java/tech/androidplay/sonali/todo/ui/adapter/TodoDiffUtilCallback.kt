@@ -1,7 +1,7 @@
 package tech.androidplay.sonali.todo.ui.adapter
 
 import androidx.recyclerview.widget.DiffUtil
-import tech.androidplay.sonali.todo.data.model.Todo
+import tech.androidplay.sonali.todo.model.Todo
 
 /**
  * Created by Androidplay

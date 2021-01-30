@@ -7,7 +7,7 @@
 
     <item
         android:id="@+id/menu_share_app"
-        android:title="@string/share"/>
+        android:title="@string/share" />
 
     <item
         android:id="@+id/menu_feedback"

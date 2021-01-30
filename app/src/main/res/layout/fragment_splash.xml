@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:textAlignment="center"
-        android:fontFamily="@font/calibre_black"
+        android:fontFamily="@font/calibre_semi"
         android:text="@string/think"
         android:textColor="@color/dribblePink"
         android:textSize="@dimen/text_55sp" />

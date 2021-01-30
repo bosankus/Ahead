@@ -1,4 +1,4 @@
-package tech.androidplay.sonali.todo.data.viewmodel
+package tech.androidplay.sonali.todo.viewmodel
 
 import android.net.Uri
 import androidx.hilt.lifecycle.ViewModelInject
@@ -7,7 +7,7 @@ import androidx.lifecycle.liveData
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
-import tech.androidplay.sonali.todo.data.firebase.FirebaseRepository
+import tech.androidplay.sonali.todo.data.repository.FirebaseRepository
 import tech.androidplay.sonali.todo.utils.ResultData
 import tech.androidplay.sonali.todo.utils.UIHelper.getCurrentTimestamp
 

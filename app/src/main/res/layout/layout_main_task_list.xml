@@ -6,8 +6,12 @@
     <data>
 
         <variable
+            name="viewModel"
+            type="tech.androidplay.sonali.todo.viewmodel.TaskViewModel" />
+
+        <variable
             name="todo"
-            type="tech.androidplay.sonali.todo.data.model.Todo" />
+            type="tech.androidplay.sonali.todo.model.Todo" />
     </data>
 
     <LinearLayout
@@ -20,18 +24,16 @@
             android:id="@+id/clItemListContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingTop="@dimen/padding_10dp"
             android:background="?attr/selectableItemBackground"
             android:focusable="false"
             android:focusableInTouchMode="false"
+            android:paddingTop="@dimen/padding_10dp"
             tools:ignore="RtlSymmetry,UselessParent">
 
             <TextView
                 android:id="@+id/tvTodoListItem"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/padding_10dp"
-                android:layout_marginEnd="@dimen/padding_10dp"
                 android:ellipsize="end"
                 android:fontFamily="@font/calibre_semi"
                 android:maxLines="1"
@@ -48,21 +50,20 @@
                 android:id="@+id/tvTodoDayName"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/padding_10dp"
-                android:layout_marginEnd="@dimen/padding_10dp"
                 android:fontFamily="@font/calibre"
                 android:textColor="@color/grey2"
                 android:textSize="@dimen/text_14sp"
                 app:day_name="@{todo.todoDate}"
-                app:layout_constraintTop_toBottomOf="@+id/tvTodoListItem"
                 app:layout_constraintEnd_toStartOf="@+id/cbTaskStatus"
-                app:layout_constraintStart_toStartOf="parent" />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvTodoListItem" />
 
             <CheckBox
                 android:id="@+id/cbTaskStatus"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:alpha="0.9"
+                android:visibility="gone"
                 android:buttonTint="@color/dribblePink"
                 android:checked="@{todo.isCompleted}"
                 app:layout_constraintBottom_toBottomOf="parent"
