@@ -55,7 +55,9 @@ class AuthFragment : Fragment(R.layout.fragment_auth) {
             requireActivity().hideKeyboard()
             val userEmail = binding.loginInputEmailTxt.text.toString()
             val userPassword = binding.loginInputPasswordTxt.text.toString()
-            createAccount(userEmail, userPassword)
+            val fName = binding.userInputFirstName.text.toString()
+            val lName = binding.userInputLastName.text.toString()
+            createAccount(userEmail, userPassword, fName, lName)
         }
 
         binding.btnloginEmailPassword.setOnClickListener {
@@ -76,8 +78,13 @@ class AuthFragment : Fragment(R.layout.fragment_auth) {
         binding.tvLoginOption.setOnClickListener { setLoginUi() }
     }
 
-    private fun createAccount(userEmail: String, userPassword: String) {
-        authViewModel.createAccount(userEmail, userPassword).observe(
+    private fun createAccount(
+        userEmail: String,
+        userPassword: String,
+        fName: String,
+        lName: String
+    ) {
+        authViewModel.createAccount(userEmail, userPassword, fName, lName).observe(
             viewLifecycleOwner,
             {
                 it?.let {
@@ -141,6 +148,7 @@ class AuthFragment : Fragment(R.layout.fragment_auth) {
         if (networkFlag) {
             showToast(requireContext(), "Have Patience")
         } else {
+            viewAnimation(authInputContainer, animFadeOut, true)
             viewAnimation(btnloginEmailPassword, animFadeIn, false)
             viewAnimation(tvSignUpOption, animFadeIn, false)
             viewAnimation(btnSignUpEmailPassword, animFadeOut, true)
@@ -152,6 +160,7 @@ class AuthFragment : Fragment(R.layout.fragment_auth) {
         if (networkFlag) {
             showToast(requireContext(), "Have Patience")
         } else {
+            viewAnimation(authInputContainer, animFadeIn, false)
             viewAnimation(btnSignUpEmailPassword, animFadeIn, false)
             viewAnimation(tvLoginOption, animFadeIn, false)
             viewAnimation(btnloginEmailPassword, animFadeOut, true)

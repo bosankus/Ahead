@@ -2,6 +2,7 @@ package tech.androidplay.sonali.todo.data.repository
 
 import android.net.Uri
 import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.storage.StorageReference
 import kotlinx.coroutines.flow.Flow
 import tech.androidplay.sonali.todo.model.Todo
 import tech.androidplay.sonali.todo.utils.ResultData
@@ -16,8 +17,9 @@ interface FirebaseApi {
 
     // For User authentication
     suspend fun logInUser(email: String, password: String): ResultData<FirebaseUser>
-    suspend fun createAccount(email: String, password: String): ResultData<FirebaseUser>
+    suspend fun createAccount(email: String, password: String, fName: String, lName: String): ResultData<FirebaseUser>
     suspend fun resetPassword(email: String): ResultData<String>
+    suspend fun checkAssigneeAvailability(email: String): ResultData<String>
     suspend fun signOut()
 
     // For Firestore
@@ -28,12 +30,13 @@ interface FirebaseApi {
     ): ResultData<String>
 
     suspend fun fetchTaskRealtime(): Flow<MutableList<Todo>>
+    suspend fun fetchAssignedTaskRealtime(): Flow<MutableList<Todo>>
     suspend fun updateTask(taskId: String, map: Map<String, Any?>)
     suspend fun deleteTask(docId: String, hasImage: Boolean): ResultData<Boolean>
     suspend fun provideFeedback(hashMap: HashMap<String, String?>): ResultData<String>
 
     // For Firebase storage
-    suspend fun uploadImage(uri: Uri, docRefId: String): ResultData<String>
+    suspend fun uploadImage(uri: Uri, imgPathRef: StorageReference?, docRefId: String?): ResultData<String>
 
     // For updating new token
     suspend fun sendTokenToSever(token: String)

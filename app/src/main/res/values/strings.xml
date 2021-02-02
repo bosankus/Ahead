@@ -49,4 +49,7 @@
     <string name="today_s_quote">Today\'s quote</string>
     <string name="overdue">Overdue</string>
     <string name="add_note">Add note</string>
+    <string name="first_name">First name</string>
+    <string name="last_name">Last name</string>
+    <string name="save_details">Save details</string>
 </resources>

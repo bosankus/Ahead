@@ -35,8 +35,7 @@ object UIHelper {
     }
 
     fun showSnack(view: View, message: String) {
-        Snackbar.make(view, message, Snackbar.LENGTH_LONG)
-            .show()
+        Snackbar.make(view, message, Snackbar.LENGTH_LONG).show()
     }
 
     fun viewAnimation(view: View, animation: Animation?, visibility: Boolean) {

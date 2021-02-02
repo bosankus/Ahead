@@ -35,7 +35,7 @@ class EditTaskViewModel @ViewModelInject constructor(private val dataSource: Fir
     fun uploadImage(uri: Uri?, taskId: String) = uri?.let {
         liveData {
             emit(ResultData.Loading)
-            emit(dataSource.uploadImage(it, taskId))
+            emit(dataSource.uploadImage(it, null, taskId))
         }
     }
 

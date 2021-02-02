@@ -49,16 +49,9 @@ class FirebaseRepository @Inject constructor(
         .whereEqualTo("creator", userDetails?.uid)
         .orderBy("todoCreationTimeStamp", Query.Direction.ASCENDING)
 
-    private val assignedTaskQuery: Query = taskListRef
-        .whereArrayContains("assignee", userDetails?.uid!!)
-        .orderBy("todoCreationTimeStamp", Query.Direction.ASCENDING)
-
-
     override suspend fun logInUser(email: String, password: String): ResultData<FirebaseUser> {
         return try {
-            val response = firebaseAuth
-                .signInWithEmailAndPassword(email, password)
-                .await()
+            val response = firebaseAuth.signInWithEmailAndPassword(email, password).await()
             ResultData.Success(response.user)
         } catch (e: Exception) {
             crashReport.log(e.message.toString())
@@ -66,17 +59,23 @@ class FirebaseRepository @Inject constructor(
         }
     }
 
-    override suspend fun createAccount(email: String, password: String): ResultData<FirebaseUser> {
+    override suspend fun createAccount(
+        email: String,
+        password: String,
+        fName: String,
+        lName: String
+    ):
+            ResultData<FirebaseUser> {
         return try {
-            val response = firebaseAuth
-                .createUserWithEmailAndPassword(email, password)
-                .await()
+            val response = firebaseAuth.createUserWithEmailAndPassword(email, password).await()
             val deviceToken = messaging.token.await()
             logMessage(deviceToken)
             val userMap = hashMapOf(
                 "uid" to response.user?.uid,
                 "email" to response.user?.email,
                 "token" to deviceToken,
+                "fname" to fName,
+                "lname" to lName,
                 "createdOn" to getCurrentTimestamp()
             )
             response?.user?.let {
@@ -103,30 +102,24 @@ class FirebaseRepository @Inject constructor(
         firebaseAuth.signOut()
     }
 
-
-    override suspend fun createTask(
-        taskMap: HashMap<*, *>,
-        assignee: String?,
-        uri: Uri?
-    ): ResultData<String> {
+    override suspend fun createTask(taskMap: HashMap<*, *>, assignee: String?, uri: Uri?):
+            ResultData<String> {
         return try {
             val docRef = taskListRef.add(taskMap).await()
-
             uri?.let {
-                when (uploadImage(uri, docRef.id)) {
+                when (uploadImage(uri, null, docRef.id)) {
                     is ResultData.Success -> ResultData.Success(docRef.id)
                     is ResultData.Failed -> ResultData.Failed("Task Created. Image Upload Failed. Please retry.")
                     else -> ResultData.Failed("Something went wrong while uploading Image")
                 }
             } ?: ResultData.Success(docRef.id)
-
         } catch (e: Exception) {
             crashReport.log(e.message.toString())
             ResultData.Failed(false.toString())
         }
     }
 
-    suspend fun checkAssigneeAvailability(email: String): ResultData<String> {
+    override suspend fun checkAssigneeAvailability(email: String): ResultData<String> {
         return try {
             val query: Query = userListRef.whereEqualTo("email", email)
             val result: QuerySnapshot = query.get().await()
@@ -162,21 +155,23 @@ class FirebaseRepository @Inject constructor(
             }
         }
 
-    suspend fun fetchAssignedTaskRealtime(): Flow<MutableList<Todo>> =
+    override suspend fun fetchAssignedTaskRealtime(): Flow<MutableList<Todo>> =
         callbackFlow {
             try {
-                val querySnapshot = assignedTaskQuery
-                    .addSnapshotListener { value, error ->
-                        if (error != null) {
-                            crashReport.log(error.message.toString())
-                            return@addSnapshotListener
-                        } else {
-                            value?.let {
-                                val todo: MutableList<Todo> = it.toObjects(Todo::class.java)
-                                offer(todo)
-                            } ?: offer(mutableListOf<Todo>())
-                        }
+                val assignedTaskQuery: Query = taskListRef
+                    .whereArrayContains("assignee", userDetails?.uid!!)
+                    .orderBy("todoCreationTimeStamp", Query.Direction.ASCENDING)
+                val querySnapshot = assignedTaskQuery.addSnapshotListener { value, error ->
+                    if (error != null) {
+                        crashReport.log(error.message.toString())
+                        return@addSnapshotListener
+                    } else {
+                        value?.let {
+                            val todo: MutableList<Todo> = it.toObjects(Todo::class.java)
+                            offer(todo)
+                        } ?: offer(mutableListOf<Todo>())
                     }
+                }
                 awaitClose {
                     querySnapshot.remove()
                 }
@@ -188,9 +183,7 @@ class FirebaseRepository @Inject constructor(
 
     override suspend fun updateTask(taskId: String, map: Map<String, Any?>) {
         try {
-            taskListRef.document(taskId)
-                .update(map)
-                .await()
+            taskListRef.document(taskId).update(map).await()
         } catch (e: Exception) {
             crashReport.log(e.message.toString())
         }
@@ -221,14 +214,16 @@ class FirebaseRepository @Inject constructor(
         }
     }
 
-    override suspend fun uploadImage(uri: Uri, docRefId: String): ResultData<String> {
-        val ref = storageReference
-            .child("${userDetails?.email}/$docRefId")
+    override suspend fun uploadImage(uri: Uri, imgPathRef: StorageReference?, docRefId: String?):
+            ResultData<String> {
+        val pathRef = imgPathRef ?: storageReference.child("${userDetails?.email}/$docRefId")
         return try {
-            ref.putFile(uri).await()
-            val imageUrl = ref.downloadUrl.await().toString()
-            val newImgMap = mapOf("taskImage" to imageUrl)
-            updateTask(docRefId, newImgMap)
+            pathRef.putFile(uri).await()
+            val imageUrl = pathRef.downloadUrl.await().toString()
+            docRefId?.let {
+                val newImgMap = mapOf("taskImage" to imageUrl)
+                updateTask(it, newImgMap)
+            }
             ResultData.Success(imageUrl)
         } catch (e: Exception) {
             crashReport.log(e.message.toString())
@@ -241,6 +236,3 @@ class FirebaseRepository @Inject constructor(
         userDetails?.let { userListRef.document(it.uid).set(tokenMap, SetOptions.merge()).await() }
     }
 }
-
-
-
