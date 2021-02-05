@@ -1,4 +1,4 @@
-package tech.androidplay.sonali.todo.data.repository
+package tech.androidplay.sonali.todo.data.network
 
 import android.net.Uri
 import com.google.firebase.auth.FirebaseUser
@@ -17,7 +17,13 @@ interface FirebaseApi {
 
     // For User authentication
     suspend fun logInUser(email: String, password: String): ResultData<FirebaseUser>
-    suspend fun createAccount(email: String, password: String, fName: String, lName: String): ResultData<FirebaseUser>
+    suspend fun createAccount(
+        email: String,
+        password: String,
+        fName: String,
+        lName: String
+    ): ResultData<FirebaseUser>
+
     suspend fun resetPassword(email: String): ResultData<String>
     suspend fun checkAssigneeAvailability(email: String): ResultData<String>
     suspend fun signOut()
@@ -29,15 +35,16 @@ interface FirebaseApi {
         uri: Uri?
     ): ResultData<String>
 
-    suspend fun fetchTaskRealtime(): Flow<MutableList<Todo>>
-    suspend fun fetchAssignedTaskRealtime(): Flow<MutableList<Todo>>
+    suspend fun fetchAllUnassignedTask(): Flow<MutableList<Todo>>
+    suspend fun fetchOnlyAssignedTask(): Flow<MutableList<Todo>>
     suspend fun updateTask(taskId: String, map: Map<String, Any?>)
     suspend fun deleteTask(docId: String, hasImage: Boolean): ResultData<Boolean>
     suspend fun provideFeedback(hashMap: HashMap<String, String?>): ResultData<String>
 
     // For Firebase storage
-    suspend fun uploadImage(uri: Uri, imgPathRef: StorageReference?, docRefId: String?): ResultData<String>
+    suspend fun uploadImage(uri: Uri, imgPathRef: StorageReference?, docRefId: String?):
+            ResultData<String>
 
     // For updating new token
-    suspend fun sendTokenToSever(token: String)
+    suspend fun sendTokenToSever(token: String?)
 }

@@ -51,14 +51,14 @@ class AuthFragment : Fragment(R.layout.fragment_auth) {
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
             activity?.finishAffinity()
         }
-        binding.btnSignUpEmailPassword.setOnClickListener {
+        /*binding.btnSignUpEmailPassword.setOnClickListener {
             requireActivity().hideKeyboard()
             val userEmail = binding.loginInputEmailTxt.text.toString()
             val userPassword = binding.loginInputPasswordTxt.text.toString()
             val fName = binding.userInputFirstName.text.toString()
             val lName = binding.userInputLastName.text.toString()
             createAccount(userEmail, userPassword, fName, lName)
-        }
+        }*/
 
         binding.btnloginEmailPassword.setOnClickListener {
             requireActivity().hideKeyboard()
@@ -92,8 +92,7 @@ class AuthFragment : Fragment(R.layout.fragment_auth) {
                         is ResultData.Loading -> showLoading(btnSignUpEmailPassword)
                         is ResultData.Success -> goToMainActivity()
                         is ResultData.Failed -> hideLoading(
-                            btnSignUpEmailPassword,
-                            it.message.toString()
+                            btnSignUpEmailPassword, it.message.toString()
                         )
                     }
                 }

@@ -6,7 +6,7 @@ import android.content.Intent
 import android.os.IBinder
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.*
-import tech.androidplay.sonali.todo.data.repository.FirebaseRepository
+import tech.androidplay.sonali.todo.data.repository.TaskRepository
 import tech.androidplay.sonali.todo.utils.Constants.NOTIFICATION_ID
 import tech.androidplay.sonali.todo.utils.Constants.TASK_DOC_ID
 import javax.inject.Inject
@@ -23,7 +23,7 @@ import javax.inject.Inject
 class NotificationService : Service() {
 
     @Inject
-    lateinit var repository: FirebaseRepository
+    lateinit var repository: TaskRepository
 
     @Inject
     lateinit var notificationManager: NotificationManager

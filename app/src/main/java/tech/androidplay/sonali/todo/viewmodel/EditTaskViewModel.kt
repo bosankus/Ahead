@@ -7,7 +7,7 @@ import androidx.lifecycle.liveData
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
-import tech.androidplay.sonali.todo.data.repository.FirebaseRepository
+import tech.androidplay.sonali.todo.data.repository.TaskRepository
 import tech.androidplay.sonali.todo.utils.ResultData
 import tech.androidplay.sonali.todo.utils.UIHelper.getCurrentTimestamp
 
@@ -19,7 +19,7 @@ import tech.androidplay.sonali.todo.utils.UIHelper.getCurrentTimestamp
  */
 
 @ExperimentalCoroutinesApi
-class EditTaskViewModel @ViewModelInject constructor(private val dataSource: FirebaseRepository) :
+class EditTaskViewModel @ViewModelInject constructor(private val dataSource: TaskRepository) :
     ViewModel() {
 
     fun updateTask(taskId: String, todoBody: String?, todoDesc: String?, todoDate: String?) {

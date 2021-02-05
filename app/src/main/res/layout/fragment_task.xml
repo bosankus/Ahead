@@ -24,6 +24,7 @@
             layout="@layout/layout_task_app_bar"
             android:layout_width="match_parent"
             android:layout_height="60dp"
+            app:fname="@{viewmodel.firstName}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -83,18 +84,18 @@
                     app:listSize="@{viewmodel.taskListSize}"
                     app:viewModel="@{viewmodel}" />
 
-                <include
-                    android:id="@+id/layoutLoadingTask"
-                    layout="@layout/layout_task_loading"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:loadingState="@{viewmodel.loadingState}" />
-
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </androidx.core.widget.NestedScrollView>
+
+        <include
+            android:id="@+id/layoutLoadingTask"
+            layout="@layout/layout_task_loading"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:loadingState="@{viewmodel.loadingState}" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

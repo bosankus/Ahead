@@ -10,12 +10,12 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.tasks.await
-import tech.androidplay.sonali.todo.data.repository.DataRepository
-import tech.androidplay.sonali.todo.data.repository.FirebaseRepository
+import tech.androidplay.sonali.todo.data.repository.QuoteRepository
+import tech.androidplay.sonali.todo.data.repository.TaskRepository
 import tech.androidplay.sonali.todo.model.Todo
 import tech.androidplay.sonali.todo.utils.Constants.IS_AFTER
 import tech.androidplay.sonali.todo.utils.Constants.IS_BEFORE
+import tech.androidplay.sonali.todo.utils.UIHelper.logMessage
 import tech.androidplay.sonali.todo.utils.compareWithToday
 import javax.inject.Inject
 
@@ -28,15 +28,18 @@ import javax.inject.Inject
 @ExperimentalCoroutinesApi
 @InternalCoroutinesApi
 class TaskViewModel @ViewModelInject constructor(
-    private val firebaseSource: FirebaseRepository,
-    private val dataSource: DataRepository,
+    private val taskSource: TaskRepository,
+    private val quoteSource: QuoteRepository,
     private val messaging: FirebaseMessaging
 ) : ViewModel() {
 
     @Inject
     lateinit var sharedPreferences: SharedPreferences
 
-    private var _userId = firebaseSource.userDetails?.uid
+    private var _firstName = MutableLiveData<String>()
+    val firstName get() = _firstName
+
+    private var _userId = taskSource.userDetails?.uid
     val userId get() = _userId
 
     private var _loadingState = MutableLiveData<Boolean>()
@@ -65,24 +68,22 @@ class TaskViewModel @ViewModelInject constructor(
 
     init {
         _loadingState.value = true
-        getAllTasks()
-        getAllAssignedTasks()
+        getUserFirstName()
         updateDeviceToken()
     }
 
-    private fun getQuote() {
+    private fun getUserFirstName() {
         viewModelScope.launch {
-            val todayQuote = dataSource.fetchQuote()
-            _quoteText.value = "${todayQuote.text}"
-            _quoteAuthor.value = "- ${todayQuote.author}"
-            _loadingState.value = false
+            _firstName.value = "Good Day, ${taskSource.getUserFirstName()}"
+            getAllTasks()
+            getAllAssignedTasks()
         }
     }
 
     private fun getAllTasks() {
         viewModelScope.launch {
             try {
-                firebaseSource.fetchTaskRealtime().collect { allTodoList ->
+                taskSource.fetchAllUnassignedTask().collect { allTodoList ->
                     _taskListSize.value = allTodoList.size
                     if (allTodoList.size == 0) getQuote()
                     _completedTaskList.value =
@@ -93,10 +94,9 @@ class TaskViewModel @ViewModelInject constructor(
                     _overdueTaskList.value =
                         allTodoList.filter { it.todoDate.compareWithToday() == IS_BEFORE && !it.isCompleted }
                             .sortedByDescending { it.todoDate }
-                    _loadingState.value = false
                 }
             } catch (e: Exception) {
-                _loadingState.value = false
+                logMessage("TaskViewModel-getAllTasks: ${e.message}")
             }
         }
     }
@@ -104,32 +104,29 @@ class TaskViewModel @ViewModelInject constructor(
     private fun getAllAssignedTasks() {
         viewModelScope.launch {
             try {
-                firebaseSource.fetchAssignedTaskRealtime().collect { assignedTask ->
-                    _assignedTaskList.value =
-                        assignedTask.sortedByDescending { it.todoDate }
+                taskSource.fetchOnlyAssignedTask().collect { assignedTask ->
+                    _assignedTaskList.value = assignedTask.sortedByDescending { it.todoDate }
+                    _loadingState.value = false
                 }
             } catch (e: Exception) {
+                logMessage("TaskViewModel-getAllAssignedTasks: ${e.message}")
                 _loadingState.value = false
             }
         }
     }
 
-    // Implement using data Binding
-    /*fun changeTaskStatus(taskId: String, status: Boolean) {
-        val map: Map<String, Boolean> = mapOf("isCompleted" to status)
-        viewModelScope.launch { firebaseSource.updateTask(taskId, map) }
-    }*/
-
-
-    fun logoutUser() = viewModelScope.launch {
-        firebaseSource.signOut()
-    }
-
-    private fun updateDeviceToken() {
+    private fun getQuote() {
         viewModelScope.launch {
-            val token = messaging.token.await()
-            firebaseSource.sendTokenToSever(token)
+            val todayQuote = quoteSource.fetchQuote()
+            _quoteText.value = "${todayQuote.text}"
+            _quoteAuthor.value = "- ${todayQuote.author}"
+            _loadingState.value = false
         }
     }
+
+    fun logoutUser() = viewModelScope.launch { taskSource.signOut() }
+
+    private fun updateDeviceToken() = viewModelScope.launch { taskSource.sendTokenToSever("") }
+
 }
 

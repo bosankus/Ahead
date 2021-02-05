@@ -10,7 +10,7 @@ import javax.inject.Inject
  * Email: ankush@androidplay.in
  */
 
-class DataRepository @Inject constructor(private val apiService: ApiService) {
+class QuoteRepository @Inject constructor(private val apiService: ApiService) {
 
     suspend fun fetchQuote() = apiService.getQuote()
 }

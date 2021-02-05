@@ -10,7 +10,7 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ServiceComponent
 import dagger.hilt.android.scopes.ServiceScoped
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import tech.androidplay.sonali.todo.data.repository.FirebaseRepository
+import tech.androidplay.sonali.todo.data.repository.TaskRepository
 
 /**
  * Created by Androidplay
@@ -31,5 +31,5 @@ class ServiceModule {
         firebaseAuth: FirebaseAuth,
         storageReference: StorageReference,
         fireStore: FirebaseFirestore
-    ) = FirebaseRepository(firebaseCrashReport, firebaseAuth, storageReference, fireStore)
+    ) = TaskRepository(storageReference, firebaseCrashReport, fireStore, firebaseAuth)
 }

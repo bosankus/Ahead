@@ -22,7 +22,7 @@
             android:layout_marginStart="@dimen/padding_18dp"
             android:alpha="0.8"
             android:fontFamily="@font/calibre_semi"
-            android:text="Good Day, Ankush"
+            android:text="@{fname}"
             android:textColor="@color/grey3"
             android:textSize="@dimen/text_22sp"
             app:layout_constraintBottom_toBottomOf="parent"
