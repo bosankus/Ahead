@@ -17,6 +17,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_task_create.*
 import kotlinx.android.synthetic.main.layout_assign_user.*
 import kotlinx.android.synthetic.main.layout_assign_user.view.*
+import kotlinx.android.synthetic.main.layout_create_task_features.view.*
 import kotlinx.android.synthetic.main.layout_task_app_bar.view.*
 import kotlinx.coroutines.*
 import tech.androidplay.sonali.todo.R
@@ -63,7 +64,7 @@ class TaskCreateFragment : Fragment(R.layout.fragment_task_create) {
     }
 
     private fun setListeners() {
-        tvSelectImage.setOnClickListener { selectImage() }
+        layoutCreateTaskFeatures.addImage.setOnClickListener { selectImage() }
 
         tvSelectDate.setOnClickListener { dateTimePicker.openDateTimePicker(requireContext()) }
         dateTimePicker.epochFormat.observe(viewLifecycleOwner, {
@@ -83,10 +84,7 @@ class TaskCreateFragment : Fragment(R.layout.fragment_task_create) {
 
         layoutAssigneeUser.etAssigneeUsername.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(
-                charSequence: CharSequence?,
-                p1: Int,
-                p2: Int,
-                p3: Int
+                charSequence: CharSequence?, p1: Int, p2: Int, p3: Int
             ) {
             }
 

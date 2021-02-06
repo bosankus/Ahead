@@ -1,9 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="horizontal">
 
+    <ImageView
+        android:id="@+id/addBullets"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:background="@drawable/bg_icon_ripple"
+        android:padding="@dimen/padding_8dp"
+        android:src="@drawable/ic_add_bullet"
+        app:tint="@color/grey3"
+        tools:ignore="ContentDescription" />
 
+    <ImageView
+        android:id="@+id/changeCase"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:layout_marginStart="@dimen/padding_16dp"
+        android:background="@drawable/bg_icon_ripple"
+        android:padding="@dimen/padding_8dp"
+        android:src="@drawable/ic_case_change"
+        app:tint="@color/grey3"
+        tools:ignore="ContentDescription" />
+
+    <ImageView
+        android:id="@+id/addUser"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:layout_marginStart="@dimen/padding_16dp"
+        android:background="@drawable/bg_icon_ripple"
+        android:padding="@dimen/padding_8dp"
+        android:src="@drawable/ic_add_user"
+        app:tint="@color/grey3"
+        tools:ignore="ContentDescription" />
+
+    <ImageView
+        android:id="@+id/addImage"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:layout_marginStart="@dimen/padding_16dp"
+        android:background="@drawable/bg_icon_ripple"
+        android:padding="@dimen/padding_8dp"
+        android:src="@drawable/ic_attach"
+        app:tint="@color/grey3"
+        tools:ignore="ContentDescription" />
 
 </LinearLayout>

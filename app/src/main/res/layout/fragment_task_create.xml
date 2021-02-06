@@ -56,6 +56,18 @@
         app:layout_constraintTop_toBottomOf="@+id/tvTaskInput"
         tools:ignore="Autofill" />
 
+    <include
+        android:id="@+id/layoutCreateTaskFeatures"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/padding_26dp"
+        android:layout_marginStart="@dimen/padding_18dp"
+        android:layout_marginEnd="@dimen/padding_18dp"
+        layout="@layout/layout_create_task_features"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvTaskDescInput"/>
+
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/clAlarm"
@@ -68,7 +80,7 @@
         android:paddingBottom="@dimen/padding_8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvTaskDescInput">
+        app:layout_constraintTop_toBottomOf="@+id/layoutCreateTaskFeatures">
 
         <TextView
             android:id="@+id/tvAlarmHeader"
