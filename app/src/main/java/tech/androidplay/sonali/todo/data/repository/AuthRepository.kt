@@ -22,7 +22,6 @@ import javax.inject.Inject
 class AuthRepository @Inject constructor(
     private val crashReport: FirebaseCrashlytics,
     private val firebaseAuth: FirebaseAuth,
-    private val storageReference: StorageReference,
     fireStore: FirebaseFirestore
 ) {
 

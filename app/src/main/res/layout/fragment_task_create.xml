@@ -1,211 +1,175 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/clCreateTask"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:clipToPadding="false">
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/clCreateTask"
+    <include
+        android:id="@+id/layoutTaskBar"
+        layout="@layout/layout_task_app_bar"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_height="60dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/tvTaskInput"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/padding_18dp"
+        android:layout_marginTop="@dimen/padding_16dp"
+        android:layout_marginEnd="@dimen/padding_18dp"
+        android:background="@android:color/transparent"
+        android:fontFamily="@font/calibre"
+        android:hint=" Task Title"
+        android:inputType="text"
+        android:maxLines="1"
+        android:textColor="@color/dribblePink"
+        android:textSize="@dimen/text_22sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/layoutTaskBar"
+        tools:ignore="Autofill" />
+
+    <EditText
+        android:id="@+id/tvTaskDescInput"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/padding_18dp"
+        android:layout_marginTop="@dimen/padding_20dp"
+        android:layout_marginEnd="@dimen/padding_18dp"
+        android:background="@android:color/transparent"
+        android:fontFamily="@font/calibre"
+        android:hint=" Add task details"
+        android:inputType="textMultiLine"
+        android:textColor="@color/grey3"
+        android:textSize="@dimen/text_16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvTaskInput"
+        tools:ignore="Autofill" />
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/clAlarm"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/padding_16dp"
+        android:layout_marginTop="@dimen/padding_26dp"
+        android:layout_marginEnd="@dimen/padding_16dp"
+        android:background="@drawable/bg_rounded"
+        android:paddingBottom="@dimen/padding_8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvTaskDescInput">
 
         <TextView
-            android:id="@+id/tvBottomAddTaskHeader"
+            android:id="@+id/tvAlarmHeader"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/padding_16dp"
             android:layout_marginTop="@dimen/padding_16dp"
-            android:fontFamily="@font/calibre"
-            android:text="@string/new_task"
+            android:ellipsize="end"
+            android:fontFamily="@font/calibre_semi"
+            android:text="@string/set_alarm"
             android:textColor="@color/grey3"
             android:textSize="@dimen/text_18sp"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <View
-            android:id="@+id/view1"
-            android:layout_width="match_parent"
-            android:layout_height="0.7dp"
-            android:layout_marginTop="@dimen/padding_8dp"
-            android:background="@color/grey1"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvBottomAddTaskHeader" />
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/clAlarm"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/padding_16dp"
-            android:background="@drawable/bg_rounded"
-            android:paddingBottom="@dimen/padding_8dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/view1">
-
-            <TextView
-                android:id="@+id/tvAlarmHeader"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/padding_26dp"
-                android:layout_marginTop="@dimen/padding_16dp"
-                android:ellipsize="end"
-                android:fontFamily="@font/calibre_semi"
-                android:text="@string/set_alarm"
-                android:textColor="@color/grey3"
-                android:textSize="@dimen/text_18sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/tvAlarmDesc"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/padding_26dp"
-                android:fontFamily="@font/calibre"
-                android:text="@string/ring_alarm_for_this_task"
-                android:textColor="@color/grey2"
-                android:textSize="@dimen/text_16sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tvAlarmHeader" />
-
-            <TextView
-                android:id="@+id/tvSelectDate"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/padding_26dp"
-                android:layout_marginTop="@dimen/padding_10dp"
-                android:drawablePadding="@dimen/padding_5dp"
-                android:fontFamily="@font/calibre"
-                android:paddingTop="@dimen/padding_5dp"
-                android:paddingBottom="@dimen/padding_5dp"
-                android:text="@string/hint_date_txt"
-                android:textColor="@color/dribblePink"
-                android:textSize="@dimen/text_16sp"
-                app:drawableStartCompat="@drawable/ic_date"
-                app:drawableTint="@color/dribblePink"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tvAlarmDesc" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
         <TextView
-            android:id="@+id/tvTaskInputHeader"
+            android:id="@+id/tvAlarmDesc"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/padding_26dp"
-            android:layout_marginTop="@dimen/padding_26dp"
-            android:fontFamily="@font/calibre_semi"
-            android:text="@string/create_task"
-            android:textColor="@color/grey3"
-            android:textSize="@dimen/text_18sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/clAlarm" />
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/clTaskInput"
-            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/padding_16dp"
-            android:layout_marginTop="@dimen/padding_8dp"
-            android:layout_marginEnd="@dimen/padding_16dp"
-            android:background="@drawable/bg_rounded"
-            android:padding="@dimen/padding_8dp"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:fontFamily="@font/calibre"
+            android:text="@string/ring_alarm_for_this_task"
+            android:textColor="@color/grey2"
+            android:textSize="@dimen/text_16sp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvTaskInputHeader">
-
-            <EditText
-                android:id="@+id/tvTaskInput"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/calibre"
-                android:hint="@string/task"
-                android:inputType="text"
-                android:maxLines="1"
-                android:textColor="@color/grey3"
-                android:textSize="@dimen/text_18sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:ignore="Autofill" />
-
-            <EditText
-                android:id="@+id/tvTaskDescInput"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/padding_8dp"
-                android:fontFamily="@font/calibre"
-                android:hint="@string/task_description"
-                android:inputType="textMultiLine"
-                android:textColor="@color/grey3"
-                android:textSize="@dimen/text_18sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tvTaskInput"
-                tools:ignore="Autofill" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <include
-            android:id="@+id/layoutAssigneeUser"
-            layout="@layout/layout_assign_user"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/clTaskInput" />
+            app:layout_constraintTop_toBottomOf="@+id/tvAlarmHeader" />
 
         <TextView
-            android:id="@+id/tvSelectImage"
+            android:id="@+id/tvSelectDate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/padding_26dp"
-            android:layout_marginTop="@dimen/padding_16dp"
-            android:drawablePadding="@dimen/padding_8dp"
-            android:ellipsize="end"
+            android:layout_marginStart="@dimen/padding_16dp"
+            android:layout_marginTop="@dimen/padding_10dp"
+            android:drawablePadding="@dimen/padding_5dp"
             android:fontFamily="@font/calibre"
-            android:padding="@dimen/padding_5dp"
-            android:text="@string/attach_image"
+            android:paddingTop="@dimen/padding_5dp"
+            android:paddingBottom="@dimen/padding_5dp"
+            android:text="@string/hint_date_txt"
             android:textColor="@color/dribblePink"
-            android:textSize="@dimen/text_18sp"
-            app:drawableStartCompat="@drawable/ic_attach"
+            android:textSize="@dimen/text_16sp"
+            app:drawableStartCompat="@drawable/ic_date"
+            app:drawableTint="@color/dribblePink"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/layoutAssigneeUser" />
-
-        <Button
-            android:id="@+id/btCreateTask"
-            style="?android:attr/borderlessButtonStyle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/padding_18dp"
-            android:background="@drawable/bg_rounded_btn"
-            android:backgroundTint="@color/dribblePink"
-            android:fontFamily="@font/calibre_semi"
-            android:text="@string/create_task"
-            android:textAllCaps="false"
-            android:textColor="@color/white"
-            android:textSize="@dimen/text_18sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvSelectImage" />
+            app:layout_constraintTop_toBottomOf="@id/tvAlarmDesc" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <include
+        android:id="@+id/layoutAssigneeUser"
+        layout="@layout/layout_assign_user"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/clAlarm" />
+
+    <TextView
+        android:id="@+id/tvSelectImage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/padding_26dp"
+        android:layout_marginTop="@dimen/padding_16dp"
+        android:drawablePadding="@dimen/padding_8dp"
+        android:ellipsize="end"
+        android:fontFamily="@font/calibre"
+        android:padding="@dimen/padding_5dp"
+        android:text="@string/attach_image"
+        android:textColor="@color/dribblePink"
+        android:textSize="@dimen/text_18sp"
+        app:drawableStartCompat="@drawable/ic_attach"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/layoutAssigneeUser" />
+
+    <Button
+        android:id="@+id/btCreateTask"
+        style="?android:attr/borderlessButtonStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/padding_18dp"
+        android:background="@drawable/bg_rounded_btn"
+        android:backgroundTint="@color/dribblePink"
+        android:fontFamily="@font/calibre_semi"
+        android:text="@string/create_task"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:textSize="@dimen/text_18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvSelectImage" />
 
     <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/lottiCreateTaskLoading"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:layout_gravity="center"
         android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         app:lottie_fileName="lottie_create_task.json"
         app:lottie_loop="true" />
 
+</androidx.constraintlayout.widget.ConstraintLayout>
 
-</androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -26,7 +26,7 @@ class ServiceModule {
 
     @ServiceScoped
     @Provides
-    fun providesFirebaseRepository(
+    fun providesTaskRepository(
         firebaseCrashReport: FirebaseCrashlytics,
         firebaseAuth: FirebaseAuth,
         storageReference: StorageReference,

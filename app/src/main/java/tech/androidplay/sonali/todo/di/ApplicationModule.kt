@@ -16,8 +16,8 @@ import com.google.firebase.storage.StorageReference
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.components.ApplicationComponent
 import dagger.hilt.android.qualifiers.ApplicationContext
+import dagger.hilt.components.SingletonComponent
 import tech.androidplay.sonali.todo.R
 import tech.androidplay.sonali.todo.TodoApplication
 import tech.androidplay.sonali.todo.ui.activity.MainActivity
@@ -36,7 +36,7 @@ import javax.inject.Singleton
  */
 
 @Module
-@InstallIn(ApplicationComponent::class)
+@InstallIn(SingletonComponent::class)
 class ApplicationModule {
 
     @Provides

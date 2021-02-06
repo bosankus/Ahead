@@ -44,7 +44,7 @@
                 android:background="@android:color/transparent"
                 android:padding="@dimen/padding_10dp"
                 android:textColor="@color/grey3"
-                android:textSize="@dimen/text_18sp" />
+                android:textSize="@dimen/text_16sp" />
 
             <com.airbnb.lottie.LottieAnimationView
                 android:id="@+id/lottieAvailabilityLoading"

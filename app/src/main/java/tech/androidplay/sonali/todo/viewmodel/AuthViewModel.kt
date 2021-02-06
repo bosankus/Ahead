@@ -1,13 +1,14 @@
 package tech.androidplay.sonali.todo.viewmodel
 
 import androidx.hilt.lifecycle.ViewModelInject
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.liveData
+import androidx.lifecycle.*
 import com.google.firebase.auth.FirebaseUser
+import dagger.assisted.Assisted
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import tech.androidplay.sonali.todo.data.repository.AuthRepository
 import tech.androidplay.sonali.todo.utils.ResultData
+import javax.inject.Inject
 
 /**
  * Created by Androidplay
@@ -15,6 +16,7 @@ import tech.androidplay.sonali.todo.utils.ResultData
  * On: 4/22/2020, 5:51 AM
  */
 
+@Suppress("UNCHECKED_CAST")
 @ExperimentalCoroutinesApi
 class AuthViewModel @ViewModelInject constructor(private val dataSource: AuthRepository) :
     ViewModel() {
@@ -50,4 +52,19 @@ class AuthViewModel @ViewModelInject constructor(private val dataSource: AuthRep
             } else emit(dataSource.resetPassword(email))
         }
     }
+
+    /*@dagger.assisted.AssistedFactory
+    interface AssistedFactory {
+        fun create(dataSource: AuthRepository): AuthViewModel
+    }
+
+    companion object {
+        fun provideFactory(assistedFactory: AssistedFactory, dataSource: AuthRepository):
+                ViewModelProvider.Factory = object : ViewModelProvider.Factory {
+            override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+                return assistedFactory.create(dataSource) as T
+            }
+
+        }
+    }*/
 }

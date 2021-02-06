@@ -27,4 +27,5 @@
     <color name="bordered_btn_green_dark">#A5D6A7</color>
     <color name="bordered_btn_green_light">#A5D6A7</color>
     <color name="market_watch_red">#FF8A80</color>
+    <color name="light_blue">#E7E5F2</color>
 </resources>

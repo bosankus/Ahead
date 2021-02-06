@@ -119,10 +119,10 @@ dependencies {
     implementation "io.reactivex.rxjava2:rxandroid:$rxjava_android"
 
     // Firebase
-    implementation 'com.google.firebase:firebase-analytics:18.0.1'
+    implementation 'com.google.firebase:firebase-analytics:18.0.2'
     implementation 'com.google.firebase:firebase-auth:20.0.2'
     implementation 'com.google.android.gms:play-services-auth:19.0.0'
-    implementation 'com.google.firebase:firebase-firestore-ktx:22.0.1'
+    implementation 'com.google.firebase:firebase-firestore-ktx:22.0.2'
     implementation 'com.firebaseui:firebase-ui-firestore:6.2.0'
     implementation 'com.google.firebase:firebase-storage-ktx:19.2.1'
     implementation 'com.google.firebase:firebase-messaging'

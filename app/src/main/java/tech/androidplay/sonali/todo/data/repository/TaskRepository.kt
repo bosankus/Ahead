@@ -3,10 +3,7 @@ package tech.androidplay.sonali.todo.data.repository
 import android.net.Uri
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.crashlytics.FirebaseCrashlytics
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.Query
-import com.google.firebase.firestore.QuerySnapshot
-import com.google.firebase.firestore.SetOptions
+import com.google.firebase.firestore.*
 import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.storage.StorageReference
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -99,6 +96,14 @@ class TaskRepository @Inject constructor(
                 querySnapshot.remove()
             }
         }
+
+    suspend fun fetchTaskByTaskId(taskId: String): ResultData<Todo> {
+        val docSnapshot: DocumentSnapshot = taskListRef.document(taskId).get().await()
+        return if (docSnapshot.exists()) {
+            val task = docSnapshot.toObject(Todo::class.java)
+            ResultData.Success(task)
+        } else ResultData.Failed("Document do not exists")
+    }
 
     suspend fun updateTask(taskId: String, map: Map<String, Any?>) {
         try {

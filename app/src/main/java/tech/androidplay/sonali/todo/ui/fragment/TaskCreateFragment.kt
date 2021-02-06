@@ -17,9 +17,9 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_task_create.*
 import kotlinx.android.synthetic.main.layout_assign_user.*
 import kotlinx.android.synthetic.main.layout_assign_user.view.*
+import kotlinx.android.synthetic.main.layout_task_app_bar.view.*
 import kotlinx.coroutines.*
 import tech.androidplay.sonali.todo.R
-import tech.androidplay.sonali.todo.viewmodel.TaskCreateViewModel
 import tech.androidplay.sonali.todo.utils.*
 import tech.androidplay.sonali.todo.utils.Constants.IS_AFTER
 import tech.androidplay.sonali.todo.utils.UIHelper.hideKeyboard
@@ -27,6 +27,7 @@ import tech.androidplay.sonali.todo.utils.UIHelper.isEmailValid
 import tech.androidplay.sonali.todo.utils.UIHelper.showSnack
 import tech.androidplay.sonali.todo.utils.UIHelper.showToast
 import tech.androidplay.sonali.todo.utils.alarmutils.startAlarmedNotification
+import tech.androidplay.sonali.todo.viewmodel.TaskCreateViewModel
 import javax.inject.Inject
 
 /**
@@ -50,7 +51,15 @@ class TaskCreateFragment : Fragment(R.layout.fragment_task_create) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setUpScreen()
         setListeners()
+    }
+
+    private fun setUpScreen() {
+        layoutTaskBar.tvUserFName.text = "Create Task"
+        layoutTaskBar.imgCreate.visibility = View.GONE
+        layoutTaskBar.imgMenu.visibility = View.GONE
+        tvTaskInput.requestFocus()
     }
 
     private fun setListeners() {
@@ -73,16 +82,17 @@ class TaskCreateFragment : Fragment(R.layout.fragment_task_create) {
         }
 
         layoutAssigneeUser.etAssigneeUsername.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(charSequence: CharSequence?, p1: Int, p2: Int, p3: Int) {
-
+            override fun beforeTextChanged(
+                charSequence: CharSequence?,
+                p1: Int,
+                p2: Int,
+                p3: Int
+            ) {
             }
 
+            override fun afterTextChanged(p0: Editable?) {}
             override fun onTextChanged(charSequence: CharSequence?, p1: Int, p2: Int, p3: Int) {
                 charSequence?.let { if (it.isEmailValid()) checkAssigneeAvailability(it.toString()) }
-            }
-
-            override fun afterTextChanged(p0: Editable?) {
-
             }
         })
     }

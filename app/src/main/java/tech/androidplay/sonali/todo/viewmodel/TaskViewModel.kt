@@ -5,7 +5,6 @@ import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.firebase.messaging.FirebaseMessaging
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.flow.collect
@@ -27,20 +26,20 @@ import javax.inject.Inject
 
 @ExperimentalCoroutinesApi
 @InternalCoroutinesApi
+
 class TaskViewModel @ViewModelInject constructor(
     private val taskSource: TaskRepository,
-    private val quoteSource: QuoteRepository,
-    private val messaging: FirebaseMessaging
+        private val quoteSource: QuoteRepository,
 ) : ViewModel() {
 
     @Inject
     lateinit var sharedPreferences: SharedPreferences
 
+    /*private var _userId = taskSource.userDetails?.uid
+    val userId get() = _userId*/
+
     private var _firstName = MutableLiveData<String>()
     val firstName get() = _firstName
-
-    private var _userId = taskSource.userDetails?.uid
-    val userId get() = _userId
 
     private var _loadingState = MutableLiveData<Boolean>()
     val loadingState get() = _loadingState
