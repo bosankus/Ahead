@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/clAlarm"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="visible"
+        android:background="@drawable/bg_rounded"
+        android:paddingBottom="@dimen/padding_8dp">
+
+        <TextView
+            android:id="@+id/tvAlarmHeader"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/padding_16dp"
+            android:layout_marginTop="@dimen/padding_16dp"
+            android:ellipsize="end"
+            android:fontFamily="@font/calibre_semi"
+            android:text="@string/set_alarm"
+            android:textColor="@color/grey3"
+            android:textSize="@dimen/text_18sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tvAlarmDesc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/padding_16dp"
+            android:fontFamily="@font/calibre"
+            android:text="@string/ring_alarm_for_this_task"
+            android:textColor="@color/grey2"
+            android:textSize="@dimen/text_16sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvAlarmHeader" />
+
+        <TextView
+            android:id="@+id/tvSelectDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/padding_16dp"
+            android:layout_marginTop="@dimen/padding_10dp"
+            android:drawablePadding="@dimen/padding_8dp"
+            android:fontFamily="@font/calibre"
+            android:paddingTop="@dimen/padding_5dp"
+            android:paddingBottom="@dimen/padding_5dp"
+            android:text="@string/hint_date_txt"
+            android:textColor="@color/dribblePink"
+            android:textSize="@dimen/text_16sp"
+            app:drawableTint="@color/dribblePink"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvAlarmDesc"
+            app:drawableStartCompat="@drawable/ic_calendar" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</FrameLayout>

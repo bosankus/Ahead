@@ -34,4 +34,23 @@
     <style name="action_menu_style">
         <item name="fontFamily">@font/calibre_semi</item>
     </style>
+
+    <style name="AuthStyle" parent="FirebaseUI">
+        <item name="colorPrimary">@color/dribblePink</item>
+        <item name="colorPrimaryDark">@color/dribblePink</item>
+        <item name="colorAccent">@color/dribblePink</item>
+        <item name="colorButtonNormal">@color/colorAccent</item>
+        <item name="colorControlNormal">@color/grey2</item>
+        <item name="colorControlActivated">@color/grey3</item>
+        <item name="colorControlHighlight">@color/grey3</item>
+        <item name="android:textColor">@color/grey3</item>
+        <item name="android:textColorPrimary">@color/grey3</item>
+        <item name="android:textColorSecondary">@color/grey2</item>
+        <item name="android:windowBackground">@android:color/white</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="fontFamily">@font/calibre_semi</item>
+        <item name="android:textSize">@dimen/text_16sp</item>
+        <item name="android:textColorHint">@color/grey2</item>
+    </style>
 </resources>

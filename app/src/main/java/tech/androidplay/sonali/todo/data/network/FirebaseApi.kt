@@ -16,7 +16,7 @@ import tech.androidplay.sonali.todo.utils.ResultData
 interface FirebaseApi {
 
     // For User authentication
-    suspend fun logInUser(email: String, password: String): ResultData<FirebaseUser>
+    /*suspend fun logInUser(email: String, password: String): ResultData<FirebaseUser>
     suspend fun createAccount(
         email: String,
         password: String,
@@ -25,8 +25,7 @@ interface FirebaseApi {
     ): ResultData<FirebaseUser>
 
     suspend fun resetPassword(email: String): ResultData<String>
-    suspend fun checkAssigneeAvailability(email: String): ResultData<String>
-    suspend fun signOut()
+    suspend fun signOut()*/
 
     // For Firestore
     suspend fun createTask(
@@ -37,12 +36,14 @@ interface FirebaseApi {
 
     suspend fun fetchAllUnassignedTask(): Flow<MutableList<Todo>>
     suspend fun fetchOnlyAssignedTask(): Flow<MutableList<Todo>>
-    suspend fun updateTask(taskId: String, map: Map<String, Any?>)
+    suspend fun fetchTaskByTaskId(taskId: String): ResultData<Todo>
+    suspend fun updateTask(taskId: String, map: Map<String, Any?>): ResultData<Boolean>
     suspend fun deleteTask(docId: String, hasImage: Boolean): ResultData<Boolean>
+    suspend fun isUserAvailable(email: String): ResultData<Boolean>
     suspend fun provideFeedback(hashMap: HashMap<String, String?>): ResultData<String>
 
     // For Firebase storage
-    suspend fun uploadImage(uri: Uri, imgPathRef: StorageReference?, docRefId: String?):
+    suspend fun uploadImage(uri: Uri, docRefId: String, imgPathRef: StorageReference?):
             ResultData<String>
 
     // For updating new token

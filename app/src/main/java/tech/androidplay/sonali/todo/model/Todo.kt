@@ -11,10 +11,10 @@ import java.io.Serializable
  */
 
 data class Todo(
-    @SerializedName("id")
-    var id: String = "",
     @DocumentId
     var docId: String = "",
+    @SerializedName("creator")
+    var creator: String = "",
     @SerializedName("todoBody")
     var todoBody: String? = "",
     @SerializedName("todoDesc")
@@ -29,5 +29,5 @@ data class Todo(
     @SerializedName("taskImage")
     var taskImage: String? = "",
     @SerializedName("assignee")
-    var assigneeList: List<String>? = null,
+    var assigneeList: List<*>? = null,
 ) : Serializable

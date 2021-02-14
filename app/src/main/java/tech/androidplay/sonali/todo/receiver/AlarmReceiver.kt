@@ -12,7 +12,7 @@ import androidx.core.app.NotificationCompat
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import tech.androidplay.sonali.todo.R
-import tech.androidplay.sonali.todo.service.NotificationService
+import tech.androidplay.sonali.todo.service.TaskStatusUpdateService
 import tech.androidplay.sonali.todo.utils.Constants.ALARM_DESCRIPTION
 import tech.androidplay.sonali.todo.utils.Constants.ALARM_TEXT
 import tech.androidplay.sonali.todo.utils.Constants.ANDROID_OREO
@@ -64,7 +64,7 @@ class AlarmReceiver : HiltBroadcastReceiver() {
         taskId: String
     ) {
         val uniqueNotificationId = taskId.generateRequestCode()
-        val intent = Intent(context, NotificationService::class.java).also {
+        val intent = Intent(context, TaskStatusUpdateService::class.java).also {
             it.putExtra(TASK_DOC_ID, taskId)
             it.putExtra(NOTIFICATION_ID, uniqueNotificationId)
         }

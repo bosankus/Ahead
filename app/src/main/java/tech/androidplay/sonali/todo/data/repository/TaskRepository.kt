@@ -83,7 +83,6 @@ class TaskRepository @Inject constructor(
                 .orderBy("todoCreationTimeStamp", Query.Direction.ASCENDING)
             val querySnapshot = assignedTaskQuery.addSnapshotListener { value, error ->
                 if (error != null) {
-                    crashReport.log(error.message.toString())
                     return@addSnapshotListener
                 } else {
                     value?.let {

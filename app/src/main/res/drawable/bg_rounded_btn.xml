@@ -1,5 +1,5 @@
 <ripple xmlns:android="http://schemas.android.com/apk/res/android"
-    android:color="@color/colorPrimary">
+    android:color="@color/dribblePink">
     <item android:id="@android:id/background">
         <shape android:shape="rectangle">
             <solid android:color="#FAFAFA" />

@@ -32,7 +32,7 @@
 
         <receiver android:name=".receiver.AlarmReceiver" />
 
-        <service android:name=".service.NotificationService" />
+        <service android:name=".service.TaskStatusUpdateService" />
         <service
             android:name=".service.FirebaseNotificationService"
             android:exported="false">

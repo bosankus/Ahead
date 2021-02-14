@@ -20,7 +20,7 @@ import javax.inject.Inject
 
 @ExperimentalCoroutinesApi
 @AndroidEntryPoint
-class NotificationService : Service() {
+class TaskStatusUpdateService : Service() {
 
     @Inject
     lateinit var repository: TaskRepository

@@ -4,13 +4,18 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.text.SpannableString
+import android.text.TextUtils
 import android.text.style.StrikethroughSpan
 import android.util.Log
 import android.view.View
 import android.view.animation.Animation
 import android.view.inputmethod.InputMethodManager
+import android.widget.EditText
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.DrawableCompat
 import com.google.android.material.snackbar.Snackbar
 import tech.androidplay.sonali.todo.utils.Constants.GLOBAL_TAG
 import java.time.Instant
@@ -52,6 +57,12 @@ object UIHelper {
         inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
     }
 
+    fun ImageView.setSvgTint(colorName: Int) {
+        DrawableCompat.setTint(
+            DrawableCompat.wrap(this.drawable), ContextCompat.getColor(this.context, colorName)
+        )
+    }
+
     fun TextView.strikeThroughText() {
         val text = this.text.toString()
         val spannable = SpannableString(text)
@@ -69,5 +80,4 @@ object UIHelper {
     fun CharSequence.isEmailValid(): Boolean {
         return android.util.Patterns.EMAIL_ADDRESS.matcher(this).matches()
     }
-
 }

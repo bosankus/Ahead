@@ -11,10 +11,12 @@ import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_main.*
 import tech.androidplay.sonali.todo.R
+import tech.androidplay.sonali.todo.utils.AuthManager
 import tech.androidplay.sonali.todo.utils.CacheManager
 import tech.androidplay.sonali.todo.utils.Constants.ACTION_SHOW_TASK_FRAGMENT
 import tech.androidplay.sonali.todo.utils.Constants.ANDROID_OREO
 import tech.androidplay.sonali.todo.utils.Constants.DEVICE_ANDROID_VERSION
+import tech.androidplay.sonali.todo.utils.UIHelper.showSnack
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -22,12 +24,13 @@ class MainActivity : AppCompatActivity() {
 
     @Inject
     lateinit var cache: CacheManager
+    private lateinit var authManager: AuthManager
 
     @SuppressLint("SimpleDateFormat")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
+        authManager = AuthManager(this)
         navigateToGlobalFragment(intent)
         setScreenUI()
     }
@@ -56,6 +59,21 @@ class MainActivity : AppCompatActivity() {
         // To support portrait view in API 26
         if (DEVICE_ANDROID_VERSION != ANDROID_OREO) {
             requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        authManager.handleAuth(requestCode, resultCode, data) { isSuccessful, error ->
+            if (isSuccessful) {
+                navHostFragment.findNavController().navigate(R.id.action_global_taskFragment)
+            } else showSnack(
+                findViewById(R.id.activityMain), getString(
+                    R.string.prompt_failed_to_login,
+                    error?.localizedMessage ?: "Unknown Error"
+                )
+            )
         }
     }
 

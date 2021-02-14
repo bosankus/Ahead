@@ -46,9 +46,9 @@ class FirebaseNotificationService : FirebaseMessagingService() {
         super.onMessageReceived(message)
 
         message.let {
-            val title = it.data["title"].toString()
-            val body = it.data["message"].toString()
-            val docId = it.data["document"].toString()
+            val title = checkNotNull(it.data["title"].toString())
+            val body = checkNotNull(it.data["message"].toString())
+            val docId = checkNotNull(it.data["document"].toString())
             logMessage(docId)
             sendNotification(title, body, docId)
         }

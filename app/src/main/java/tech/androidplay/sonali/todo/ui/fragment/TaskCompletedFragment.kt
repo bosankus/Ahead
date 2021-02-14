@@ -6,13 +6,16 @@ import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.android.synthetic.main.fragment_task_completed.*
+import kotlinx.android.synthetic.main.layout_task_app_bar.*
+import kotlinx.android.synthetic.main.layout_task_app_bar.view.*
+import kotlinx.android.synthetic.main.layout_task_empty.view.*
+import kotlinx.android.synthetic.main.layout_task_upcoming.view.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.InternalCoroutinesApi
 import tech.androidplay.sonali.todo.R
-import tech.androidplay.sonali.todo.viewmodel.TaskViewModel
-import tech.androidplay.sonali.todo.databinding.FragmentTaskCompletedBinding
 import tech.androidplay.sonali.todo.ui.adapter.TodoAdapter
-import tech.androidplay.sonali.todo.utils.viewLifecycleLazy
+import tech.androidplay.sonali.todo.viewmodel.TaskViewModel
 import javax.inject.Inject
 
 /**
@@ -28,8 +31,6 @@ import javax.inject.Inject
 @SuppressLint("SetTextI18n")
 class TaskCompletedFragment : Fragment(R.layout.fragment_task_completed) {
 
-    private val binding by viewLifecycleLazy { FragmentTaskCompletedBinding.bind(requireView()) }
-
     @Inject
     lateinit var adapter: TodoAdapter
     private val viewModel: TaskViewModel by viewModels()
@@ -41,14 +42,16 @@ class TaskCompletedFragment : Fragment(R.layout.fragment_task_completed) {
     }
 
     private fun setScreen() {
-        binding.viewmodel = viewModel
-        binding.lifecycleOwner = viewLifecycleOwner
-        binding.layoutTaskBar.imgMenu.visibility = View.INVISIBLE
-        binding.layoutNoTask.btnAddTask.text = "It's empty here!"
+        layoutTaskBar.apply {
+            tvUserFName.text = "Completed task"
+            imgCreate.visibility = View.GONE
+            imgMenu.visibility = View.GONE
+        }
+        layoutNoTask.btnAddTask.text = "It's empty here!"
     }
 
     private fun setObservers() {
-        binding.layoutCompletedTask.rvUpcomingTaskList.adapter = adapter
+        layoutCompletedTask.rvUpcomingTaskList.adapter = adapter
         viewModel.completedTaskList.observe(viewLifecycleOwner, { list ->
             list?.let { adapter.submitList(it) }
         })

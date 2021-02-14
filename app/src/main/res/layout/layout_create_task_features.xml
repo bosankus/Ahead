@@ -13,6 +13,7 @@
         android:background="@drawable/bg_icon_ripple"
         android:padding="@dimen/padding_8dp"
         android:src="@drawable/ic_add_bullet"
+        android:visibility="gone"
         app:tint="@color/grey3"
         tools:ignore="ContentDescription" />
 
@@ -20,21 +21,21 @@
         android:id="@+id/changeCase"
         android:layout_width="35dp"
         android:layout_height="35dp"
-        android:layout_marginStart="@dimen/padding_16dp"
+        android:layout_marginStart="@dimen/padding_8dp"
         android:background="@drawable/bg_icon_ripple"
         android:padding="@dimen/padding_8dp"
         android:src="@drawable/ic_case_change"
+        android:visibility="gone"
         app:tint="@color/grey3"
         tools:ignore="ContentDescription" />
 
     <ImageView
-        android:id="@+id/addUser"
+        android:id="@+id/addAlarm"
         android:layout_width="35dp"
         android:layout_height="35dp"
-        android:layout_marginStart="@dimen/padding_16dp"
         android:background="@drawable/bg_icon_ripple"
         android:padding="@dimen/padding_8dp"
-        android:src="@drawable/ic_add_user"
+        android:src="@drawable/ic_date"
         app:tint="@color/grey3"
         tools:ignore="ContentDescription" />
 
@@ -42,10 +43,21 @@
         android:id="@+id/addImage"
         android:layout_width="35dp"
         android:layout_height="35dp"
-        android:layout_marginStart="@dimen/padding_16dp"
+        android:layout_marginStart="@dimen/padding_8dp"
         android:background="@drawable/bg_icon_ripple"
         android:padding="@dimen/padding_8dp"
         android:src="@drawable/ic_attach"
+        app:tint="@color/grey3"
+        tools:ignore="ContentDescription" />
+
+    <ImageView
+        android:id="@+id/addUser"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:layout_marginStart="@dimen/padding_8dp"
+        android:background="@drawable/bg_icon_ripple"
+        android:padding="@dimen/padding_8dp"
+        android:src="@drawable/ic_add_user"
         app:tint="@color/grey3"
         tools:ignore="ContentDescription" />
 

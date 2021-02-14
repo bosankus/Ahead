@@ -13,8 +13,9 @@
     <!--    Gradient Colors-->
 
     <!--    Scrapped Colors-->
-    <color name="dribblePink">#E94D88</color>
-    <color name="dribblePinkLight">#F998BD</color>
+    <color name="dribbleDarkBlue">#3425D6</color>
+    <color name="dribblePink">#3068DE</color>
+    <color name="dribblePinkLight">#3068DE</color>
     <color name="shimmerColor">#dddddd</color>
 
     <!-- Colors for intro indicators -->
