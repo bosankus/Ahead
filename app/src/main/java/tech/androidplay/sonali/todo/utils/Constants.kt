@@ -15,6 +15,8 @@ object Constants {
     const val GLOBAL_TAG = "Androidplay"
     const val DATABASE_NAME = "think_db"
 
+    const val QUOTE_API = "https://quotes-inspirational-quotes-motivational-quotes.p.rapidapi.com/"
+
     // For firestore collection - Production
     const val TASK_COLLECTION = "Tasks"
     const val USER_COLLECTION = "Users"
@@ -81,6 +83,6 @@ object Constants {
     const val ANDROID_OREO = Build.VERSION_CODES.O
     /*const val ANDROID_10 = Build.VERSION_CODES.Q*/
 
-    // Firebase Analytics events
+    const val ARG_OBJECT = "objects"
 
 }

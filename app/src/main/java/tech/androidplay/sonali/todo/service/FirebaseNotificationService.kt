@@ -11,7 +11,7 @@ import com.google.firebase.messaging.RemoteMessage
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.*
 import tech.androidplay.sonali.todo.R
-import tech.androidplay.sonali.todo.data.firebase.FirebaseRepository
+import tech.androidplay.sonali.todo.data.repository.TaskRepository
 import tech.androidplay.sonali.todo.utils.Constants.ANDROID_OREO
 import tech.androidplay.sonali.todo.utils.Constants.DEVICE_ANDROID_VERSION
 import tech.androidplay.sonali.todo.utils.Constants.NOTIFICATION_CHANNEL_ID
@@ -32,7 +32,7 @@ import javax.inject.Inject
 class FirebaseNotificationService : FirebaseMessagingService() {
 
     @Inject
-    lateinit var repository: FirebaseRepository
+    lateinit var repository: TaskRepository
 
     @Inject
     lateinit var notificationManager: NotificationManager
@@ -46,9 +46,9 @@ class FirebaseNotificationService : FirebaseMessagingService() {
         super.onMessageReceived(message)
 
         message.let {
-            val title = it.data["title"].toString()
-            val body = it.data["message"].toString()
-            val docId = it.data["document"].toString()
+            val title = checkNotNull(it.data["title"].toString())
+            val body = checkNotNull(it.data["message"].toString())
+            val docId = checkNotNull(it.data["document"].toString())
             logMessage(docId)
             sendNotification(title, body, docId)
         }

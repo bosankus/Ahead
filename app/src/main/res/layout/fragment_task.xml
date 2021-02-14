@@ -7,87 +7,96 @@
 
         <variable
             name="viewmodel"
-            type="tech.androidplay.sonali.todo.data.viewmodel.TaskViewModel" />
+            type="tech.androidplay.sonali.todo.viewmodel.TaskViewModel" />
     </data>
 
-    <androidx.coordinatorlayout.widget.CoordinatorLayout
+
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/taskFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/white"
+        android:orientation="vertical"
         tools:context=".ui.activity.MainActivity">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/clTaskListContainer"
+        <include
+            android:id="@+id/layoutTaskBar"
+            layout="@layout/layout_task_app_bar"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="60dp"
+            app:fname="@{viewmodel.firstName}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-            <include
-                android:id="@+id/layoutTaskBar"
-                layout="@layout/layout_task_app_bar"
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/layoutTask"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:fillViewport="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/layoutTaskBar">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/clTaskListContainer"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/padding_26dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                android:layout_height="wrap_content">
 
-            <include
-                android:id="@+id/layoutNoTask"
-                layout="@layout/layout_task_empty"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/layoutTaskBar"
-                app:listSize="@{viewmodel.incompleteTaskListSize}" />
+                <include
+                    android:id="@+id/layoutAssignedTask"
+                    layout="@layout/layout_task_assigned"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:listSize="@{viewmodel.assignedTaskList.size()}" />
 
-            <include
-                android:id="@+id/layoutTodayTask"
-                layout="@layout/layout_task_today"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/padding_16dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/layoutTaskBar"
-                app:listSize="@{viewmodel.upcomingTaskList.size()}" />
+                <include
+                    android:id="@+id/layoutUpcomingTask"
+                    layout="@layout/layout_task_upcoming"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/layoutAssignedTask"
+                    app:listSize="@{viewmodel.upcomingTaskList.size()}" />
 
-            <include
-                android:id="@+id/layoutOverdueTask"
-                layout="@layout/layout_task_overdue"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/padding_16dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/layoutTodayTask"
-                app:listSize="@{viewmodel.overdueTaskList.size()}" />
+                <include
+                    android:id="@+id/layoutOverdueTask"
+                    layout="@layout/layout_task_overdue"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/layoutUpcomingTask"
+                    app:listSize="@{viewmodel.overdueTaskList.size()}" />
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+                <include
+                    android:id="@+id/layoutNoTask"
+                    layout="@layout/layout_task_empty"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:listSize="@{viewmodel.taskListSize}"
+                    app:viewModel="@{viewmodel}" />
 
-        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-            android:id="@+id/efabAddTask"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|end"
-            android:layout_margin="20sp"
-            android:backgroundTint="@color/dribblePink"
-            android:fontFamily="@font/jost_bold"
-            android:minHeight="1dp"
-            android:text="@string/add_task"
-            android:textColor="@color/white"
-            android:textSize="16sp"
-            app:icon="@android:drawable/ic_input_add"
-            app:iconPadding="0sp"
-            app:iconTint="@color/white"
-            app:rippleColor="@color/colorPrimary" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.core.widget.NestedScrollView>
 
         <include
             android:id="@+id/layoutLoadingTask"
             layout="@layout/layout_task_loading"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:loadingState="@{viewmodel.loadingState}" /> 
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:loadingState="@{viewmodel.loadingState}" />
 
-    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>

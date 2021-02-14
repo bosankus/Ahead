@@ -2,6 +2,7 @@ package tech.androidplay.sonali.todo.ui.fragment
 
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.os.CountDownTimer
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -33,14 +34,20 @@ class SplashFragment : Fragment(R.layout.fragment_splash) {
     }
 
     private fun checkDestination() {
-        if (firebaseAuth.currentUser == null || sharedPreferences.getBoolean(IS_FIRST_TIME, true))
-            goToIntroFragment()
-        else if (firebaseAuth.currentUser != null) goToTaskFragment()
-        else goToAuthFragment()
-    }
-
-    private fun goToIntroFragment() {
-        findNavController().navigate(R.id.action_splashFragment_to_introFragment)
+        val timer = object : CountDownTimer(1000, 1000) {
+            override fun onTick(millisUntilFinished: Long) {}
+            override fun onFinish() {
+                if (firebaseAuth.currentUser == null || sharedPreferences.getBoolean(
+                        IS_FIRST_TIME,
+                        true
+                    )
+                )
+                    goToAuthFragment()
+                else if (firebaseAuth.currentUser != null) goToTaskFragment()
+                else goToAuthFragment()
+            }
+        }
+        timer.start()
     }
 
     private fun goToTaskFragment() {

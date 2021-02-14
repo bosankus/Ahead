@@ -4,6 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
+        <variable
+            name="viewModel"
+            type="tech.androidplay.sonali.todo.viewmodel.TaskViewModel" />
+
         <variable
             name="listSize"
             type="int" />
@@ -13,7 +18,6 @@
         android:id="@+id/clEmptyTask"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/white"
         app:show="@{(listSize==0) ? true: false}">
 
         <ImageView
@@ -23,23 +27,41 @@
             android:src="@drawable/ic_note"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.498"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.351"
             tools:ignore="ContentDescription" />
 
-        <TextView
-            android:id="@+id/tvEmptyTask"
+        <include
+            android:id="@+id/layoutDailyQuote"
+            layout="@layout/layout_daily_quote"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/padding_18dp"
+            app:author="@{viewModel.author}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/imgEmptyTask"
+            app:quote="@{viewModel.quote}" />
+
+        <Button
+            android:id="@+id/btnAddTask"
+            style="?android:attr/borderlessButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="start"
             android:layout_marginTop="@dimen/padding_16dp"
-            android:fontFamily="@font/jost_semi"
+            android:background="@drawable/bg_rounded_btn"
+            android:drawableStart="@android:drawable/ic_input_add"
+            android:fontFamily="@font/jost"
+            android:minHeight="0dp"
             android:text="@string/all_tasks_completed_add_more"
-            android:textColor="@color/grey3"
-            android:textSize="@dimen/text_18sp"
+            android:textColor="@color/white"
+            android:textSize="@dimen/text_16sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imgEmptyTask" />
+            app:layout_constraintTop_toBottomOf="@+id/layoutDailyQuote" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -19,7 +19,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/MaterialTheme"
-        android:windowSoftInputMode="adjustResize|stateHidden"
+        android:windowSoftInputMode="adjustPan|stateHidden"
         tools:ignore="AllowBackup,UnusedAttribute">
 
         <activity android:name=".ui.activity.MainActivity">
@@ -32,7 +32,7 @@
 
         <receiver android:name=".receiver.AlarmReceiver" />
 
-        <service android:name=".service.NotificationService" />
+        <service android:name=".service.TaskStatusUpdateService" />
         <service
             android:name=".service.FirebaseNotificationService"
             android:exported="false">

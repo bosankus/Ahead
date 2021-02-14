@@ -1,6 +1,4 @@
 <resources>
-    <string name="app_name">think Ahead</string>
-    <string name="login_header_txt">Get \nStarted<font color="#E94D88">.</font></string>
     <string name="signup_create_acc_txt">Create account for <font color="#E94D88"><b>thinking Ahead</b></font></string>
     <string name="login_create_acc_txt">Have account? <font color="#E94D88"><b>Get in</b></font></string>
     <string name="think">think.</string>
@@ -8,17 +6,16 @@
     <string name="new_task">New task</string>
     <string name="set_alarm">Set Alarm</string>
     <string name="ring_alarm_for_this_task">Ring alarm for this task</string>
-    <string name="task">Task</string>
+    <string name="task">task</string>
     <string name="task_description">Task Description</string>
     <string name="create_task">Create task</string>
     <string name="email">Email</string>
     <string name="password">Password</string>
     <string name="forgot_password">Forgot Password ?</string>
-    <string name="sign_up">Sign up</string>
     <string name="login">login</string>
-    <string name="today">TODAY</string>
-    <string name="upcoming">UPCOMING TASK</string>
-    <string name="all_tasks_completed_add_more">All tasks Completed. Add more</string>
+    <string name="today">Today</string>
+    <string name="upcoming">Upcoming</string>
+    <string name="all_tasks_completed_add_more">Create new task</string>
     <string name="add_task">Add Task</string>
     <string name="edit">Edit</string>
     <string name="save_task">Save Task</string>
@@ -36,14 +33,34 @@
     <string name="topic_hint">What change you want to see?</string>
     <string name="description_hint">Describe to make us understand</string>
     <string name="feedback_story">We are always <font color="#E94D88">thinking Ahead</font> to make your experience better. Please share with us how you felt while using the app.</string>
-    <string name="suggest_the_developers">Suggest the Developers</string>
-    <string name="past">OVERDUE TASK</string>
+    <string name="suggest_the_developers">Suggest</string>
+    <string name="past">Overdue</string>
     <string name="upload_img_txt">Upload your task image</string>
     <string name="task_title">Task title:</string>
     <string name="task_details">Task Details:</string>
-    <string name="completed_tasks"><b>Completed Tasks</b></string>
-    <string name="get_started">Let\'s create</string>
+    <string name="completed_tasks">Completed Tasks</string>
+    <string name="get_started">Next</string>
     <string name="details">Details</string>
-    <string name="assign_task">Assign Task</string>
+    <string name="assign_task">Assigned</string>
     <string name="username">Username (Email ID)</string>
+    <string name="today_s_quote">Today\'s quote</string>
+    <string name="overdue">Overdue</string>
+    <string name="add_note">Add note</string>
+    <string name="first_name">First name</string>
+    <string name="last_name">Last name</string>
+    <string name="save_details">Save details</string>
+
+    <!--Revised Strings-->
+    <string name="app_name">Ahead</string>
+    <string name="prompt_failed_to_login">Failed to login. Reason: %1$s</string>
+    <string name="login_header_txt"><font color="#444444">Welcome,</font><font color="#9E9E9E">\nSign in to get started</font></string>
+
+    <!--Authentication-->
+    <string name="sign_in">Sign In</string>
+
+    <!--Task Creation-->
+    <string name="task_progress_uploading">Uploading Image…</string>
+    <string name="task_added_failure">Failed to add task</string>
+    <string name="task_added_success">Task added success successfully 👍</string>
+    <string name="task_image_upload_failed">Image uploading failed. Please retry adding the task.</string>
 </resources>

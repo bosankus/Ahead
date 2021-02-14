@@ -15,9 +15,9 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_task_edit.*
+import kotlinx.android.synthetic.main.layout_task_app_bar.view.*
 import kotlinx.coroutines.*
 import tech.androidplay.sonali.todo.R
-import tech.androidplay.sonali.todo.data.viewmodel.EditTaskViewModel
 import tech.androidplay.sonali.todo.utils.*
 import tech.androidplay.sonali.todo.utils.Constants.IS_AFTER
 import tech.androidplay.sonali.todo.utils.Constants.IS_BEFORE
@@ -31,6 +31,7 @@ import tech.androidplay.sonali.todo.utils.UIHelper.showSnack
 import tech.androidplay.sonali.todo.utils.UIHelper.showToast
 import tech.androidplay.sonali.todo.utils.alarmutils.cancelAlarmedNotification
 import tech.androidplay.sonali.todo.utils.alarmutils.startAlarmedNotification
+import tech.androidplay.sonali.todo.viewmodel.EditTaskViewModel
 import javax.inject.Inject
 
 /**
@@ -75,6 +76,11 @@ class TaskEditFragment : Fragment(R.layout.fragment_task_edit) {
     }
 
     private fun setUpScreen() {
+        layoutTaskBar.tvUserFName.text = "Task Details"
+        layoutTaskBar.imgCreate.visibility = View.GONE
+        layoutTaskBar.imgMenu.visibility = View.GONE
+
+
         taskId = arguments?.getString(TASK_DOC_ID)
         taskBody = arguments?.getString(TASK_DOC_BODY)!!
         taskDesc = arguments?.getString(TASK_DOC_DESC)!!
@@ -118,6 +124,22 @@ class TaskEditFragment : Fragment(R.layout.fragment_task_edit) {
                     }. Tap here to change."
                 else tvSelectDate.text = "Alarm won't ring for time which has passed " +
                         "${it.toString().toLocalDateTime()?.beautifyDateTime()}."
+            }
+        })
+    }
+
+
+    private fun fetchTask(taskId: String) {
+        viewModel.getTaskByTaskId(taskId).observe(viewLifecycleOwner, { task ->
+            task?.let {
+                when (it) {
+                    is ResultData.Loading -> {
+                    }
+                    is ResultData.Success -> {
+                    }
+                    is ResultData.Failed -> {
+                    }
+                }
             }
         })
     }

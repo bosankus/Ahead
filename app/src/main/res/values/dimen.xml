@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <dimen name="padding_3dp">3dp</dimen>
     <dimen name="padding_5dp">5dp</dimen>
     <dimen name="padding_8dp">8dp</dimen>
     <dimen name="padding_10dp">10dp</dimen>
@@ -7,6 +8,7 @@
     <dimen name="padding_14dp">14dp</dimen>
     <dimen name="padding_16dp">16dp</dimen>
     <dimen name="padding_18dp">18dp</dimen>
+    <dimen name="padding_20dp">20dp</dimen>
     <dimen name="padding_22dp">22dp</dimen>
     <dimen name="padding_26dp">26dp</dimen>
     <dimen name="padding_48dp">48dp</dimen>
@@ -16,4 +18,7 @@
     <dimen name="text_18sp">18sp</dimen>
     <dimen name="text_22sp">22sp</dimen>
     <dimen name="text_55sp">55sp</dimen>
+
+    <dimen name="viewpager_next_item_visible">26dp</dimen>
+    <dimen name="viewpager_current_item_horizontal_margin">16dp</dimen>
 </resources>

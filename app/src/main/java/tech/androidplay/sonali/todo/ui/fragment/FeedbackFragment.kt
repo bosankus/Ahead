@@ -9,8 +9,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.InternalCoroutinesApi
 import tech.androidplay.sonali.todo.R
-import tech.androidplay.sonali.todo.data.viewmodel.FeedbackViewModel
-import tech.androidplay.sonali.todo.data.viewmodel.TaskViewModel
+import tech.androidplay.sonali.todo.viewmodel.FeedbackViewModel
 import tech.androidplay.sonali.todo.databinding.FragmentFeedbackBinding
 import tech.androidplay.sonali.todo.utils.ResultData
 import tech.androidplay.sonali.todo.utils.UIHelper.hideKeyboard

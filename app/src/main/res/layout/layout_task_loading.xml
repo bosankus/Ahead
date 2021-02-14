@@ -21,15 +21,13 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="center"
-            android:background="@color/white"
             android:orientation="vertical"
             app:shimmer_auto_start="true">
 
             <include
                 layout="@layout/layout_shimmer_fragment_task"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="130dp" />
+                android:layout_height="wrap_content" />
         </com.facebook.shimmer.ShimmerFrameLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

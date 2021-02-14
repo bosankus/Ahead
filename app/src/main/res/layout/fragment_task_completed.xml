@@ -6,7 +6,7 @@
 
         <variable
             name="viewmodel"
-            type="tech.androidplay.sonali.todo.data.viewmodel.TaskViewModel" />
+            type="tech.androidplay.sonali.todo.viewmodel.TaskViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -17,8 +17,7 @@
             android:id="@+id/layoutTaskBar"
             layout="@layout/layout_task_app_bar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/padding_26dp"
+            android:layout_height="60dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -34,10 +33,9 @@
 
         <include
             android:id="@+id/layoutCompletedTask"
-            layout="@layout/layout_task_today"
+            layout="@layout/layout_task_upcoming"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/padding_16dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/layoutTaskBar"
