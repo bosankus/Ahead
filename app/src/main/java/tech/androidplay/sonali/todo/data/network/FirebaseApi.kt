@@ -47,5 +47,5 @@ interface FirebaseApi {
             ResultData<String>
 
     // For updating new token
-    suspend fun sendTokenToSever(token: String?)
+    /*suspend fun sendTokenToSever(token: String?)*/
 }

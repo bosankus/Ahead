@@ -5,16 +5,16 @@ import android.content.Context
 import android.content.Intent
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
-import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import tech.androidplay.sonali.todo.R
 import tech.androidplay.sonali.todo.data.repository.TodoRepository
-import tech.androidplay.sonali.todo.ui.activity.MainActivity
 import tech.androidplay.sonali.todo.utils.Notifier.dismissNotification
 import tech.androidplay.sonali.todo.utils.Notifier.show
 import tech.androidplay.sonali.todo.utils.ResultData
 import tech.androidplay.sonali.todo.utils.UIHelper.getCurrentTimestamp
+import tech.androidplay.sonali.todo.view.activity.MainActivity
 import tech.androidplay.sonali.todo.workers.TaskImageUploadWorker.Companion.UPLOADED_IMAGE_URI
+import java.util.*
 
 /**
  * Created by Androidplay
@@ -35,7 +35,7 @@ class TaskCreationWorker(context: Context, workerParameters: WorkerParameters) :
         val taskBody = checkNotNull(inputData.getString(TASK_BODY))
         val taskDesc = checkNotNull(inputData.getString(TASK_DESC))
         val taskDate = checkNotNull(inputData.getString(TASK_DATE))
-        val taskAssignee = inputData.getStringArray(TASK_ASSIGNEE) as List<*>?
+        val taskAssigneeList = inputData.getString(TASK_ASSIGNEE)
         val imageUri = inputData.getString(UPLOADED_IMAGE_URI)
 
         val taskMap = hashMapOf(
@@ -46,7 +46,7 @@ class TaskCreationWorker(context: Context, workerParameters: WorkerParameters) :
             "todoCreationTimeStamp" to getCurrentTimestamp(),
             "isCompleted" to false,
             "taskImage" to imageUri,
-            "assignee" to arrayListOf(taskAssignee)
+            "assignee" to taskAssigneeList
         )
 
         // TODO: add deep link, deal detail fragment, then take user to there from notification.
@@ -54,7 +54,8 @@ class TaskCreationWorker(context: Context, workerParameters: WorkerParameters) :
             .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
 
         when (repository.createTask(taskMap)) {
-            is ResultData.Loading -> {/*Do Nothing*/}
+            is ResultData.Loading -> {/*Do Nothing*/
+            }
             is ResultData.Success -> {
                 showNotification(
                     taskBody, context.getString(R.string.task_added_success), intent
@@ -62,9 +63,7 @@ class TaskCreationWorker(context: Context, workerParameters: WorkerParameters) :
                 return Result.success()
             }
             is ResultData.Failed -> {
-                showNotification(
-                    taskBody, context.getString(R.string.task_added_failure), intent
-                )
+                showNotification(taskBody, context.getString(R.string.task_added_failure), intent)
                 return Result.failure()
             }
         }

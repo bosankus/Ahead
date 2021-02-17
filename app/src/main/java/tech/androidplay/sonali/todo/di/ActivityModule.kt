@@ -2,7 +2,6 @@ package tech.androidplay.sonali.todo.di
 
 import android.app.AlertDialog
 import android.content.Context
-import com.google.firebase.ktx.Firebase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -10,7 +9,7 @@ import dagger.hilt.android.components.ActivityComponent
 import dagger.hilt.android.qualifiers.ActivityContext
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.InternalCoroutinesApi
-import tech.androidplay.sonali.todo.ui.adapter.TodoAdapter
+import tech.androidplay.sonali.todo.view.adapter.TodoAdapter
 import tech.androidplay.sonali.todo.utils.DateTimePicker
 import java.util.*
 

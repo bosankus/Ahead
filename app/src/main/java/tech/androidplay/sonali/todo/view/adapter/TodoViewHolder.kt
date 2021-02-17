@@ -1,4 +1,4 @@
-package tech.androidplay.sonali.todo.ui.adapter
+package tech.androidplay.sonali.todo.view.adapter
 
 import androidx.core.os.bundleOf
 import androidx.navigation.findNavController

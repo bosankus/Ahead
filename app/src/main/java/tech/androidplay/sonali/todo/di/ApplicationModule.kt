@@ -20,7 +20,7 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import tech.androidplay.sonali.todo.R
 import tech.androidplay.sonali.todo.TodoApplication
-import tech.androidplay.sonali.todo.ui.activity.MainActivity
+import tech.androidplay.sonali.todo.view.activity.MainActivity
 import tech.androidplay.sonali.todo.utils.CacheManager
 import tech.androidplay.sonali.todo.utils.Constants
 import tech.androidplay.sonali.todo.utils.Constants.ACTION_SHOW_TASK_FRAGMENT

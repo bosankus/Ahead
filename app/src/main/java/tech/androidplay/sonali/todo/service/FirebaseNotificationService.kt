@@ -1,5 +1,6 @@
 package tech.androidplay.sonali.todo.service
 
+import android.annotation.SuppressLint
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.graphics.Color
@@ -27,6 +28,7 @@ import javax.inject.Inject
  * Email: ankush@androidplay.in
  */
 
+@SuppressLint("MissingFirebaseInstanceTokenRefresh")
 @ExperimentalCoroutinesApi
 @AndroidEntryPoint
 class FirebaseNotificationService : FirebaseMessagingService() {
@@ -40,7 +42,7 @@ class FirebaseNotificationService : FirebaseMessagingService() {
     @Inject
     lateinit var baseNotificationBuilder: NotificationCompat.Builder
 
-    private val scope = CoroutineScope(Dispatchers.IO + SupervisorJob())
+    /*private val scope = CoroutineScope(Dispatchers.IO + SupervisorJob())*/
 
     override fun onMessageReceived(message: RemoteMessage) {
         super.onMessageReceived(message)
@@ -52,16 +54,6 @@ class FirebaseNotificationService : FirebaseMessagingService() {
             logMessage(docId)
             sendNotification(title, body, docId)
         }
-    }
-
-    override fun onNewToken(token: String) {
-        super.onNewToken(token)
-
-        sendNewTokenToServer(token)
-    }
-
-    private fun sendNewTokenToServer(token: String) {
-        scope.launch { repository.sendTokenToSever(token) }
     }
 
     private fun sendNotification(title: String, body: String, taskId: String) {

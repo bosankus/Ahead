@@ -68,7 +68,6 @@ class TaskViewModel @ViewModelInject constructor(
     init {
         _loadingState.value = true
         getUserFirstName()
-        updateDeviceToken()
     }
 
     private fun getUserFirstName() {
@@ -93,6 +92,7 @@ class TaskViewModel @ViewModelInject constructor(
                     _overdueTaskList.value =
                         allTodoList.filter { it.todoDate.compareWithToday() == IS_BEFORE && !it.isCompleted }
                             .sortedByDescending { it.todoDate }
+                    _loadingState.value = false
                 }
             } catch (e: Exception) {
                 logMessage("TaskViewModel-getAllTasks: ${e.message}")
@@ -124,8 +124,6 @@ class TaskViewModel @ViewModelInject constructor(
     }
 
     fun logoutUser() = viewModelScope.launch { taskSource.signOut() }
-
-    private fun updateDeviceToken() = viewModelScope.launch { taskSource.sendTokenToSever("") }
 
 }
 

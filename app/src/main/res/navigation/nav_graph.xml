@@ -16,7 +16,7 @@
 
     <fragment
         android:id="@+id/authFragment"
-        android:name="tech.androidplay.sonali.todo.ui.fragment.AuthFragment"
+        android:name="tech.androidplay.sonali.todo.view.fragment.AuthFragment"
         android:label="AuthFragment">
         <action
             android:id="@+id/action_authFragment_to_taskFragment"
@@ -28,7 +28,7 @@
     </fragment>
     <fragment
         android:id="@+id/taskFragment"
-        android:name="tech.androidplay.sonali.todo.ui.fragment.TaskFragment"
+        android:name="tech.androidplay.sonali.todo.view.fragment.TaskFragment"
         android:label="TaskFragment">
         <action
             android:id="@+id/action_taskFragment_to_taskEditFragment"
@@ -68,7 +68,7 @@
     </fragment>
     <fragment
         android:id="@+id/splashFragment"
-        android:name="tech.androidplay.sonali.todo.ui.fragment.SplashFragment"
+        android:name="tech.androidplay.sonali.todo.view.fragment.SplashFragment"
         android:label="SplashFragment">
         <action
             android:id="@+id/action_splashFragment_to_authFragment"
@@ -85,7 +85,7 @@
     </fragment>
     <fragment
         android:id="@+id/taskEditFragment"
-        android:name="tech.androidplay.sonali.todo.ui.fragment.TaskEditFragment"
+        android:name="tech.androidplay.sonali.todo.view.fragment.TaskEditFragment"
         android:label="TaskEditFragment">
         <action
             android:id="@+id/action_taskEditFragment_to_taskFragment"
@@ -106,7 +106,7 @@
     </fragment>
     <fragment
         android:id="@+id/taskCreateFragment"
-        android:name="tech.androidplay.sonali.todo.ui.fragment.TaskCreateFragment"
+        android:name="tech.androidplay.sonali.todo.view.fragment.TaskCreateFragment"
         tools:layout="TaskCreateFragment">
         <action
             android:id="@+id/action_taskCreateFragment_to_taskFragment"
@@ -117,7 +117,7 @@
     </fragment>
     <fragment
         android:id="@+id/feedbackFragment"
-        android:name="tech.androidplay.sonali.todo.ui.fragment.FeedbackFragment"
+        android:name="tech.androidplay.sonali.todo.view.fragment.FeedbackFragment"
         android:label="FeedbackFragment" >
         <action
             android:id="@+id/action_feedbackFragment_to_taskFragment"
@@ -129,7 +129,7 @@
     </fragment>
     <fragment
         android:id="@+id/taskCompletedFragment"
-        android:name="tech.androidplay.sonali.todo.ui.fragment.TaskCompletedFragment"
+        android:name="tech.androidplay.sonali.todo.view.fragment.TaskCompletedFragment"
         android:label="TaskCompletedFragment" >
         <action
             android:id="@+id/action_taskCompletedFragment_to_taskFragment"
