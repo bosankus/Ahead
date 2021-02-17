@@ -1,4 +1,4 @@
-package tech.androidplay.sonali.todo.ui.fragment
+package tech.androidplay.sonali.todo.view.fragment
 
 import android.annotation.SuppressLint
 import android.app.AlertDialog
@@ -17,7 +17,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.InternalCoroutinesApi
 import tech.androidplay.sonali.todo.R
 import tech.androidplay.sonali.todo.databinding.FragmentTaskBinding
-import tech.androidplay.sonali.todo.ui.adapter.TodoAdapter
+import tech.androidplay.sonali.todo.view.adapter.TodoAdapter
 import tech.androidplay.sonali.todo.utils.Constants.IS_FIRST_TIME
 import tech.androidplay.sonali.todo.utils.UIHelper.logMessage
 import tech.androidplay.sonali.todo.utils.UIHelper.showSnack

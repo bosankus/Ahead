@@ -7,6 +7,7 @@ import androidx.lifecycle.liveData
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.IdpResponse
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import kotlinx.coroutines.tasks.await
 import tech.androidplay.sonali.todo.R
 
@@ -26,16 +27,19 @@ class AuthManager(
             return auth.currentUser != null
         }
 
+    val userDetails: FirebaseUser?
+        get() {
+            return if (isUserLoggedIn) auth.currentUser else null
+        }
+
     val userEmail: String?
         get() {
-            return if (isUserLoggedIn) auth.currentUser?.email
-            else null
+            return if (isUserLoggedIn) auth.currentUser?.email else null
         }
 
     val userId: String?
         get() {
-            return if (isUserLoggedIn) auth.currentUser?.uid
-            else null
+            return if (isUserLoggedIn) auth.currentUser?.uid else null
         }
 
     private val providers = arrayListOf(AuthUI.IdpConfig.EmailBuilder().build())

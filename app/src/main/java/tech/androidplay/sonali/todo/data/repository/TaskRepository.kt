@@ -159,19 +159,9 @@ class TaskRepository @Inject constructor(
         }
     }
 
-    suspend fun sendTokenToSever(token: String?) {
-        val generatedToken = token ?: messaging.token.await()
-        val tokenMap = hashMapOf("token" to generatedToken)
-        userDetails?.let { userListRef.document(it.uid).set(tokenMap, SetOptions.merge()) }
-    }
-
-    suspend fun getUserFirstName(): String? {
-        val userId = userDetails?.uid
-        userId?.let {
-            val user = userListRef.document(it).get().await()
-            return user["fname"] as String
-        }
-        return "User"
+    fun getUserFirstName(): String {
+        val name = userDetails?.displayName
+        return name ?: ""
     }
 
     fun signOut() = firebaseAuth.signOut()

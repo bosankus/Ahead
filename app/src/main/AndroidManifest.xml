@@ -22,7 +22,7 @@
         android:windowSoftInputMode="adjustPan|stateHidden"
         tools:ignore="AllowBackup,UnusedAttribute">
 
-        <activity android:name=".ui.activity.MainActivity">
+        <activity android:name=".view.activity.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

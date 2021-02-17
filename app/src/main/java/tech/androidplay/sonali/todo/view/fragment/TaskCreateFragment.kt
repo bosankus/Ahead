@@ -1,4 +1,4 @@
-package tech.androidplay.sonali.todo.ui.fragment
+package tech.androidplay.sonali.todo.view.fragment
 
 import android.annotation.SuppressLint
 import android.app.Activity
@@ -20,13 +20,9 @@ import kotlinx.coroutines.InternalCoroutinesApi
 import tech.androidplay.sonali.todo.R
 import tech.androidplay.sonali.todo.databinding.FragmentTaskCreateBinding
 import tech.androidplay.sonali.todo.utils.*
-import tech.androidplay.sonali.todo.utils.Constants.IS_AFTER
 import tech.androidplay.sonali.todo.utils.UIHelper.hideKeyboard
 import tech.androidplay.sonali.todo.utils.UIHelper.isEmailValid
 import tech.androidplay.sonali.todo.utils.UIHelper.setSvgTint
-import tech.androidplay.sonali.todo.utils.UIHelper.showSnack
-import tech.androidplay.sonali.todo.utils.UIHelper.showToast
-import tech.androidplay.sonali.todo.utils.alarmutils.startAlarmedNotification
 import tech.androidplay.sonali.todo.viewmodel.TaskCreateViewModel
 import tech.androidplay.sonali.todo.workers.TaskCreationWorker
 import tech.androidplay.sonali.todo.workers.TaskCreationWorker.Companion.TASK_ASSIGNEE
@@ -54,7 +50,7 @@ class TaskCreateFragment : Fragment(R.layout.fragment_task_create) {
 
     @Inject
     lateinit var dateTimePicker: DateTimePicker
-
+    lateinit var authManager: AuthManager
     private val viewModel: TaskCreateViewModel by viewModels()
     private var taskTimeStamp: String? = null
 
@@ -63,31 +59,26 @@ class TaskCreateFragment : Fragment(R.layout.fragment_task_create) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        authManager = AuthManager(requireActivity())
         setUpScreen()
         setListeners()
     }
 
     private fun setUpScreen() {
         binding.layoutTaskInput.tvTaskInput.requestFocus()
-
     }
 
     private fun setListeners() {
+        binding.layoutSetAlarm.tvSelectDate.setOnClickListener {
+            dateTimePicker.openDateTimePicker(requireContext())
+        }
+
         dateTimePicker.epochFormat.observe(viewLifecycleOwner, {
             taskTimeStamp = it.toString()
             binding.layoutSetAlarm.tvSelectDate.text =
                 taskTimeStamp?.toLocalDateTime()?.beautifyDateTime()
         })
 
-        binding.btCreateTask.setOnClickListener {
-            requireActivity().hideKeyboard()
-            if ((binding.layoutTaskInput.tvTaskInput.text.length) <= 0)
-                showSnack(requireView(), "Fields can not be empty!")
-            else if (taskTimeStamp.isNullOrEmpty())
-                showSnack(requireView(), "Please select notification time")
-            else if (!isNetworkAvailable()) showSnack(requireView(), "No Internet!")
-            else createTask()
-        }
 
         binding.layoutCreateTaskFeatures.addImage.setOnClickListener {
             selectImage()
@@ -96,16 +87,21 @@ class TaskCreateFragment : Fragment(R.layout.fragment_task_create) {
         }
 
         binding.layoutTaskImage.btnImgPhotoRemove.setOnClickListener {
-            binding.layoutTaskImage.imgPhoto.setImageDrawable(null)
-            binding.layoutTaskImage.clImagePlaceHolder.visibility = View.GONE
-            isImageAdded = false
+            binding.apply {
+                layoutTaskImage.imgPhoto.setImageDrawable(null)
+                layoutTaskImage.clImagePlaceHolder.visibility = View.GONE
+                layoutCreateTaskFeatures.addImage.setSvgTint(R.color.grey3)
+                isImageAdded = false
+            }
         }
 
         binding.layoutCreateTaskFeatures.addUser.setOnClickListener {
             if (isAssigneeShowing)
                 showAssigneeOption(binding.layoutCreateTaskFeatures.addUser, false)
-            else if (!isAssigneeShowing)
+            else if (!isAssigneeShowing) {
                 showAssigneeOption(binding.layoutCreateTaskFeatures.addUser, true)
+                assigneeId = null
+            }
         }
 
         binding.layoutAssigneeUser.etAssigneeUsername.addTextChangedListener(object : TextWatcher {
@@ -120,21 +116,29 @@ class TaskCreateFragment : Fragment(R.layout.fragment_task_create) {
             }
         })
 
-        binding.layoutSetAlarm.tvSelectDate.setOnClickListener {
-            dateTimePicker.openDateTimePicker(
-                requireContext()
-            )
+        binding.btCreateTask.setOnClickListener {
+            requireActivity().hideKeyboard()
+            if ((binding.layoutTaskInput.tvTaskInput.text.length) <= 0)
+                UIHelper.showSnack(requireView(), "Fields can not be empty!")
+            else if (taskTimeStamp.isNullOrEmpty())
+                UIHelper.showSnack(requireView(), "Please select notification time")
+            else if (!isNetworkAvailable()) UIHelper.showSnack(requireView(), "No Internet!")
+            else createTask()
         }
     }
 
     private fun showAssigneeOption(icon: ImageView, show: Boolean) {
         isAssigneeShowing = if (show) {
-            icon.setSvgTint(R.color.dribblePink)
-            binding.layoutAssigneeUser.clAssignUser.visibility = View.VISIBLE
+            binding.apply {
+                layoutAssigneeUser.clAssignUser.visibility = View.VISIBLE
+                icon.setSvgTint(R.color.dribblePink)
+            }
             true
         } else {
-            icon.setSvgTint(R.color.grey3)
-            binding.layoutAssigneeUser.clAssignUser.visibility = View.GONE
+            binding.apply {
+                layoutAssigneeUser.clAssignUser.visibility = View.GONE
+                icon.setSvgTint(R.color.grey3)
+            }
             false
         }
     }
@@ -172,24 +176,7 @@ class TaskCreateFragment : Fragment(R.layout.fragment_task_create) {
         val todoBody = binding.layoutTaskInput.tvTaskInput.text.toString().trim()
         val todoDesc = binding.layoutTaskInput.tvTaskDescInput.text.toString().trim()
         val todoDate = taskTimeStamp
-        val assignee = assigneeId
-        /*lifecycleScope.launch {
-            val compressedImage = taskImage?.compressImage(requireContext())
-            withContext(Dispatchers.Main) {
-                viewModel.createTask(todoBody, todoDesc, todoDate, assignee, compressedImage)
-                    .observe(viewLifecycleOwner, {
-                        it?.let {
-                            when (it) {
-                                is ResultData.Loading -> handleLoading()
-                                is ResultData.Success -> handleSuccess(
-                                    it.data!!, todoBody, todoDesc
-                                )
-                                is ResultData.Failed -> handleFailure()
-                            }
-                        }
-                    })
-            }
-        }*/
+        val assigneeList = assigneeId
 
         val constraints = Constraints.Builder()
             .setRequiredNetworkType(NetworkType.CONNECTED)
@@ -199,7 +186,7 @@ class TaskCreateFragment : Fragment(R.layout.fragment_task_create) {
             TASK_BODY to todoBody,
             TASK_DESC to todoDesc,
             TASK_DATE to todoDate,
-            TASK_ASSIGNEE to assignee,
+            TASK_ASSIGNEE to assigneeList,
             TASK_IMAGE_URI to taskImage.toString()
         )
 
@@ -224,34 +211,14 @@ class TaskCreateFragment : Fragment(R.layout.fragment_task_create) {
 
     }
 
-    private fun handleLoading() {
-        binding.clCreateTask.visibility = View.INVISIBLE
-        binding.lottiCreateTaskLoading.visibility = View.VISIBLE
-        binding.lottiCreateTaskLoading.playAnimation()
-    }
-
-    private fun handleSuccess(taskId: String, todoBody: String, todoDesc: String) {
-        taskImage = null
-        if (taskTimeStamp?.compareWithToday() == IS_AFTER)
-            taskTimeStamp?.let {
-                startAlarmedNotification(taskId, todoBody, todoDesc, it.toLong(), alarmManager)
-            }
-        binding.lottiCreateTaskLoading.cancelAnimation()
-        findNavController().navigate(R.id.action_taskCreateFragment_to_taskFragment)
-    }
-
-    private fun handleFailure() {
-        binding.lottiCreateTaskLoading.cancelAnimation()
-        showToast(requireContext(), "Something went wrong")
-    }
-
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (resultCode == Activity.RESULT_OK && data != null) {
             taskImage = data.data
             isImageAdded = true
-            binding.layoutTaskImage.apply {
-                clImagePlaceHolder.visibility = View.VISIBLE
-                imgPhoto.loadImageCircleCropped(taskImage.toString())
+            binding.apply {
+                layoutCreateTaskFeatures.addImage.setSvgTint(R.color.dribblePink)
+                layoutTaskImage.clImagePlaceHolder.visibility = View.VISIBLE
+                layoutTaskImage.imgPhoto.loadImageCircleCropped(taskImage.toString())
             }
         }
     }

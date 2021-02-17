@@ -1,4 +1,4 @@
-package tech.androidplay.sonali.todo.ui.fragment
+package tech.androidplay.sonali.todo.view.fragment
 
 import android.annotation.SuppressLint
 import android.app.Activity

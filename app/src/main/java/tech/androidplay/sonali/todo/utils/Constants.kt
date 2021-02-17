@@ -13,14 +13,13 @@ object Constants {
     // For default log tag
     const val PLAY_STORE_LINK = "https://androidplay.in/29hQ"
     const val GLOBAL_TAG = "Androidplay"
-    const val DATABASE_NAME = "think_db"
+    /*const val DATABASE_NAME = "think_db"*/
 
     const val QUOTE_API = "https://quotes-inspirational-quotes-motivational-quotes.p.rapidapi.com/"
 
     // For firestore collection - Production
     const val TASK_COLLECTION = "Tasks"
     const val USER_COLLECTION = "Users"
-    const val ASSIGNEE_COLLECTION = "assignee"
     const val FEEDBACK_COLLECTION = "Feedbacks"
 
     const val TASK_ASSIGNED = 1
@@ -63,26 +62,9 @@ object Constants {
     const val NOTIFICATION_CHANNEL_NAME = "think"
     const val NOTIFICATION_ID = "NOTIFICATION_ID"
 
-    // For notification group
-    /*const val NOTIFICATION_GROUP_ID = "111"
-    const val NOTIFICATION_GROUP_NAME = "syncing"*/
-
-    // For forground service
-    /*const val START_SYNC_SERVICE = "START_SYNC_SERVICE"
-    const val STOP_SYNC_SERVICE = "STOP_SYNC_SERVICE"*/
-
-    // For storage permissions
-    /*const val WRITE_EXTERNAL_STORAGE = Manifest.permission.WRITE_EXTERNAL_STORAGE
-    const val READ_EXTERNAL_STORAGE = Manifest.permission.READ_EXTERNAL_STORAGE
-    const val STORAGE_PERMISSION_REQUEST_RATIONAL =
-        "You need to accept location permissions to use this app"
-    const val STORAGE_PERMISSION_REQUEST_CODE = 101*/
-
     // For Android version check
     val DEVICE_ANDROID_VERSION = Build.VERSION.SDK_INT
     const val ANDROID_OREO = Build.VERSION_CODES.O
     /*const val ANDROID_10 = Build.VERSION_CODES.Q*/
-
-    const val ARG_OBJECT = "objects"
 
 }

@@ -1,4 +1,4 @@
-package tech.androidplay.sonali.todo.ui.activity
+package tech.androidplay.sonali.todo.view.activity
 
 import android.annotation.SuppressLint
 import android.content.Intent
@@ -6,6 +6,7 @@ import android.content.pm.ActivityInfo
 import android.graphics.Color
 import android.os.Bundle
 import android.view.View
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
@@ -17,6 +18,7 @@ import tech.androidplay.sonali.todo.utils.Constants.ACTION_SHOW_TASK_FRAGMENT
 import tech.androidplay.sonali.todo.utils.Constants.ANDROID_OREO
 import tech.androidplay.sonali.todo.utils.Constants.DEVICE_ANDROID_VERSION
 import tech.androidplay.sonali.todo.utils.UIHelper.showSnack
+import tech.androidplay.sonali.todo.viewmodel.AuthViewModel
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -25,6 +27,7 @@ class MainActivity : AppCompatActivity() {
     @Inject
     lateinit var cache: CacheManager
     private lateinit var authManager: AuthManager
+    private val viewModel: AuthViewModel by viewModels()
 
     @SuppressLint("SimpleDateFormat")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -67,6 +70,8 @@ class MainActivity : AppCompatActivity() {
 
         authManager.handleAuth(requestCode, resultCode, data) { isSuccessful, error ->
             if (isSuccessful) {
+                val userDetails = authManager.userDetails
+                userDetails?.let { viewModel.saveUserData(it) }
                 navHostFragment.findNavController().navigate(R.id.action_global_taskFragment)
             } else showSnack(
                 findViewById(R.id.activityMain), getString(

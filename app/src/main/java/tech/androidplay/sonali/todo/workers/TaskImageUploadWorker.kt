@@ -11,7 +11,7 @@ import androidx.work.WorkerParameters
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import tech.androidplay.sonali.todo.R
 import tech.androidplay.sonali.todo.data.repository.TodoRepository
-import tech.androidplay.sonali.todo.ui.activity.MainActivity
+import tech.androidplay.sonali.todo.view.activity.MainActivity
 import tech.androidplay.sonali.todo.utils.Notifier.dismissNotification
 import tech.androidplay.sonali.todo.utils.Notifier.progressable
 import tech.androidplay.sonali.todo.utils.Notifier.show

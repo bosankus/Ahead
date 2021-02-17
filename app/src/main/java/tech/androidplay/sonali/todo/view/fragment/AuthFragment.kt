@@ -1,4 +1,4 @@
-package tech.androidplay.sonali.todo.ui.fragment
+package tech.androidplay.sonali.todo.view.fragment
 
 import android.os.Bundle
 import android.view.View

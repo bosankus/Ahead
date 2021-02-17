@@ -52,15 +52,17 @@
 
     <!--Revised Strings-->
     <string name="app_name">Ahead</string>
-    <string name="prompt_failed_to_login">Failed to login. Reason: %1$s</string>
-    <string name="login_header_txt"><font color="#444444">Welcome,</font><font color="#9E9E9E">\nSign in to get started</font></string>
 
     <!--Authentication-->
+    <string name="login_header_txt"><font color="#444444">Welcome,</font><font color="#9E9E9E">\nSign in to get started</font></string>
     <string name="sign_in">Sign In</string>
+    <string name="prompt_failed_to_login">Failed to login. Reason: %1$s</string>
 
     <!--Task Creation-->
     <string name="task_progress_uploading">Uploading Image…</string>
     <string name="task_added_failure">Failed to add task</string>
     <string name="task_added_success">Task added success successfully 👍</string>
     <string name="task_image_upload_failed">Image uploading failed. Please retry adding the task.</string>
+    <string name="create_task_title_hint">Task Title</string>
+    <string name="create_task_details_hint">Add task details</string>
 </resources>

@@ -1,4 +1,4 @@
-package tech.androidplay.sonali.todo.ui.fragment
+package tech.androidplay.sonali.todo.view.fragment
 
 import android.annotation.SuppressLint
 import android.os.Bundle
@@ -7,14 +7,13 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_task_completed.*
-import kotlinx.android.synthetic.main.layout_task_app_bar.*
 import kotlinx.android.synthetic.main.layout_task_app_bar.view.*
 import kotlinx.android.synthetic.main.layout_task_empty.view.*
 import kotlinx.android.synthetic.main.layout_task_upcoming.view.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.InternalCoroutinesApi
 import tech.androidplay.sonali.todo.R
-import tech.androidplay.sonali.todo.ui.adapter.TodoAdapter
+import tech.androidplay.sonali.todo.view.adapter.TodoAdapter
 import tech.androidplay.sonali.todo.viewmodel.TaskViewModel
 import javax.inject.Inject
 

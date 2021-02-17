@@ -125,10 +125,6 @@ class TodoRepository : FirebaseApi {
             ResultData.Failed(e.message)
         }
 
-    override suspend fun sendTokenToSever(token: String?) {
-        // TODO: Implement sending token to server
-    }
-
     override suspend fun uploadImage(uri: Uri, docRefId: String, imgPathRef: StorageReference?):
             ResultData<String> = try {
         val pathRef = (imgPathRef ?: storage.child("${userDetails?.email}/$docRefId"))
