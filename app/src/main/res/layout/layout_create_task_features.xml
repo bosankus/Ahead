@@ -35,6 +35,7 @@
         android:layout_height="35dp"
         android:background="@drawable/bg_icon_ripple"
         android:padding="@dimen/padding_8dp"
+        android:visibility="gone"
         android:src="@drawable/ic_date"
         app:tint="@color/grey3"
         tools:ignore="ContentDescription" />
@@ -43,7 +44,6 @@
         android:id="@+id/addImage"
         android:layout_width="35dp"
         android:layout_height="35dp"
-        android:layout_marginStart="@dimen/padding_8dp"
         android:background="@drawable/bg_icon_ripple"
         android:padding="@dimen/padding_8dp"
         android:src="@drawable/ic_attach"

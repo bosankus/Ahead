@@ -152,22 +152,14 @@ class TaskCreateFragment : Fragment(R.layout.fragment_task_create) {
         viewModel.checkAssigneeAvailability(email).observe(viewLifecycleOwner, { result ->
             result?.let {
                 when (it) {
-                    is ResultData.Loading -> binding.layoutAssigneeUser.lottieAvailabilityLoading.visibility =
-                        View.VISIBLE
+                    is ResultData.Loading -> binding.layoutAssigneeUser.tvAssigneeAvailability.text =
+                        "Checking..."
                     is ResultData.Success -> {
-                        binding.layoutAssigneeUser.apply {
-                            lottieAvailabilityLoading.visibility = View.INVISIBLE
-                            tvAssigneeAvailability.visibility = View.VISIBLE
-                            tvAssigneeAvailability.text = "User is available"
-                        }
+                        binding.layoutAssigneeUser.tvAssigneeAvailability.text = "User is available"
                         assigneeId = it.data
                     }
                     is ResultData.Failed -> {
-                        binding.layoutAssigneeUser.apply {
-                            lottieAvailabilityLoading.visibility = View.INVISIBLE
-                            tvAssigneeAvailability.visibility = View.VISIBLE
-                            tvAssigneeAvailability.text = "No user found"
-                        }
+                        binding.layoutAssigneeUser.tvAssigneeAvailability.text = "No user found!"
                         assigneeId = null
                     }
                 }
@@ -185,14 +177,15 @@ class TaskCreateFragment : Fragment(R.layout.fragment_task_create) {
 
         if (taskImage == null) {
             viewModel.createTask(todoBody, todoDesc, todoDate, assigneeList)
-                .observe(viewLifecycleOwner, { when(it) {
-                    is ResultData.Loading -> showSnack(requireView(), "Creating...")
-                    is ResultData.Success -> {
-                        showSnack(requireView(), "Task Created")
-                        findNavController().navigateUp()
+                .observe(viewLifecycleOwner, {
+                    when (it) {
+                        is ResultData.Loading -> showSnack(requireView(), "Creating...")
+                        is ResultData.Success -> {
+                            showSnack(requireView(), "Task Created")
+                            findNavController().navigateUp()
+                        }
+                        is ResultData.Failed -> showSnack(requireView(), "Something went wrong")
                     }
-                    is ResultData.Failed -> showSnack(requireView(), "Something went wrong")
-                }
                 })
         } else {
 
