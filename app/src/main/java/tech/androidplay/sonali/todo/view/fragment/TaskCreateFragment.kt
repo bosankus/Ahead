@@ -23,6 +23,7 @@ import tech.androidplay.sonali.todo.utils.*
 import tech.androidplay.sonali.todo.utils.UIHelper.hideKeyboard
 import tech.androidplay.sonali.todo.utils.UIHelper.isEmailValid
 import tech.androidplay.sonali.todo.utils.UIHelper.setSvgTint
+import tech.androidplay.sonali.todo.utils.UIHelper.showSnack
 import tech.androidplay.sonali.todo.viewmodel.TaskCreateViewModel
 import tech.androidplay.sonali.todo.workers.TaskCreationWorker
 import tech.androidplay.sonali.todo.workers.TaskCreationWorker.Companion.TASK_ASSIGNEE
@@ -54,8 +55,11 @@ class TaskCreateFragment : Fragment(R.layout.fragment_task_create) {
     private val viewModel: TaskCreateViewModel by viewModels()
     private var taskTimeStamp: String? = null
 
-    private var isAssigneeShowing = false
-    private var isImageAdded = false
+    private var isAssigneeShowing: Boolean = false
+    private var isImageAdded: Boolean = false
+
+    var taskImage: Uri? = null
+    var assigneeId: String? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -119,10 +123,10 @@ class TaskCreateFragment : Fragment(R.layout.fragment_task_create) {
         binding.btCreateTask.setOnClickListener {
             requireActivity().hideKeyboard()
             if ((binding.layoutTaskInput.tvTaskInput.text.length) <= 0)
-                UIHelper.showSnack(requireView(), "Fields can not be empty!")
+                showSnack(requireView(), "Fields can not be empty!")
             else if (taskTimeStamp.isNullOrEmpty())
-                UIHelper.showSnack(requireView(), "Please select notification time")
-            else if (!isNetworkAvailable()) UIHelper.showSnack(requireView(), "No Internet!")
+                showSnack(requireView(), "Please select notification time")
+            else if (!isNetworkAvailable()) showSnack(requireView(), "No Internet!")
             else createTask()
         }
     }
@@ -173,42 +177,56 @@ class TaskCreateFragment : Fragment(R.layout.fragment_task_create) {
 
 
     private fun createTask() {
+        requireActivity().hideKeyboard()
         val todoBody = binding.layoutTaskInput.tvTaskInput.text.toString().trim()
         val todoDesc = binding.layoutTaskInput.tvTaskDescInput.text.toString().trim()
         val todoDate = taskTimeStamp
-        val assigneeList = assigneeId
+        val assigneeList = arrayOf(assigneeId)
 
-        val constraints = Constraints.Builder()
-            .setRequiredNetworkType(NetworkType.CONNECTED)
-            .build()
+        if (taskImage == null) {
+            viewModel.createTask(todoBody, todoDesc, todoDate, assigneeList)
+                .observe(viewLifecycleOwner, { when(it) {
+                    is ResultData.Loading -> showSnack(requireView(), "Creating...")
+                    is ResultData.Success -> {
+                        showSnack(requireView(), "Task Created")
+                        findNavController().navigateUp()
+                    }
+                    is ResultData.Failed -> showSnack(requireView(), "Something went wrong")
+                }
+                })
+        } else {
 
-        val inputData = workDataOf(
-            TASK_BODY to todoBody,
-            TASK_DESC to todoDesc,
-            TASK_DATE to todoDate,
-            TASK_ASSIGNEE to assigneeList,
-            TASK_IMAGE_URI to taskImage.toString()
-        )
-
-        val taskImageUploadWorker =
-            OneTimeWorkRequestBuilder<TaskImageUploadWorker>()
-                .setConstraints(constraints)
-                .setInputData(inputData)
+            val constraints = Constraints.Builder()
+                .setRequiredNetworkType(NetworkType.CONNECTED)
                 .build()
 
-        val taskCreationWorker =
-            OneTimeWorkRequestBuilder<TaskCreationWorker>()
-                .setConstraints(constraints)
-                .build()
+            val inputData = workDataOf(
+                TASK_BODY to todoBody,
+                TASK_DESC to todoDesc,
+                TASK_DATE to todoDate,
+                TASK_ASSIGNEE to assigneeList,
+                TASK_IMAGE_URI to taskImage.toString()
+            )
 
-        WorkManager.getInstance(requireContext()).let { manager ->
-            manager.beginWith(taskImageUploadWorker)
-                .then(taskCreationWorker)
-                .enqueue()
+            val taskImageUploadWorker =
+                OneTimeWorkRequestBuilder<TaskImageUploadWorker>()
+                    .setConstraints(constraints)
+                    .setInputData(inputData)
+                    .build()
 
-            findNavController().navigateUp()
+            val taskCreationWorker =
+                OneTimeWorkRequestBuilder<TaskCreationWorker>()
+                    .setConstraints(constraints)
+                    .build()
+
+            WorkManager.getInstance(requireContext()).let { manager ->
+                manager.beginWith(taskImageUploadWorker)
+                    .then(taskCreationWorker)
+                    .enqueue()
+                taskImage = null
+                findNavController().navigateUp()
+            }
         }
-
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -223,8 +241,12 @@ class TaskCreateFragment : Fragment(R.layout.fragment_task_create) {
         }
     }
 
-    companion object {
-        var taskImage: Uri? = null
-        var assigneeId: String? = null
+    override fun onResume() {
+        super.onResume()
+
+    }
+
+    override fun onPause() {
+        super.onPause()
     }
 }

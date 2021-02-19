@@ -42,17 +42,11 @@ class TaskRepository @Inject constructor(
         .whereEqualTo("creator", userDetails?.uid)
         .orderBy("todoCreationTimeStamp", Query.Direction.ASCENDING)
 
-    suspend fun createTask(taskMap: HashMap<*, *>, assignee: String?, uri: Uri?):
+    suspend fun createTask(taskMap: HashMap<*, *>):
             ResultData<String> {
         return try {
             val docRef = taskListRef.add(taskMap).await()
-            uri?.let {
-                when (uploadImage(uri, null, docRef.id)) {
-                    is ResultData.Success -> ResultData.Success(docRef.id)
-                    is ResultData.Failed -> ResultData.Failed("Task Created. Image Upload Failed. Please retry.")
-                    else -> ResultData.Failed("Something went wrong while uploading Image")
-                }
-            } ?: ResultData.Success(docRef.id)
+            ResultData.Success(docRef.id)
         } catch (e: Exception) {
             ResultData.Failed(false.toString())
         }

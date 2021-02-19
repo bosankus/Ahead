@@ -130,8 +130,8 @@ dependencies {
     // Navigation Component
     implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
     implementation "androidx.navigation:navigation-ui-ktx:$nav_version"
-/*
-    // Paging Library
+
+    /*// Paging Library
     implementation "androidx.paging:paging-runtime-ktx:2.1.2"*/
 
     // DI - Hilt

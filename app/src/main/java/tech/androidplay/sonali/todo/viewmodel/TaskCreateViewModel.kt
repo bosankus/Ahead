@@ -1,17 +1,13 @@
 package tech.androidplay.sonali.todo.viewmodel
 
-import android.net.Uri
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
-import dagger.assisted.Assisted
-import dagger.assisted.AssistedInject
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import tech.androidplay.sonali.todo.data.repository.TaskRepository
 import tech.androidplay.sonali.todo.utils.ResultData
-import tech.androidplay.sonali.todo.utils.UIHelper
+import tech.androidplay.sonali.todo.utils.UIHelper.getCurrentTimestamp
 
 /**
  * Created by Androidplay
@@ -31,8 +27,7 @@ class TaskCreateViewModel @ViewModelInject constructor(private val taskSource: T
         todoBody: String,
         todoDesc: String,
         todoDate: String?,
-        assignee: String?,
-        uri: Uri?
+        assignee: Array<String?>,
     ): LiveData<ResultData<String>> {
 
         val taskMap = hashMapOf(
@@ -40,14 +35,14 @@ class TaskCreateViewModel @ViewModelInject constructor(private val taskSource: T
             "todoBody" to todoBody,
             "todoDesc" to todoDesc,
             "todoDate" to todoDate,
-            "todoCreationTimeStamp" to UIHelper.getCurrentTimestamp(),
+            "todoCreationTimeStamp" to getCurrentTimestamp(),
             "isCompleted" to false,
-            "assignee" to arrayListOf(assignee)
+            "assignee" to assignee.toList()
         )
 
         return liveData {
             emit(ResultData.Loading)
-            emit(taskSource.createTask(taskMap, assignee, uri))
+            emit(taskSource.createTask(taskMap))
         }
     }
 

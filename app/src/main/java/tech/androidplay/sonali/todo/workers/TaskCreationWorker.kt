@@ -35,7 +35,7 @@ class TaskCreationWorker(context: Context, workerParameters: WorkerParameters) :
         val taskBody = checkNotNull(inputData.getString(TASK_BODY))
         val taskDesc = checkNotNull(inputData.getString(TASK_DESC))
         val taskDate = checkNotNull(inputData.getString(TASK_DATE))
-        val taskAssigneeList = inputData.getString(TASK_ASSIGNEE)
+        val taskAssigneeList = (inputData.getStringArray(TASK_ASSIGNEE))?.toList()
         val imageUri = inputData.getString(UPLOADED_IMAGE_URI)
 
         val taskMap = hashMapOf(

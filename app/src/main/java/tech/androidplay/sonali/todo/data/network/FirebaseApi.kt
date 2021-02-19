@@ -28,12 +28,7 @@ interface FirebaseApi {
     suspend fun signOut()*/
 
     // For Firestore
-    suspend fun createTask(
-        taskMap: HashMap<*, *>,
-        assignee: String?,
-        uri: Uri?
-    ): ResultData<String>
-
+    suspend fun createTask(taskMap: HashMap<*, *>): ResultData<String>
     suspend fun fetchAllUnassignedTask(): Flow<MutableList<Todo>>
     suspend fun fetchOnlyAssignedTask(): Flow<MutableList<Todo>>
     suspend fun fetchTaskByTaskId(taskId: String): ResultData<Todo>

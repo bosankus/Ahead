@@ -59,19 +59,9 @@ class TaskFragment : Fragment(R.layout.fragment_task) {
 
     private val viewModel: TaskViewModel by viewModels()
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        logMessage("onCreateView: Called")
-        return super.onCreateView(inflater, container, savedInstanceState)
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         sharedPreferences.edit().putBoolean(IS_FIRST_TIME, false).apply()
-        logMessage("onViewCreated: Called")
         setUpScreen()
         setListeners()
         setObservers()

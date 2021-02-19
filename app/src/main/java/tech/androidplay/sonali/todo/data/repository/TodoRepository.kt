@@ -51,20 +51,12 @@ class TodoRepository : FirebaseApi {
         .orderBy("todoCreationTimeStamp", Query.Direction.ASCENDING)
 
 
-    suspend fun createTask(taskMap: HashMap<*, *>): ResultData<Boolean> =
+    override suspend fun createTask(taskMap: HashMap<*, *>): ResultData<String> =
         suspendCoroutine { cont ->
             taskListRef.add(taskMap)
-                .addOnSuccessListener { cont.resume(ResultData.Success(true)) }
+                .addOnSuccessListener { cont.resume(ResultData.Success(it.id)) }
                 .addOnFailureListener { cont.resume(ResultData.Failed(it.message)) }
         }
-
-    override suspend fun createTask(
-        taskMap: HashMap<*, *>,
-        assignee: String?,
-        uri: Uri?
-    ): ResultData<String> {
-        return ResultData.Failed("abcd")
-    }
 
     override suspend fun fetchAllUnassignedTask(): Flow<MutableList<Todo>> = callbackFlow {
         val querySnapshot = query.addSnapshotListener { value, error ->
