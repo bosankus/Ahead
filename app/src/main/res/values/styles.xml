@@ -31,9 +31,9 @@
         <item name="android:scrollbarDefaultDelayBeforeFade">1000</item>
     </style>
 
-    <style name="action_menu_style">
+    <!--<style name="action_menu_style">
         <item name="fontFamily">@font/calibre_semi</item>
-    </style>
+    </style>-->
 
     <style name="AuthStyle" parent="FirebaseUI">
         <item name="colorPrimary">@color/dribblePink</item>

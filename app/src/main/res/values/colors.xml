@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#BE1451</color>
-    <color name="colorPrimaryDark">#7C092B</color>
+    <!--<color name="colorPrimary">#BE1451</color>
+    <color name="colorPrimaryDark">#7C092B</color>-->
     <color name="colorAccent">#F8F9FB</color>
 
     <!--    Custom Calender Colors-->
@@ -17,16 +17,17 @@
     <color name="dribblePink">#3068DE</color>
     <color name="dribblePinkLight">#3068DE</color>
     <color name="shimmerColor">#dddddd</color>
+    <color name="cardBackgroundColor">#7057D2</color>
 
     <!-- Colors for intro indicators -->
-    <color name="tab_indicator_grey">#C0C0C0</color>
+    <!--<color name="tab_indicator_grey">#C0C0C0</color>-->
 
     <!-- Picked colors from web -->
     <color name="page_background">#F0F2F7</color>
-    <color name="green_text_color">#34E48D</color>
+    <!--<color name="green_text_color">#34E48D</color>
     <color name="green_text_color_dark">#5BB49D</color>
     <color name="bordered_btn_green_dark">#A5D6A7</color>
     <color name="bordered_btn_green_light">#A5D6A7</color>
     <color name="market_watch_red">#FF8A80</color>
-    <color name="light_blue">#E7E5F2</color>
+    <color name="light_blue">#E7E5F2</color>-->
 </resources>

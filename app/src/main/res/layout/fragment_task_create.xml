@@ -27,9 +27,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/padding_18dp"
-        android:layout_marginTop="@dimen/padding_26dp"
+        android:layout_marginTop="24dp"
         android:layout_marginEnd="@dimen/padding_18dp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/layoutTaskInput" />
 
@@ -64,7 +65,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/layoutSetAlarm" />
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btCreateTask"
         style="?android:attr/borderlessButtonStyle"
         android:layout_width="match_parent"
@@ -79,7 +80,7 @@
         android:textSize="@dimen/text_18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/layoutTaskImage" />
+        app:layout_constraintBottom_toBottomOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 

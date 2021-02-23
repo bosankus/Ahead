@@ -8,7 +8,7 @@ import tech.androidplay.sonali.todo.model.Todo
  * Author: Ankush
  * On: 8/11/2020, 4:56 PM
  */
-class TodoDiffUtilCallback : DiffUtil.ItemCallback<Todo>() {
+class DiffUtilCallback : DiffUtil.ItemCallback<Todo>() {
     override fun areItemsTheSame(oldItem: Todo, newItem: Todo): Boolean {
         return oldItem.docId == newItem.docId
     }

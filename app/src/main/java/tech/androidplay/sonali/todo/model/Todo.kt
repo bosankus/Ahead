@@ -30,4 +30,6 @@ data class Todo(
     var taskImage: String? = "",
     @SerializedName("assignee")
     var assigneeList: List<*>? = null,
+    @SerializedName("priority")
+    var priority: Int? = 0,
 ) : Serializable

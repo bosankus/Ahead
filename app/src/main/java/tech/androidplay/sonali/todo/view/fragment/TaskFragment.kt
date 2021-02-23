@@ -4,9 +4,7 @@ import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.PopupMenu
 import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
@@ -17,13 +15,11 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.InternalCoroutinesApi
 import tech.androidplay.sonali.todo.R
 import tech.androidplay.sonali.todo.databinding.FragmentTaskBinding
-import tech.androidplay.sonali.todo.view.adapter.TodoAdapter
+import tech.androidplay.sonali.todo.utils.*
 import tech.androidplay.sonali.todo.utils.Constants.IS_FIRST_TIME
-import tech.androidplay.sonali.todo.utils.UIHelper.logMessage
 import tech.androidplay.sonali.todo.utils.UIHelper.showSnack
-import tech.androidplay.sonali.todo.utils.isNetworkAvailable
-import tech.androidplay.sonali.todo.utils.shareApp
-import tech.androidplay.sonali.todo.utils.viewLifecycleLazy
+import tech.androidplay.sonali.todo.view.adapter.main_adapter.TodoAdapter
+import tech.androidplay.sonali.todo.view.adapter.viewpager_adapter.ViewPagerAdapter
 import tech.androidplay.sonali.todo.viewmodel.TaskViewModel
 import javax.inject.Inject
 
@@ -46,7 +42,7 @@ class TaskFragment : Fragment(R.layout.fragment_task) {
     lateinit var dialog: AlertDialog.Builder
 
     @Inject
-    lateinit var assignedTaskAdapter: TodoAdapter
+    lateinit var assignedTaskAdapter: ViewPagerAdapter
 
     @Inject
     lateinit var overdueAdapter: TodoAdapter
@@ -57,21 +53,15 @@ class TaskFragment : Fragment(R.layout.fragment_task) {
     @Inject
     lateinit var sharedPreferences: SharedPreferences
 
-    private val viewModel: TaskViewModel by viewModels()
+    private lateinit var authManager: AuthManager
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        logMessage("onCreateView: Called")
-        return super.onCreateView(inflater, container, savedInstanceState)
-    }
+    private val viewModel: TaskViewModel by viewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         sharedPreferences.edit().putBoolean(IS_FIRST_TIME, false).apply()
-        logMessage("onViewCreated: Called")
+        authManager = AuthManager(requireActivity())
+
         setUpScreen()
         setListeners()
         setObservers()
@@ -85,9 +75,13 @@ class TaskFragment : Fragment(R.layout.fragment_task) {
         binding.viewmodel = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
 
-        binding.layoutAssignedTask.rvAssignedTaskList.adapter = assignedTaskAdapter
         binding.layoutUpcomingTask.rvUpcomingTaskList.adapter = upcomingAdapter
         binding.layoutOverdueTask.rvOverdueTaskList.adapter = overdueAdapter
+        binding.layoutAssignedTask.vpAssignedTaskList.apply {
+            adapter = assignedTaskAdapter
+            offscreenPageLimit = 3
+            setPageTransformer(SliderTransformer(3))
+        }
 
     }
 
@@ -95,6 +89,7 @@ class TaskFragment : Fragment(R.layout.fragment_task) {
         binding.layoutTaskBar.imgMenu.setOnClickListener { showPopupMenu(binding.layoutTaskBar.imgMenu) }
         binding.layoutTaskBar.imgCreate.setOnClickListener { showCreateMenu(binding.layoutTaskBar.imgCreate) }
         binding.layoutNoTask.btnAddTask.setOnClickListener { goToCreateTaskFragment() }
+
     }
 
     private fun setObservers() {
@@ -152,10 +147,13 @@ class TaskFragment : Fragment(R.layout.fragment_task) {
     private fun logOutUser() {
         dialog.setMessage("Are you sure you want to logout?")
             .setPositiveButton("Yes") { dialogInterface, _ ->
-                sharedPreferences.edit().putBoolean(IS_FIRST_TIME, true).apply()
-                viewModel.logoutUser()
-                dialogInterface.dismiss()
-                findNavController().navigate(R.id.action_taskFragment_to_splashFragment)
+                authManager.signOut().observe(viewLifecycleOwner, {
+                    if (it is ResultData.Success) {
+                        sharedPreferences.edit().putBoolean(IS_FIRST_TIME, true).apply()
+                        dialogInterface.dismiss()
+                        findNavController().navigate(R.id.action_taskFragment_to_splashFragment)
+                    } else if (it is ResultData.Failed) showSnack(requireView(), "Logout failed!")
+                })
             }.create().show()
     }
 

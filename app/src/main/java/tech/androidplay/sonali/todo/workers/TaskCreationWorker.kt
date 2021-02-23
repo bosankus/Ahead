@@ -14,7 +14,6 @@ import tech.androidplay.sonali.todo.utils.ResultData
 import tech.androidplay.sonali.todo.utils.UIHelper.getCurrentTimestamp
 import tech.androidplay.sonali.todo.view.activity.MainActivity
 import tech.androidplay.sonali.todo.workers.TaskImageUploadWorker.Companion.UPLOADED_IMAGE_URI
-import java.util.*
 
 /**
  * Created by Androidplay
@@ -35,7 +34,7 @@ class TaskCreationWorker(context: Context, workerParameters: WorkerParameters) :
         val taskBody = checkNotNull(inputData.getString(TASK_BODY))
         val taskDesc = checkNotNull(inputData.getString(TASK_DESC))
         val taskDate = checkNotNull(inputData.getString(TASK_DATE))
-        val taskAssigneeList = inputData.getString(TASK_ASSIGNEE)
+        val taskAssigneeList = (inputData.getStringArray(TASK_ASSIGNEE))?.toList()
         val imageUri = inputData.getString(UPLOADED_IMAGE_URI)
 
         val taskMap = hashMapOf(
@@ -46,7 +45,8 @@ class TaskCreationWorker(context: Context, workerParameters: WorkerParameters) :
             "todoCreationTimeStamp" to getCurrentTimestamp(),
             "isCompleted" to false,
             "taskImage" to imageUri,
-            "assignee" to taskAssigneeList
+            "assignee" to taskAssigneeList,
+            "priority" to 1,
         )
 
         // TODO: add deep link, deal detail fragment, then take user to there from notification.

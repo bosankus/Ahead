@@ -122,8 +122,8 @@ object Notifier {
      * Cancels any notifications of this type previously shown.
      */
     fun dismissNotification(context: Context, id: Int) {
-        if (notificationManager == null) {
-        }
+        /*if (notificationManager == null) {
+        }*/
         notificationManager = notificationManager(context)
 
         notificationManager?.cancel(id)

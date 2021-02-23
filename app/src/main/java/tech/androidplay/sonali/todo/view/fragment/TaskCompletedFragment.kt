@@ -13,7 +13,7 @@ import kotlinx.android.synthetic.main.layout_task_upcoming.view.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.InternalCoroutinesApi
 import tech.androidplay.sonali.todo.R
-import tech.androidplay.sonali.todo.view.adapter.TodoAdapter
+import tech.androidplay.sonali.todo.view.adapter.main_adapter.TodoAdapter
 import tech.androidplay.sonali.todo.viewmodel.TaskViewModel
 import javax.inject.Inject
 

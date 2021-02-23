@@ -2,13 +2,9 @@ package tech.androidplay.sonali.todo.viewmodel
 
 import android.net.Uri
 import androidx.hilt.lifecycle.ViewModelInject
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
 import androidx.lifecycle.viewModelScope
-import dagger.assisted.Assisted
-import dagger.assisted.AssistedInject
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
 import tech.androidplay.sonali.todo.data.repository.TaskRepository
@@ -26,8 +22,8 @@ import tech.androidplay.sonali.todo.utils.UIHelper.getCurrentTimestamp
 class EditTaskViewModel @ViewModelInject constructor(private val taskSource: TaskRepository) :
     ViewModel() {
 
-    private var _userId = MutableLiveData<String>()
-    val userId get() = _userId
+    /*private var _userId = MutableLiveData<String>()
+    val userId get() = _userId*/
 
     fun getTaskByTaskId(taskId: String) = liveData {
         emit(ResultData.Loading)

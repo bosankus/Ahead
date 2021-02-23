@@ -4,13 +4,11 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.text.SpannableString
-import android.text.TextUtils
 import android.text.style.StrikethroughSpan
 import android.util.Log
 import android.view.View
 import android.view.animation.Animation
 import android.view.inputmethod.InputMethodManager
-import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
@@ -62,6 +60,10 @@ object UIHelper {
             DrawableCompat.wrap(this.drawable), ContextCompat.getColor(this.context, colorName)
         )
     }
+
+    /*fun EditText.setEndIcon(drawable: Int) {
+        this.setCompoundDrawablesWithIntrinsicBounds(0, 0, drawable, 0)
+    }*/
 
     fun TextView.strikeThroughText() {
         val text = this.text.toString()
