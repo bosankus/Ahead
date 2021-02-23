@@ -21,7 +21,7 @@ import tech.androidplay.sonali.todo.utils.Constants.NOTIFICATION_CHANNEL_ID
 import tech.androidplay.sonali.todo.utils.Constants.NOTIFICATION_CHANNEL_NAME
 import tech.androidplay.sonali.todo.utils.Constants.NOTIFICATION_ID
 import tech.androidplay.sonali.todo.utils.Constants.TASK_DOC_ID
-import tech.androidplay.sonali.todo.utils.alarmutils.generateRequestCode
+import tech.androidplay.sonali.todo.utils.generateRequestCode
 import javax.inject.Inject
 
 /**

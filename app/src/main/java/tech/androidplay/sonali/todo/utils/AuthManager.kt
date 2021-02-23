@@ -32,7 +32,7 @@ class AuthManager(
             return if (isUserLoggedIn) auth.currentUser else null
         }
 
-    val userEmail: String?
+    /*val userEmail: String?
         get() {
             return if (isUserLoggedIn) auth.currentUser?.email else null
         }
@@ -40,7 +40,7 @@ class AuthManager(
     val userId: String?
         get() {
             return if (isUserLoggedIn) auth.currentUser?.uid else null
-        }
+        }*/
 
     private val providers = arrayListOf(AuthUI.IdpConfig.EmailBuilder().build())
 

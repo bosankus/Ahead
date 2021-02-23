@@ -29,7 +29,7 @@ import javax.inject.Inject
 
 class TaskViewModel @ViewModelInject constructor(
     private val taskSource: TaskRepository,
-        private val quoteSource: QuoteRepository,
+    private val quoteSource: QuoteRepository,
 ) : ViewModel() {
 
     @Inject
@@ -74,7 +74,6 @@ class TaskViewModel @ViewModelInject constructor(
         viewModelScope.launch {
             _firstName.value = "Good Day, ${taskSource.getUserFirstName()}"
             getAllTasks()
-            getAllAssignedTasks()
         }
     }
 
@@ -82,17 +81,19 @@ class TaskViewModel @ViewModelInject constructor(
         viewModelScope.launch {
             try {
                 taskSource.fetchAllUnassignedTask().collect { allTodoList ->
-                    _taskListSize.value = allTodoList.size
-                    if (allTodoList.size == 0) getQuote()
-                    _completedTaskList.value =
-                        allTodoList.filter { it.isCompleted }.sortedByDescending { it.todoDate }
-                    _upcomingTaskList.value =
-                        allTodoList.filter { it.todoDate.compareWithToday() == IS_AFTER && !it.isCompleted }
-                            .sortedByDescending { it.todoDate }
-                    _overdueTaskList.value =
-                        allTodoList.filter { it.todoDate.compareWithToday() == IS_BEFORE && !it.isCompleted }
-                            .sortedByDescending { it.todoDate }
-                    _loadingState.value = false
+                    if (allTodoList.size != 0) {
+                        _taskListSize.value = allTodoList.size
+                        _completedTaskList.value =
+                            allTodoList.filter { it.isCompleted }.sortedByDescending { it.todoDate }
+                        _upcomingTaskList.value =
+                            allTodoList.filter { it.todoDate.compareWithToday() == IS_AFTER && !it.isCompleted }
+                                .sortedByDescending { it.todoDate }
+                        _overdueTaskList.value =
+                            allTodoList.filter { it.todoDate.compareWithToday() == IS_BEFORE && !it.isCompleted }
+                                .sortedByDescending { it.todoDate }
+                        _loadingState.value = false
+                    }
+                    getAllAssignedTasks()
                 }
             } catch (e: Exception) {
                 logMessage("TaskViewModel-getAllTasks: ${e.message}")
@@ -104,12 +105,14 @@ class TaskViewModel @ViewModelInject constructor(
         viewModelScope.launch {
             try {
                 taskSource.fetchOnlyAssignedTask().collect { assignedTask ->
-                    _assignedTaskList.value = assignedTask.sortedByDescending { it.todoDate }
-                    _loadingState.value = false
+                    if (assignedTask.size != 0) {
+                        _taskListSize.postValue(_taskListSize.value?.plus(assignedTask.size))
+                        _assignedTaskList.value = assignedTask.sortedByDescending { it.todoDate }
+                        _loadingState.value = false
+                    } else getQuote()
                 }
             } catch (e: Exception) {
                 logMessage("TaskViewModel-getAllAssignedTasks: ${e.message}")
-                _loadingState.value = false
             }
         }
     }
@@ -123,7 +126,8 @@ class TaskViewModel @ViewModelInject constructor(
         }
     }
 
-    fun logoutUser() = viewModelScope.launch { taskSource.signOut() }
+    fun fetchUserFullName(userId: String?) =
+        userId?.let { viewModelScope.launch { taskSource.fetchUserFullName(it) } }
 
 }
 

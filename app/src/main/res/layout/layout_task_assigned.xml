@@ -10,53 +10,23 @@
             type="int" />
     </data>
 
-    <LinearLayout xmlns:tools="http://schemas.android.com/tools"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         app:show="@{(listSize>0) ? true : false}">
 
-        <TextView
-            android:id="@+id/tvAssignedTaskListHeader"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="start"
-            android:layout_marginStart="@dimen/padding_18dp"
-            android:layout_marginTop="@dimen/padding_16dp"
-            android:drawablePadding="3dp"
-            android:fontFamily="@font/calibre_semi"
-            android:text="@string/assign_task"
-            android:textColor="@color/dribblePink"
-            android:textSize="@dimen/text_14sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="3dp"
-            android:layout_marginTop="5dp"
-            android:visibility="gone"
-            android:background="@drawable/bg_tab_indicator"
-            android:layout_marginStart="@dimen/padding_18dp"/>
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvAssignedTaskList"
-            style="@style/scrollbar_shape_style"
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/vpAssignedTaskList"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/padding_18dp"
-            android:layout_marginEnd="@dimen/padding_18dp"
-            android:background="@android:color/transparent"
             android:clipToPadding="false"
-            android:nestedScrollingEnabled="true"
-            android:orientation="vertical"
+            android:clipChildren="false"
             android:overScrollMode="never"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            android:orientation="horizontal"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:itemCount="2"
-            tools:listitem="@layout/layout_main_task_list" />
+            app:layout_constraintTop_toTopOf="parent" />
 
     </LinearLayout>
 

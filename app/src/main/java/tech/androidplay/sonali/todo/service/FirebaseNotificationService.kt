@@ -18,7 +18,7 @@ import tech.androidplay.sonali.todo.utils.Constants.DEVICE_ANDROID_VERSION
 import tech.androidplay.sonali.todo.utils.Constants.NOTIFICATION_CHANNEL_ID
 import tech.androidplay.sonali.todo.utils.Constants.NOTIFICATION_CHANNEL_NAME
 import tech.androidplay.sonali.todo.utils.UIHelper.logMessage
-import tech.androidplay.sonali.todo.utils.alarmutils.generateRequestCode
+import tech.androidplay.sonali.todo.utils.generateRequestCode
 import javax.inject.Inject
 
 /**

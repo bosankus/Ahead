@@ -9,7 +9,6 @@ import android.util.Log
 import android.view.View
 import android.view.animation.Animation
 import android.view.inputmethod.InputMethodManager
-import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
@@ -62,9 +61,9 @@ object UIHelper {
         )
     }
 
-    fun EditText.setEndIcon(drawable: Int) {
-        this.setCompoundDrawablesWithIntrinsicBounds(0, 0, drawable, 0);
-    }
+    /*fun EditText.setEndIcon(drawable: Int) {
+        this.setCompoundDrawablesWithIntrinsicBounds(0, 0, drawable, 0)
+    }*/
 
     fun TextView.strikeThroughText() {
         val text = this.text.toString()

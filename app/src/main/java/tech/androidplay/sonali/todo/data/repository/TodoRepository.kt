@@ -34,8 +34,8 @@ import kotlin.coroutines.suspendCoroutine
 @ExperimentalCoroutinesApi
 class TodoRepository : FirebaseApi {
     val userDetails = FirebaseAuth.getInstance().currentUser
-    val db: FirebaseFirestore = Firebase.firestore
-    val storage = FirebaseStorage.getInstance().reference
+    private val db: FirebaseFirestore = Firebase.firestore
+    private val storage = FirebaseStorage.getInstance().reference
 
     // reference to fireStore tables
     private val taskListRef = db.collection(TASK_COLLECTION)
@@ -109,6 +109,14 @@ class TodoRepository : FirebaseApi {
         ResultData.Failed(e.message)
     }
 
+    suspend fun fetchUserFullName(userId: String): String? = try {
+        val response = userListRef.whereEqualTo("uid", userId).get().await()
+        if (!response.isEmpty) response.toObjects(User::class.java)[0].displayName
+        else "Unknown"
+    } catch (e: Exception) {
+        ""
+    }
+
     override suspend fun provideFeedback(hashMap: HashMap<String, String?>): ResultData<String> =
         try {
             val feedback = feedbackListRef.add(hashMap).await()
@@ -128,6 +136,7 @@ class TodoRepository : FirebaseApi {
         ResultData.Failed(e.message)
     }
 
+    // Use this for upload
     fun upload(uri: Uri, block: ((ResultData<Uri>, Int) -> Unit)?) {
         val pathRef = storage.child(("${userDetails?.email}/${uri.lastPathSegment}"))
         pathRef.putFile(uri)

@@ -34,10 +34,6 @@
         <item name="android:scrollbarDefaultDelayBeforeFade">1000</item>
     </style>
 
-    <style name="action_menu_style">
-        <item name="fontFamily">@font/calibre_semi</item>
-    </style>
-
     <style name="AuthStyle" parent="FirebaseUI">
         <item name="colorPrimary">@color/dribblePink</item>
         <item name="colorPrimaryDark">@color/dribblePink</item>
@@ -64,5 +60,14 @@
         <item name="android:spotShadowAlpha">1</item>
         <item name="android:outlineAmbientShadowColor">@color/dribbleDarkBlue</item>
         <item name="android:outlineSpotShadowColor">@color/dribbleDarkBlue</item>
+    </style>
+
+    <style name="CardStyle" parent="Base.CardView">
+        <item name="android:elevation">@dimen/padding_10dp</item>
+        <item name="android:translationZ">@dimen/padding_10dp</item>
+        <item name="android:ambientShadowAlpha">1</item>
+        <item name="android:spotShadowAlpha">1</item>
+        <item name="android:outlineAmbientShadowColor">@color/grey3</item>
+        <item name="android:outlineSpotShadowColor">@color/grey3</item>
     </style>
 </resources>

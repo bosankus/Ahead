@@ -1,7 +1,6 @@
 package tech.androidplay.sonali.todo.data.network
 
 import android.net.Uri
-import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.storage.StorageReference
 import kotlinx.coroutines.flow.Flow
 import tech.androidplay.sonali.todo.model.Todo
@@ -34,7 +33,11 @@ interface FirebaseApi {
     suspend fun fetchTaskByTaskId(taskId: String): ResultData<Todo>
     suspend fun updateTask(taskId: String, map: Map<String, Any?>): ResultData<Boolean>
     suspend fun deleteTask(docId: String, hasImage: Boolean): ResultData<Boolean>
+
+    // For user related
     suspend fun isUserAvailable(email: String): ResultData<Boolean>
+
+    // For Feedback
     suspend fun provideFeedback(hashMap: HashMap<String, String?>): ResultData<String>
 
     // For Firebase storage

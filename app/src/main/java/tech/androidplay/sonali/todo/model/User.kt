@@ -14,10 +14,10 @@ data class User(
     var uid: String = "",
     @SerializedName("email")
     var email: String = "",
-    @SerializedName("fname")
-    var fname: String = "",
-    @SerializedName("lname")
-    var lname: String = "",
+    @SerializedName("displayName")
+    var displayName: String = "",
+    @SerializedName("token")
+    var token: String = "",
     @SerializedName("createdOn")
     var createdOn: String = "",
 ) : Serializable

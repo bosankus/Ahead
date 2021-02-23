@@ -29,8 +29,8 @@ import tech.androidplay.sonali.todo.utils.Constants.TASK_DOC_ID
 import tech.androidplay.sonali.todo.utils.Constants.TASK_IMAGE_URL
 import tech.androidplay.sonali.todo.utils.UIHelper.showSnack
 import tech.androidplay.sonali.todo.utils.UIHelper.showToast
-import tech.androidplay.sonali.todo.utils.alarmutils.cancelAlarmedNotification
-import tech.androidplay.sonali.todo.utils.alarmutils.startAlarmedNotification
+import tech.androidplay.sonali.todo.utils.cancelAlarmedNotification
+import tech.androidplay.sonali.todo.utils.startAlarmedNotification
 import tech.androidplay.sonali.todo.viewmodel.EditTaskViewModel
 import javax.inject.Inject
 
@@ -129,7 +129,7 @@ class TaskEditFragment : Fragment(R.layout.fragment_task_edit) {
     }
 
 
-    private fun fetchTask(taskId: String) {
+    /*private fun fetchTask(taskId: String) {
         viewModel.getTaskByTaskId(taskId).observe(viewLifecycleOwner, { task ->
             task?.let {
                 when (it) {
@@ -142,7 +142,7 @@ class TaskEditFragment : Fragment(R.layout.fragment_task_edit) {
                 }
             }
         })
-    }
+    }*/
 
 
     // TODO: create alarm on change of date

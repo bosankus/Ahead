@@ -65,7 +65,7 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <TextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/tvSelectDate"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -165,6 +165,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="20dp"
         android:layout_marginEnd="16dp"
+        android:layout_marginBottom="@dimen/padding_18dp"
         android:background="@drawable/bg_rounded_btn"
         android:backgroundTint="@color/dribblePink"
         android:fontFamily="@font/calibre"
@@ -172,11 +173,11 @@
         android:textAllCaps="false"
         android:textColor="@color/white"
         android:textSize="@dimen/text_18sp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/clTaskInput" />
+        app:layout_constraintStart_toStartOf="parent" />
 
-    <TextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/tvDeleteTask"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -192,6 +193,6 @@
         app:drawableTint="@color/grey2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnSaveTasks" />
+        app:layout_constraintTop_toBottomOf="@+id/clTaskInput" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

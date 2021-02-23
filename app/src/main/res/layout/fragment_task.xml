@@ -59,6 +59,7 @@
                     layout="@layout/layout_task_upcoming"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/padding_18dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/layoutAssignedTask"
@@ -79,6 +80,7 @@
                     layout="@layout/layout_task_empty"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:visibility="gone"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:listSize="@{viewmodel.taskListSize}"
@@ -93,6 +95,7 @@
             layout="@layout/layout_task_loading"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:loadingState="@{viewmodel.loadingState}" />

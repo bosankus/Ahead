@@ -1,4 +1,4 @@
-package tech.androidplay.sonali.todo.utils.alarmutils
+package tech.androidplay.sonali.todo.utils
 
 import android.app.AlarmManager
 import android.app.PendingIntent
@@ -45,6 +45,7 @@ fun Fragment.startAlarmedNotification(
     )
 }
 
+@ExperimentalCoroutinesApi
 fun Fragment.cancelAlarmedNotification(requestCode: String) {
     val intent = Intent(requireContext(), AlarmReceiver::class.java)
     val pendingIntent =
@@ -57,6 +58,7 @@ fun Fragment.cancelAlarmedNotification(requestCode: String) {
     pendingIntent.cancel()
 }
 
+@ExperimentalCoroutinesApi
 fun View.cancelAlarmedNotification(requestCode: String) {
     val intent = Intent(this.context, AlarmReceiver::class.java)
     val pendingIntent =

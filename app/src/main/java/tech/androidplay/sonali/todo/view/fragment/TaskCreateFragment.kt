@@ -51,15 +51,15 @@ class TaskCreateFragment : Fragment(R.layout.fragment_task_create) {
 
     @Inject
     lateinit var dateTimePicker: DateTimePicker
-    lateinit var authManager: AuthManager
+    private lateinit var authManager: AuthManager
     private val viewModel: TaskCreateViewModel by viewModels()
     private var taskTimeStamp: String? = null
 
     private var isAssigneeShowing: Boolean = false
     private var isImageAdded: Boolean = false
 
-    var taskImage: Uri? = null
-    var assigneeId: String? = null
+    private var taskImage: Uri? = null
+    private var assigneeId: String? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -232,14 +232,5 @@ class TaskCreateFragment : Fragment(R.layout.fragment_task_create) {
                 layoutTaskImage.imgPhoto.loadImageCircleCropped(taskImage.toString())
             }
         }
-    }
-
-    override fun onResume() {
-        super.onResume()
-
-    }
-
-    override fun onPause() {
-        super.onPause()
     }
 }

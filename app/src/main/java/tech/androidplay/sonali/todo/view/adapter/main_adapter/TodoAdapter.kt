@@ -1,4 +1,4 @@
-package tech.androidplay.sonali.todo.view.adapter
+package tech.androidplay.sonali.todo.view.adapter.main_adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -7,6 +7,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.InternalCoroutinesApi
 import tech.androidplay.sonali.todo.model.Todo
 import tech.androidplay.sonali.todo.databinding.LayoutMainTaskListBinding
+import tech.androidplay.sonali.todo.view.adapter.DiffUtilCallback
 
 /**
  * Created by Androidplay
@@ -16,7 +17,7 @@ import tech.androidplay.sonali.todo.databinding.LayoutMainTaskListBinding
 
 @ExperimentalCoroutinesApi
 @InternalCoroutinesApi
-class TodoAdapter : ListAdapter<Todo, TodoViewHolder>(TodoDiffUtilCallback()) {
+class TodoAdapter : ListAdapter<Todo, TodoViewHolder>(DiffUtilCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TodoViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)

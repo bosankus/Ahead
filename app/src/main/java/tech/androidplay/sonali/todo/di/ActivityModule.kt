@@ -1,3 +1,5 @@
+@file:Suppress("SpellCheckingInspection", "SpellCheckingInspection", "SpellCheckingInspection")
+
 package tech.androidplay.sonali.todo.di
 
 import android.app.AlertDialog
@@ -9,8 +11,10 @@ import dagger.hilt.android.components.ActivityComponent
 import dagger.hilt.android.qualifiers.ActivityContext
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.InternalCoroutinesApi
-import tech.androidplay.sonali.todo.view.adapter.TodoAdapter
 import tech.androidplay.sonali.todo.utils.DateTimePicker
+import tech.androidplay.sonali.todo.view.adapter.main_adapter.TodoAdapter
+import tech.androidplay.sonali.todo.view.adapter.viewpager_adapter.ViewPagerAdapter
+import tech.androidplay.sonali.todo.viewmodel.TaskViewModel
 import java.util.*
 
 /**
@@ -30,9 +34,10 @@ class ActivityModule {
     fun provideDatetimePicker(calendar: Calendar) = DateTimePicker(calendar)
 
     @Provides
-    fun providesTodoAdapter(): TodoAdapter {
-        return TodoAdapter()
-    }
+    fun providesTodoAdapter(): TodoAdapter = TodoAdapter()
+
+    @Provides
+    fun provideViewPagerAdapter(): ViewPagerAdapter = ViewPagerAdapter()
 
     @Provides
     fun providesAlertDialog(@ActivityContext context: Context): AlertDialog.Builder {

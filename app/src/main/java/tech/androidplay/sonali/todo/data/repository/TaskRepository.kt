@@ -16,6 +16,7 @@ import tech.androidplay.sonali.todo.model.User
 import tech.androidplay.sonali.todo.utils.Constants.TASK_COLLECTION
 import tech.androidplay.sonali.todo.utils.Constants.USER_COLLECTION
 import tech.androidplay.sonali.todo.utils.ResultData
+import tech.androidplay.sonali.todo.utils.UIHelper.logMessage
 import javax.inject.Inject
 
 /**
@@ -30,7 +31,7 @@ class TaskRepository @Inject constructor(
     private val storageReference: StorageReference,
     private val crashReport: FirebaseCrashlytics,
     fireStore: FirebaseFirestore,
-    private val firebaseAuth: FirebaseAuth
+    firebaseAuth: FirebaseAuth
 ) {
 
     @Inject
@@ -77,6 +78,7 @@ class TaskRepository @Inject constructor(
                 .orderBy("todoCreationTimeStamp", Query.Direction.ASCENDING)
             val querySnapshot = assignedTaskQuery.addSnapshotListener { value, error ->
                 if (error != null) {
+                    logMessage(error.message.toString())
                     return@addSnapshotListener
                 } else {
                     value?.let {
@@ -153,10 +155,16 @@ class TaskRepository @Inject constructor(
         }
     }
 
+    suspend fun fetchUserFullName(userId: String): String? = try {
+        val response = userListRef.whereEqualTo("uid", userId).get().await()
+        if (!response.isEmpty) response.toObjects(User::class.java)[0].displayName
+        else "Unknown"
+    } catch (e: Exception) {
+        ""
+    }
+
     fun getUserFirstName(): String {
         val name = userDetails?.displayName
         return name ?: ""
     }
-
-    fun signOut() = firebaseAuth.signOut()
 }

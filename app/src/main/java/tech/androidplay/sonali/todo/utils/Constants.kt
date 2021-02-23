@@ -22,8 +22,8 @@ object Constants {
     const val USER_COLLECTION = "Users"
     const val FEEDBACK_COLLECTION = "Feedbacks"
 
-    const val TASK_ASSIGNED = 1
-    const val TASK_ASSIGNED_ON_HOLD = 0
+    /*const val TASK_ASSIGNED = 1
+    const val TASK_ASSIGNED_ON_HOLD = 0*/
 
     /*// For firestore collection - Test
     const val TASK_COLLECTION_TEST = "test_Tasks"
