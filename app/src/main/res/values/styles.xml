@@ -58,15 +58,15 @@
     </style>
 
     <style name="CardStyle" parent="Base.CardView">
-        <item name="android:elevation">@dimen/padding_10dp</item>
-        <item name="android:translationZ">@dimen/padding_10dp</item>
+        <item name="android:elevation">@dimen/padding_3dp</item>
+        <item name="android:translationZ">@dimen/padding_3dp</item>
         <item name="android:ambientShadowAlpha">1</item>
         <item name="android:spotShadowAlpha">1</item>
     </style>
 
     <style name="HeadingTextViewStyle" parent="android:style/Widget.TextView">
-        <item name="android:elevation">@dimen/padding_10dp</item>
-        <item name="android:translationZ">@dimen/padding_10dp</item>
+        <item name="android:elevation">@dimen/padding_5dp</item>
+        <item name="android:translationZ">@dimen/padding_5dp</item>
         <item name="android:ambientShadowAlpha">1</item>
         <item name="android:spotShadowAlpha">1</item>
         <item name="android:paddingEnd">@dimen/padding_10dp</item>

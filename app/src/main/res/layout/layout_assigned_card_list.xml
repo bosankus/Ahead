@@ -21,7 +21,7 @@
 
         <androidx.cardview.widget.CardView
             style="@style/CardStyle"
-            android:layout_width="250dp"
+            android:layout_width="150dp"
             android:layout_height="150dp"
             android:layout_margin="@dimen/padding_18dp"
             app:cardCornerRadius="@dimen/padding_5dp">
@@ -35,10 +35,14 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/padding_18dp"
+                    android:layout_marginEnd="@dimen/padding_18dp"
                     android:layout_marginTop="@dimen/padding_10dp"
                     android:textColor="@color/grey2"
                     android:textSize="@dimen/text_14sp"
+                    android:ellipsize="marquee"
+                    android:singleLine="true"
                     app:day_name="@{todo.todoDate}"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"/>
 
@@ -51,8 +55,8 @@
                     android:layout_marginEnd="@dimen/padding_18dp"
                     android:ellipsize="end"
                     android:fontFamily="@font/calibre"
-                    android:lines="2"
-                    android:maxLines="2"
+                    android:lines="3"
+                    android:maxLines="3"
                     android:text="@{todo.todoBody}"
                     android:textColor="@color/grey3"
                     android:textSize="@dimen/text_20sp"
