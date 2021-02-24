@@ -17,18 +17,14 @@
         android:orientation="vertical"
         app:show="@{(listSize>0) ? true: false}">
 
-        <TextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tvOverdueTaskListHeader"
+            style="@style/HeadingTextViewStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="start"
             android:layout_marginStart="@dimen/padding_18dp"
             android:layout_marginTop="@dimen/padding_16dp"
-            android:drawablePadding="3dp"
-            android:fontFamily="@font/calibre_semi"
             android:text="@string/overdue"
-            android:textColor="@color/dribblePink"
-            android:textSize="@dimen/text_14sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -38,26 +34,10 @@
             android:layout_height="3dp"
             android:layout_marginStart="@dimen/padding_18dp"
             android:layout_marginTop="5dp"
-            android:visibility="gone"
             android:background="@drawable/bg_tab_indicator"
+            android:visibility="gone"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tvOverdueTaskListHeader" />
-
-        <TextView
-            android:id="@+id/tvOverdueAddTask"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="start"
-            android:layout_marginTop="@dimen/padding_16dp"
-            android:layout_marginEnd="@dimen/padding_18dp"
-            android:drawablePadding="3dp"
-            android:visibility="gone"
-            android:fontFamily="@font/calibre_semi"
-            android:text="@string/add_task"
-            android:textColor="@color/dribblePink"
-            android:textSize="@dimen/text_18sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvOverdueTaskList"
@@ -65,6 +45,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/padding_18dp"
+            android:layout_marginTop="@dimen/padding_10dp"
             android:layout_marginEnd="@dimen/padding_18dp"
             android:background="@android:color/transparent"
             android:clipToPadding="false"
