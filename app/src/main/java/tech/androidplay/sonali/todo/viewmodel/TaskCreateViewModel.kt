@@ -21,7 +21,7 @@ class TaskCreateViewModel @ViewModelInject constructor(private val taskSource: T
     ViewModel() {
 
     private val _currentUser = taskSource.userDetails
-    /*val currentUser get() = _currentUser*/
+    val currentUser get() = _currentUser
 
     fun createTask(
         todoBody: String,

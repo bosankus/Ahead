@@ -155,11 +155,16 @@ class TaskCreateFragment : Fragment(R.layout.fragment_task_create) {
                     is ResultData.Loading -> binding.layoutAssigneeUser.tvAssigneeAvailability.text =
                         "Checking..."
                     is ResultData.Success -> {
-                        binding.layoutAssigneeUser.tvAssigneeAvailability.text = "User is available"
-                        assigneeId = it.data
+                        if (it.data == viewModel.currentUser?.uid)
+                            binding.layoutAssigneeUser.tvAssigneeAvailability.text =
+                                "⚠️Can not assign task to yourself"
+                        else {
+                            assigneeId = it.data
+                            binding.layoutAssigneeUser.tvAssigneeAvailability.text = " ✔️User added"
+                        }
                     }
                     is ResultData.Failed -> {
-                        binding.layoutAssigneeUser.tvAssigneeAvailability.text = "No user found!"
+                        binding.layoutAssigneeUser.tvAssigneeAvailability.text = "❗No user found"
                         assigneeId = null
                     }
                 }
@@ -175,6 +180,7 @@ class TaskCreateFragment : Fragment(R.layout.fragment_task_create) {
         val todoDate = taskTimeStamp
         val assigneeList = arrayOf(assigneeId)
 
+        // creating task via viewmodel
         if (taskImage == null) {
             viewModel.createTask(todoBody, todoDesc, todoDate, assigneeList)
                 .observe(viewLifecycleOwner, {
@@ -188,7 +194,7 @@ class TaskCreateFragment : Fragment(R.layout.fragment_task_create) {
                     }
                 })
         } else {
-
+            // creating task via work manager
             val constraints = Constraints.Builder()
                 .setRequiredNetworkType(NetworkType.CONNECTED)
                 .build()
@@ -227,7 +233,7 @@ class TaskCreateFragment : Fragment(R.layout.fragment_task_create) {
             taskImage = data.data
             isImageAdded = true
             binding.apply {
-                layoutCreateTaskFeatures.addImage.setSvgTint(R.color.dribblePink)
+                layoutCreateTaskFeatures.addImage.setSvgTint(R.color.grey2)
                 layoutTaskImage.clImagePlaceHolder.visibility = View.VISIBLE
                 layoutTaskImage.imgPhoto.loadImageCircleCropped(taskImage.toString())
             }

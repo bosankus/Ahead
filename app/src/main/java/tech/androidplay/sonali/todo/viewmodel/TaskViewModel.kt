@@ -96,6 +96,7 @@ class TaskViewModel @ViewModelInject constructor(
                     getAllAssignedTasks()
                 }
             } catch (e: Exception) {
+                _loadingState.value = false
                 logMessage("TaskViewModel-getAllTasks: ${e.message}")
             }
         }
@@ -112,6 +113,7 @@ class TaskViewModel @ViewModelInject constructor(
                     } else getQuote()
                 }
             } catch (e: Exception) {
+                _loadingState.value = false
                 logMessage("TaskViewModel-getAllAssignedTasks: ${e.message}")
             }
         }
@@ -130,4 +132,3 @@ class TaskViewModel @ViewModelInject constructor(
         userId?.let { viewModelScope.launch { taskSource.fetchUserFullName(it) } }
 
 }
-
