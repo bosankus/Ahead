@@ -2,7 +2,7 @@
     android:color="@color/grey1">
     <item android:id="@android:id/background">
         <shape android:shape="rectangle">
-            <solid android:color="#FAFAFA" />
+            <solid android:color="@color/bg_off_white" />
             <corners android:radius="10dp" />
         </shape>
     </item>

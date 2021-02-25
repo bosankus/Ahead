@@ -24,11 +24,13 @@
             android:layout_width="150dp"
             android:layout_height="150dp"
             android:layout_margin="@dimen/padding_18dp"
+            app:cardBackgroundColor="@android:color/white"
             app:cardCornerRadius="@dimen/padding_5dp">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:background="?attr/selectableItemBackground">
 
                 <TextView
                     android:id="@+id/tvTodoDayName"
@@ -38,7 +40,7 @@
                     android:layout_marginEnd="@dimen/padding_18dp"
                     android:layout_marginTop="@dimen/padding_10dp"
                     android:textColor="@color/grey2"
-                    android:textSize="@dimen/text_14sp"
+                    android:textSize="@dimen/text_12sp"
                     android:ellipsize="marquee"
                     android:singleLine="true"
                     app:day_name="@{todo.todoDate}"
