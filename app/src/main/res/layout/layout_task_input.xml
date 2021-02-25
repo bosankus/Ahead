@@ -33,7 +33,7 @@
         android:hint="@string/create_task_details_hint"
         android:imeOptions="actionNext"
         android:inputType="textMultiLine"
-        android:lines="8"
+        android:lines="5"
         android:padding="@dimen/padding_10dp"
         android:scrollbars="vertical"
         android:scrollHorizontally="false"

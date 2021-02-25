@@ -2,8 +2,8 @@
     android:color="@color/grey1">
     <item android:id="@android:id/background">
         <shape android:shape="rectangle">
-            <solid android:color="@color/bg_off_white" />
-            <corners android:radius="10dp" />
+            <solid android:color="#FAFAFA" />
+            <corners android:radius="200dp" />
         </shape>
     </item>
 </ripple>

@@ -42,8 +42,6 @@ class TaskCompletedFragment : Fragment(R.layout.fragment_task_completed) {
 
     private fun setScreen() {
         layoutTaskBar.apply {
-            tvUserFName.text = "Completed task"
-            imgCreate.visibility = View.GONE
             imgMenu.visibility = View.GONE
         }
         layoutNoTask.btnAddTask.text = "It's empty here!"

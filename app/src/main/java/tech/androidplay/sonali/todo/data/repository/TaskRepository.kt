@@ -163,7 +163,7 @@ class TaskRepository @Inject constructor(
         ""
     }
 
-    fun getUserFirstName(): String {
+    fun getUserFullName(): String {
         val name = userDetails?.displayName
         return name ?: ""
     }

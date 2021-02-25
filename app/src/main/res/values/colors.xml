@@ -24,6 +24,7 @@
 
     <!-- Picked colors from web -->
     <color name="page_background">#F0F2F7</color>
+    <color name="bg_off_white">#FAFAFA</color>
     <!--<color name="green_text_color">#34E48D</color>
     <color name="green_text_color_dark">#5BB49D</color>
     <color name="bordered_btn_green_dark">#A5D6A7</color>

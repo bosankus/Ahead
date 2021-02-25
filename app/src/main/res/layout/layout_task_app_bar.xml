@@ -15,34 +15,20 @@
         android:layout_height="wrap_content"
         android:background="@color/white">
 
-        <TextView
-            android:id="@+id/tvUserFName"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/padding_18dp"
-            android:alpha="0.8"
-            android:fontFamily="@font/calibre_semi"
-            android:text="@{fname}"
-            android:textColor="@color/grey3"
-            android:textSize="@dimen/text_22sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/imgMenu"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
         <ImageView
-            android:id="@+id/imgCreate"
+            android:id="@+id/imgAvatar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/padding_18dp"
+            android:layout_marginStart="@dimen/padding_22dp"
             android:background="@drawable/bg_icon_ripple"
             android:padding="@dimen/padding_3dp"
-            android:src="@drawable/ic_create"
-            app:layout_constraintBottom_toBottomOf="@+id/tvUserFName"
-            app:layout_constraintEnd_toStartOf="@+id/imgMenu"
-            app:layout_constraintTop_toTopOf="@+id/tvUserFName"
-            app:tint="@color/grey3"
+            android:src="@drawable/ic_avatar"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="@color/dribblePink"
             tools:ignore="ContentDescription" />
+
 
         <ImageView
             android:id="@+id/imgMenu"
@@ -52,10 +38,10 @@
             android:background="@drawable/bg_icon_ripple"
             android:padding="@dimen/padding_3dp"
             android:src="@drawable/ic_menu"
-            app:layout_constraintBottom_toBottomOf="@+id/tvUserFName"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/tvUserFName"
-            app:tint="@color/grey3"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="@color/dribblePink"
             tools:ignore="ContentDescription" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

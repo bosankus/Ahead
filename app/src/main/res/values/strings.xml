@@ -42,16 +42,14 @@
     <string name="get_started">Next</string>
     <string name="details">Details</string>
     <string name="assign_task">Assigned</string>
-    <string name="username">Username (Email ID)</string>
     <string name="today_s_quote">Today\'s quote</string>
     <string name="overdue">Overdue</string>
     <string name="add_note">Add note</string>
-    <string name="first_name">First name</string>
-    <string name="last_name">Last name</string>
     <string name="save_details">Save details</string>
 
     <!--Revised Strings-->
     <string name="app_name">Ahead</string>
+    <string name="fragment_task_general_app_desc">Start managing your tasks</string>
 
     <!--Authentication-->
     <string name="login_header_txt"><font color="#444444">Welcome,</font><font color="#9E9E9E">\nSign in to get started</font></string>
@@ -65,4 +63,7 @@
     <string name="task_image_upload_failed">Image uploading failed. Please retry adding the task.</string>
     <string name="create_task_title_hint">Task Title</string>
     <string name="create_task_details_hint">Add task details</string>
+    <string name="username">Username (Email ID)</string>
+
+    <!--Task Editing-->
 </resources>
