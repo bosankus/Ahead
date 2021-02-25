@@ -72,8 +72,11 @@ class TaskViewModel @ViewModelInject constructor(
 
     private fun getUserFirstName() {
         viewModelScope.launch {
-            _firstName.value = "Good Day, ${taskSource.getUserFirstName()}"
+            val fullName = taskSource.getUserFullName()
+            val firstName = fullName.split(" ").toMutableList().firstOrNull()
+            _firstName.value = "Good Day, $firstName"
             getAllTasks()
+
         }
     }
 
@@ -84,7 +87,8 @@ class TaskViewModel @ViewModelInject constructor(
                     if (allTodoList.size != 0) {
                         _taskListSize.value = allTodoList.size
                         _completedTaskList.value =
-                            allTodoList.filter { it.isCompleted }.sortedByDescending { it.todoDate }
+                            allTodoList.filter { it.isCompleted }
+                                .sortedByDescending { it.todoDate }
                         _upcomingTaskList.value =
                             allTodoList.filter { it.todoDate.compareWithToday() == IS_AFTER && !it.isCompleted }
                                 .sortedByDescending { it.todoDate }
@@ -108,7 +112,8 @@ class TaskViewModel @ViewModelInject constructor(
                 taskSource.fetchOnlyAssignedTask().collect { assignedTask ->
                     if (assignedTask.size != 0) {
                         _taskListSize.postValue(_taskListSize.value?.plus(assignedTask.size))
-                        _assignedTaskList.value = assignedTask.sortedByDescending { it.todoDate }
+                        _assignedTaskList.value =
+                            assignedTask.sortedByDescending { it.todoDate }
                         _loadingState.value = false
                     } else getQuote()
                 }
@@ -128,7 +133,7 @@ class TaskViewModel @ViewModelInject constructor(
         }
     }
 
-    fun fetchUserFullName(userId: String?) =
-        userId?.let { viewModelScope.launch { taskSource.fetchUserFullName(it) } }
+    /*fun fetchUserFullName(userId: String?) =
+        userId?.let { viewModelScope.launch { taskSource.fetchUserFullName(it) } }*/
 
 }

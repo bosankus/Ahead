@@ -87,7 +87,7 @@ class TaskFragment : Fragment(R.layout.fragment_task) {
 
     private fun setListeners() {
         binding.layoutTaskBar.imgMenu.setOnClickListener { showPopupMenu(binding.layoutTaskBar.imgMenu) }
-        binding.layoutTaskBar.imgCreate.setOnClickListener { showCreateMenu(binding.layoutTaskBar.imgCreate) }
+        /*binding.layoutTaskBar.imgCreate.setOnClickListener { showCreateMenu(binding.layoutTaskBar.imgCreate) }*/
         binding.layoutNoTask.btnAddTask.setOnClickListener { goToCreateTaskFragment() }
 
     }

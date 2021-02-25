@@ -76,8 +76,8 @@ class TaskEditFragment : Fragment(R.layout.fragment_task_edit) {
     }
 
     private fun setUpScreen() {
-        layoutTaskBar.tvUserFName.text = "Task Details"
-        layoutTaskBar.imgCreate.visibility = View.GONE
+        /*layoutTaskBar.tvUserFName.text = "Task Details"
+        layoutTaskBar.imgCreate.visibility = View.GONE*/
         layoutTaskBar.imgMenu.visibility = View.GONE
 
 
