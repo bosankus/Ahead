@@ -47,7 +47,7 @@
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
                 android:fontFamily="@font/calibre_semi"
-                android:lines="2"
+                android:lines="1"
                 android:maxLines="2"
                 android:text="@{todo.todoBody}"
                 android:textColor="@color/grey3"

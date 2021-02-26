@@ -47,10 +47,10 @@ class EditTaskViewModel @ViewModelInject constructor(private val taskSource: Tas
         }
     }
 
-    fun deleteTask(docId: String?, hasImage: Boolean) = docId?.let {
+    fun deleteTask(docId: String?, imgLink: String?) = docId?.let {
         liveData {
             emit(ResultData.Loading)
-            emit(taskSource.deleteTask(it, hasImage))
+            emit(taskSource.deleteTask(it, imgLink))
         }
     }
 }

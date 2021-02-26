@@ -28,15 +28,16 @@
             android:layout_marginStart="@dimen/padding_8dp"
             android:layout_marginTop="@dimen/padding_8dp"
             android:layout_marginEnd="@dimen/padding_16dp"
+            android:drawablePadding="@dimen/padding_8dp"
             android:fontFamily="@font/calibre"
             android:text="@{quote}"
+            android:textAlignment="center"
             android:textColor="@color/grey2"
             android:textSize="@dimen/text_16sp"
-            android:drawablePadding="@dimen/padding_8dp"
-            app:drawableTint="@color/grey2"
-            android:textAlignment="center"
             app:drawableEndCompat="@drawable/ic_quote"
-            app:drawableStartCompat="@drawable/ic_quote" />
+            app:drawableStartCompat="@drawable/ic_quote"
+            app:drawableTint="@color/grey2"
+            app:show="@{(quote != null)? true: false}" />
 
         <TextView
             android:id="@+id/tvAppBarAuthor"
@@ -53,6 +54,5 @@
             app:show="@{(author != null) ? true : false}" />
 
     </LinearLayout>
-
 
 </layout>

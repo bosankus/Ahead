@@ -29,8 +29,6 @@ import tech.androidplay.sonali.todo.utils.Constants.TASK_DOC_ID
 import tech.androidplay.sonali.todo.utils.Constants.TASK_IMAGE_URL
 import tech.androidplay.sonali.todo.utils.UIHelper.showSnack
 import tech.androidplay.sonali.todo.utils.UIHelper.showToast
-import tech.androidplay.sonali.todo.utils.cancelAlarmedNotification
-import tech.androidplay.sonali.todo.utils.startAlarmedNotification
 import tech.androidplay.sonali.todo.viewmodel.EditTaskViewModel
 import javax.inject.Inject
 
@@ -109,10 +107,8 @@ class TaskEditFragment : Fragment(R.layout.fragment_task_edit) {
                 "Check Internet!"
             )
         }
-        tvDeleteTask.setOnClickListener {
-            if (taskImage.isNullOrEmpty()) deleteTask(taskId, false)
-            else deleteTask(taskId, true)
-        }
+        tvDeleteTask.setOnClickListener { deleteTask(taskId, taskImage) }
+
         btnSaveTasks.setOnClickListener { saveTask() }
         tvSelectDate.setOnClickListener { dateTimePicker.openDateTimePicker(requireContext()) }
         dateTimePicker.epochFormat.observe(viewLifecycleOwner, { epoch ->
@@ -215,7 +211,7 @@ class TaskEditFragment : Fragment(R.layout.fragment_task_edit) {
         }
     }
 
-    private fun deleteTask(docId: String?, hasImage: Boolean) {
+    private fun deleteTask(docId: String?, hasImage: String?) {
         dialog.setPositiveButton("Yes") { dialogInterface, _ ->
             viewModel.deleteTask(docId, hasImage)?.observe(viewLifecycleOwner, {
                 when (it) {

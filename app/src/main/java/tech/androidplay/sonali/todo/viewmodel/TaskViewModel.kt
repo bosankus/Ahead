@@ -111,7 +111,6 @@ class TaskViewModel @ViewModelInject constructor(
             try {
                 taskSource.fetchOnlyAssignedTask().collect { assignedTask ->
                     if (assignedTask.size != 0) {
-                        _taskListSize.postValue(_taskListSize.value?.plus(assignedTask.size))
                         _assignedTaskList.value =
                             assignedTask.sortedByDescending { it.todoDate }
                         _loadingState.value = false

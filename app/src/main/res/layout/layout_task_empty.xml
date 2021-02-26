@@ -10,7 +10,11 @@
             type="tech.androidplay.sonali.todo.viewmodel.TaskViewModel" />
 
         <variable
-            name="listSize"
+            name="allListSize"
+            type="int" />
+
+        <variable
+            name="assignedListSize"
             type="int" />
     </data>
 
@@ -18,7 +22,7 @@
         android:id="@+id/clEmptyTask"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:show="@{(listSize==0) ? true: false}">
+        app:show="@{(allListSize==0 &amp;&amp; assignedListSize==0 ) ? true: false}">
 
         <ImageView
             android:id="@+id/imgEmptyTask"

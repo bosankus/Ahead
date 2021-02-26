@@ -108,18 +108,17 @@ class TaskRepository @Inject constructor(
         }
     }
 
-    suspend fun deleteTask(docId: String, hasImage: Boolean): ResultData<Boolean> {
-        return try {
-            taskListRef.document(docId).delete().await()
-            if (hasImage)
-                storageReference.child("${userDetails?.email}/$docId").delete().await()
-            else ResultData.Success(true)
-            ResultData.Success(true)
-        } catch (e: Exception) {
-            crashReport.log(e.message.toString())
-            ResultData.Failed(e.message)
-        }
+    suspend fun deleteTask(docId: String, imgLink: String?): ResultData<Boolean> = try {
+        taskListRef.document(docId).delete().await()
+        imgLink?.let { storageReference.storage.getReferenceFromUrl(it).delete().await() }
+        /*if (hasImage?.isNotEmpty() == true)
+            storageReference.child("${userDetails?.email}/$docId").delete().await()*/
+        ResultData.Success(true)
+    } catch (e: Exception) {
+        crashReport.log(e.message.toString())
+        ResultData.Failed(e.message)
     }
+
 
     suspend fun uploadImage(
         uri: Uri,

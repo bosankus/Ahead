@@ -32,7 +32,7 @@ interface FirebaseApi {
     suspend fun fetchOnlyAssignedTask(): Flow<MutableList<Todo>>
     suspend fun fetchTaskByTaskId(taskId: String): ResultData<Todo>
     suspend fun updateTask(taskId: String, map: Map<String, Any?>): ResultData<Boolean>
-    suspend fun deleteTask(docId: String, hasImage: Boolean): ResultData<Boolean>
+    suspend fun deleteTask(docId: String, hasImage: String?): ResultData<Boolean>
 
     // For user related
     suspend fun isUserAvailable(email: String): ResultData<Boolean>

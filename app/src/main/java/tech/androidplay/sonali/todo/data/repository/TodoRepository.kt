@@ -92,10 +92,10 @@ class TodoRepository : FirebaseApi {
             ResultData.Failed(e.message)
         }
 
-    override suspend fun deleteTask(docId: String, hasImage: Boolean): ResultData<Boolean> = try {
-        /*if (hasImage) storage.storage.getReferenceFromUrl("").delete().await()*/
-        if (hasImage) storage.child("${userDetails?.email}/$docId").delete().await()
+    override suspend fun deleteTask(docId: String, hasImage: String?): ResultData<Boolean> = try {
         taskListRef.document(docId).delete().await()
+        hasImage?.let { storage.storage.getReferenceFromUrl(it).delete().await() }
+        /*if (hasImage) storage.child("${userDetails?.email}/$docId").delete().await()*/
         ResultData.Success(true)
     } catch (e: Exception) {
         ResultData.Failed(e.message)
