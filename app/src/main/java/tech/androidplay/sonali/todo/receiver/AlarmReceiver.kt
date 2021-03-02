@@ -14,13 +14,13 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import tech.androidplay.sonali.todo.R
 import tech.androidplay.sonali.todo.service.TaskStatusUpdateService
 import tech.androidplay.sonali.todo.utils.Constants.ALARM_DESCRIPTION
+import tech.androidplay.sonali.todo.utils.Constants.ALARM_ID
 import tech.androidplay.sonali.todo.utils.Constants.ALARM_TEXT
 import tech.androidplay.sonali.todo.utils.Constants.ANDROID_OREO
 import tech.androidplay.sonali.todo.utils.Constants.DEVICE_ANDROID_VERSION
 import tech.androidplay.sonali.todo.utils.Constants.NOTIFICATION_CHANNEL_ID
 import tech.androidplay.sonali.todo.utils.Constants.NOTIFICATION_CHANNEL_NAME
 import tech.androidplay.sonali.todo.utils.Constants.NOTIFICATION_ID
-import tech.androidplay.sonali.todo.utils.Constants.TASK_DOC_ID
 import tech.androidplay.sonali.todo.utils.generateRequestCode
 import javax.inject.Inject
 
@@ -49,7 +49,7 @@ class AlarmReceiver : HiltBroadcastReceiver() {
         intent?.let {
             alarmText = "${it.extras?.get(ALARM_TEXT)}"
             alarmDescription = "${it.extras?.get(ALARM_DESCRIPTION)}"
-            taskId = "${it.extras?.get(TASK_DOC_ID)}"
+            taskId = "${it.extras?.get(ALARM_ID)}"
         } ?: return
         context?.let {
             showNotification(it, alarmText, alarmDescription, taskId)
@@ -65,7 +65,7 @@ class AlarmReceiver : HiltBroadcastReceiver() {
     ) {
         val uniqueNotificationId = taskId.generateRequestCode()
         val intent = Intent(context, TaskStatusUpdateService::class.java).also {
-            it.putExtra(TASK_DOC_ID, taskId)
+            it.putExtra(ALARM_ID, taskId)
             it.putExtra(NOTIFICATION_ID, uniqueNotificationId)
         }
 

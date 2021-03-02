@@ -2,14 +2,15 @@ package tech.androidplay.sonali.todo.utils
 
 import android.app.AlarmManager
 import android.app.PendingIntent
+import android.content.Context
 import android.content.Intent
 import android.view.View
 import androidx.fragment.app.Fragment
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import tech.androidplay.sonali.todo.receiver.AlarmReceiver
 import tech.androidplay.sonali.todo.utils.Constants.ALARM_DESCRIPTION
+import tech.androidplay.sonali.todo.utils.Constants.ALARM_ID
 import tech.androidplay.sonali.todo.utils.Constants.ALARM_TEXT
-import tech.androidplay.sonali.todo.utils.Constants.TASK_DOC_ID
 
 /**
  * Created by Androidplay
@@ -19,22 +20,22 @@ import tech.androidplay.sonali.todo.utils.Constants.TASK_DOC_ID
  */
 
 @ExperimentalCoroutinesApi
-fun Fragment.startAlarmedNotification(
-    requestCode: String,
-    notificationText: String,
-    notificationBody: String,
+fun Context.startAlarmedNotification(
+    id: String,
+    body: String,
+    description: String,
     dateTime: Long,
     alarmManager: AlarmManager
 ) {
-    val intent = Intent(requireContext(), AlarmReceiver::class.java).apply {
-        this.putExtra(ALARM_TEXT, notificationText)
-        this.putExtra(ALARM_DESCRIPTION, notificationBody)
-        this.putExtra(TASK_DOC_ID, requestCode)
+    val intent = Intent(this, AlarmReceiver::class.java).apply {
+        this.putExtra(ALARM_TEXT, body)
+        this.putExtra(ALARM_DESCRIPTION, description)
+        this.putExtra(ALARM_ID, id)
     }
     val pendingIntent =
         PendingIntent.getBroadcast(
-            requireContext(),
-            requestCode.generateRequestCode(),
+            this,
+            id.generateRequestCode(),
             intent,
             PendingIntent.FLAG_UPDATE_CURRENT
         )
@@ -46,24 +47,11 @@ fun Fragment.startAlarmedNotification(
 }
 
 @ExperimentalCoroutinesApi
-fun Fragment.cancelAlarmedNotification(requestCode: String) {
-    val intent = Intent(requireContext(), AlarmReceiver::class.java)
+fun Context.cancelAlarmedNotification(requestCode: String) {
+    val intent = Intent(this, AlarmReceiver::class.java)
     val pendingIntent =
         PendingIntent.getBroadcast(
-            requireContext(),
-            requestCode.generateRequestCode(),
-            intent,
-            PendingIntent.FLAG_UPDATE_CURRENT
-        )
-    pendingIntent.cancel()
-}
-
-@ExperimentalCoroutinesApi
-fun View.cancelAlarmedNotification(requestCode: String) {
-    val intent = Intent(this.context, AlarmReceiver::class.java)
-    val pendingIntent =
-        PendingIntent.getBroadcast(
-            this.context,
+            this,
             requestCode.generateRequestCode(),
             intent,
             PendingIntent.FLAG_UPDATE_CURRENT

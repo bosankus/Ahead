@@ -67,7 +67,6 @@ class MainActivity : AppCompatActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-
         authManager.handleAuth(requestCode, resultCode, data) { isSuccessful, error ->
             if (isSuccessful) {
                 val userDetails = authManager.userDetails

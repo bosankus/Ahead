@@ -6,12 +6,6 @@ import androidx.recyclerview.widget.RecyclerView
 import tech.androidplay.sonali.todo.R
 import tech.androidplay.sonali.todo.databinding.LayoutMainTaskListBinding
 import tech.androidplay.sonali.todo.model.Todo
-import tech.androidplay.sonali.todo.utils.Constants.TASK_DATE
-import tech.androidplay.sonali.todo.utils.Constants.TASK_DOC_BODY
-import tech.androidplay.sonali.todo.utils.Constants.TASK_DOC_DESC
-import tech.androidplay.sonali.todo.utils.Constants.TASK_DOC_ID
-import tech.androidplay.sonali.todo.utils.Constants.TASK_IMAGE_URL
-import tech.androidplay.sonali.todo.utils.Constants.TASK_STATUS
 
 /**
  * Created by Androidplay
@@ -24,22 +18,17 @@ class TodoViewHolder(
 ) : RecyclerView.ViewHolder(binding.root) {
 
     fun bind(todoItem: Todo) {
-        binding.todo = todoItem
-        binding.executePendingBindings()
-        binding.tvTodoListItem.transitionName = "todoBody"
-
-        binding.clItemListContainer.setOnClickListener {
-            val bundle = bundleOf(
-                TASK_DOC_ID to todoItem.docId,
-                TASK_DOC_BODY to todoItem.todoBody,
-                TASK_DOC_DESC to todoItem.todoDesc,
-                TASK_STATUS to todoItem.isCompleted,
-                TASK_DATE to todoItem.todoDate,
-                TASK_IMAGE_URL to todoItem.taskImage
-            )
-            it?.findNavController()
-                ?.navigate(R.id.action_global_taskEditFragment, bundle)
+        binding.apply {
+            todo = todoItem
+            executePendingBindings()
+            clItemListContainer.setOnClickListener {
+                val bundle = bundleOf(TASK_DOC_ID to todoItem.docId)
+                it?.findNavController()?.navigate(R.id.action_global_taskEditFragment, bundle)
+            }
         }
+    }
 
+    companion object{
+        const val TASK_DOC_ID = "TASK_DOC_ID"
     }
 }

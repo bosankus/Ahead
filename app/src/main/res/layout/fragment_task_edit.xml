@@ -1,198 +1,235 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/taskEditFragment"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <include
-        android:id="@+id/layoutTaskBar"
-        layout="@layout/layout_task_app_bar"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <data>
+
+        <variable
+            name="viewmodel"
+            type="tech.androidplay.sonali.todo.viewmodel.EditTaskViewModel" />
+
+        <variable
+            name="task"
+            type="tech.androidplay.sonali.todo.model.Todo" />
+    </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/clTaskImg"
+        android:id="@+id/taskEditFragment"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/padding_16dp"
-        android:background="@drawable/bg_rounded"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/layoutTaskBar">
+        android:layout_height="match_parent"
+        app:isImageUploading="@{viewmodel.imageUploadState}">
 
-        <TextView
-            android:id="@+id/tvNoTaskImg"
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/layoutTaskBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/calibre_semi"
+            android:paddingStart="@dimen/padding_16dp"
+            android:paddingTop="@dimen/padding_16dp"
+            android:text="@string/edit_task"
+            android:textSize="@dimen/text_26sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="RtlSymmetry" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/btnSaveTask"
+            android:background="@drawable/bg_icon_ripple"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/padding_16dp"
+            android:fontFamily="@font/calibre_semi"
+            android:padding="@dimen/padding_5dp"
+            android:text="@string/save_task"
+            android:drawablePadding="@dimen/padding_8dp"
+            app:drawableStartCompat="@drawable/ic_tick"
+            app:drawableTint="@color/dribblePink"
+            android:textColor="@color/dribblePink"
+            android:textSize="@dimen/text_20sp"
+            app:isUpdating="@{viewmodel.updateTaskState}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/clTaskImg"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/padding_16dp"
-            android:drawablePadding="@dimen/padding_5dp"
-            android:fontFamily="@font/calibre"
-            android:text="@string/upload_img_txt"
-            android:textColor="@color/grey3"
-            android:textSize="@dimen/text_16sp"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <ImageView
-            android:id="@+id/imgTask"
-            android:layout_width="match_parent"
-            android:layout_height="150dp"
-            android:scaleType="centerCrop"
-            android:visibility="gone"
+            android:background="@drawable/bg_rounded"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:ignore="ContentDescription" />
+            app:layout_constraintTop_toBottomOf="@+id/layoutTaskBar">
 
-        <ImageView
-            android:id="@+id/imgUploadTaskImg"
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tvNoTaskImg"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/padding_16dp"
+                android:drawablePadding="@dimen/padding_5dp"
+                android:fontFamily="@font/calibre"
+                android:text="@string/upload_img_txt"
+                android:textColor="@color/grey3"
+                android:textSize="@dimen/text_16sp"
+                app:isNoImageTextVisible="@{task.taskImage}"
+                app:layout_constraintEnd_toStartOf="@+id/imgUploadTaskImg"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/imgTask"
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                android:scaleType="centerCrop"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:showImage="@{viewmodel.initialTaskImage}"
+                tools:ignore="ContentDescription" />
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/imgUploadTaskImg"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/padding_16dp"
+                android:background="?attr/selectableItemBackground"
+                android:src="@drawable/ic_add_image"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:makeTint="@{viewmodel.initialTaskImage}"
+                app:tint="@color/dribblePink"
+                tools:ignore="ContentDescription" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvSelectDate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/padding_16dp"
+            android:layout_marginTop="@dimen/padding_16dp"
+            android:layout_marginEnd="@dimen/padding_16dp"
+            android:background="@drawable/bg_rounded"
+            android:drawablePadding="@dimen/padding_5dp"
+            android:fontFamily="@font/calibre"
+            android:padding="@dimen/padding_16dp"
+            android:textColor="@color/grey3"
+            android:textSize="@dimen/text_16sp"
+            app:drawableEndCompat="@drawable/ic_alarm"
+            app:drawableTint="@color/dribblePink"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/clTaskImg"
+            app:setNotificationDateTime="@{viewmodel.initialTaskDate}" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/clTaskInput"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/padding_16dp"
+            android:layout_marginTop="@dimen/padding_16dp"
+            android:layout_marginEnd="@dimen/padding_16dp"
+            android:background="@drawable/bg_rounded"
+            android:paddingBottom="@dimen/padding_16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvSelectDate">
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/etTaskBodyHeader"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/padding_16dp"
+                android:layout_marginTop="@dimen/padding_16dp"
+                android:text="@string/task_title"
+                android:textColor="@color/grey2"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/etTaskBody"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/padding_16dp"
+                android:layout_marginTop="@dimen/padding_5dp"
+                android:layout_marginEnd="@dimen/padding_16dp"
+                android:background="@android:color/transparent"
+                android:fontFamily="@font/calibre"
+                android:hint="@string/task"
+                android:inputType="text"
+                android:maxLines="1"
+                android:text="@={viewmodel.initialTaskBody}"
+                android:textColor="@color/grey3"
+                android:textSize="@dimen/text_18sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/etTaskBodyHeader"
+                tools:ignore="Autofill" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/etTaskDescHeader"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/padding_16dp"
+                android:layout_marginTop="@dimen/padding_16dp"
+                android:text="@string/task_details"
+                android:textColor="@color/grey2"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/etTaskBody" />
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/etTaskDesc"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/padding_16dp"
+                android:layout_marginTop="@dimen/padding_5dp"
+                android:layout_marginEnd="@dimen/padding_16dp"
+                android:background="@android:color/transparent"
+                android:fontFamily="@font/calibre"
+                android:hint="@string/task_description"
+                android:inputType="textMultiLine"
+                android:text="@={viewmodel.initialTaskDesc}"
+                android:textColor="@color/grey3"
+                android:textSize="@dimen/text_18sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/etTaskDescHeader"
+                tools:ignore="Autofill" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvDeleteTask"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/padding_16dp"
             android:background="?attr/selectableItemBackground"
-            android:src="@drawable/ic_add_image"
+            android:drawablePadding="@dimen/padding_5dp"
+            android:fontFamily="@font/calibre"
+            android:padding="@dimen/padding_5dp"
+            android:text="@string/delete_task"
+            android:textColor="@color/grey2"
+            android:textSize="@dimen/text_16sp"
+            app:drawableStartCompat="@drawable/ic_delete"
+            app:drawableTint="@color/grey2"
+            app:isDeleting="@{viewmodel.deleteTaskState}"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:tint="@color/dribblePink"
-            tools:ignore="ContentDescription" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/clTaskInput" />
+
+        <include
+            android:id="@+id/layoutError"
+            layout="@layout/layout_error"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:viewmodel="@{viewmodel}" />
+
+        <include
+            android:id="@+id/layoutLoading"
+            layout="@layout/layout_loading_fragment_edit_task"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:loadingState="@{viewmodel}" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/tvSelectDate"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/padding_16dp"
-        android:layout_marginTop="@dimen/padding_16dp"
-        android:layout_marginEnd="@dimen/padding_16dp"
-        android:background="@drawable/bg_rounded"
-        android:drawablePadding="@dimen/padding_5dp"
-        android:fontFamily="@font/calibre"
-        android:padding="@dimen/padding_16dp"
-        android:textColor="@color/grey3"
-        android:textSize="@dimen/text_16sp"
-        app:drawableEndCompat="@drawable/ic_alarm"
-        app:drawableTint="@color/dribblePink"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/clTaskImg" />
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/clTaskInput"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/padding_16dp"
-        android:layout_marginTop="@dimen/padding_16dp"
-        android:layout_marginEnd="@dimen/padding_16dp"
-        android:background="@drawable/bg_rounded"
-        android:paddingBottom="@dimen/padding_16dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvSelectDate">
-
-        <TextView
-            android:id="@+id/etTaskBodyHeader"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/padding_16dp"
-            android:layout_marginTop="@dimen/padding_16dp"
-            android:text="@string/task_title"
-            android:textColor="@color/grey2"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <EditText
-            android:id="@+id/etTaskBody"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/padding_16dp"
-            android:layout_marginTop="@dimen/padding_5dp"
-            android:layout_marginEnd="@dimen/padding_16dp"
-            android:background="@android:color/transparent"
-            android:fontFamily="@font/calibre"
-            android:hint="@string/task"
-            android:inputType="text"
-            android:maxLines="1"
-            android:textColor="@color/grey3"
-            android:textSize="@dimen/text_18sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/etTaskBodyHeader"
-            tools:ignore="Autofill" />
-
-        <TextView
-            android:id="@+id/etTaskDescHeader"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/padding_16dp"
-            android:layout_marginTop="@dimen/padding_16dp"
-            android:text="@string/task_details"
-            android:textColor="@color/grey2"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/etTaskBody" />
-
-        <EditText
-            android:id="@+id/etTaskDesc"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/padding_16dp"
-            android:layout_marginTop="@dimen/padding_5dp"
-            android:layout_marginEnd="@dimen/padding_16dp"
-            android:background="@android:color/transparent"
-            android:fontFamily="@font/calibre"
-            android:hint="@string/task_description"
-            android:inputType="textMultiLine"
-            android:textColor="@color/grey3"
-            android:textSize="@dimen/text_18sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/etTaskDescHeader"
-            tools:ignore="Autofill" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btnSaveTasks"
-        style="?android:attr/borderlessButtonStyle"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="@dimen/padding_18dp"
-        android:background="@drawable/bg_rounded_btn"
-        android:backgroundTint="@color/dribblePink"
-        android:fontFamily="@font/calibre"
-        android:text="@string/save_task"
-        android:textAllCaps="false"
-        android:textColor="@color/white"
-        android:textSize="@dimen/text_18sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/tvDeleteTask"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/padding_16dp"
-        android:background="?attr/selectableItemBackground"
-        android:drawablePadding="@dimen/padding_5dp"
-        android:fontFamily="@font/calibre"
-        android:padding="@dimen/padding_5dp"
-        android:text="@string/delete_task"
-        android:textColor="@color/grey2"
-        android:textSize="@dimen/text_16sp"
-        app:drawableStartCompat="@drawable/ic_delete"
-        app:drawableTint="@color/grey2"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/clTaskInput" />
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
