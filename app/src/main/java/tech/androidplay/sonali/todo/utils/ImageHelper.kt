@@ -33,7 +33,7 @@ fun Fragment.selectImage() {
         .start()
 }
 
-fun ImageView.loadImageCircleCropped(url: String?) {
+fun ImageView.loadImage(url: String?) {
     url.let {
         this.load(it) {
             crossfade(true)

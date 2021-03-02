@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:clickable="false"
     android:orientation="vertical">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -38,15 +39,15 @@
             android:id="@+id/cvCarouselShimmer"
             android:layout_width="match_parent"
             android:layout_height="150dp"
-            app:cardElevation="0dp"
-            app:cardCornerRadius="8dp"
-            app:cardBackgroundColor="@color/shimmerColor"
-            android:layout_marginTop="@dimen/padding_26dp"
             android:layout_marginStart="@dimen/padding_16dp"
+            android:layout_marginTop="@dimen/padding_26dp"
             android:layout_marginEnd="@dimen/padding_16dp"
-            app:layout_constraintStart_toStartOf="parent"
+            app:cardBackgroundColor="@color/shimmerColor"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="0dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imgMenuShimmer"/>
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/imgMenuShimmer" />
 
         <TextView
             android:id="@+id/tvTodoListItemShimmer"

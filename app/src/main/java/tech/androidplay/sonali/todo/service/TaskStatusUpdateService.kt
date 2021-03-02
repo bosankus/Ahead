@@ -7,8 +7,8 @@ import android.os.IBinder
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.*
 import tech.androidplay.sonali.todo.data.repository.TaskRepository
+import tech.androidplay.sonali.todo.utils.Constants.ALARM_ID
 import tech.androidplay.sonali.todo.utils.Constants.NOTIFICATION_ID
-import tech.androidplay.sonali.todo.utils.Constants.TASK_DOC_ID
 import javax.inject.Inject
 
 /**
@@ -38,7 +38,7 @@ class TaskStatusUpdateService : Service() {
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         intent?.let {
-            taskId = "${it.getStringExtra(TASK_DOC_ID)}"
+            taskId = "${it.getStringExtra(ALARM_ID)}"
             notificationId = it.getIntExtra(NOTIFICATION_ID, 0)
             notificationManager.cancel(notificationId)
         }

@@ -235,7 +235,7 @@ class TaskCreateFragment : Fragment(R.layout.fragment_task_create) {
             binding.apply {
                 layoutCreateTaskFeatures.addImage.setSvgTint(R.color.grey2)
                 layoutTaskImage.clImagePlaceHolder.visibility = View.VISIBLE
-                layoutTaskImage.imgPhoto.loadImageCircleCropped(taskImage.toString())
+                layoutTaskImage.imgPhoto.loadImage(taskImage.toString())
             }
         }
     }

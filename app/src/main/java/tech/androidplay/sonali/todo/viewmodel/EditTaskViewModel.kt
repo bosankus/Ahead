@@ -1,15 +1,18 @@
 package tech.androidplay.sonali.todo.viewmodel
 
+import android.annotation.SuppressLint
+import android.app.Application
 import android.net.Uri
+import androidx.databinding.ObservableField
 import androidx.hilt.lifecycle.ViewModelInject
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.liveData
+import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
 import tech.androidplay.sonali.todo.data.repository.TaskRepository
 import tech.androidplay.sonali.todo.utils.ResultData
-import tech.androidplay.sonali.todo.utils.UIHelper.getCurrentTimestamp
 
 /**
  * Created by Androidplay
@@ -18,39 +21,85 @@ import tech.androidplay.sonali.todo.utils.UIHelper.getCurrentTimestamp
  * Email: ankush@androidplay.in
  */
 
+@SuppressLint("StaticFieldLeak")
 @ExperimentalCoroutinesApi
-class EditTaskViewModel @ViewModelInject constructor(private val taskSource: TaskRepository) :
-    ViewModel() {
+class EditTaskViewModel @ViewModelInject constructor(
+    application: Application,
+    private val taskSource: TaskRepository
+) : AndroidViewModel(application) {
 
-    /*private var _userId = MutableLiveData<String>()
-    val userId get() = _userId*/
+    private val context = application.baseContext
 
-    fun getTaskByTaskId(taskId: String) = liveData {
-        emit(ResultData.Loading)
-        emit(taskSource.fetchTaskByTaskId(taskId))
-    }
+    private var _viewState = MutableLiveData<ResultData<*>>(ResultData.Loading)
+    val viewState: LiveData<ResultData<*>> get() = _viewState
 
-    fun updateTask(taskId: String, todoBody: String?, todoDesc: String?, todoDate: String?) {
-        val map: Map<String, Any?> = mapOf(
-            "todoBody" to todoBody,
-            "todoDesc" to todoDesc,
-            "todoDate" to todoDate,
-            "updatedOn" to getCurrentTimestamp()
-        )
-        viewModelScope.launch { taskSource.updateTask(taskId, map) }
-    }
+    private var _imageUploadState = MutableLiveData<ResultData<*>>(ResultData.DoNothing)
+    val imageUploadState: LiveData<ResultData<*>> get() = _imageUploadState
 
-    fun uploadImage(uri: Uri?, taskId: String) = uri?.let {
-        liveData {
-            emit(ResultData.Loading)
-            emit(taskSource.uploadImage(it, null, taskId))
+    private var _deleteTaskState = MutableLiveData<ResultData<*>>(ResultData.DoNothing)
+    val deleteTaskState: LiveData<ResultData<*>> get() = _deleteTaskState
+
+    private var _updateTaskState = MutableLiveData<ResultData<*>>(ResultData.DoNothing)
+    val updateTaskState: LiveData<ResultData<*>> get() = _updateTaskState
+
+    var initialTaskId = ObservableField("")
+    var initialTaskBody = ObservableField("")
+    var initialTaskDesc = ObservableField("")
+    var initialTaskDate = ObservableField("")
+    var initialTaskImage = ObservableField("")
+
+    fun getTaskByTaskId(taskId: String?) {
+        viewModelScope.launch {
+            val response = taskId?.let { taskSource.fetchTaskByTaskId(it) }
+            response?.let {
+                initialTaskId.set(it.docId)
+                initialTaskBody.set(it.todoBody.toString())
+                initialTaskDesc.set(it.todoDesc.toString())
+                initialTaskDate.set(it.todoDate)
+                initialTaskImage.set(it.taskImage.toString())
+                _viewState.postValue(ResultData.Success(it))
+            } ?: run { _viewState.postValue(ResultData.Failed("Check your network!")) }
         }
     }
 
-    fun deleteTask(docId: String?, imgLink: String?) = docId?.let {
-        liveData {
-            emit(ResultData.Loading)
-            emit(taskSource.deleteTask(it, imgLink))
-        }
+
+    fun updateTask() {
+        if (checkInputs()) {
+            _updateTaskState.postValue(ResultData.Loading)
+            val taskId = checkNotNull(initialTaskId.get())
+            val taskBody = checkNotNull(initialTaskBody.get())
+            val taskDesc = checkNotNull(initialTaskDesc.get())
+            val taskDate = checkNotNull(initialTaskDate.get())
+            val map: Map<String, Any?> = mapOf(
+                "todoBody" to taskBody,
+                "todoDesc" to taskDesc,
+                "todoDate" to taskDate,
+            )
+            viewModelScope.launch {
+                val response = taskSource.updateTask(taskId, map)
+                response.let { _updateTaskState.postValue(ResultData.Success(it)) }
+                    ?: run { _updateTaskState.postValue(ResultData.Failed()) }
+            }
+        } else _updateTaskState.postValue(ResultData.Failed("Fields can not be empty"))
+    }
+
+    fun uploadImage(uri: Uri?, taskId: String) = viewModelScope.launch {
+        _imageUploadState.postValue(ResultData.Loading)
+        val response = uri?.let { taskSource.uploadImage(it, null, taskId) }
+        response?.let { _imageUploadState.postValue(ResultData.Success(it)) }
+            ?: run { _imageUploadState.postValue(ResultData.Failed()) }
+    }
+
+    fun deleteTask() = viewModelScope.launch {
+        _deleteTaskState.postValue(ResultData.Loading)
+        val response =
+            initialTaskId.get()?.let { taskSource.deleteTask(it, initialTaskImage.get()) }
+        response?.let { _deleteTaskState.postValue(ResultData.Success(it)) }
+            ?: run { _deleteTaskState.postValue(ResultData.Failed("Something went wrong!")) }
+    }
+
+    private fun checkInputs(): Boolean {
+        return !(initialTaskId.get().isNullOrEmpty() || initialTaskDesc.get().isNullOrEmpty() ||
+                initialTaskDate.get().isNullOrEmpty())
     }
 }

@@ -28,7 +28,7 @@
             android:id="@+id/imgEmptyTask"
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:src="@drawable/ic_note"
+            android:src="@drawable/ic_empty"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.498"
@@ -49,7 +49,7 @@
             app:layout_constraintTop_toBottomOf="@+id/imgEmptyTask"
             app:quote="@{viewModel.quote}" />
 
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btnAddTask"
             style="?android:attr/borderlessButtonStyle"
             android:layout_width="wrap_content"
@@ -57,9 +57,11 @@
             android:layout_gravity="start"
             android:layout_marginTop="@dimen/padding_16dp"
             android:background="@drawable/bg_rounded_btn"
-            android:drawableStart="@android:drawable/ic_input_add"
+            android:backgroundTint="@color/dribblePink"
             android:fontFamily="@font/jost"
             android:minHeight="0dp"
+            android:padding="@dimen/padding_10dp"
+            android:stateListAnimator="@animator/button_state_animator"
             android:text="@string/all_tasks_completed_add_more"
             android:textColor="@color/white"
             android:textSize="@dimen/text_16sp"

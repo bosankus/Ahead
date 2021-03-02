@@ -92,31 +92,33 @@ class TaskRepository @Inject constructor(
             }
         }
 
-    suspend fun fetchTaskByTaskId(taskId: String): ResultData<Todo> {
-        val docSnapshot: DocumentSnapshot = taskListRef.document(taskId).get().await()
-        return if (docSnapshot.exists()) {
-            val task = docSnapshot.toObject(Todo::class.java)
-            ResultData.Success(task)
-        } else ResultData.Failed("Document do not exists")
-    }
-
-    suspend fun updateTask(taskId: String, map: Map<String, Any?>) {
-        try {
-            taskListRef.document(taskId).update(map).await()
+    suspend fun fetchTaskByTaskId(taskId: String): Todo? {
+        return try {
+            val docSnapshot: DocumentSnapshot = taskListRef.document(taskId).get().await()
+            return if (docSnapshot.exists()) {
+                val task = docSnapshot.toObject(Todo::class.java)
+                task
+            } else null
         } catch (e: Exception) {
-            crashReport.log(e.message.toString())
+            logMessage(e.message.toString())
+            null
         }
     }
 
-    suspend fun deleteTask(docId: String, imgLink: String?): ResultData<Boolean> = try {
-        taskListRef.document(docId).delete().await()
-        imgLink?.let { storageReference.storage.getReferenceFromUrl(it).delete().await() }
-        /*if (hasImage?.isNotEmpty() == true)
-            storageReference.child("${userDetails?.email}/$docId").delete().await()*/
-        ResultData.Success(true)
+    suspend fun updateTask(taskId: String, map: Map<String, Any?>): Boolean = try {
+        taskListRef.document(taskId).update(map).await()
+        true
     } catch (e: Exception) {
-        crashReport.log(e.message.toString())
-        ResultData.Failed(e.message)
+        false
+    }
+
+    suspend fun deleteTask(docId: String, imgLink: String?): Boolean = try {
+        taskListRef.document(docId).delete().await()
+        if (!imgLink.isNullOrEmpty()) storageReference.storage.getReferenceFromUrl(imgLink).delete()
+            .await()
+        true
+    } catch (e: Exception) {
+        false
     }
 
 
@@ -124,8 +126,7 @@ class TaskRepository @Inject constructor(
         uri: Uri,
         imgPathRef: StorageReference?,
         docRefId: String?
-    ):
-            ResultData<String> {
+    ): String {
         val pathRef =
             imgPathRef ?: storageReference.child("${userDetails?.email}/$docRefId")
         return try {
@@ -135,10 +136,9 @@ class TaskRepository @Inject constructor(
                 val newImgMap = mapOf("taskImage" to imageUrl)
                 updateTask(it, newImgMap)
             }
-            ResultData.Success(imageUrl)
+            imageUrl
         } catch (e: Exception) {
-            crashReport.log(e.message.toString())
-            ResultData.Failed(e.message)
+            e.message.toString()
         }
     }
 

@@ -2,6 +2,7 @@ package tech.androidplay.sonali.todo.utils
 
 import android.annotation.SuppressLint
 import android.text.format.DateUtils
+import tech.androidplay.sonali.todo.utils.Constants.DEFAULT_TASK_TIME
 import java.text.SimpleDateFormat
 import java.time.Instant
 import java.time.LocalDateTime
@@ -30,8 +31,11 @@ fun String.compareWithToday(): Int {
 }
 
 fun String.toLocalDateTime(): LocalDateTime? {
-    val epochValue = this.toLong()
-    return Instant.ofEpochMilli(epochValue).atZone(ZoneId.systemDefault()).toLocalDateTime()
+    return if (this.isNotEmpty()) {
+        val epochValue = this.toLong()
+        Instant.ofEpochMilli(epochValue).atZone(ZoneId.systemDefault()).toLocalDateTime()
+    } else Instant.ofEpochMilli(DEFAULT_TASK_TIME).atZone(ZoneId.systemDefault())
+        .toLocalDateTime()
 }
 
 fun LocalDateTime.beautifyDateTime(): String {

@@ -14,7 +14,6 @@ import tech.androidplay.sonali.todo.data.repository.TaskRepository
 import tech.androidplay.sonali.todo.model.Todo
 import tech.androidplay.sonali.todo.utils.Constants.IS_AFTER
 import tech.androidplay.sonali.todo.utils.Constants.IS_BEFORE
-import tech.androidplay.sonali.todo.utils.UIHelper.logMessage
 import tech.androidplay.sonali.todo.utils.compareWithToday
 import javax.inject.Inject
 
@@ -34,9 +33,6 @@ class TaskViewModel @ViewModelInject constructor(
 
     @Inject
     lateinit var sharedPreferences: SharedPreferences
-
-    /*private var _userId = taskSource.userDetails?.uid
-    val userId get() = _userId*/
 
     private var _firstName = MutableLiveData<String>()
     val firstName get() = _firstName
@@ -72,11 +68,12 @@ class TaskViewModel @ViewModelInject constructor(
 
     private fun getUserFirstName() {
         viewModelScope.launch {
-            val fullName = taskSource.getUserFullName()
-            val firstName = fullName.split(" ").toMutableList().firstOrNull()
+            val firstName = taskSource.getUserFullName()
+                .split(" ")
+                .toMutableList()
+                .firstOrNull()
             _firstName.value = "Good Day, $firstName"
             getAllTasks()
-
         }
     }
 
@@ -85,23 +82,15 @@ class TaskViewModel @ViewModelInject constructor(
             try {
                 taskSource.fetchAllUnassignedTask().collect { allTodoList ->
                     if (allTodoList.size != 0) {
-                        _taskListSize.value = allTodoList.size
-                        _completedTaskList.value =
-                            allTodoList.filter { it.isCompleted }
-                                .sortedByDescending { it.todoDate }
-                        _upcomingTaskList.value =
-                            allTodoList.filter { it.todoDate.compareWithToday() == IS_AFTER && !it.isCompleted }
-                                .sortedByDescending { it.todoDate }
-                        _overdueTaskList.value =
-                            allTodoList.filter { it.todoDate.compareWithToday() == IS_BEFORE && !it.isCompleted }
-                                .sortedByDescending { it.todoDate }
-                        _loadingState.value = false
+                        _taskListSize.value = allTodoList.filter { !it.isCompleted }.size
+                        _completedTaskList.value = getCompletedTaskList(allTodoList)
+                        _upcomingTaskList.value = getUpcomingTaskList(allTodoList)
+                        _overdueTaskList.value = getOverDueTaskList(allTodoList)
                     }
                     getAllAssignedTasks()
                 }
             } catch (e: Exception) {
                 _loadingState.value = false
-                logMessage("TaskViewModel-getAllTasks: ${e.message}")
             }
         }
     }
@@ -111,17 +100,31 @@ class TaskViewModel @ViewModelInject constructor(
             try {
                 taskSource.fetchOnlyAssignedTask().collect { assignedTask ->
                     if (assignedTask.size != 0) {
-                        _assignedTaskList.value =
-                            assignedTask.sortedByDescending { it.todoDate }
+                        getAssignedTaskList(assignedTask)
                         _loadingState.value = false
-                    } else getQuote()
+                    } else if (assignedTask.size == 0 && _taskListSize.value == 0) getQuote()
+                    else _loadingState.value = false
                 }
             } catch (e: Exception) {
                 _loadingState.value = false
-                logMessage("TaskViewModel-getAllAssignedTasks: ${e.message}")
             }
         }
     }
+
+    private fun getCompletedTaskList(list: List<Todo>) = list.filter { it.isCompleted }
+        .sortedByDescending { it.todoDate }
+
+    private fun getUpcomingTaskList(list: List<Todo>) =
+        list.filter { it.todoDate.compareWithToday() == IS_AFTER && !it.isCompleted }
+            .sortedByDescending { it.todoDate }
+
+    private fun getOverDueTaskList(list: List<Todo>) =
+        list.filter { it.todoDate.compareWithToday() == IS_BEFORE && !it.isCompleted }
+            .sortedByDescending { it.todoDate }
+
+    private fun getAssignedTaskList(list: List<Todo>) =
+        list.sortedByDescending { it.todoDate }
+
 
     private fun getQuote() {
         viewModelScope.launch {
@@ -131,8 +134,5 @@ class TaskViewModel @ViewModelInject constructor(
             _loadingState.value = false
         }
     }
-
-    /*fun fetchUserFullName(userId: String?) =
-        userId?.let { viewModelScope.launch { taskSource.fetchUserFullName(it) } }*/
 
 }

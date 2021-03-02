@@ -122,7 +122,7 @@
 
         <include
             android:id="@+id/layoutLoadingTask"
-            layout="@layout/layout_task_loading"
+            layout="@layout/layout_loading_fragment_task"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:visibility="gone"
