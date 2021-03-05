@@ -99,6 +99,7 @@ class TaskViewModel @ViewModelInject constructor(
         viewModelScope.launch {
             try {
                 taskSource.fetchOnlyAssignedTask().collect { assignedTask ->
+                    assignedTaskList.value = assignedTask
                     if (assignedTask.size != 0) {
                         getAssignedTaskList(assignedTask)
                         _loadingState.value = false

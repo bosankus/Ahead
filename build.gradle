@@ -2,7 +2,7 @@
 
 buildscript {
     ext.gradle_version = '4.1.2'
-    ext.kotlin_version = "1.4.30"
+    ext.kotlin_version = "1.4.31"
     ext.google_services = "4.3.4"
     ext.lifecycle_version = "2.2.0"
     ext.viewpager_version = "1.1.0-alpha01"
@@ -17,7 +17,7 @@ buildscript {
     ext.lottie_version = "3.4.1"
     ext.shimmer_version = "0.5.0"
     ext.picker_version = "1.7.1"
-    ext.coil_version = "1.1.0"
+    ext.glide_version = "4.11.0"
     ext.coroutine_version = "1.4.1"
     ext.coroutine_play_version = "1.1.1"
     ext.rxjava_core = "2.2.9"

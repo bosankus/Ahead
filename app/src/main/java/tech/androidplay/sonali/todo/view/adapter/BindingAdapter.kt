@@ -6,6 +6,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.databinding.BindingAdapter
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
 import tech.androidplay.sonali.todo.R
 import tech.androidplay.sonali.todo.utils.*
 import tech.androidplay.sonali.todo.utils.Constants.IS_AFTER
@@ -124,6 +125,7 @@ fun View.isImageUploading(responseState: ResultData<*>) {
         showSnack(this, "Check your connection")
 }
 
+@SuppressLint("SetTextI18n")
 @BindingAdapter("isDeleting")
 fun TextView.isDeleting(responseState: ResultData<*>) {
     if (responseState is ResultData.Loading)
@@ -132,6 +134,7 @@ fun TextView.isDeleting(responseState: ResultData<*>) {
         showSnack(this.rootView, "Deleted")
 }
 
+@SuppressLint("SetTextI18n")
 @BindingAdapter("isUpdating")
 fun TextView.isUpdating(responseState: ResultData<*>) {
     when (responseState) {
@@ -144,5 +147,4 @@ fun TextView.isUpdating(responseState: ResultData<*>) {
         }
     }
 }
-
 

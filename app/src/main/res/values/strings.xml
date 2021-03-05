@@ -8,7 +8,6 @@
     <string name="ring_alarm_for_this_task">Ring alarm for this task</string>
     <string name="task">task</string>
     <string name="task_description">Task Description</string>
-    <string name="create_task">Create task</string>
     <string name="email">Email</string>
     <string name="password">Password</string>
     <string name="forgot_password">Forgot Password ?</string>
@@ -53,6 +52,9 @@
     <string name="sign_in">Sign In</string>
     <string name="prompt_failed_to_login">Failed to login. Reason: %1$s</string>
 
+    <!--Main Task View-->
+    <string name="create_task">Create Task</string>
+
     <!--Task Creation-->
     <string name="task_progress_uploading">Uploading Image…</string>
     <string name="task_added_failure">Failed to add task</string>
@@ -61,7 +63,6 @@
     <string name="create_task_title_hint">Task Title</string>
     <string name="create_task_details_hint">Add task details</string>
     <string name="username">Username (Email ID)</string>
-
 
     <!--Task Editing-->
     <string name="edit_task">Edit Task</string>

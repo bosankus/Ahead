@@ -11,8 +11,11 @@ import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import androidx.core.widget.ImageViewCompat
 import androidx.fragment.app.Fragment
-import coil.load
-import coil.transform.RoundedCornersTransformation
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.load.resource.bitmap.CenterInside
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.github.dhaval2404.imagepicker.ImagePicker
 import id.zelory.compressor.Compressor
 import id.zelory.compressor.constraint.quality
@@ -35,14 +38,11 @@ fun Fragment.selectImage() {
 
 fun ImageView.loadImage(url: String?) {
     url.let {
-        this.load(it) {
-            crossfade(true)
-            transformations(
-                RoundedCornersTransformation(
-                    20.0F, 20.0F, 20.0F, 20.0F
-                )
-            )
-        }
+        Glide.with(this.context)
+            .load(url)
+            .transition(DrawableTransitionOptions.withCrossFade())
+            .transform(CenterInside(), RoundedCorners(20))
+            .into(this)
     }
 }
 
