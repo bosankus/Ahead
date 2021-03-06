@@ -10,8 +10,10 @@ import retrofit2.Converter
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import tech.androidplay.sonali.todo.data.network.ApiService
+import tech.androidplay.sonali.todo.data.repository.QuoteRepository
 import tech.androidplay.sonali.todo.utils.Constants.QUOTE_API
 import java.util.concurrent.TimeUnit
+import javax.inject.Singleton
 
 /**
  * Created by Androidplay
@@ -60,4 +62,8 @@ object NetworkModule {
     fun provideApiService(retrofit: Retrofit): ApiService {
         return retrofit.create(ApiService::class.java)
     }
+
+    @Singleton
+    @Provides
+    fun provideQuoteRepository(apiService: ApiService) = QuoteRepository(apiService)
 }

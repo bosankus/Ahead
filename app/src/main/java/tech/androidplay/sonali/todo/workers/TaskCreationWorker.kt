@@ -66,6 +66,7 @@ class TaskCreationWorker(context: Context, workerParameters: WorkerParameters) :
                 showNotification(taskBody, context.getString(R.string.task_added_failure), intent)
                 return Result.failure()
             }
+            else -> Result.failure()
         }
 
         return Result.failure()

@@ -9,7 +9,7 @@ buildscript {
     ext.lifecycle_java8_version = "2.3.0"
     ext.work_version = "2.5.0"
     ext.nav_version = "2.3.3"
-    ext.hilt_version = "2.28.3-alpha"
+    ext.hilt_version = "2.33-beta"
     ext.hilt_jetpack_version = "1.0.0-alpha03"
     ext.room_version = "2.2.6"
     ext.retrofit_version = "2.9.0"
