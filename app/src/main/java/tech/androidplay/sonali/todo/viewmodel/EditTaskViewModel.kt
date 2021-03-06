@@ -4,15 +4,16 @@ import android.annotation.SuppressLint
 import android.app.Application
 import android.net.Uri
 import androidx.databinding.ObservableField
-import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
 import tech.androidplay.sonali.todo.data.repository.TaskRepository
 import tech.androidplay.sonali.todo.utils.ResultData
+import javax.inject.Inject
 
 /**
  * Created by Androidplay
@@ -23,7 +24,8 @@ import tech.androidplay.sonali.todo.utils.ResultData
 
 @SuppressLint("StaticFieldLeak")
 @ExperimentalCoroutinesApi
-class EditTaskViewModel @ViewModelInject constructor(
+@HiltViewModel
+class EditTaskViewModel @Inject constructor(
     application: Application,
     private val taskSource: TaskRepository
 ) : AndroidViewModel(application) {

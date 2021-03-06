@@ -103,8 +103,7 @@ class TaskViewModel @Inject constructor(
                     if (assignedTask.size != 0) {
                         getAssignedTaskList(assignedTask)
                         _loadingState.value = false
-                    } else if (assignedTask.size == 0 && _taskListSize.value == 0) getQuote()
-                    else _loadingState.value = false
+                    } else getQuote()
                 }
             } catch (e: Exception) {
                 _loadingState.value = false
@@ -128,10 +127,10 @@ class TaskViewModel @Inject constructor(
 
 
     private fun getQuote() {
-        val quote = preferences.getString(QUOTE, "").toString()
-        if (quote.isNotBlank()) {
+        val quote = preferences.getString(QUOTE, "")
+        if (quote?.isNotBlank() == true) {
             _quoteText.value = quote
-            _quoteAuthor.value = preferences.getString(QUOTE_AUTHOR, "").toString()
+            _quoteAuthor.value = preferences.getString(QUOTE_AUTHOR, "")
             _loadingState.value = false
         } else {
             viewModelScope.launch {

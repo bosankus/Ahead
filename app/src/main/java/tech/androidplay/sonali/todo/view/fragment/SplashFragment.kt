@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.os.CountDownTimer
 import android.view.View
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
@@ -55,6 +56,8 @@ class SplashFragment : Fragment(R.layout.fragment_splash) {
     }
 
     private fun goToAuthFragment() {
-        findNavController().navigate(R.id.action_splashFragment_to_authFragment)
+        lifecycleScope.launchWhenResumed {
+            findNavController().navigate(R.id.action_splashFragment_to_authFragment)
+        }
     }
 }
