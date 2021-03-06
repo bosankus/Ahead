@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="data"
+            type="tech.androidplay.sonali.todo.viewmodel.TaskViewModel" />
+    </data>
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/layoutTask"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/clTaskListContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/tvUserFName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/padding_18dp"
+                android:layout_marginEnd="@dimen/padding_18dp"
+                android:alpha="0.8"
+                android:fontFamily="@font/calibre_semi"
+                android:text="@{data.firstName}"
+                android:textColor="@color/grey3"
+                android:textSize="@dimen/text_26sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tvGeneralAppDesc"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/padding_18dp"
+                android:layout_marginTop="@dimen/padding_5dp"
+                android:layout_marginEnd="@dimen/padding_18dp"
+                android:alpha="0.8"
+                android:fontFamily="@font/calibre_semi"
+                android:text="@string/fragment_task_general_app_desc"
+                android:textColor="@color/grey2"
+                android:textSize="@dimen/text_18sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvUserFName" />
+
+            <include
+                android:id="@+id/layoutAssignedTask"
+                layout="@layout/layout_task_assigned"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvGeneralAppDesc"
+                app:listSize="@{data.assignedTaskList.size()}" />
+
+            <include
+                android:id="@+id/layoutUpcomingTask"
+                layout="@layout/layout_task_upcoming"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/layoutAssignedTask"
+                app:listSize="@{data.upcomingTaskList.size()}" />
+
+            <include
+                android:id="@+id/layoutOverdueTask"
+                layout="@layout/layout_task_overdue"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/layoutUpcomingTask"
+                app:listSize="@{data.overdueTaskList.size()}" />
+
+            <include
+                android:id="@+id/layoutNoTask"
+                layout="@layout/layout_task_empty"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="gone"
+                app:allListSize="@{data.taskListSize}"
+                app:assignedListSize="@{data.assignedTaskList.size()}"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:viewModel="@{data}" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.core.widget.NestedScrollView>
+</layout>

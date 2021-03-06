@@ -72,24 +72,25 @@ class TaskFragment : Fragment(R.layout.fragment_task) {
     }
 
     private fun setUpScreen() {
-        binding.viewmodel = viewModel
-        binding.lifecycleOwner = viewLifecycleOwner
-
-        binding.layoutUpcomingTask.rvUpcomingTaskList.adapter = upcomingAdapter
-        binding.layoutOverdueTask.rvOverdueTaskList.adapter = overdueAdapter
-        binding.layoutAssignedTask.vpAssignedTaskList.apply {
-            adapter = assignedTaskAdapter
-            offscreenPageLimit = 3
-            setPageTransformer(SliderTransformer(3))
+        binding.apply {
+            viewmodel = viewModel
+            lifecycleOwner = viewLifecycleOwner
+            layoutTaskHolder.layoutUpcomingTask.rvUpcomingTaskList.adapter = upcomingAdapter
+            layoutTaskHolder.layoutOverdueTask.rvOverdueTaskList.adapter = overdueAdapter
+            layoutTaskHolder.layoutAssignedTask.vpAssignedTaskList.apply {
+                adapter = assignedTaskAdapter
+                offscreenPageLimit = 3
+                setPageTransformer(SliderTransformer(3))
+            }
         }
-
     }
 
     private fun setListeners() {
-        binding.layoutTaskBar.imgMenu.setOnClickListener { showPopupMenu(binding.layoutTaskBar.imgMenu) }
-        /*binding.layoutTaskBar.imgCreate.setOnClickListener { showCreateMenu(binding.layoutTaskBar.imgCreate) }*/
-        binding.layoutNoTask.btnAddTask.setOnClickListener { goToCreateTaskFragment() }
-
+        binding.apply {
+            layoutTaskBar.imgMenu.setOnClickListener { showPopupMenu(binding.layoutTaskBar.imgMenu) }
+            layoutTaskHolder.layoutNoTask.btnAddTask.setOnClickListener { goToCreateTaskFragment() }
+            btnCreateTask.setOnClickListener { goToCreateTaskFragment() }
+        }
     }
 
     private fun setObservers() {
@@ -119,19 +120,6 @@ class TaskFragment : Fragment(R.layout.fragment_task) {
                     findNavController().navigate(R.id.action_taskFragment_to_feedbackFragment)
                 R.id.menu_task_history ->
                     findNavController().navigate(R.id.action_taskFragment_to_taskCompletedFragment)
-            }
-            true
-        }
-    }
-
-    private fun showCreateMenu(view: View) {
-        val popupMenu = PopupMenu(requireContext(), view)
-        popupMenu.menuInflater.inflate(R.menu.menu_create_options, popupMenu.menu)
-        popupMenu.show()
-
-        popupMenu.setOnMenuItemClickListener {
-            when (it.itemId) {
-                R.id.menu_create_task -> goToCreateTaskFragment()
             }
             true
         }

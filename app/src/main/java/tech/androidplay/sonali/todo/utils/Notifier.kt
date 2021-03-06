@@ -62,8 +62,7 @@ object Notifier {
         var notificationId: Int? = null,
         var contentTitle: String = "",
         var contentText: String = "",
-        var pendingIntent:
-        PendingIntent? = null,
+        var pendingIntent: PendingIntent? = null,
         var isAutoCancelable: Boolean = true,
         @DrawableRes var smallIcon: Int? = null
     )

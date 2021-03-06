@@ -1,10 +1,10 @@
 package tech.androidplay.sonali.todo.viewmodel
 
 import android.content.SharedPreferences
-import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.flow.collect
@@ -14,6 +14,8 @@ import tech.androidplay.sonali.todo.data.repository.TaskRepository
 import tech.androidplay.sonali.todo.model.Todo
 import tech.androidplay.sonali.todo.utils.Constants.IS_AFTER
 import tech.androidplay.sonali.todo.utils.Constants.IS_BEFORE
+import tech.androidplay.sonali.todo.utils.Constants.QUOTE
+import tech.androidplay.sonali.todo.utils.Constants.QUOTE_AUTHOR
 import tech.androidplay.sonali.todo.utils.compareWithToday
 import javax.inject.Inject
 
@@ -25,14 +27,12 @@ import javax.inject.Inject
 
 @ExperimentalCoroutinesApi
 @InternalCoroutinesApi
-
-class TaskViewModel @ViewModelInject constructor(
+@HiltViewModel
+class TaskViewModel @Inject constructor(
     private val taskSource: TaskRepository,
     private val quoteSource: QuoteRepository,
+    private val preferences: SharedPreferences
 ) : ViewModel() {
-
-    @Inject
-    lateinit var sharedPreferences: SharedPreferences
 
     private var _firstName = MutableLiveData<String>()
     val firstName get() = _firstName
@@ -99,11 +99,11 @@ class TaskViewModel @ViewModelInject constructor(
         viewModelScope.launch {
             try {
                 taskSource.fetchOnlyAssignedTask().collect { assignedTask ->
+                    assignedTaskList.value = assignedTask
                     if (assignedTask.size != 0) {
                         getAssignedTaskList(assignedTask)
                         _loadingState.value = false
-                    } else if (assignedTask.size == 0 && _taskListSize.value == 0) getQuote()
-                    else _loadingState.value = false
+                    } else getQuote()
                 }
             } catch (e: Exception) {
                 _loadingState.value = false
@@ -127,11 +127,18 @@ class TaskViewModel @ViewModelInject constructor(
 
 
     private fun getQuote() {
-        viewModelScope.launch {
-            val todayQuote = quoteSource.fetchQuote()
-            _quoteText.value = "${todayQuote.text}"
-            _quoteAuthor.value = "- ${todayQuote.author}"
+        val quote = preferences.getString(QUOTE, "")
+        if (quote?.isNotBlank() == true) {
+            _quoteText.value = quote
+            _quoteAuthor.value = preferences.getString(QUOTE_AUTHOR, "")
             _loadingState.value = false
+        } else {
+            viewModelScope.launch {
+                val todayQuote = quoteSource.fetchQuote()
+                _quoteText.value = "${todayQuote.text}"
+                _quoteAuthor.value = "- ${todayQuote.author}"
+                _loadingState.value = false
+            }
         }
     }
 

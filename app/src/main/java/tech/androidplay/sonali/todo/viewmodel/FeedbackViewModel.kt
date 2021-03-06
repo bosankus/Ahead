@@ -1,12 +1,13 @@
 package tech.androidplay.sonali.todo.viewmodel
 
-import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import tech.androidplay.sonali.todo.data.repository.FeedbackRepository
 import tech.androidplay.sonali.todo.utils.ResultData
+import javax.inject.Inject
 
 /**
  * Created by Androidplay
@@ -16,7 +17,8 @@ import tech.androidplay.sonali.todo.utils.ResultData
  */
 
 @ExperimentalCoroutinesApi
-class FeedbackViewModel @ViewModelInject constructor(private val dataSource: FeedbackRepository) :
+@HiltViewModel
+class FeedbackViewModel @Inject constructor(private val dataSource: FeedbackRepository) :
     ViewModel() {
 
     private val _currentUser = dataSource.currentUser
