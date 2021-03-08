@@ -80,7 +80,6 @@ class EditTaskViewModel @Inject constructor(
             viewModelScope.launch {
                 val response = taskSource.updateTask(taskId, map)
                 response.let { _updateTaskState.postValue(ResultData.Success(it)) }
-                    ?: run { _updateTaskState.postValue(ResultData.Failed()) }
             }
         } else _updateTaskState.postValue(ResultData.Failed("Fields can not be empty"))
     }

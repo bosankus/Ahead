@@ -34,7 +34,6 @@
     <string name="upload_img_txt">Upload your task image</string>
     <string name="task_title">Task title:</string>
     <string name="task_details">Task Details:</string>
-    <string name="completed_tasks">Completed Tasks</string>
     <string name="get_started">Next</string>
     <string name="details">Details</string>
     <string name="assign_task">Assigned</string>
@@ -54,6 +53,7 @@
 
     <!--Main Task View-->
     <string name="create_task">Create Task</string>
+    <string name="completed">Completed</string>
 
     <!--Task Creation-->
     <string name="task_progress_uploading">Uploading Image…</string>
@@ -71,5 +71,5 @@
     <string name="prompt_past_no_notification">Alarm won\'t ring for time which has passed %1$s</string>
     <string name="prompt_past_notification">You were notified on %1$s. Tap here to change.</string>
     <string name="prompt_future_notification">You will be notified on %1$s. Tap here to change.</string>
-    <!--Task Editing-->
+
 </resources>

@@ -8,10 +8,10 @@ import android.os.Bundle
 import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.navigation.fragment.findNavController
+import androidx.navigation.findNavController
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.android.synthetic.main.activity_main.*
 import tech.androidplay.sonali.todo.R
+import tech.androidplay.sonali.todo.databinding.ActivityMainBinding
 import tech.androidplay.sonali.todo.utils.AuthManager
 import tech.androidplay.sonali.todo.utils.CacheManager
 import tech.androidplay.sonali.todo.utils.Constants.ACTION_SHOW_TASK_FRAGMENT
@@ -24,6 +24,8 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
+    private lateinit var binding: ActivityMainBinding
+
     @Inject
     lateinit var cache: CacheManager
     private lateinit var authManager: AuthManager
@@ -32,7 +34,8 @@ class MainActivity : AppCompatActivity() {
     @SuppressLint("SimpleDateFormat")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         authManager = AuthManager(this)
         navigateToGlobalFragment(intent)
         setScreenUI()
@@ -65,25 +68,28 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun navigateToGlobalFragment(intent: Intent) {
+        if (intent.action == ACTION_SHOW_TASK_FRAGMENT)
+            findNavController(R.id.navHostFragment).navigate(R.id.action_global_taskFragment)
+    }
+
+    @SuppressLint("MissingSuperCall")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        authManager.handleAuth(requestCode, resultCode, data) { isSuccessful, error ->
-            if (isSuccessful) {
-                val userDetails = authManager.userDetails
-                userDetails?.let { viewModel.saveUserData(it) }
-                navHostFragment.findNavController().navigate(R.id.action_global_taskFragment)
-            } else showSnack(
-                findViewById(R.id.activityMain), getString(
-                    R.string.prompt_failed_to_login,
-                    error?.localizedMessage ?: "Unknown Error"
+        if (resultCode == RESULT_OK && data != null) {
+            authManager.handleAuth(requestCode, resultCode, data) { isSuccessful, error ->
+                if (isSuccessful) {
+                    val userDetails = authManager.userDetails
+                    userDetails?.let { viewModel.saveUserData(it) }
+                    findNavController(R.id.navHostFragment).navigate(R.id.action_global_taskFragment)
+                } else showSnack(
+                    findViewById(R.id.activityMain), getString(
+                        R.string.prompt_failed_to_login,
+                        error?.localizedMessage ?: "Unknown Error"
+                    )
                 )
-            )
+            }
         }
     }
 
-    private fun navigateToGlobalFragment(intent: Intent) {
-        if (intent.action == ACTION_SHOW_TASK_FRAGMENT)
-            navHostFragment.findNavController().navigate(R.id.action_global_taskFragment)
-    }
 }
 

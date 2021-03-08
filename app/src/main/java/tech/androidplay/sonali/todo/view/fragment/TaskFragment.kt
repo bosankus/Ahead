@@ -51,6 +51,9 @@ class TaskFragment : Fragment(R.layout.fragment_task) {
     lateinit var upcomingAdapter: TodoAdapter
 
     @Inject
+    lateinit var completedAdapter: TodoAdapter
+
+    @Inject
     lateinit var sharedPreferences: SharedPreferences
 
     private lateinit var authManager: AuthManager
@@ -77,6 +80,7 @@ class TaskFragment : Fragment(R.layout.fragment_task) {
             lifecycleOwner = viewLifecycleOwner
             layoutTaskHolder.layoutUpcomingTask.rvUpcomingTaskList.adapter = upcomingAdapter
             layoutTaskHolder.layoutOverdueTask.rvOverdueTaskList.adapter = overdueAdapter
+            layoutTaskHolder.layoutCompletedTask.rvCompletedTaskList.adapter = completedAdapter
             layoutTaskHolder.layoutAssignedTask.vpAssignedTaskList.apply {
                 adapter = assignedTaskAdapter
                 offscreenPageLimit = 3
@@ -94,16 +98,20 @@ class TaskFragment : Fragment(R.layout.fragment_task) {
     }
 
     private fun setObservers() {
-        viewModel.assignedTaskList.observe(viewLifecycleOwner, {
-            assignedTaskAdapter.submitList(it)
+        viewModel.assignedTaskList.observe(viewLifecycleOwner, { list ->
+            list?.let { assignedTaskAdapter.submitList(it) }
         })
 
-        viewModel.overdueTaskList.observe(viewLifecycleOwner, {
-            overdueAdapter.submitList(it)
+        viewModel.overdueTaskList.observe(viewLifecycleOwner, { list ->
+            list?.let { overdueAdapter.submitList(it) }
         })
 
-        viewModel.upcomingTaskList.observe(viewLifecycleOwner, {
-            upcomingAdapter.submitList(it)
+        viewModel.upcomingTaskList.observe(viewLifecycleOwner, { list ->
+            list?.let { upcomingAdapter.submitList(it) }
+        })
+
+        viewModel.completedTaskList.observe(viewLifecycleOwner, { list ->
+            list?.let { completedAdapter.submitList(it) }
         })
     }
 
@@ -118,8 +126,6 @@ class TaskFragment : Fragment(R.layout.fragment_task) {
                 R.id.menu_share_app -> shareApp()
                 R.id.menu_feedback ->
                     findNavController().navigate(R.id.action_taskFragment_to_feedbackFragment)
-                R.id.menu_task_history ->
-                    findNavController().navigate(R.id.action_taskFragment_to_taskCompletedFragment)
             }
             true
         }

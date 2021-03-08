@@ -11,24 +11,24 @@
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/clOverdueList"
+        android:id="@+id/clCompletedList"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:show="@{(listSize>0) ? true: false}">
 
         <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/tvOverdueTaskListHeader"
+            android:id="@+id/tvCompletedTaskListHeader"
             style="@style/HeadingTextViewStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/padding_18dp"
             android:layout_marginTop="@dimen/padding_16dp"
-            android:text="@string/overdue"
+            android:text="@string/completed"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvOverdueTaskList"
+            android:id="@+id/rvCompletedTaskList"
             style="@style/scrollbar_shape_style"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -43,7 +43,7 @@
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvOverdueTaskListHeader"
+            app:layout_constraintTop_toBottomOf="@+id/tvCompletedTaskListHeader"
             tools:itemCount="2"
             tools:listitem="@layout/layout_main_task_list" />
 
