@@ -9,6 +9,7 @@
             type="tech.androidplay.sonali.todo.viewmodel.TaskViewModel" />
     </data>
 
+
     <androidx.core.widget.NestedScrollView
         android:id="@+id/layoutTask"
         android:layout_width="match_parent"
@@ -80,6 +81,16 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/layoutUpcomingTask"
                 app:listSize="@{data.overdueTaskList.size()}" />
+
+            <include
+                android:id="@+id/layoutCompletedTask"
+                layout="@layout/layout_task_completed"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/layoutOverdueTask"
+                app:listSize="@{data.completedTaskList.size()}" />
 
             <include
                 android:id="@+id/layoutNoTask"

@@ -33,6 +33,7 @@ interface FirebaseApi {
     suspend fun fetchTaskByTaskId(taskId: String): ResultData<Todo>
     suspend fun updateTask(taskId: String, map: Map<String, Any?>): ResultData<Boolean>
     suspend fun deleteTask(docId: String, taskImageLink: String?): ResultData<Boolean>
+    suspend fun markTaskComplete(map: Map<String, Any?>, docId: String): Boolean
 
     // For user related
     suspend fun isUserAvailable(email: String): ResultData<Boolean>

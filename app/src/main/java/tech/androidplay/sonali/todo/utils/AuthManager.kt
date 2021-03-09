@@ -78,6 +78,6 @@ class AuthManager(
     }
 
     companion object {
-        private const val RC_SIGN_IN = 123
+        const val RC_SIGN_IN = 123
     }
 }

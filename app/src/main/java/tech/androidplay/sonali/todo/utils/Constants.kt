@@ -60,6 +60,7 @@ object Constants {
     // For Android version check
     val DEVICE_ANDROID_VERSION = Build.VERSION.SDK_INT
     const val ANDROID_OREO = Build.VERSION_CODES.O
+    const val ANDROID_R = Build.VERSION_CODES.R
     /*const val ANDROID_10 = Build.VERSION_CODES.Q*/
 
 }

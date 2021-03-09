@@ -79,6 +79,10 @@ class TaskEditFragment : Fragment(R.layout.fragment_task_edit) {
                 if (isNetworkAvailable()) selectImage()
                 else showSnack(requireView(), "Check Internet!")
             }
+            cbCompleteTask.setOnClickListener {
+                if (binding.cbCompleteTask.isChecked) viewmodel?.changeTaskStatus(true)
+                else viewmodel?.changeTaskStatus(false)
+            }
             tvDeleteTask.setOnClickListener { deleteTask(taskId) }
             btnSaveTask.setOnClickListener { updateTask() }
             tvSelectDate.setOnClickListener { selectNotificationDateTime() }

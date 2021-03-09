@@ -18,6 +18,9 @@
         <item name="android:textColorSecondary">@color/grey2</item>
         <item name="android:textSize">@dimen/text_18sp</item>
         <item name="fontFamily">@font/calibre_semi</item>
+        <item name="android:navigationBarColor">@color/white</item>
+        <item name="android:statusBarColor">@color/white</item>
+        <item name="android:windowLightStatusBar">true</item>
     </style>
 
     <style name="scrollbar_shape_style">

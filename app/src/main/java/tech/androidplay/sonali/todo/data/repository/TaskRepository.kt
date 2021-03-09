@@ -121,6 +121,12 @@ class TaskRepository @Inject constructor(
         false
     }
 
+    suspend fun changeTaskStatus(map: Map<String, Any?>, docId: String): Boolean = try {
+        taskListRef.document(docId).update(map).await()
+        true
+    } catch (e: Exception) {
+        false
+    }
 
     suspend fun uploadImage(
         uri: Uri,

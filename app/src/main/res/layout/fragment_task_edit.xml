@@ -35,18 +35,18 @@
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/btnSaveTask"
-            android:background="@drawable/bg_icon_ripple"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/padding_16dp"
+            android:background="@drawable/bg_icon_ripple"
+            android:drawablePadding="@dimen/padding_8dp"
             android:fontFamily="@font/calibre_semi"
             android:padding="@dimen/padding_5dp"
             android:text="@string/save_task"
-            android:drawablePadding="@dimen/padding_8dp"
-            app:drawableStartCompat="@drawable/ic_tick"
-            app:drawableTint="@color/dribblePink"
             android:textColor="@color/dribblePink"
             android:textSize="@dimen/text_20sp"
+            app:drawableStartCompat="@drawable/ic_tick"
+            app:drawableTint="@color/dribblePink"
             app:isUpdating="@{viewmodel.updateTaskState}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -197,30 +197,46 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
+        <androidx.appcompat.widget.AppCompatCheckBox
+            android:id="@+id/cbCompleteTask"
+            checkBoxText="@{viewmodel.initialTaskStatus}"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/padding_16dp"
+            android:checked="@={viewmodel.initialTaskStatus}"
+            android:fontFamily="@font/calibre_semi"
+            android:padding="@dimen/padding_10dp"
+            android:textColor="@color/grey2"
+            android:textSize="@dimen/text_18sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/clTaskInput" />
+
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tvDeleteTask"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/padding_16dp"
+            android:alpha="0.7"
             android:background="?attr/selectableItemBackground"
-            android:drawablePadding="@dimen/padding_5dp"
+            android:drawablePadding="@dimen/padding_10dp"
             android:fontFamily="@font/calibre"
             android:padding="@dimen/padding_5dp"
             android:text="@string/delete_task"
-            android:textColor="@color/grey2"
+            android:textColor="@android:color/holo_red_light"
             android:textSize="@dimen/text_16sp"
             app:drawableStartCompat="@drawable/ic_delete"
-            app:drawableTint="@color/grey2"
+            app:drawableTint="@android:color/holo_red_light"
             app:isDeleting="@{viewmodel.deleteTaskState}"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/clTaskInput" />
+            app:layout_constraintTop_toBottomOf="@+id/cbCompleteTask" />
 
         <include
             android:id="@+id/layoutError"
             layout="@layout/layout_error"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:visibility="gone"
             app:viewmodel="@{viewmodel}" />
 
         <include
@@ -228,6 +244,7 @@
             layout="@layout/layout_loading_fragment_edit_task"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:visibility="gone"
             app:loadingState="@{viewmodel}" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
