@@ -3,9 +3,7 @@ package tech.androidplay.sonali.todo.view.activity
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.ActivityInfo
-import android.graphics.Color
 import android.os.Bundle
-import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
@@ -20,6 +18,7 @@ import tech.androidplay.sonali.todo.utils.Constants.DEVICE_ANDROID_VERSION
 import tech.androidplay.sonali.todo.utils.UIHelper.showSnack
 import tech.androidplay.sonali.todo.viewmodel.AuthViewModel
 import javax.inject.Inject
+
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -57,11 +56,6 @@ class MainActivity : AppCompatActivity() {
     // TODO: Find work around
     @SuppressLint("ResourceAsColor")
     private fun setScreenUI() {
-        // enable white status bar with black icons
-        window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
-        window.statusBarColor = Color.WHITE
-        window.navigationBarColor = Color.WHITE
-
         // To support portrait view in API 26
         if (DEVICE_ANDROID_VERSION != ANDROID_OREO) {
             requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT

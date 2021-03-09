@@ -1,12 +1,11 @@
 package tech.androidplay.sonali.todo.viewmodel
 
 import android.annotation.SuppressLint
-import android.app.Application
 import android.net.Uri
 import androidx.databinding.ObservableField
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -25,12 +24,7 @@ import javax.inject.Inject
 @SuppressLint("StaticFieldLeak")
 @ExperimentalCoroutinesApi
 @HiltViewModel
-class EditTaskViewModel @Inject constructor(
-    application: Application,
-    private val taskSource: TaskRepository
-) : AndroidViewModel(application) {
-
-    private val context = application.baseContext
+class EditTaskViewModel @Inject constructor(private val taskSource: TaskRepository) : ViewModel() {
 
     private var _viewState = MutableLiveData<ResultData<*>>(ResultData.Loading)
     val viewState: LiveData<ResultData<*>> get() = _viewState
@@ -49,6 +43,7 @@ class EditTaskViewModel @Inject constructor(
     var initialTaskDesc = ObservableField("")
     var initialTaskDate = ObservableField("")
     var initialTaskImage = ObservableField("")
+    var initialTaskStatus = ObservableField(false)
 
     fun getTaskByTaskId(taskId: String?) {
         viewModelScope.launch {
@@ -59,6 +54,7 @@ class EditTaskViewModel @Inject constructor(
                 initialTaskDesc.set(it.todoDesc.toString())
                 initialTaskDate.set(it.todoDate)
                 initialTaskImage.set(it.taskImage.toString())
+                initialTaskStatus.set(it.isCompleted)
                 _viewState.postValue(ResultData.Success(it))
             } ?: run { _viewState.postValue(ResultData.Failed("Check your network!")) }
         }
@@ -82,6 +78,11 @@ class EditTaskViewModel @Inject constructor(
                 response.let { _updateTaskState.postValue(ResultData.Success(it)) }
             }
         } else _updateTaskState.postValue(ResultData.Failed("Fields can not be empty"))
+    }
+
+    fun changeTaskStatus(status: Boolean) = viewModelScope.launch {
+        val statusMap = mapOf("isCompleted" to status)
+        initialTaskId.get()?.let { taskSource.changeTaskStatus(statusMap, it) }
     }
 
     fun uploadImage(uri: Uri?, taskId: String) = viewModelScope.launch {

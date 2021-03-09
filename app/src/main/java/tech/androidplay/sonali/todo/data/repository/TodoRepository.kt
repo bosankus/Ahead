@@ -102,6 +102,13 @@ class TodoRepository : FirebaseApi {
             ResultData.Failed(e.message)
         }
 
+    override suspend fun markTaskComplete(map: Map<String, Any?>, docId: String): Boolean = try {
+        taskListRef.document(docId).update(map).await()
+        true
+    } catch (e: Exception) {
+        false
+    }
+
     override suspend fun isUserAvailable(email: String): ResultData<Boolean> = try {
         val response = userListRef.whereEqualTo("email", email).get().await()
         if (response.toObjects(User::class.java)[0].uid.isNotEmpty()) ResultData.Success(true)

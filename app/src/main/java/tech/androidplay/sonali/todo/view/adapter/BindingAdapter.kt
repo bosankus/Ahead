@@ -4,9 +4,9 @@ import android.annotation.SuppressLint
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.appcompat.widget.AppCompatCheckBox
 import androidx.core.content.ContextCompat
 import androidx.databinding.BindingAdapter
-import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
 import tech.androidplay.sonali.todo.R
 import tech.androidplay.sonali.todo.utils.*
 import tech.androidplay.sonali.todo.utils.Constants.IS_AFTER
@@ -137,14 +137,20 @@ fun TextView.isDeleting(responseState: ResultData<*>) {
 @SuppressLint("SetTextI18n")
 @BindingAdapter("isUpdating")
 fun TextView.isUpdating(responseState: ResultData<*>) {
-    when (responseState) {
-        is ResultData.DoNothing -> text = "Save"
-        is ResultData.Loading -> text = "Saving..."
-        is ResultData.Failed -> text = "Try again!"
+    text = when (responseState) {
+        is ResultData.DoNothing -> "Save"
+        is ResultData.Loading -> "Saving..."
+        is ResultData.Failed -> "Try again!"
         is ResultData.Success -> {
-            text = "Save"
-            showSnack(this.rootView, "Saved successfully")
+            "Save"
         }
     }
+}
+
+@SuppressLint("SetTextI18n")
+@BindingAdapter("checkBoxText")
+fun AppCompatCheckBox.checkBoxText(status: Boolean) {
+    text = if (status) "Marked as completed"
+    else "Mark as complete"
 }
 

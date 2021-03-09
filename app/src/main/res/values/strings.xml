@@ -71,5 +71,6 @@
     <string name="prompt_past_no_notification">Alarm won\'t ring for time which has passed %1$s</string>
     <string name="prompt_past_notification">You were notified on %1$s. Tap here to change.</string>
     <string name="prompt_future_notification">You will be notified on %1$s. Tap here to change.</string>
+    <string name="mark_as_completed">Mark as completed</string>
 
 </resources>
