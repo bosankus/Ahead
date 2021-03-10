@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -8,11 +9,11 @@
         android:id="@+id/tvFeedbackHeader"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="@dimen/padding_16dp"
         android:fontFamily="@font/calibre"
         android:text="@string/feedback"
         android:textColor="@color/grey2"
-        android:textSize="18sp"
+        android:textSize="@dimen/text_18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -21,7 +22,7 @@
         android:id="@+id/tvFeedbackHeaderView"
         android:layout_width="match_parent"
         android:layout_height="0.7dp"
-        android:layout_marginTop="8sp"
+        android:layout_marginTop="@dimen/padding_8dp"
         android:background="@color/grey1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -29,15 +30,15 @@
 
     <TextView
         android:id="@+id/tvFeedbackSubHeader"
-        android:layout_width="0dp"
+        android:layout_width="@dimen/padding_0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/padding_16dp"
-        android:layout_marginTop="26dp"
+        android:layout_marginTop="@dimen/padding_26dp"
         android:layout_marginEnd="@dimen/padding_16dp"
         android:fontFamily="@font/calibre"
         android:text="@string/feedback_story"
         android:textColor="@color/grey2"
-        android:textSize="18sp"
+        android:textSize="@dimen/text_18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvFeedbackHeaderView" />
@@ -64,7 +65,7 @@
             android:inputType="text"
             android:maxLines="1"
             android:textColor="@color/grey3"
-            android:textSize="18sp"
+            android:textSize="@dimen/text_18sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -74,15 +75,15 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/padding_16dp"
-            android:autofillHints=""
             android:fontFamily="@font/calibre"
             android:hint="@string/description_hint"
             android:inputType="textMultiLine"
             android:textColor="@color/grey3"
-            android:textSize="18sp"
+            android:textSize="@dimen/text_18sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/etFeedbackTopic" />
+            app:layout_constraintTop_toBottomOf="@+id/etFeedbackTopic"
+            tools:ignore="Autofill" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -91,23 +92,23 @@
         style="?android:attr/borderlessButtonStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="18sp"
+        android:layout_margin="@dimen/padding_18dp"
         android:background="@drawable/bg_rounded_btn"
         android:backgroundTint="@color/dribblePink"
         android:fontFamily="@font/calibre_semi"
         android:text="@string/suggest_the_developers"
-        android:textSize="18sp"
         android:textAllCaps="false"
         android:textColor="@color/white"
+        android:textSize="@dimen/text_18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/clFeedbackInput" />
 
     <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/lottieFeedbackLoading"
-        android:layout_width="90dp"
-        android:layout_height="90dp"
-        android:layout_marginTop="16dp"
+        android:layout_width="@dimen/padding_90dp"
+        android:layout_height="@dimen/padding_90dp"
+        android:layout_marginTop="@dimen/padding_16dp"
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="@+id/btnProvideFeedback"
         app:layout_constraintEnd_toEndOf="parent"

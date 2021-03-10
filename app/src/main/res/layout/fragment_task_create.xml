@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:clipToPadding="false"
+    android:paddingBottom="@dimen/padding_20dp"
     android:fillViewport="true">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -38,38 +39,50 @@
             app:layout_constraintTop_toBottomOf="@+id/layoutTaskInput" />
 
         <include
-            android:id="@+id/layoutCreateTaskFeatures"
-            layout="@layout/layout_create_task_features"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/padding_18dp"
-            android:layout_marginTop="24dp"
-            android:layout_marginEnd="@dimen/padding_18dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/layoutSetAlarm" />
-
-        <include
             android:id="@+id/layoutAssigneeUser"
             layout="@layout/layout_assign_user"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/padding_16dp"
-            android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/layoutCreateTaskFeatures" />
+            app:layout_constraintTop_toBottomOf="@+id/layoutSetAlarm" />
+
+        <TextView
+            android:id="@+id/tvAttachmentHeader"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/padding_16dp"
+            android:layout_marginTop="@dimen/padding_26dp"
+            android:ellipsize="end"
+            android:fontFamily="@font/calibre_semi"
+            android:text="@string/options"
+            android:textColor="@color/grey3"
+            android:textSize="@dimen/text_18sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/layoutAssigneeUser" />
+
+        <include
+            android:id="@+id/layoutCreateTaskFeatures"
+            layout="@layout/layout_create_task_features"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/padding_18dp"
+            android:layout_marginTop="@dimen/padding_16dp"
+            android:layout_marginEnd="@dimen/padding_18dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvAttachmentHeader" />
 
         <include
             android:id="@+id/layoutTaskImage"
             layout="@layout/layout_image_holder"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/padding_16dp"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/layoutSetAlarm" />
+            app:layout_constraintTop_toBottomOf="@+id/layoutCreateTaskFeatures" />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btCreateTask"

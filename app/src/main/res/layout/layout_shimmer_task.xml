@@ -10,7 +10,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="@dimen/padding_8dp"
         tools:ignore="UselessParent">
 
         <ImageView
@@ -38,7 +38,7 @@
         <androidx.cardview.widget.CardView
             android:id="@+id/cvCarouselShimmer"
             android:layout_width="match_parent"
-            android:layout_height="150dp"
+            android:layout_height="@dimen/padding_150dp"
             android:layout_marginStart="@dimen/padding_16dp"
             android:layout_marginTop="@dimen/padding_26dp"
             android:layout_marginEnd="@dimen/padding_16dp"
@@ -51,7 +51,7 @@
 
         <TextView
             android:id="@+id/tvTodoListItemShimmer"
-            android:layout_width="250dp"
+            android:layout_width="@dimen/padding_150dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/padding_16dp"
             android:layout_marginTop="@dimen/padding_26dp"
@@ -62,7 +62,7 @@
 
         <TextView
             android:id="@+id/tvTodoItemOneShimmer"
-            android:layout_width="150dp"
+            android:layout_width="@dimen/padding_150dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/padding_16dp"
             android:layout_marginTop="@dimen/padding_26dp"
@@ -73,7 +73,7 @@
 
         <TextView
             android:id="@+id/tvTodoItemTwoShimmer"
-            android:layout_width="150dp"
+            android:layout_width="@dimen/padding_150dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/padding_16dp"
             android:layout_marginTop="@dimen/padding_26dp"

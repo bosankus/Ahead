@@ -20,10 +20,10 @@
             android:id="@+id/vpAssignedTaskList"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:clipToPadding="false"
             android:clipChildren="false"
-            android:overScrollMode="never"
+            android:clipToPadding="false"
             android:orientation="horizontal"
+            android:overScrollMode="never"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />

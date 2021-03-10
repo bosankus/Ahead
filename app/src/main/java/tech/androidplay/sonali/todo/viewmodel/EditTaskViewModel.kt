@@ -10,7 +10,7 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
-import tech.androidplay.sonali.todo.data.repository.TaskRepository
+import tech.androidplay.sonali.todo.data.repository.TodoRepository
 import tech.androidplay.sonali.todo.utils.ResultData
 import javax.inject.Inject
 
@@ -24,7 +24,7 @@ import javax.inject.Inject
 @SuppressLint("StaticFieldLeak")
 @ExperimentalCoroutinesApi
 @HiltViewModel
-class EditTaskViewModel @Inject constructor(private val taskSource: TaskRepository) : ViewModel() {
+class EditTaskViewModel @Inject constructor(private val taskSource: TodoRepository) : ViewModel() {
 
     private var _viewState = MutableLiveData<ResultData<*>>(ResultData.Loading)
     val viewState: LiveData<ResultData<*>> get() = _viewState
@@ -82,12 +82,12 @@ class EditTaskViewModel @Inject constructor(private val taskSource: TaskReposito
 
     fun changeTaskStatus(status: Boolean) = viewModelScope.launch {
         val statusMap = mapOf("isCompleted" to status)
-        initialTaskId.get()?.let { taskSource.changeTaskStatus(statusMap, it) }
+        initialTaskId.get()?.let { taskSource.markTaskComplete(statusMap, it) }
     }
 
     fun uploadImage(uri: Uri?, taskId: String) = viewModelScope.launch {
         _imageUploadState.postValue(ResultData.Loading)
-        val response = uri?.let { taskSource.uploadImage(it, null, taskId) }
+        val response = uri?.let { taskSource.uploadImage(it, taskId, null) }
         response?.let { _imageUploadState.postValue(ResultData.Success(it)) }
             ?: run { _imageUploadState.postValue(ResultData.Failed()) }
     }

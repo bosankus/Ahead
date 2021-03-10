@@ -100,9 +100,11 @@
                 android:visibility="gone"
                 app:allListSize="@{data.taskListSize}"
                 app:assignedListSize="@{data.assignedTaskList.size()}"
+                app:author="@{data.author}"
+                app:completedListSize="@{data.completedTaskList.size()}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:viewModel="@{data}" />
+                app:quote="@{data.quote}" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

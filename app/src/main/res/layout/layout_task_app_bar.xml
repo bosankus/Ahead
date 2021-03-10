@@ -3,8 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="@color/white">
+    android:layout_height="wrap_content">
 
     <ImageView
         android:id="@+id/imgAvatar"
@@ -14,6 +13,7 @@
         android:background="@drawable/bg_icon_ripple"
         android:padding="@dimen/padding_3dp"
         android:src="@drawable/ic_avatar"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -28,7 +28,7 @@
         android:layout_marginEnd="@dimen/padding_22dp"
         android:background="@drawable/bg_icon_ripple"
         android:padding="@dimen/padding_3dp"
-        android:src="@drawable/ic_menu"
+        android:src="@drawable/ic_avatar"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"

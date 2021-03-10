@@ -63,7 +63,7 @@
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/tvNoTaskImg"
-                android:layout_width="0dp"
+                android:layout_width="@dimen/padding_0dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/padding_16dp"
                 android:drawablePadding="@dimen/padding_5dp"
@@ -79,7 +79,7 @@
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/imgTask"
                 android:layout_width="match_parent"
-                android:layout_height="150dp"
+                android:layout_height="@dimen/padding_150dp"
                 android:scaleType="centerCrop"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -241,7 +241,7 @@
 
         <include
             android:id="@+id/layoutLoading"
-            layout="@layout/layout_loading_fragment_edit_task"
+            layout="@layout/layout_loading_edit_task"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:visibility="gone"

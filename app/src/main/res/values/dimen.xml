@@ -1,18 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
+    <!--Margin + padding-->
+    <dimen name="padding_0dp">0dp</dimen>
     <dimen name="padding_3dp">3dp</dimen>
     <dimen name="padding_5dp">5dp</dimen>
     <dimen name="padding_8dp">8dp</dimen>
     <dimen name="padding_10dp">10dp</dimen>
-    <!--<dimen name="padding_12dp">12dp</dimen>-->
-    <!--<dimen name="padding_14dp">14dp</dimen>-->
     <dimen name="padding_16dp">16dp</dimen>
     <dimen name="padding_18dp">18dp</dimen>
     <dimen name="padding_20dp">20dp</dimen>
     <dimen name="padding_22dp">22dp</dimen>
     <dimen name="padding_26dp">26dp</dimen>
-    <!--<dimen name="padding_48dp">48dp</dimen>-->
+    <dimen name="padding_35dp">35dp</dimen>
+    <dimen name="padding_50dp">50dp</dimen>
+    <dimen name="padding_60dp">60dp</dimen>
+    <dimen name="padding_90dp">90dp</dimen>
+    <dimen name="padding_120dp">120dp</dimen>
+    <dimen name="padding_150dp">150dp</dimen>
+    <dimen name="padding_200dp">200dp</dimen>
 
+    <!--Text sizes-->
     <dimen name="text_12sp">12sp</dimen>
     <dimen name="text_14sp">14sp</dimen>
     <dimen name="text_16sp">16sp</dimen>
@@ -22,8 +29,4 @@
     <dimen name="text_26sp">26sp</dimen>
     <dimen name="text_28sp">28sp</dimen>
     <dimen name="text_32sp">32sp</dimen>
-    <!--<dimen name="text_55sp">55sp</dimen>-->
-
-    <dimen name="viewpager_next_item_visible" tools:keep="@dimen/viewpager_next_item_visible">26dp</dimen>
-    <dimen name="viewpager_current_item_horizontal_margin" tools:keep="@dimen/viewpager_current_item_horizontal_margin">16dp</dimen>
 </resources>

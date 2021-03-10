@@ -4,8 +4,6 @@
     <string name="think">think.</string>
     <string name="hint_date_txt">Select Date</string>
     <string name="new_task">New task</string>
-    <string name="set_alarm">Set Alarm</string>
-    <string name="ring_alarm_for_this_task">Ring alarm for this task</string>
     <string name="task">task</string>
     <string name="task_description">Task Description</string>
     <string name="email">Email</string>
@@ -56,16 +54,22 @@
     <string name="completed">Completed</string>
 
     <!--Task Creation-->
+    <string name="set_alarm">Set Notification</string>
+    <string name="ring_alarm_for_this_task">Alarm will ring for the task</string>
     <string name="task_progress_uploading">Uploading Image…</string>
     <string name="task_added_failure">Failed to add task</string>
     <string name="task_added_success">Task added success successfully 👍</string>
     <string name="task_image_upload_failed">Image uploading failed. Please retry adding the task.</string>
     <string name="create_task_title_hint">Task Title</string>
     <string name="create_task_details_hint">Add task details</string>
-    <string name="username">Username (Email ID)</string>
+    <string name="options">More options</string>
+    <string name="username">Email Id</string>
+    <string name="assignee">Assignee</string>
+    <string name="remove">Remove</string>
 
     <!--Task Editing-->
-    <string name="edit_task">Edit Task</string>
+    <string name="edit_task">Task Details</string>
+    <string name="no_task_id">No Task ID found</string>
     <string name="save_task">Save</string>
     <string name="delete_task">Delete Task</string>
     <string name="prompt_past_no_notification">Alarm won\'t ring for time which has passed %1$s</string>

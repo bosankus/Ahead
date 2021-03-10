@@ -9,7 +9,6 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
-import android.widget.ImageView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -22,7 +21,6 @@ import tech.androidplay.sonali.todo.databinding.FragmentTaskCreateBinding
 import tech.androidplay.sonali.todo.utils.*
 import tech.androidplay.sonali.todo.utils.UIHelper.hideKeyboard
 import tech.androidplay.sonali.todo.utils.UIHelper.isEmailValid
-import tech.androidplay.sonali.todo.utils.UIHelper.setSvgTint
 import tech.androidplay.sonali.todo.utils.UIHelper.showSnack
 import tech.androidplay.sonali.todo.viewmodel.TaskCreateViewModel
 import tech.androidplay.sonali.todo.workers.TaskCreationWorker
@@ -83,30 +81,26 @@ class TaskCreateFragment : Fragment(R.layout.fragment_task_create) {
                 taskTimeStamp?.toLocalDateTime()?.beautifyDateTime()
         })
 
-
-        binding.layoutCreateTaskFeatures.addImage.setOnClickListener {
-            selectImage()
-            if (isImageAdded) binding.layoutCreateTaskFeatures.addImage.setSvgTint(R.color.dribblePink)
-            else if (!isImageAdded) binding.layoutCreateTaskFeatures.addImage.setSvgTint(R.color.grey3)
-        }
+        binding.layoutCreateTaskFeatures.addImage.setOnClickListener { selectImage() }
 
         binding.layoutTaskImage.btnImgPhotoRemove.setOnClickListener {
             binding.apply {
                 layoutTaskImage.imgPhoto.setImageDrawable(null)
                 layoutTaskImage.clImagePlaceHolder.visibility = View.GONE
-                layoutCreateTaskFeatures.addImage.setSvgTint(R.color.grey3)
                 isImageAdded = false
             }
         }
 
-        binding.layoutCreateTaskFeatures.addUser.setOnClickListener {
-            if (isAssigneeShowing)
-                showAssigneeOption(binding.layoutCreateTaskFeatures.addUser, false)
-            else if (!isAssigneeShowing) {
-                showAssigneeOption(binding.layoutCreateTaskFeatures.addUser, true)
-                assigneeId = null
+        /*binding.apply {
+            layoutCreateTaskFeatures.addUser.setOnClickListener {
+                if (isAssigneeShowing)
+                    layoutAssigneeUser.clAssignUser.visibility = View.VISIBLE
+                else if (!isAssigneeShowing) {
+                    layoutAssigneeUser.clAssignUser.visibility = View.GONE
+                    assigneeId = null
+                }
             }
-        }
+        }*/
 
         binding.layoutAssigneeUser.etAssigneeUsername.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(
@@ -131,22 +125,6 @@ class TaskCreateFragment : Fragment(R.layout.fragment_task_create) {
         }
     }
 
-    private fun showAssigneeOption(icon: ImageView, show: Boolean) {
-        isAssigneeShowing = if (show) {
-            binding.apply {
-                layoutAssigneeUser.clAssignUser.visibility = View.VISIBLE
-                icon.setSvgTint(R.color.dribblePink)
-            }
-            true
-        } else {
-            binding.apply {
-                layoutAssigneeUser.clAssignUser.visibility = View.GONE
-                icon.setSvgTint(R.color.grey3)
-            }
-            false
-        }
-    }
-
     @SuppressLint("SetTextI18n")
     private fun checkAssigneeAvailability(email: String) {
         viewModel.checkAssigneeAvailability(email).observe(viewLifecycleOwner, { result ->
@@ -160,10 +138,11 @@ class TaskCreateFragment : Fragment(R.layout.fragment_task_create) {
                                 "⚠️Can not assign task to yourself"
                         else {
                             assigneeId = it.data
+                            requireActivity().hideKeyboard()
                             binding.layoutAssigneeUser.tvAssigneeAvailability.text = " ✔️User added"
                         }
                     }
-                    is ResultData.Failed -> {
+                    else -> {
                         binding.layoutAssigneeUser.tvAssigneeAvailability.text = "❗No user found"
                         assigneeId = null
                     }
@@ -229,11 +208,10 @@ class TaskCreateFragment : Fragment(R.layout.fragment_task_create) {
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (resultCode == Activity.RESULT_OK && data != null) {
+        if (requestCode == 1000 && resultCode == Activity.RESULT_OK && data != null) {
             taskImage = data.data
             isImageAdded = true
             binding.apply {
-                layoutCreateTaskFeatures.addImage.setSvgTint(R.color.grey2)
                 layoutTaskImage.clImagePlaceHolder.visibility = View.VISIBLE
                 layoutTaskImage.imgPhoto.loadImage(taskImage.toString())
             }

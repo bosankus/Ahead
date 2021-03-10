@@ -6,7 +6,7 @@
 
         <variable
             name="loadingState"
-            type="tech.androidplay.sonali.todo.viewmodel.EditTaskViewModel" />
+            type="boolean" />
 
     </data>
 
@@ -15,7 +15,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/white"
-        isProgressVisible="@{loadingState.viewState}">
+        app:show="@{loadingState}">
 
         <com.facebook.shimmer.ShimmerFrameLayout
             android:id="@+id/shimmer"
@@ -26,7 +26,7 @@
             app:shimmer_auto_start="true">
 
             <include
-                layout="@layout/layout_shimmer_fragment_edit_task"
+                layout="@layout/layout_shimmer_task"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
         </com.facebook.shimmer.ShimmerFrameLayout>

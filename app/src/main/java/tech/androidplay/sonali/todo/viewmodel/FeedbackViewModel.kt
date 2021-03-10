@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import tech.androidplay.sonali.todo.data.repository.FeedbackRepository
+import tech.androidplay.sonali.todo.data.repository.TodoRepository
 import tech.androidplay.sonali.todo.utils.ResultData
 import javax.inject.Inject
 
@@ -18,21 +18,12 @@ import javax.inject.Inject
 
 @ExperimentalCoroutinesApi
 @HiltViewModel
-class FeedbackViewModel @Inject constructor(private val dataSource: FeedbackRepository) :
+class FeedbackViewModel @Inject constructor(private val dataSource: TodoRepository) :
     ViewModel() {
 
-    private val _currentUser = dataSource.currentUser
-    private val userEmailId get() = _currentUser?.email
-
-    fun provideFeedback(topic: String, description: String): LiveData<ResultData<String>> {
-        val hashMap = hashMapOf(
-            "user" to userEmailId,
-            "topic" to topic,
-            "description" to description
-        )
-        return liveData {
+    fun provideFeedback(topic: String, description: String): LiveData<ResultData<String>> =
+        liveData {
             emit(ResultData.Loading)
-            emit(dataSource.provideFeedback(hashMap))
+            emit(dataSource.provideFeedback(topic, description))
         }
-    }
 }

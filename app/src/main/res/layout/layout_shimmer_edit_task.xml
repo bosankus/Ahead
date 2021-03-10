@@ -33,7 +33,7 @@
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/imgTask"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="@dimen/padding_50dp"
             android:background="@color/shimmerColor"
             android:scaleType="centerCrop"
             app:layout_constraintEnd_toEndOf="parent"

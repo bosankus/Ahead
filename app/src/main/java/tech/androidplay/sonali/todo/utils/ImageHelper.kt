@@ -33,7 +33,7 @@ fun Fragment.selectImage() {
         .crop()
         .compress(500)
         .maxResultSize(500, 500)
-        .start()
+        .start(1000)
 }
 
 fun ImageView.loadImage(url: String?) {
@@ -41,7 +41,7 @@ fun ImageView.loadImage(url: String?) {
         Glide.with(this.context)
             .load(url)
             .transition(DrawableTransitionOptions.withCrossFade())
-            .transform(CenterInside(), RoundedCorners(20))
+            .transform(CenterInside())
             .into(this)
     }
 }

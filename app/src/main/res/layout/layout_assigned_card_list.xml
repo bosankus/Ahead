@@ -14,15 +14,15 @@
     </data>
 
     <LinearLayout
-        android:id="@+id/assignedCardItemList"
+        android:id="@+id/llAssignedCardItemList"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
 
         <androidx.cardview.widget.CardView
             style="@style/CardStyle"
-            android:layout_width="150dp"
-            android:layout_height="150dp"
+            android:layout_width="@dimen/padding_150dp"
+            android:layout_height="@dimen/padding_150dp"
             android:layout_margin="@dimen/padding_18dp"
             app:cardBackgroundColor="@android:color/white"
             app:cardCornerRadius="@dimen/padding_5dp">
@@ -34,23 +34,23 @@
 
                 <TextView
                     android:id="@+id/tvTodoDayName"
-                    android:layout_width="0dp"
+                    android:layout_width="@dimen/padding_0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/padding_18dp"
-                    android:layout_marginEnd="@dimen/padding_18dp"
                     android:layout_marginTop="@dimen/padding_10dp"
-                    android:textColor="@color/grey2"
-                    android:textSize="@dimen/text_12sp"
+                    android:layout_marginEnd="@dimen/padding_18dp"
                     android:ellipsize="marquee"
                     android:singleLine="true"
+                    android:textColor="@color/grey2"
+                    android:textSize="@dimen/text_12sp"
                     app:day_name="@{todo.todoDate}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"/>
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
                     android:id="@+id/tvTodoBody"
-                    android:layout_width="0dp"
+                    android:layout_width="@dimen/padding_0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/padding_18dp"
                     android:layout_marginTop="@dimen/padding_5dp"
@@ -69,13 +69,13 @@
                 <View
                     android:id="@+id/viewPriority"
                     android:layout_width="match_parent"
-                    android:layout_height="5dp"
+                    android:layout_height="@dimen/padding_5dp"
                     android:layout_marginTop="@dimen/padding_16dp"
                     android:paddingBottom="@dimen/padding_10dp"
                     app:background_color="@{todo.priority}"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"/>
+                    app:layout_constraintStart_toStartOf="parent" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

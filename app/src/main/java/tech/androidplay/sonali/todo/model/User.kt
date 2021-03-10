@@ -13,11 +13,9 @@ data class User(
     @SerializedName("uid")
     var uid: String = "",
     @SerializedName("email")
-    var email: String = "",
+    var email: String? = "",
     @SerializedName("displayName")
-    var displayName: String = "",
+    var displayName: String? = "",
     @SerializedName("token")
-    var token: String = "",
-    @SerializedName("createdOn")
-    var createdOn: String = "",
+    var token: String? = "",
 ) : Serializable

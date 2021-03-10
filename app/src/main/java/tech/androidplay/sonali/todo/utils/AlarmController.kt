@@ -39,7 +39,7 @@ fun Context.startAlarmedNotification(
             intent,
             PendingIntent.FLAG_UPDATE_CURRENT
         )
-    alarmManager.setExact(
+    alarmManager.setExactAndAllowWhileIdle(
         AlarmManager.RTC_WAKEUP,
         dateTime,
         pendingIntent

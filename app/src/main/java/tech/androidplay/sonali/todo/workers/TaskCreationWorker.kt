@@ -12,6 +12,8 @@ import tech.androidplay.sonali.todo.utils.Notifier.dismissNotification
 import tech.androidplay.sonali.todo.utils.Notifier.show
 import tech.androidplay.sonali.todo.utils.ResultData
 import tech.androidplay.sonali.todo.utils.UIHelper.getCurrentTimestamp
+import tech.androidplay.sonali.todo.utils.UIHelper.logMessage
+import tech.androidplay.sonali.todo.utils.startAlarmedNotification
 import tech.androidplay.sonali.todo.view.activity.MainActivity
 import tech.androidplay.sonali.todo.workers.TaskImageUploadWorker.Companion.UPLOADED_IMAGE_URI
 
@@ -57,9 +59,10 @@ class TaskCreationWorker(context: Context, workerParameters: WorkerParameters) :
             is ResultData.Loading -> {/*Do Nothing*/
             }
             is ResultData.Success -> {
-                showNotification(
-                    taskBody, context.getString(R.string.task_added_success), intent
-                )
+                // TODO: Create alarm
+                /*context.startAlarmedNotification(it.data)*/
+                logMessage("$inputData")
+                showNotification(taskBody, context.getString(R.string.task_added_success), intent)
                 return Result.success()
             }
             is ResultData.Failed -> {

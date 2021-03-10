@@ -10,7 +10,6 @@
             type="tech.androidplay.sonali.todo.viewmodel.TaskViewModel" />
     </data>
 
-
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:id="@+id/taskFragment"
         android:layout_width="match_parent"
@@ -28,12 +27,12 @@
                 android:id="@+id/layoutTaskBar"
                 layout="@layout/layout_task_app_bar"
                 android:layout_width="match_parent"
-                android:layout_height="60dp"
+                android:layout_height="@dimen/padding_60dp"
                 android:layout_gravity="top" />
 
             <include
                 android:id="@+id/layoutLoadingTask"
-                layout="@layout/layout_loading_fragment_task"
+                layout="@layout/layout_loading_task"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:visibility="gone"

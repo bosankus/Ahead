@@ -6,28 +6,36 @@
     <data>
 
         <variable
-            name="viewModel"
-            type="tech.androidplay.sonali.todo.viewmodel.TaskViewModel" />
-
-        <variable
             name="allListSize"
             type="int" />
 
         <variable
             name="assignedListSize"
             type="int" />
+
+        <variable
+            name="completedListSize"
+            type="int" />
+
+        <variable
+            name="quote"
+            type="String" />
+
+        <variable
+            name="author"
+            type="String" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/clEmptyTask"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:show="@{(allListSize==0 &amp;&amp; assignedListSize==0 ) ? true: false}">
+        app:show="@{(allListSize==0 &amp;&amp; assignedListSize==0 &amp;&amp; completedListSize==0) ? true: false}">
 
         <ImageView
             android:id="@+id/imgEmptyTask"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
+            android:layout_width="@dimen/padding_90dp"
+            android:layout_height="@dimen/padding_90dp"
             android:src="@drawable/ic_empty"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -43,11 +51,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/padding_18dp"
-            app:author="@{viewModel.author}"
+            app:author="@{author}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/imgEmptyTask"
-            app:quote="@{viewModel.quote}" />
+            app:quote="@{quote}" />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btnAddTask"
@@ -59,7 +67,7 @@
             android:background="@drawable/bg_rounded_btn"
             android:backgroundTint="@color/dribblePink"
             android:fontFamily="@font/jost"
-            android:minHeight="0dp"
+            android:minHeight="@dimen/padding_0dp"
             android:padding="@dimen/padding_10dp"
             android:stateListAnimator="@animator/button_state_animator"
             android:text="@string/all_tasks_completed_add_more"
