@@ -43,21 +43,18 @@ import javax.inject.Inject
 class TaskCreateFragment : Fragment(R.layout.fragment_task_create) {
 
     private val binding by viewLifecycleLazy { FragmentTaskCreateBinding.bind(requireView()) }
+    private val viewModel: TaskCreateViewModel by viewModels()
+    private lateinit var authManager: AuthManager
+    private var taskTimeStamp: String? = null
+    private var isImageAdded: Boolean = false
+    private var taskImage: Uri? = null
+    private var assigneeId: String? = null
 
     @Inject
     lateinit var alarmManager: AlarmManager
 
     @Inject
     lateinit var dateTimePicker: DateTimePicker
-    private lateinit var authManager: AuthManager
-    private val viewModel: TaskCreateViewModel by viewModels()
-    private var taskTimeStamp: String? = null
-
-    private var isAssigneeShowing: Boolean = false
-    private var isImageAdded: Boolean = false
-
-    private var taskImage: Uri? = null
-    private var assigneeId: String? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -90,17 +87,6 @@ class TaskCreateFragment : Fragment(R.layout.fragment_task_create) {
                 isImageAdded = false
             }
         }
-
-        /*binding.apply {
-            layoutCreateTaskFeatures.addUser.setOnClickListener {
-                if (isAssigneeShowing)
-                    layoutAssigneeUser.clAssignUser.visibility = View.VISIBLE
-                else if (!isAssigneeShowing) {
-                    layoutAssigneeUser.clAssignUser.visibility = View.GONE
-                    assigneeId = null
-                }
-            }
-        }*/
 
         binding.layoutAssigneeUser.etAssigneeUsername.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(
@@ -162,14 +148,21 @@ class TaskCreateFragment : Fragment(R.layout.fragment_task_create) {
         // creating task via viewmodel
         if (taskImage == null) {
             viewModel.createTask(todoBody, todoDesc, todoDate, assigneeList)
-                .observe(viewLifecycleOwner, {
-                    when (it) {
+                .observe(viewLifecycleOwner, { response ->
+                    when (response) {
                         is ResultData.Loading -> showSnack(requireView(), "Creating...")
                         is ResultData.Success -> {
+                            if (todoDate != null) requireContext().startAlarmedNotification(
+                                response.data.toString(),
+                                todoBody,
+                                todoDesc,
+                                todoDate.toLong(),
+                                alarmManager
+                            )
                             showSnack(requireView(), "Task Created")
                             findNavController().navigateUp()
                         }
-                        is ResultData.Failed -> showSnack(requireView(), "Something went wrong")
+                        else -> showSnack(requireView(), "Something went wrong")
                     }
                 })
         } else {

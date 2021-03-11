@@ -37,8 +37,8 @@ fun View.visibility(status: Boolean) {
 }
 
 @BindingAdapter("day_name")
-fun TextView.showDayName(date: String) {
-    this.text = date.toLong().convertFromEpochTime()
+fun TextView.showDayName(date: String?) {
+    this.text = if (date.isNullOrEmpty()) "" else date.toLong().convertFromEpochTime()
 }
 
 @BindingAdapter("background_color")

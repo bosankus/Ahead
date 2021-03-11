@@ -21,7 +21,6 @@ import tech.androidplay.sonali.todo.utils.Constants.DEVICE_ANDROID_VERSION
 import tech.androidplay.sonali.todo.utils.Constants.NOTIFICATION_CHANNEL_ID
 import tech.androidplay.sonali.todo.utils.Constants.NOTIFICATION_CHANNEL_NAME
 import tech.androidplay.sonali.todo.utils.Constants.NOTIFICATION_ID
-import tech.androidplay.sonali.todo.utils.generateRequestCode
 import javax.inject.Inject
 
 /**
@@ -57,28 +56,32 @@ class AlarmReceiver : HiltBroadcastReceiver() {
     }
 
 
+    /**
+     * [For notification button action]
+     * We will user uniqueNotificationId for request code for creating new pending intent
+     * each time when multiple notifications are send. So that on action click, the pending
+     * intent hits related extras.
+     */
     private fun showNotification(
         context: Context,
         alarmText: String,
         alarmDescription: String,
         taskId: String
     ) {
-        val uniqueNotificationId = taskId.generateRequestCode()
+
+        // Generates notification code taskId.hashCode()
+        val uniqueNotificationId = taskId.hashCode()
+        // Extras for notification action button
         val intent = Intent(context, TaskStatusUpdateService::class.java).also {
             it.putExtra(ALARM_ID, taskId)
             it.putExtra(NOTIFICATION_ID, uniqueNotificationId)
         }
-
-        /*
-         We will user uniqueNotificationId for request code for creating new pending intent
-         each time when multiple notifications are send. So that on action click, the pending
-         intent hits related extras.
-         */
         val pendingIntent = PendingIntent.getService(
             context, uniqueNotificationId, intent,
             PendingIntent.FLAG_UPDATE_CURRENT
         )
 
+        // Creating notification channel
         if (DEVICE_ANDROID_VERSION >= ANDROID_OREO)
             createNotification(context, notificationManager)
 
@@ -92,6 +95,9 @@ class AlarmReceiver : HiltBroadcastReceiver() {
         notificationManager.notify(uniqueNotificationId, baseNotificationBuilder.build())
     }
 
+    /**
+     * This method creates the notification channel with custom sound attribute
+     */
     private fun createNotification(context: Context, notificationManager: NotificationManager) {
         val uri = Uri.parse("android.resource://" + context.packageName + "/" + R.raw.noti_sound)
 

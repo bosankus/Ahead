@@ -68,6 +68,11 @@ class TodoRepository : FirebaseApi {
                 .addOnFailureListener { cont.resume(ResultData.Failed(it.message)) }
         }
 
+    override suspend fun createTaskFromWorker(taskMap: HashMap<*, *>): String {
+        val document = taskListRef.add(taskMap).await()
+        return document.id
+    }
+
     override suspend fun fetchAllUnassignedTask(): Flow<MutableList<Todo>> = callbackFlow {
         val querySnapshot = query.addSnapshotListener { value, error ->
             if (error != null) return@addSnapshotListener
@@ -128,14 +133,6 @@ class TodoRepository : FirebaseApi {
         ResultData.Failed(e.message)
     }
 
-    suspend fun fetchUserFullName(userId: String): String? = try {
-        val response = userListRef.whereEqualTo("uid", userId).get().await()
-        if (!response.isEmpty) response.toObjects(User::class.java)[0].displayName
-        else "Unknown"
-    } catch (e: Exception) {
-        ""
-    }
-
     override suspend fun provideFeedback(topic: String, description: String): ResultData<String> =
         try {
             val feedbackDetails = Feedback(userDetails?.email, topic, description)
@@ -157,7 +154,7 @@ class TodoRepository : FirebaseApi {
     }
 
     // Use this for upload
-    fun upload(uri: Uri, block: ((ResultData<Uri>, Int) -> Unit)?) {
+    override fun uploadImageFromWorker(uri: Uri, block: ((ResultData<Uri>, Int) -> Unit)?) {
         val pathRef = storage.child(("${userDetails?.email}/${uri.lastPathSegment}"))
         pathRef.putFile(uri)
             .addOnProgressListener { taskSnapshot ->

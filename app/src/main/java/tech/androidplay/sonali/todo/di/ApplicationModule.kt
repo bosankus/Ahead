@@ -22,8 +22,8 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import tech.androidplay.sonali.todo.R
 import tech.androidplay.sonali.todo.TodoApplication
 import tech.androidplay.sonali.todo.utils.CacheManager
-import tech.androidplay.sonali.todo.utils.Constants
 import tech.androidplay.sonali.todo.utils.Constants.ACTION_SHOW_TASK_FRAGMENT
+import tech.androidplay.sonali.todo.utils.Constants.NOTIFICATION_CHANNEL_ID
 import tech.androidplay.sonali.todo.utils.Constants.SHARED_PREFERENCE_NAME
 import tech.androidplay.sonali.todo.view.activity.MainActivity
 import java.util.*
@@ -102,10 +102,7 @@ class ApplicationModule {
     fun provideBaseNotificationBuilder(
         @ApplicationContext context: Context,
         pendingIntent: PendingIntent
-    ): NotificationCompat.Builder = NotificationCompat.Builder(
-        context,
-        Constants.NOTIFICATION_CHANNEL_ID
-    )
+    ): NotificationCompat.Builder = NotificationCompat.Builder(context, NOTIFICATION_CHANNEL_ID)
         .setAutoCancel(true)
         .setSmallIcon(R.drawable.ic_notification)
         .setContentIntent(pendingIntent)

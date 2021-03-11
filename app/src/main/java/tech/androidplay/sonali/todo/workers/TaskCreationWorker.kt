@@ -1,18 +1,22 @@
 package tech.androidplay.sonali.todo.workers
 
+import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import androidx.hilt.work.HiltWorker
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedInject
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.withContext
 import tech.androidplay.sonali.todo.R
 import tech.androidplay.sonali.todo.data.repository.TodoRepository
 import tech.androidplay.sonali.todo.utils.Notifier.dismissNotification
 import tech.androidplay.sonali.todo.utils.Notifier.show
-import tech.androidplay.sonali.todo.utils.ResultData
 import tech.androidplay.sonali.todo.utils.UIHelper.getCurrentTimestamp
-import tech.androidplay.sonali.todo.utils.UIHelper.logMessage
 import tech.androidplay.sonali.todo.utils.startAlarmedNotification
 import tech.androidplay.sonali.todo.view.activity.MainActivity
 import tech.androidplay.sonali.todo.workers.TaskImageUploadWorker.Companion.UPLOADED_IMAGE_URI
@@ -24,14 +28,19 @@ import tech.androidplay.sonali.todo.workers.TaskImageUploadWorker.Companion.UPLO
  * Email: ankush@androidplay.in
  */
 @ExperimentalCoroutinesApi
-class TaskCreationWorker(context: Context, workerParameters: WorkerParameters) :
+@HiltWorker
+class TaskCreationWorker @AssistedInject constructor(
+    @Assisted context: Context,
+    @Assisted workerParameters: WorkerParameters,
+    private val alarmManager: AlarmManager
+) :
     CoroutineWorker(context, workerParameters) {
 
     private val context = applicationContext
     private val repository = TodoRepository()
     private val currentUser = repository.userDetails
 
-    override suspend fun doWork(): Result {
+    override suspend fun doWork(): Result = withContext(Dispatchers.IO){
         val taskCreator = checkNotNull(currentUser?.uid)
         val taskBody = checkNotNull(inputData.getString(TASK_BODY))
         val taskDesc = checkNotNull(inputData.getString(TASK_DESC))
@@ -51,28 +60,24 @@ class TaskCreationWorker(context: Context, workerParameters: WorkerParameters) :
             "priority" to 1,
         )
 
-        // TODO: add deep link, deal detail fragment, then take user to there from notification.
         val intent = Intent(context, MainActivity::class.java)
             .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
 
-        when (repository.createTask(taskMap)) {
-            is ResultData.Loading -> {/*Do Nothing*/
-            }
-            is ResultData.Success -> {
-                // TODO: Create alarm
-                /*context.startAlarmedNotification(it.data)*/
-                logMessage("$inputData")
-                showNotification(taskBody, context.getString(R.string.task_added_success), intent)
-                return Result.success()
-            }
-            is ResultData.Failed -> {
-                showNotification(taskBody, context.getString(R.string.task_added_failure), intent)
-                return Result.failure()
-            }
-            else -> Result.failure()
+        val response: String = repository.createTaskFromWorker(taskMap)
+        if (response.isNotEmpty()) {
+            context.startAlarmedNotification(
+                id = response,
+                taskBody,
+                taskDesc,
+                taskDate.toLong(),
+                alarmManager
+            )
+            showNotification(taskBody, context.getString(R.string.task_added_success), intent)
+            Result.success()
+        } else {
+            showNotification(taskBody, context.getString(R.string.task_added_failure), intent)
+            Result.failure()
         }
-
-        return Result.failure()
     }
 
     private fun showNotification(title: String, caption: String, intent: Intent) {

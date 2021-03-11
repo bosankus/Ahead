@@ -128,16 +128,18 @@ class TaskViewModel @Inject constructor(
     }
 
     private fun getCompletedTaskList(list: List<Todo>) = list.filter { it.isCompleted }
-        .sortedByDescending { it.todoDate }
+        .sortedWith(compareByDescending(nullsLast(), { it.todoDate }))
 
     private fun getUpcomingTaskList(list: List<Todo>) =
-        list.filter { it.todoDate.compareWithToday() == IS_AFTER && !it.isCompleted }
-            .sortedByDescending { it.todoDate }
+        list.filter { it.todoDate?.compareWithToday() == IS_AFTER && !it.isCompleted }
+            .sortedWith(compareByDescending(nullsLast(), { it.todoDate }))
+
 
     private fun getOverDueTaskList(list: List<Todo>) =
-        list.filter { it.todoDate.compareWithToday() == IS_BEFORE && !it.isCompleted }
-            .sortedByDescending { it.todoDate }
+        list.filter { it.todoDate?.compareWithToday() == IS_BEFORE && !it.isCompleted }
+            .sortedWith(compareByDescending(nullsLast(), { it.todoDate }))
 
     private fun getAssignedTaskList(list: List<Todo>) =
-        list.sortedByDescending { it.todoDate }
+        list.sortedWith(compareByDescending(nullsLast(), { it.todoDate }))
+
 }

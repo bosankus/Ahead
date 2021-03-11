@@ -28,10 +28,16 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
-import android.os.Build
+import android.graphics.Color
+import android.media.AudioAttributes
+import android.net.Uri
 import androidx.annotation.DrawableRes
 import androidx.core.app.NotificationCompat
 import tech.androidplay.sonali.todo.R
+import tech.androidplay.sonali.todo.utils.Constants.ANDROID_OREO
+import tech.androidplay.sonali.todo.utils.Constants.DEVICE_ANDROID_VERSION
+import tech.androidplay.sonali.todo.utils.Constants.NOTIFICATION_CHANNEL_ID
+import tech.androidplay.sonali.todo.utils.Constants.NOTIFICATION_CHANNEL_NAME
 
 /**
  * Helper class for showing different types of notifications.
@@ -83,7 +89,9 @@ object Notifier {
         // Remove any notification with the same id.
         this.dismissNotification(context, notificationId)
 
-        createDefaultChannel()
+        if (DEVICE_ANDROID_VERSION >= ANDROID_OREO)
+            createDefaultChannel(context)
+
         val builder = notificationBuilder(context, CHANNEL_ID_DEFAULT, data)
             .setAutoCancel(data.isAutoCancelable)
 
@@ -108,8 +116,10 @@ object Notifier {
 
         val notificationId = data.notificationId ?: NOTIFICATION_TAG.hashCode()
 
-        createDefaultChannel()
-        val builder = notificationBuilder(context, CHANNEL_ID_DEFAULT, data)
+        if (DEVICE_ANDROID_VERSION >= ANDROID_OREO)
+            createDefaultChannel(context)
+
+        val builder = notificationBuilder(context, NOTIFICATION_CHANNEL_ID, data)
             .setProgress(max, progress, isIndeterminate)
             .setOngoing(true)
             .setAutoCancel(false)
@@ -148,21 +158,32 @@ object Notifier {
             .setSmallIcon(data.smallIcon ?: R.drawable.ic_notification)
             .setContentTitle(data.contentTitle)
             .setContentText(data.contentText)
+            .setStyle(NotificationCompat.BigTextStyle().bigText(data.contentText))
             // All fields below this line are optional.
-            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .setTicker(data.contentTitle)
             .setContentIntent(data.pendingIntent)
     }
 
-    private fun createDefaultChannel() {
+    private fun createDefaultChannel(context: Context) {
+        // Custom notification sound uri
+        val uri = Uri.parse("android.resource://" + context.packageName + "/" + R.raw.noti_sound)
+
+        // Notification sound audio attributes builder
+        val attributes = AudioAttributes.Builder()
+            .setUsage(AudioAttributes.USAGE_NOTIFICATION_RINGTONE)
+            .build()
+
+
         // Notification channel is added since android Oreo.
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val channel = NotificationChannel(
-                CHANNEL_ID_DEFAULT,
-                "Default",
-                NotificationManager.IMPORTANCE_DEFAULT
-            )
-            notificationManager?.createNotificationChannel(channel)
+        val channel = NotificationChannel(
+            NOTIFICATION_CHANNEL_ID, NOTIFICATION_CHANNEL_NAME,
+            NotificationManager.IMPORTANCE_HIGH
+        ).apply {
+            lightColor = Color.YELLOW
+            setSound(uri, attributes)
+            enableVibration(true)
+            setShowBadge(true)
         }
+        notificationManager?.createNotificationChannel(channel)
     }
 }
