@@ -10,9 +10,10 @@
         app:destination="@id/taskFragment"
         app:launchSingleTop="true" />
 
-    <action android:id="@+id/action_global_taskEditFragment"
+    <action
+        android:id="@+id/action_global_taskEditFragment"
         app:destination="@id/taskEditFragment"
-        app:launchSingleTop="true"/>
+        app:launchSingleTop="true" />
 
     <fragment
         android:id="@+id/authFragment"
@@ -47,13 +48,6 @@
         <action
             android:id="@+id/action_taskFragment_to_feedbackFragment"
             app:destination="@id/feedbackFragment"
-            app:enterAnim="@anim/fade_out_animation"
-            app:exitAnim="@anim/fade_in_animation"
-            app:popEnterAnim="@anim/fade_out_animation"
-            app:popExitAnim="@anim/fade_in_animation" />
-        <action
-            android:id="@+id/action_taskFragment_to_taskCompletedFragment"
-            app:destination="@id/taskCompletedFragment"
             app:enterAnim="@anim/fade_out_animation"
             app:exitAnim="@anim/fade_in_animation"
             app:popEnterAnim="@anim/fade_out_animation"
@@ -96,13 +90,6 @@
             app:popExitAnim="@anim/fade_in_animation"
             app:popUpTo="@id/taskFragment"
             app:popUpToInclusive="true" />
-        <action
-            android:id="@+id/action_taskEditFragment_to_taskCompletedFragment"
-            app:destination="@id/taskCompletedFragment"
-            app:enterAnim="@anim/fade_out_animation"
-            app:exitAnim="@anim/fade_in_animation"
-            app:popEnterAnim="@anim/fade_out_animation"
-            app:popExitAnim="@anim/fade_in_animation" />
     </fragment>
     <fragment
         android:id="@+id/taskCreateFragment"
@@ -118,7 +105,7 @@
     <fragment
         android:id="@+id/feedbackFragment"
         android:name="tech.androidplay.sonali.todo.view.fragment.FeedbackFragment"
-        android:label="FeedbackFragment" >
+        android:label="FeedbackFragment">
         <action
             android:id="@+id/action_feedbackFragment_to_taskFragment"
             app:destination="@id/taskFragment"
@@ -126,22 +113,5 @@
             app:exitAnim="@anim/fade_in_animation"
             app:popEnterAnim="@anim/fade_out_animation"
             app:popExitAnim="@anim/fade_in_animation" />
-    </fragment>
-    <fragment
-        android:id="@+id/taskCompletedFragment"
-        android:name="tech.androidplay.sonali.todo.view.fragment.TaskCompletedFragment"
-        android:label="TaskCompletedFragment" >
-        <action
-            android:id="@+id/action_taskCompletedFragment_to_taskFragment"
-            app:destination="@id/taskFragment"
-            app:enterAnim="@anim/fade_out_animation"
-            app:exitAnim="@anim/fade_in_animation"
-            app:popEnterAnim="@anim/fade_out_animation"
-            app:popExitAnim="@anim/fade_in_animation" />
-        <action
-            android:id="@+id/action_taskCompletedFragment_to_taskEditFragment"
-            app:destination="@id/taskEditFragment"
-            app:enterAnim="@anim/fade_out_animation"
-            app:popEnterAnim="@anim/fade_out_animation" />
     </fragment>
 </navigation>

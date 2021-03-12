@@ -37,7 +37,7 @@ class AuthFragment : Fragment(R.layout.fragment_auth) {
             activity?.finishAffinity()
         }
 
-        binding.btnSignUpEmailPassword.setOnClickListener {
+        binding.btnSignUp.setOnClickListener {
             if (!authManager.isUserLoggedIn) authManager.authUser()
             else showSnack(requireView(), "Already signedIn")
         }

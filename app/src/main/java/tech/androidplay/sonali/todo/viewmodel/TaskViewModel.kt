@@ -10,12 +10,13 @@ import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import tech.androidplay.sonali.todo.data.repository.QuoteRepository
-import tech.androidplay.sonali.todo.data.repository.TaskRepository
+import tech.androidplay.sonali.todo.data.repository.TodoRepository
 import tech.androidplay.sonali.todo.model.Todo
 import tech.androidplay.sonali.todo.utils.Constants.IS_AFTER
 import tech.androidplay.sonali.todo.utils.Constants.IS_BEFORE
 import tech.androidplay.sonali.todo.utils.Constants.QUOTE
 import tech.androidplay.sonali.todo.utils.Constants.QUOTE_AUTHOR
+import tech.androidplay.sonali.todo.utils.UIHelper.greetingMessage
 import tech.androidplay.sonali.todo.utils.compareWithToday
 import javax.inject.Inject
 
@@ -29,7 +30,7 @@ import javax.inject.Inject
 @InternalCoroutinesApi
 @HiltViewModel
 class TaskViewModel @Inject constructor(
-    private val taskSource: TaskRepository,
+    private val taskSource: TodoRepository,
     private val quoteSource: QuoteRepository,
     private val preferences: SharedPreferences
 ) : ViewModel() {
@@ -68,11 +69,11 @@ class TaskViewModel @Inject constructor(
 
     private fun getUserFirstName() {
         viewModelScope.launch {
-            val firstName = taskSource.getUserFullName()
-                .split(" ")
-                .toMutableList()
-                .firstOrNull()
-            _firstName.value = "Good Day, $firstName"
+            val firstName = taskSource.userDetails?.displayName
+                ?.split(" ")
+                ?.toMutableList()
+                ?.firstOrNull()
+            _firstName.value = "${greetingMessage()}, $firstName"
             getAllTasks()
         }
     }
@@ -111,21 +112,6 @@ class TaskViewModel @Inject constructor(
         }
     }
 
-    private fun getCompletedTaskList(list: List<Todo>) = list.filter { it.isCompleted }
-        .sortedByDescending { it.todoDate }
-
-    private fun getUpcomingTaskList(list: List<Todo>) =
-        list.filter { it.todoDate.compareWithToday() == IS_AFTER && !it.isCompleted }
-            .sortedByDescending { it.todoDate }
-
-    private fun getOverDueTaskList(list: List<Todo>) =
-        list.filter { it.todoDate.compareWithToday() == IS_BEFORE && !it.isCompleted }
-            .sortedByDescending { it.todoDate }
-
-    private fun getAssignedTaskList(list: List<Todo>) =
-        list.sortedByDescending { it.todoDate }
-
-
     private fun getQuote() {
         val quote = preferences.getString(QUOTE, "")
         if (quote?.isNotBlank() == true) {
@@ -141,5 +127,20 @@ class TaskViewModel @Inject constructor(
             }
         }
     }
+
+    private fun getCompletedTaskList(list: List<Todo>) = list.filter { it.isCompleted }
+        .sortedWith(compareByDescending(nullsLast(), { it.todoDate }))
+
+    private fun getUpcomingTaskList(list: List<Todo>) =
+        list.filter { it.todoDate?.compareWithToday() == IS_AFTER && !it.isCompleted }
+            .sortedWith(compareByDescending(nullsLast(), { it.todoDate }))
+
+
+    private fun getOverDueTaskList(list: List<Todo>) =
+        list.filter { it.todoDate?.compareWithToday() == IS_BEFORE && !it.isCompleted }
+            .sortedWith(compareByDescending(nullsLast(), { it.todoDate }))
+
+    private fun getAssignedTaskList(list: List<Todo>) =
+        list.sortedWith(compareByDescending(nullsLast(), { it.todoDate }))
 
 }

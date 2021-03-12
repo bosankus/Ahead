@@ -9,7 +9,6 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
-import android.widget.ImageView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -22,7 +21,6 @@ import tech.androidplay.sonali.todo.databinding.FragmentTaskCreateBinding
 import tech.androidplay.sonali.todo.utils.*
 import tech.androidplay.sonali.todo.utils.UIHelper.hideKeyboard
 import tech.androidplay.sonali.todo.utils.UIHelper.isEmailValid
-import tech.androidplay.sonali.todo.utils.UIHelper.setSvgTint
 import tech.androidplay.sonali.todo.utils.UIHelper.showSnack
 import tech.androidplay.sonali.todo.viewmodel.TaskCreateViewModel
 import tech.androidplay.sonali.todo.workers.TaskCreationWorker
@@ -45,21 +43,18 @@ import javax.inject.Inject
 class TaskCreateFragment : Fragment(R.layout.fragment_task_create) {
 
     private val binding by viewLifecycleLazy { FragmentTaskCreateBinding.bind(requireView()) }
+    private val viewModel: TaskCreateViewModel by viewModels()
+    private lateinit var authManager: AuthManager
+    private var taskTimeStamp: String? = null
+    private var isImageAdded: Boolean = false
+    private var taskImage: Uri? = null
+    private var assigneeId: String? = null
 
     @Inject
     lateinit var alarmManager: AlarmManager
 
     @Inject
     lateinit var dateTimePicker: DateTimePicker
-    private lateinit var authManager: AuthManager
-    private val viewModel: TaskCreateViewModel by viewModels()
-    private var taskTimeStamp: String? = null
-
-    private var isAssigneeShowing: Boolean = false
-    private var isImageAdded: Boolean = false
-
-    private var taskImage: Uri? = null
-    private var assigneeId: String? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -83,28 +78,13 @@ class TaskCreateFragment : Fragment(R.layout.fragment_task_create) {
                 taskTimeStamp?.toLocalDateTime()?.beautifyDateTime()
         })
 
-
-        binding.layoutCreateTaskFeatures.addImage.setOnClickListener {
-            selectImage()
-            if (isImageAdded) binding.layoutCreateTaskFeatures.addImage.setSvgTint(R.color.dribblePink)
-            else if (!isImageAdded) binding.layoutCreateTaskFeatures.addImage.setSvgTint(R.color.grey3)
-        }
+        binding.layoutCreateTaskFeatures.addImage.setOnClickListener { selectImage() }
 
         binding.layoutTaskImage.btnImgPhotoRemove.setOnClickListener {
             binding.apply {
                 layoutTaskImage.imgPhoto.setImageDrawable(null)
                 layoutTaskImage.clImagePlaceHolder.visibility = View.GONE
-                layoutCreateTaskFeatures.addImage.setSvgTint(R.color.grey3)
                 isImageAdded = false
-            }
-        }
-
-        binding.layoutCreateTaskFeatures.addUser.setOnClickListener {
-            if (isAssigneeShowing)
-                showAssigneeOption(binding.layoutCreateTaskFeatures.addUser, false)
-            else if (!isAssigneeShowing) {
-                showAssigneeOption(binding.layoutCreateTaskFeatures.addUser, true)
-                assigneeId = null
             }
         }
 
@@ -131,22 +111,6 @@ class TaskCreateFragment : Fragment(R.layout.fragment_task_create) {
         }
     }
 
-    private fun showAssigneeOption(icon: ImageView, show: Boolean) {
-        isAssigneeShowing = if (show) {
-            binding.apply {
-                layoutAssigneeUser.clAssignUser.visibility = View.VISIBLE
-                icon.setSvgTint(R.color.dribblePink)
-            }
-            true
-        } else {
-            binding.apply {
-                layoutAssigneeUser.clAssignUser.visibility = View.GONE
-                icon.setSvgTint(R.color.grey3)
-            }
-            false
-        }
-    }
-
     @SuppressLint("SetTextI18n")
     private fun checkAssigneeAvailability(email: String) {
         viewModel.checkAssigneeAvailability(email).observe(viewLifecycleOwner, { result ->
@@ -160,10 +124,11 @@ class TaskCreateFragment : Fragment(R.layout.fragment_task_create) {
                                 "⚠️Can not assign task to yourself"
                         else {
                             assigneeId = it.data
+                            requireActivity().hideKeyboard()
                             binding.layoutAssigneeUser.tvAssigneeAvailability.text = " ✔️User added"
                         }
                     }
-                    is ResultData.Failed -> {
+                    else -> {
                         binding.layoutAssigneeUser.tvAssigneeAvailability.text = "❗No user found"
                         assigneeId = null
                     }
@@ -183,14 +148,21 @@ class TaskCreateFragment : Fragment(R.layout.fragment_task_create) {
         // creating task via viewmodel
         if (taskImage == null) {
             viewModel.createTask(todoBody, todoDesc, todoDate, assigneeList)
-                .observe(viewLifecycleOwner, {
-                    when (it) {
+                .observe(viewLifecycleOwner, { response ->
+                    when (response) {
                         is ResultData.Loading -> showSnack(requireView(), "Creating...")
                         is ResultData.Success -> {
+                            if (todoDate != null) requireContext().startAlarmedNotification(
+                                response.data.toString(),
+                                todoBody,
+                                todoDesc,
+                                todoDate.toLong(),
+                                alarmManager
+                            )
                             showSnack(requireView(), "Task Created")
                             findNavController().navigateUp()
                         }
-                        is ResultData.Failed -> showSnack(requireView(), "Something went wrong")
+                        else -> showSnack(requireView(), "Something went wrong")
                     }
                 })
         } else {
@@ -229,11 +201,10 @@ class TaskCreateFragment : Fragment(R.layout.fragment_task_create) {
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (resultCode == Activity.RESULT_OK && data != null) {
+        if (requestCode == 1000 && resultCode == Activity.RESULT_OK && data != null) {
             taskImage = data.data
             isImageAdded = true
             binding.apply {
-                layoutCreateTaskFeatures.addImage.setSvgTint(R.color.grey2)
                 layoutTaskImage.clImagePlaceHolder.visibility = View.VISIBLE
                 layoutTaskImage.imgPhoto.loadImage(taskImage.toString())
             }

@@ -18,13 +18,14 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import tech.androidplay.sonali.todo.R
 import tech.androidplay.sonali.todo.TodoApplication
-import tech.androidplay.sonali.todo.view.activity.MainActivity
 import tech.androidplay.sonali.todo.utils.CacheManager
-import tech.androidplay.sonali.todo.utils.Constants
 import tech.androidplay.sonali.todo.utils.Constants.ACTION_SHOW_TASK_FRAGMENT
+import tech.androidplay.sonali.todo.utils.Constants.NOTIFICATION_CHANNEL_ID
 import tech.androidplay.sonali.todo.utils.Constants.SHARED_PREFERENCE_NAME
+import tech.androidplay.sonali.todo.view.activity.MainActivity
 import java.util.*
 import javax.inject.Singleton
 
@@ -65,10 +66,6 @@ class ApplicationModule {
 
     @Singleton
     @Provides
-    fun providesStringBuilder() = StringBuilder()
-
-    @Singleton
-    @Provides
     fun providesCalender(): Calendar = Calendar.getInstance()
 
     @Singleton
@@ -88,6 +85,7 @@ class ApplicationModule {
         return context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
     }
 
+    @ExperimentalCoroutinesApi
     @Provides
     fun providesPendingIntent(
         @ApplicationContext context: Context
@@ -104,10 +102,7 @@ class ApplicationModule {
     fun provideBaseNotificationBuilder(
         @ApplicationContext context: Context,
         pendingIntent: PendingIntent
-    ): NotificationCompat.Builder = NotificationCompat.Builder(
-        context,
-        Constants.NOTIFICATION_CHANNEL_ID
-    )
+    ): NotificationCompat.Builder = NotificationCompat.Builder(context, NOTIFICATION_CHANNEL_ID)
         .setAutoCancel(true)
         .setSmallIcon(R.drawable.ic_notification)
         .setContentIntent(pendingIntent)

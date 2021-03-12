@@ -2,11 +2,14 @@ package tech.androidplay.sonali.todo.data.repository
 
 import android.net.Uri
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
+import com.google.firebase.firestore.SetOptions
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -15,6 +18,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.tasks.await
 import tech.androidplay.sonali.todo.data.network.FirebaseApi
+import tech.androidplay.sonali.todo.model.Feedback
 import tech.androidplay.sonali.todo.model.Todo
 import tech.androidplay.sonali.todo.model.User
 import tech.androidplay.sonali.todo.utils.Constants.FEEDBACK_COLLECTION
@@ -33,9 +37,10 @@ import kotlin.coroutines.suspendCoroutine
 
 @ExperimentalCoroutinesApi
 class TodoRepository : FirebaseApi {
-    val userDetails = FirebaseAuth.getInstance().currentUser
+    val userDetails: FirebaseUser? = FirebaseAuth.getInstance().currentUser
     private val db: FirebaseFirestore = Firebase.firestore
     private val storage = FirebaseStorage.getInstance().reference
+    private val messaging = FirebaseMessaging.getInstance()
 
     // reference to fireStore tables
     private val taskListRef = db.collection(TASK_COLLECTION)
@@ -50,6 +55,11 @@ class TodoRepository : FirebaseApi {
         .whereArrayContains("assignee", userDetails?.uid!!)
         .orderBy("todoCreationTimeStamp", Query.Direction.ASCENDING)
 
+    override suspend fun saveUser(user: FirebaseUser) {
+        val deviceToken = messaging.token.await()
+        val userDetails = User(user.uid, user.email, deviceToken, user.displayName)
+        userListRef.document(user.uid).set(userDetails, SetOptions.merge()).await()
+    }
 
     override suspend fun createTask(taskMap: HashMap<*, *>): ResultData<String> =
         suspendCoroutine { cont ->
@@ -57,6 +67,11 @@ class TodoRepository : FirebaseApi {
                 .addOnSuccessListener { cont.resume(ResultData.Success(it.id)) }
                 .addOnFailureListener { cont.resume(ResultData.Failed(it.message)) }
         }
+
+    override suspend fun createTaskFromWorker(taskMap: HashMap<*, *>): String {
+        val document = taskListRef.add(taskMap).await()
+        return document.id
+    }
 
     override suspend fun fetchAllUnassignedTask(): Flow<MutableList<Todo>> = callbackFlow {
         val querySnapshot = query.addSnapshotListener { value, error ->
@@ -76,12 +91,12 @@ class TodoRepository : FirebaseApi {
         awaitClose { querySnapshot.remove() }
     }
 
-    override suspend fun fetchTaskByTaskId(taskId: String): ResultData<Todo> = try {
+    override suspend fun fetchTaskByTaskId(taskId: String): Todo? = try {
         val docSnapshot: DocumentSnapshot = taskListRef.document(taskId).get().await()
-        if (docSnapshot.exists()) ResultData.Success(docSnapshot.toObject(Todo::class.java))
-        else ResultData.Failed("Document do not exists")
+        if (docSnapshot.exists()) docSnapshot.toObject(Todo::class.java)
+        else null
     } catch (e: Exception) {
-        ResultData.Failed(e.message)
+        null
     }
 
     override suspend fun updateTask(taskId: String, map: Map<String, Any?>): ResultData<Boolean> =
@@ -109,26 +124,20 @@ class TodoRepository : FirebaseApi {
         false
     }
 
-    override suspend fun isUserAvailable(email: String): ResultData<Boolean> = try {
+    override suspend fun isUserAvailable(email: String): ResultData<String> = try {
         val response = userListRef.whereEqualTo("email", email).get().await()
-        if (response.toObjects(User::class.java)[0].uid.isNotEmpty()) ResultData.Success(true)
-        else ResultData.Success(false)
+        val userId = response.toObjects(User::class.java)[0].uid
+        if (userId.isNotEmpty()) ResultData.Success(userId)
+        else ResultData.Failed()
     } catch (e: Exception) {
         ResultData.Failed(e.message)
     }
 
-    suspend fun fetchUserFullName(userId: String): String? = try {
-        val response = userListRef.whereEqualTo("uid", userId).get().await()
-        if (!response.isEmpty) response.toObjects(User::class.java)[0].displayName
-        else "Unknown"
-    } catch (e: Exception) {
-        ""
-    }
-
-    override suspend fun provideFeedback(hashMap: HashMap<String, String?>): ResultData<String> =
+    override suspend fun provideFeedback(topic: String, description: String): ResultData<String> =
         try {
-            val feedback = feedbackListRef.add(hashMap).await()
-            ResultData.Success(feedback.id)
+            val feedbackDetails = Feedback(userDetails?.email, topic, description)
+            val response = feedbackListRef.add(feedbackDetails).await()
+            ResultData.Success(response.id)
         } catch (e: Exception) {
             ResultData.Failed(e.message)
         }
@@ -145,7 +154,7 @@ class TodoRepository : FirebaseApi {
     }
 
     // Use this for upload
-    fun upload(uri: Uri, block: ((ResultData<Uri>, Int) -> Unit)?) {
+    override fun uploadImageFromWorker(uri: Uri, block: ((ResultData<Uri>, Int) -> Unit)?) {
         val pathRef = storage.child(("${userDetails?.email}/${uri.lastPathSegment}"))
         pathRef.putFile(uri)
             .addOnProgressListener { taskSnapshot ->

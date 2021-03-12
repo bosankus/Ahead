@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import tech.androidplay.sonali.todo.data.repository.TaskRepository
+import tech.androidplay.sonali.todo.data.repository.TodoRepository
 import tech.androidplay.sonali.todo.utils.ResultData
 import tech.androidplay.sonali.todo.utils.UIHelper.getCurrentTimestamp
 import javax.inject.Inject
@@ -19,7 +19,7 @@ import javax.inject.Inject
 
 @ExperimentalCoroutinesApi
 @HiltViewModel
-class TaskCreateViewModel @Inject constructor(private val taskSource: TaskRepository) :
+class TaskCreateViewModel @Inject constructor(private val taskSource: TodoRepository) :
     ViewModel() {
 
     private val _currentUser = taskSource.userDetails
@@ -51,6 +51,6 @@ class TaskCreateViewModel @Inject constructor(private val taskSource: TaskReposi
 
     fun checkAssigneeAvailability(email: String) = liveData {
         emit(ResultData.Loading)
-        emit(taskSource.checkAssigneeAvailability(email))
+        emit(taskSource.isUserAvailable(email))
     }
 }

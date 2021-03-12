@@ -42,7 +42,7 @@ class TaskImageUploadWorker(context: Context, workerParameters: WorkerParameters
     }
 
     private suspend fun uploadImageFromUri(fileUri: Uri): Result = suspendCoroutine { cont ->
-        repository.upload(fileUri) { result, percentage ->
+        repository.uploadImageFromWorker(fileUri) { result, percentage ->
             when (result) {
                 is ResultData.Loading -> {
                     showProgressNotification(

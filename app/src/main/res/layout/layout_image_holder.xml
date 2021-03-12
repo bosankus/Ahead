@@ -9,24 +9,23 @@
 
     <ImageView
         android:id="@+id/imgPhoto"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@drawable/bg_rounded"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/padding_120dp"
+        android:foreground="@drawable/bg_trans_gradient"
         android:scaleType="matrix"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         tools:ignore="ContentDescription" />
 
-    <ImageButton
+    <ImageView
         android:id="@+id/btnImgPhotoRemove"
-        android:layout_width="@dimen/padding_22dp"
-        android:layout_height="@dimen/padding_22dp"
-        android:layout_gravity="end"
-        android:background="@android:color/transparent"
-        android:scaleType="fitXY"
-        android:src="@drawable/ic_cross_bold"
-        android:tint="@color/dribblePink"
-        app:layout_constraintEnd_toEndOf="@+id/imgPhoto"
-        app:layout_constraintStart_toEndOf="@+id/imgPhoto"
-        app:layout_constraintTop_toTopOf="@+id/imgPhoto"
+        android:layout_width="@dimen/padding_0dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_icon_ripple"
+        android:padding="@dimen/padding_8dp"
+        android:src="@drawable/ic_delete"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         tools:ignore="ContentDescription" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

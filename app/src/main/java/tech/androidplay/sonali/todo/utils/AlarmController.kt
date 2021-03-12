@@ -4,8 +4,6 @@ import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
-import android.view.View
-import androidx.fragment.app.Fragment
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import tech.androidplay.sonali.todo.receiver.AlarmReceiver
 import tech.androidplay.sonali.todo.utils.Constants.ALARM_DESCRIPTION
@@ -32,18 +30,13 @@ fun Context.startAlarmedNotification(
         this.putExtra(ALARM_DESCRIPTION, description)
         this.putExtra(ALARM_ID, id)
     }
-    val pendingIntent =
-        PendingIntent.getBroadcast(
-            this,
-            id.generateRequestCode(),
-            intent,
-            PendingIntent.FLAG_UPDATE_CURRENT
-        )
-    alarmManager.setExact(
-        AlarmManager.RTC_WAKEUP,
-        dateTime,
-        pendingIntent
+    val pendingIntent = PendingIntent.getBroadcast(
+        this,
+        id.hashCode(),
+        intent,
+        PendingIntent.FLAG_UPDATE_CURRENT
     )
+    alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, dateTime, pendingIntent)
 }
 
 @ExperimentalCoroutinesApi
@@ -52,20 +45,9 @@ fun Context.cancelAlarmedNotification(requestCode: String) {
     val pendingIntent =
         PendingIntent.getBroadcast(
             this,
-            requestCode.generateRequestCode(),
+            requestCode.hashCode(),
             intent,
             PendingIntent.FLAG_UPDATE_CURRENT
         )
     pendingIntent.cancel()
-}
-
-@Suppress("UNUSED_CHANGED_VALUE")
-fun String.generateRequestCode(): Int {
-    var ascii: Int
-    var code = 0
-    for (i in this.indices - 1) {
-        ascii = this[i].toInt()
-        code += ascii
-    }
-    return code
 }

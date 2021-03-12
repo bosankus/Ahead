@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -8,39 +7,39 @@
     android:layout_height="match_parent">
 
     <ImageView
-        android:id="@+id/imgAppIntroLogo"
-        android:layout_width="200dp"
+        android:id="@+id/imgSignUpLogo"
+        android:layout_width="@dimen/padding_200dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/text_16sp"
-        android:layout_marginTop="120dp"
+        android:layout_marginTop="@dimen/padding_120dp"
         android:src="@drawable/ic_intro_logo"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="ContentDescription" />
 
     <TextView
-        android:id="@+id/tvLoginHeader"
+        android:id="@+id/tvSignUpHeader"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16sp"
+        android:layout_marginStart="@dimen/padding_16dp"
         android:layout_marginTop="@dimen/padding_26dp"
         android:layout_marginEnd="@dimen/padding_16dp"
+        android:alpha="0.8"
         android:fontFamily="@font/calibre_semi"
         android:text="@string/login_header_txt"
-        android:textSize="26sp"
-        android:alpha="0.8"
+        android:textSize="@dimen/text_26sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imgAppIntroLogo"/>
+        app:layout_constraintTop_toBottomOf="@+id/imgSignUpLogo" />
 
     <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btnSignUpEmailPassword"
+        android:id="@+id/btnSignUp"
         style="?android:attr/borderlessButtonStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="50dp"
+        android:layout_marginStart="@dimen/padding_16dp"
+        android:layout_marginEnd="@dimen/text_16sp"
+        android:layout_marginBottom="@dimen/padding_50dp"
         android:background="@drawable/bg_rounded_btn"
         android:backgroundTint="@color/dribblePink"
         android:fontFamily="@font/calibre_semi"
@@ -48,7 +47,7 @@
         android:stateListAnimator="@animator/button_state_animator"
         android:text="@string/sign_in"
         android:textColor="@color/white"
-        android:textSize="18sp"
+        android:textSize="@dimen/text_18sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

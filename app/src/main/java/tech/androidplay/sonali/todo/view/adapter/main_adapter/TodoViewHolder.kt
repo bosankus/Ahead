@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 import tech.androidplay.sonali.todo.R
 import tech.androidplay.sonali.todo.databinding.LayoutMainTaskListBinding
 import tech.androidplay.sonali.todo.model.Todo
+import tech.androidplay.sonali.todo.utils.Constants.TASK_DOC_ID
 
 /**
  * Created by Androidplay
@@ -26,9 +27,5 @@ class TodoViewHolder(
                 it?.findNavController()?.navigate(R.id.action_global_taskEditFragment, bundle)
             }
         }
-    }
-
-    companion object{
-        const val TASK_DOC_ID = "TASK_DOC_ID"
     }
 }

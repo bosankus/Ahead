@@ -20,7 +20,7 @@ data class Todo(
     @SerializedName("todoDesc")
     var todoDesc: String? = "",
     @SerializedName("todoDate")
-    var todoDate: String = "",
+    var todoDate: String? = "",
     @SerializedName("todoCreationTimeStamp")
     var todoCreationTimeStamp: String = "",
     @JvmField

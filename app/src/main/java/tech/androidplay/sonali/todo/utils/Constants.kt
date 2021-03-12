@@ -18,7 +18,6 @@ object Constants {
     const val QUOTE_WORKER_TAG = "quote_worker"
     const val QUOTE_WORKER_ID = 1001
 
-
     const val PLAY_STORE_LINK = "https://androidplay.in/29hQ"
     const val GLOBAL_TAG = "Androidplay"
 
@@ -60,7 +59,8 @@ object Constants {
     // For Android version check
     val DEVICE_ANDROID_VERSION = Build.VERSION.SDK_INT
     const val ANDROID_OREO = Build.VERSION_CODES.O
-    const val ANDROID_R = Build.VERSION_CODES.R
-    /*const val ANDROID_10 = Build.VERSION_CODES.Q*/
+
+    // For opening document in EditTaskFragment
+    const val TASK_DOC_ID = "TASK_DOC_ID"
 
 }

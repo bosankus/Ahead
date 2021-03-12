@@ -21,7 +21,7 @@
         android:layout_marginTop="@dimen/padding_10dp"
         app:cardBackgroundColor="@color/bg_off_white"
         app:cardCornerRadius="@dimen/padding_5dp"
-        app:cardElevation="0dp">
+        app:cardElevation="@dimen/padding_0dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -43,7 +43,7 @@
 
             <TextView
                 android:id="@+id/tvTodoListItem"
-                android:layout_width="0dp"
+                android:layout_width="@dimen/padding_0dp"
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
                 android:fontFamily="@font/calibre_semi"
