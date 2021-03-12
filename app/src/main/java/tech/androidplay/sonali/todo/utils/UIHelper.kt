@@ -9,14 +9,12 @@ import android.util.Log
 import android.view.View
 import android.view.animation.Animation
 import android.view.inputmethod.InputMethodManager
-import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
-import androidx.core.content.ContextCompat
-import androidx.core.graphics.drawable.DrawableCompat
 import com.google.android.material.snackbar.Snackbar
 import tech.androidplay.sonali.todo.utils.Constants.GLOBAL_TAG
 import java.time.Instant
+import java.util.*
 
 /**
  * Created by Androidplay
@@ -55,11 +53,11 @@ object UIHelper {
         inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
     }
 
-    fun ImageView.setSvgTint(colorName: Int) {
+    /*fun ImageView.setSvgTint(colorName: Int) {
         DrawableCompat.setTint(
             DrawableCompat.wrap(this.drawable), ContextCompat.getColor(this.context, colorName)
         )
-    }
+    }*/
 
     /*fun EditText.setEndIcon(drawable: Int) {
         this.setCompoundDrawablesWithIntrinsicBounds(0, 0, drawable, 0)
@@ -81,5 +79,16 @@ object UIHelper {
 
     fun CharSequence.isEmailValid(): Boolean {
         return android.util.Patterns.EMAIL_ADDRESS.matcher(this).matches()
+    }
+
+    fun greetingMessage(): String {
+        val calendar = Calendar.getInstance()
+        return when (calendar.get(Calendar.HOUR_OF_DAY)) {
+            in 0..11 -> "Good morning"
+            in 12..15 -> "Afternoon"
+            in 16..20 -> "Good eve"
+            in 21..23 -> "Good night"
+            else -> "Hello"
+        }
     }
 }

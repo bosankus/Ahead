@@ -16,6 +16,7 @@ import tech.androidplay.sonali.todo.utils.Constants.IS_AFTER
 import tech.androidplay.sonali.todo.utils.Constants.IS_BEFORE
 import tech.androidplay.sonali.todo.utils.Constants.QUOTE
 import tech.androidplay.sonali.todo.utils.Constants.QUOTE_AUTHOR
+import tech.androidplay.sonali.todo.utils.UIHelper.greetingMessage
 import tech.androidplay.sonali.todo.utils.compareWithToday
 import javax.inject.Inject
 
@@ -72,7 +73,7 @@ class TaskViewModel @Inject constructor(
                 ?.split(" ")
                 ?.toMutableList()
                 ?.firstOrNull()
-            _firstName.value = "Good Day, $firstName"
+            _firstName.value = "${greetingMessage()}, $firstName"
             getAllTasks()
         }
     }

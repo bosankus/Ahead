@@ -21,37 +21,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <TextView
-                android:id="@+id/tvUserFName"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/padding_18dp"
-                android:layout_marginEnd="@dimen/padding_18dp"
-                android:alpha="0.8"
-                android:fontFamily="@font/calibre_semi"
-                android:text="@{data.firstName}"
-                android:textColor="@color/grey3"
-                android:textSize="@dimen/text_26sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/tvGeneralAppDesc"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/padding_18dp"
-                android:layout_marginTop="@dimen/padding_5dp"
-                android:layout_marginEnd="@dimen/padding_18dp"
-                android:alpha="0.8"
-                android:fontFamily="@font/calibre_semi"
-                android:text="@string/fragment_task_general_app_desc"
-                android:textColor="@color/grey2"
-                android:textSize="@dimen/text_18sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tvUserFName" />
-
             <include
                 android:id="@+id/layoutAssignedTask"
                 layout="@layout/layout_task_assigned"
@@ -59,7 +28,7 @@
                 android:layout_height="wrap_content"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tvGeneralAppDesc"
+                app:layout_constraintTop_toTopOf="parent"
                 app:listSize="@{data.assignedTaskList.size()}" />
 
             <include

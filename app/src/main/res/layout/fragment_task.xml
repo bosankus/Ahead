@@ -28,7 +28,8 @@
                 layout="@layout/layout_task_app_bar"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/padding_60dp"
-                android:layout_gravity="top" />
+                android:layout_gravity="top"
+                app:data="@{viewmodel}" />
 
             <include
                 android:id="@+id/layoutLoadingTask"
@@ -46,6 +47,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 app:data="@{viewmodel}"
+                android:layout_marginTop="@dimen/padding_16dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -62,7 +64,6 @@
             android:backgroundTint="@color/dribblePink"
             android:fontFamily="@font/calibre_semi"
             android:minHeight="@dimen/padding_10dp"
-            android:text="@string/create_task"
             android:textColor="@color/white"
             android:textSize="@dimen/text_16sp"
             app:icon="@drawable/ic_add"

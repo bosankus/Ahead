@@ -1,39 +1,60 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <ImageView
-        android:id="@+id/imgAvatar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/padding_22dp"
-        android:background="@drawable/bg_icon_ripple"
-        android:padding="@dimen/padding_3dp"
-        android:src="@drawable/ic_avatar"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:tint="@color/dribblePink"
-        tools:ignore="ContentDescription" />
+    <data>
 
+        <variable
+            name="data"
+            type="tech.androidplay.sonali.todo.viewmodel.TaskViewModel" />
+    </data>
 
-    <ImageView
-        android:id="@+id/imgMenu"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/padding_22dp"
-        android:background="@drawable/bg_icon_ripple"
-        android:padding="@dimen/padding_3dp"
-        android:src="@drawable/ic_avatar"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:tint="@color/dribblePink"
-        tools:ignore="ContentDescription" />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <TextView
+            android:id="@+id/tvUserFName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/padding_18dp"
+            android:layout_marginTop="@dimen/padding_26dp"
+            android:layout_marginEnd="@dimen/padding_26dp"
+            android:alpha="0.8"
+            android:fontFamily="@font/calibre_semi"
+            android:maxLines="1"
+            android:text="@{data.firstName}"
+            android:textColor="@color/grey3"
+            android:textSize="@dimen/text_26sp" />
+
+        <TextView
+            android:id="@+id/tvGeneralAppDesc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvUserFName"
+            android:layout_marginStart="@dimen/padding_18dp"
+            android:layout_marginTop="@dimen/padding_5dp"
+            android:alpha="0.8"
+            android:fontFamily="@font/calibre_semi"
+            android:text="@string/fragment_task_general_app_desc"
+            android:textColor="@color/grey2"
+            android:textSize="@dimen/text_18sp" />
+
+        <ImageView
+            android:id="@+id/imgMenu"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="@dimen/padding_26dp"
+            android:layout_marginEnd="@dimen/padding_22dp"
+            android:background="@drawable/bg_icon_ripple"
+            android:padding="@dimen/padding_3dp"
+            android:src="@drawable/ic_avatar"
+            app:tint="@color/dribblePink"
+            tools:ignore="ContentDescription" />
+
+    </RelativeLayout>
+
+</layout>
 

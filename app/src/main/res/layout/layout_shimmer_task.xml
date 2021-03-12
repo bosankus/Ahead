@@ -10,44 +10,22 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/padding_8dp"
+        android:clickable="false"
         tools:ignore="UselessParent">
-
-        <ImageView
-            android:id="@+id/imgCreateShimmer"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/padding_18dp"
-            android:background="@drawable/ic_shimmer_circle"
-            android:padding="@dimen/padding_3dp"
-            app:layout_constraintEnd_toStartOf="@+id/imgMenuShimmer"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:ignore="ContentDescription" />
-
-        <ImageView
-            android:id="@+id/imgMenuShimmer"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/padding_22dp"
-            android:background="@drawable/ic_shimmer_circle"
-            android:padding="@dimen/padding_3dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:ignore="ContentDescription" />
 
         <androidx.cardview.widget.CardView
             android:id="@+id/cvCarouselShimmer"
             android:layout_width="match_parent"
             android:layout_height="@dimen/padding_150dp"
             android:layout_marginStart="@dimen/padding_16dp"
-            android:layout_marginTop="@dimen/padding_26dp"
+            android:layout_marginTop="@dimen/padding_35dp"
             android:layout_marginEnd="@dimen/padding_16dp"
             app:cardBackgroundColor="@color/shimmerColor"
             app:cardCornerRadius="8dp"
             app:cardElevation="0dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imgMenuShimmer" />
+            app:layout_constraintTop_toTopOf="parent"/>
 
         <TextView
             android:id="@+id/tvTodoListItemShimmer"
