@@ -27,7 +27,7 @@
                 android:id="@+id/layoutTaskBar"
                 layout="@layout/layout_task_app_bar"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/padding_60dp"
+                android:layout_height="wrap_content"
                 android:layout_gravity="top"
                 app:data="@{viewmodel}" />
 

@@ -40,7 +40,7 @@ class QuoteFetchWorker @AssistedInject constructor(
         if (response.text?.isNotEmpty() == true) {
             preferences.edit {
                 putString(QUOTE, response.text)
-                putString(QUOTE_AUTHOR, response.author)
+                putString(QUOTE_AUTHOR, "- ${response.author}")
                 apply()
             }
             dismissNotification(context, QUOTE_WORKER_ID)
