@@ -16,6 +16,8 @@ import java.time.format.DateTimeFormatter
  * Email: ankush@androidplay.in
  */
 
+/** Holds all the extension methods for handeling date time format & comaparing */
+
 fun String.compareWithToday(): Int {
     val taskDate = this.toLocalDateTime()
     val currentDate = LocalDateTime.now()

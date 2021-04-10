@@ -22,7 +22,8 @@ import java.util.*
  * On: 4/26/2020, 10:51 AM
  */
 
-@SuppressLint("SimpleDateFormat")
+/** General ui related extension functions */
+
 object UIHelper {
 
     fun getCurrentTimestamp(): String = Instant.now().toEpochMilli().toString()
@@ -52,16 +53,6 @@ object UIHelper {
         if (view == null) view = View(this)
         inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
     }
-
-    /*fun ImageView.setSvgTint(colorName: Int) {
-        DrawableCompat.setTint(
-            DrawableCompat.wrap(this.drawable), ContextCompat.getColor(this.context, colorName)
-        )
-    }*/
-
-    /*fun EditText.setEndIcon(drawable: Int) {
-        this.setCompoundDrawablesWithIntrinsicBounds(0, 0, drawable, 0)
-    }*/
 
     fun TextView.strikeThroughText() {
         val text = this.text.toString()

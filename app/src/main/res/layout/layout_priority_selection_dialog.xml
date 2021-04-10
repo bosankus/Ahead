@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/padding_20dp">
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tvPriorityHeader"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/padding_16dp"
+        android:ellipsize="end"
+        android:fontFamily="@font/calibre_semi"
+        android:text="@string/select_task_priority"
+        android:textColor="@color/grey2"
+        android:textSize="@dimen/text_20sp" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tvTopPriority"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/padding_16dp"
+        android:background="@drawable/bg_icon_ripple"
+        android:drawableStart="@drawable/ic_priority"
+        android:drawablePadding="@dimen/padding_18dp"
+        android:drawableTint="@color/top_priority"
+        android:ellipsize="end"
+        android:fontFamily="@font/calibre_semi"
+        android:text="@string/top_priority"
+        android:textColor="@color/grey3"
+        android:textSize="@dimen/text_18sp" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tvMediumPriority"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/padding_16dp"
+        android:background="@drawable/bg_icon_ripple"
+        android:drawableStart="@drawable/ic_priority"
+        android:drawablePadding="@dimen/padding_18dp"
+        android:drawableTint="@color/medium_priority"
+        android:ellipsize="end"
+        android:fontFamily="@font/calibre_semi"
+        android:text="@string/medium_priority"
+        android:textColor="@color/grey3"
+        android:textSize="@dimen/text_18sp" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tvLowPriority"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/padding_16dp"
+        android:background="@drawable/bg_icon_ripple"
+        android:drawableStart="@drawable/ic_priority"
+        android:drawablePadding="@dimen/padding_18dp"
+        android:drawableTint="@color/low_priority"
+        android:ellipsize="end"
+        android:fontFamily="@font/calibre_semi"
+        android:text="@string/low_priority"
+        android:textColor="@color/grey3"
+        android:textSize="@dimen/text_18sp" />
+
+</LinearLayout>

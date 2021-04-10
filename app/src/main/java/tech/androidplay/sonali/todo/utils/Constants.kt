@@ -8,10 +8,14 @@ import android.os.Build
  * On: 22/Aug/2020
  * Email: ankush@androidplay.in
  */
+
+/** Holds all the constants at one place */
+
 object Constants {
 
     // For default log tag
     const val QUOTE_API = "https://quotes-inspirational-quotes-motivational-quotes.p.rapidapi.com/"
+
     // For work QuoteFetchWorker.kt
     const val QUOTE_AUTHOR = "author"
     const val QUOTE = "quote"

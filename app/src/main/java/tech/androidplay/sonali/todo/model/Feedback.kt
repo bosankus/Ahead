@@ -2,6 +2,8 @@ package tech.androidplay.sonali.todo.model
 
 import com.google.gson.annotations.SerializedName
 
+/** Data class for [Feedback] operations */
+
 data class Feedback(
     @SerializedName("user")
     var user: String?, // Wayne Dyer

@@ -12,6 +12,9 @@ import kotlin.math.abs
  * Email: ankush@androidplay.in
  */
 
+/** This handles slide animation of viewPager (for assigned task)
+ * */
+
 class SliderTransformer(private val offscreenPageLimit: Int) : ViewPager2.PageTransformer {
 
     companion object {

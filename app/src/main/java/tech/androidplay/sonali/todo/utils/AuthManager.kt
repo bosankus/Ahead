@@ -17,6 +17,9 @@ import tech.androidplay.sonali.todo.R
  * On: 10/Feb/2021
  * Email: ankush@androidplay.in
  */
+
+/** This class helps to authenticate user through [AuthUI.IdpConfig.EmailBuilder] signin */
+
 class AuthManager(
     private val activity: Activity,
     private val auth: FirebaseAuth = FirebaseAuth.getInstance()
@@ -42,7 +45,9 @@ class AuthManager(
             return if (isUserLoggedIn) auth.currentUser?.uid else null
         }*/
 
-    private val providers = arrayListOf(AuthUI.IdpConfig.EmailBuilder().build())
+    private val providers = arrayListOf(
+        AuthUI.IdpConfig.EmailBuilder().build()
+    )
 
     fun authUser() = activity.startActivityForResult(
         // intent

@@ -35,10 +35,7 @@
     <string name="get_started">Next</string>
     <string name="details">Details</string>
     <string name="assign_task">Assigned</string>
-    <string name="today_s_quote">Today\'s quote</string>
     <string name="overdue">Overdue</string>
-    <string name="add_note">Add note</string>
-    <string name="save_details">Save details</string>
 
     <!--Revised Strings-->
     <string name="app_name">Ahead</string>
@@ -50,7 +47,7 @@
     <string name="prompt_failed_to_login">Failed to login. Reason: %1$s</string>
 
     <!--Main Task View-->
-    <string name="create_task">Create Task</string>
+    <string name="create_task">Create</string>
     <string name="completed">Completed</string>
 
     <!--Task Creation-->
@@ -65,6 +62,9 @@
     <string name="options">More options</string>
     <string name="username">Email Id</string>
     <string name="assignee">Assignee</string>
+    <string name="add_image">Add Image</string>
+    <string name="add_alarm">Add alarm</string>
+    <string name="add_priority">Add Priority</string>
     <string name="remove">Remove</string>
 
     <!--Task Editing-->
@@ -76,5 +76,11 @@
     <string name="prompt_past_notification">You were notified on %1$s. Tap here to change.</string>
     <string name="prompt_future_notification">You will be notified on %1$s. Tap here to change.</string>
     <string name="mark_as_completed">Mark as completed</string>
+
+    <!--Priority selection dialog-->
+    <string name="top_priority">Top Priority</string>
+    <string name="medium_priority">Medium Priority</string>
+    <string name="low_priority">Low Priority</string>
+    <string name="select_task_priority">Select Task Priority</string>
 
 </resources>

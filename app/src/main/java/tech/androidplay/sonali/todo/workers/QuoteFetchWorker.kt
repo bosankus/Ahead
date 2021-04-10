@@ -24,6 +24,10 @@ import tech.androidplay.sonali.todo.utils.Notifier.show
  * Email: ankush@androidplay.in
  */
 
+/**
+ * This helps to make one network calls each day to get daily qoute and saves in shared preferences.
+ */
+
 @HiltWorker
 class QuoteFetchWorker @AssistedInject constructor(
     @Assisted context: Context,
@@ -40,7 +44,7 @@ class QuoteFetchWorker @AssistedInject constructor(
         if (response.text?.isNotEmpty() == true) {
             preferences.edit {
                 putString(QUOTE, response.text)
-                putString(QUOTE_AUTHOR, response.author)
+                putString(QUOTE_AUTHOR, "- ${response.author}")
                 apply()
             }
             dismissNotification(context, QUOTE_WORKER_ID)

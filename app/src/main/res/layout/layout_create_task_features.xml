@@ -6,73 +6,55 @@
     android:layout_height="match_parent"
     android:orientation="horizontal">
 
-    <ImageView
-        android:id="@+id/addBullets"
-        android:layout_width="@dimen/padding_35dp"
-        android:layout_height="@dimen/padding_35dp"
-        android:background="@drawable/bg_icon_ripple"
-        android:padding="@dimen/padding_8dp"
-        android:src="@drawable/ic_add_bullet"
-        android:visibility="gone"
-        app:tint="@color/grey3"
-        tools:ignore="ContentDescription" />
-
-    <ImageView
-        android:id="@+id/changeCase"
-        android:layout_width="@dimen/padding_35dp"
-        android:layout_height="@dimen/padding_35dp"
-        android:layout_marginStart="@dimen/padding_8dp"
-        android:background="@drawable/bg_icon_ripple"
-        android:padding="@dimen/padding_8dp"
-        android:src="@drawable/ic_case_change"
-        android:visibility="gone"
-        app:tint="@color/grey3"
-        tools:ignore="ContentDescription" />
-
-    <ImageView
-        android:id="@+id/addAlarm"
-        android:layout_width="@dimen/padding_35dp"
-        android:layout_height="@dimen/padding_35dp"
-        android:background="@drawable/bg_icon_ripple"
-        android:padding="@dimen/padding_8dp"
-        android:src="@drawable/ic_date"
-        android:visibility="gone"
-        app:tint="@color/grey3"
-        tools:ignore="ContentDescription" />
-
     <TextView
-        android:id="@+id/addImage"
+        android:id="@+id/addAlarm"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/bg_icon_ripple"
-        android:drawableTop="@drawable/ic_attach"
+        android:drawableTop="@drawable/ic_date"
         android:drawablePadding="@dimen/padding_8dp"
         android:drawableTint="@color/dribblePink"
         android:fontFamily="@font/calubre_light"
         android:gravity="center"
-        android:text="Add Image"
+        android:text="@string/add_alarm"
         android:textColor="@color/dribblePink"
         android:textSize="@dimen/text_16sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/layoutSetAlarm"
         tools:ignore="UseCompatTextViewDrawableXml" />
 
-
     <TextView
-        android:id="@+id/addUser"
+        android:id="@+id/addImage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/padding_26dp"
         android:background="@drawable/bg_icon_ripple"
-        android:drawableTop="@drawable/ic_add_user"
+        android:drawableTop="@drawable/ic_attach"
         android:drawablePadding="@dimen/padding_8dp"
         android:drawableTint="@color/dribblePink"
         android:fontFamily="@font/calubre_light"
         android:gravity="center"
-        android:text="Assign"
+        android:text="@string/add_image"
         android:textColor="@color/dribblePink"
         android:textSize="@dimen/text_16sp"
-        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/layoutSetAlarm"
+        tools:ignore="UseCompatTextViewDrawableXml" />
+
+    <TextView
+        android:id="@+id/addPriority"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/padding_26dp"
+        android:background="@drawable/bg_icon_ripple"
+        android:drawableTop="@drawable/ic_flag"
+        android:drawablePadding="@dimen/padding_8dp"
+        android:drawableTint="@color/dribblePink"
+        android:fontFamily="@font/calubre_light"
+        android:gravity="center"
+        android:text="@string/add_priority"
+        android:textColor="@color/dribblePink"
+        android:textSize="@dimen/text_16sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/layoutSetAlarm"
         tools:ignore="UseCompatTextViewDrawableXml" />

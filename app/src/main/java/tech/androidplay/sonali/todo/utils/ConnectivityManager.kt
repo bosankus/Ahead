@@ -12,6 +12,8 @@ import androidx.fragment.app.Fragment
  * Email: ankush@androidplay.in
  */
 
+/** This extension method is used to check network connections */
+
 fun Fragment.isNetworkAvailable(): Boolean {
     val connectivityManager =
         requireContext().getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager

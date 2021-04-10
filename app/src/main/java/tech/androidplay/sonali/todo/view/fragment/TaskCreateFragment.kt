@@ -68,6 +68,8 @@ class TaskCreateFragment : Fragment(R.layout.fragment_task_create) {
     }
 
     private fun setListeners() {
+        binding.imgBack.setOnClickListener { findNavController().navigateUp() }
+
         binding.layoutSetAlarm.tvSelectDate.setOnClickListener {
             dateTimePicker.openDateTimePicker(requireContext())
         }
@@ -79,6 +81,10 @@ class TaskCreateFragment : Fragment(R.layout.fragment_task_create) {
         })
 
         binding.layoutCreateTaskFeatures.addImage.setOnClickListener { selectImage() }
+
+        binding.layoutCreateTaskFeatures.addPriority.setOnClickListener {
+            findNavController().navigate(R.id.action_taskCreateFragment_to_prioritySelectionDialog)
+        }
 
         binding.layoutTaskImage.btnImgPhotoRemove.setOnClickListener {
             binding.apply {

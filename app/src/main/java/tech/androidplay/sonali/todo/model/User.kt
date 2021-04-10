@@ -9,6 +9,9 @@ import java.io.Serializable
  * On: 24/Dec/2020
  * Email: ankush@androidplay.in
  */
+
+/** Data class to hold [User] data of logged in user */
+
 data class User(
     @SerializedName("uid")
     var uid: String = "",

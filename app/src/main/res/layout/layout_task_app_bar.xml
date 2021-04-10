@@ -19,14 +19,15 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/padding_18dp"
-            android:layout_marginTop="@dimen/padding_26dp"
+            android:layout_marginTop="@dimen/padding_18dp"
             android:layout_marginEnd="@dimen/padding_26dp"
             android:alpha="0.8"
             android:fontFamily="@font/calibre_semi"
             android:maxLines="1"
             android:text="@{data.firstName}"
             android:textColor="@color/grey3"
-            android:textSize="@dimen/text_26sp" />
+            android:textSize="@dimen/text_26sp"
+            tools:ignore="RelativeOverlap" />
 
         <TextView
             android:id="@+id/tvGeneralAppDesc"
@@ -46,7 +47,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
-            android:layout_marginTop="@dimen/padding_26dp"
+            android:layout_marginTop="@dimen/padding_18dp"
             android:layout_marginEnd="@dimen/padding_22dp"
             android:background="@drawable/bg_icon_ripple"
             android:padding="@dimen/padding_3dp"
