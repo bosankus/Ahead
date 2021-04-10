@@ -10,6 +10,8 @@ import java.io.Serializable
  * On: 5/6/2020, 5:30 AM
  */
 
+/** Data class for "todo" operations on Firestore DB */
+
 data class Todo(
     @DocumentId
     var docId: String = "",

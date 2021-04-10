@@ -17,6 +17,8 @@ import tech.androidplay.sonali.todo.utils.Constants.ALARM_TEXT
  * Email: ankush@androidplay.in
  */
 
+/** Holds the extension methods for starting & cancelling alarm from Activity/Fragment  */
+
 @ExperimentalCoroutinesApi
 fun Context.startAlarmedNotification(
     id: String,

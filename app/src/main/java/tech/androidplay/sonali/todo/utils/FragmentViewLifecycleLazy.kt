@@ -10,8 +10,10 @@ import kotlin.reflect.KProperty
  * Author:jamiesanson from github
  * On: 07/Dec/2020
  * Email: ankush@androidplay.in
- *
- * About : A Kotlin lazy implementation which automatically clears itself at
+ */
+
+/**
+ * A Kotlin lazy implementation which automatically clears itself at
  * appropriate times in the View Lifecycle of Fragment.
  */
 

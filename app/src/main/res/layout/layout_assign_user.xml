@@ -31,7 +31,10 @@
             android:hint="@string/username"
             android:inputType="textEmailAddress"
             android:maxLines="1"
-            android:padding="@dimen/padding_16dp"
+            android:paddingStart="@dimen/padding_16dp"
+            android:paddingEnd="@dimen/padding_16dp"
+            android:paddingTop="@dimen/padding_8dp"
+            android:paddingBottom="@dimen/padding_8dp"
             android:textColor="@color/grey3"
             android:textSize="@dimen/text_18sp"
             tools:ignore="Autofill" />

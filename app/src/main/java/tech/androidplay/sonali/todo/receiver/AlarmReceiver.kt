@@ -30,6 +30,9 @@ import javax.inject.Inject
  * Email: ankush@androidplay.in
  */
 
+/** A [HiltBroadcastReceiver] receiver to send notification of task triggered by AlarmManager */
+
+
 @AndroidEntryPoint
 @ExperimentalCoroutinesApi
 class AlarmReceiver : HiltBroadcastReceiver() {

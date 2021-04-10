@@ -14,6 +14,9 @@ import javax.inject.Inject
  * On: 03/Dec/2020
  * Email: ankush@androidplay.in
  */
+
+/** This opens dateTimepicker to select date & time from Activity/Fragment */
+
 class DateTimePicker @Inject constructor(private val currentDateTime: Calendar) {
 
     private var _epochFormat = MutableLiveData<Long>()

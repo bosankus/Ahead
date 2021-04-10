@@ -10,8 +10,6 @@
     <color name="grey2">#9E9E9E</color>
     <color name="grey3">#444444</color>
 
-    <!--    Gradient Colors-->
-
     <!--    Scrapped Colors-->
     <color name="dribbleDarkBlue">#3425D6</color>
     <color name="dribblePink">#3068DE</color>
@@ -19,16 +17,12 @@
     <color name="shimmerColor">#dddddd</color>
     <color name="cardBackgroundColor">#7057D2</color>
 
-    <!-- Colors for intro indicators -->
-    <!--<color name="tab_indicator_grey">#C0C0C0</color>-->
-
     <!-- Picked colors from web -->
     <color name="page_background">#F0F2F7</color>
     <color name="bg_off_white">#FAFAFA</color>
-    <!--<color name="green_text_color">#34E48D</color>
-    <color name="green_text_color_dark">#5BB49D</color>
-    <color name="bordered_btn_green_dark">#A5D6A7</color>
-    <color name="bordered_btn_green_light">#A5D6A7</color>
-    <color name="market_watch_red">#FF8A80</color>
-    <color name="light_blue">#E7E5F2</color>-->
+
+    <!--Priority colors-->
+    <color name="top_priority">#e53935</color>
+    <color name="medium_priority">#F2994A</color>
+    <color name="low_priority">#38ef7d</color>
 </resources>

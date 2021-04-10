@@ -34,7 +34,7 @@ class AuthFragment : Fragment(R.layout.fragment_auth) {
 
     private fun setListeners() {
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
-            activity?.finishAffinity()
+            activity?.finish()
         }
 
         binding.btnSignUp.setOnClickListener {

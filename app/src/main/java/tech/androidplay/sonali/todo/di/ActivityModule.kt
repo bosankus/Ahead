@@ -24,6 +24,8 @@ import java.util.*
  * Email: ankush@androidplay.in
  */
 
+/** [ActivityModule] provides dependencies through activity level injections*/
+
 @ExperimentalCoroutinesApi
 @InternalCoroutinesApi
 @Module

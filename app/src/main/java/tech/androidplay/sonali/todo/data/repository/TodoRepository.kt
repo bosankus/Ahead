@@ -35,8 +35,11 @@ import kotlin.coroutines.suspendCoroutine
  * Email: ankush@androidplay.in
  */
 
+/** This is a repository class for all the network calls made to firebase */
+
 @ExperimentalCoroutinesApi
 class TodoRepository : FirebaseApi {
+
     val userDetails: FirebaseUser? = FirebaseAuth.getInstance().currentUser
     private val db: FirebaseFirestore = Firebase.firestore
     private val storage = FirebaseStorage.getInstance().reference
@@ -55,11 +58,13 @@ class TodoRepository : FirebaseApi {
         .whereArrayContains("assignee", userDetails?.uid!!)
         .orderBy("todoCreationTimeStamp", Query.Direction.ASCENDING)
 
+
     override suspend fun saveUser(user: FirebaseUser) {
         val deviceToken = messaging.token.await()
         val userDetails = User(user.uid, user.email, deviceToken, user.displayName)
         userListRef.document(user.uid).set(userDetails, SetOptions.merge()).await()
     }
+
 
     override suspend fun createTask(taskMap: HashMap<*, *>): ResultData<String> =
         suspendCoroutine { cont ->
@@ -68,10 +73,12 @@ class TodoRepository : FirebaseApi {
                 .addOnFailureListener { cont.resume(ResultData.Failed(it.message)) }
         }
 
+
     override suspend fun createTaskFromWorker(taskMap: HashMap<*, *>): String {
         val document = taskListRef.add(taskMap).await()
         return document.id
     }
+
 
     override suspend fun fetchAllUnassignedTask(): Flow<MutableList<Todo>> = callbackFlow {
         val querySnapshot = query.addSnapshotListener { value, error ->
@@ -82,6 +89,7 @@ class TodoRepository : FirebaseApi {
         awaitClose { querySnapshot.remove() }
     }
 
+
     override suspend fun fetchOnlyAssignedTask(): Flow<MutableList<Todo>> = callbackFlow {
         val querySnapshot = assignedTaskQuery.addSnapshotListener { value, error ->
             if (error != null) return@addSnapshotListener
@@ -91,6 +99,7 @@ class TodoRepository : FirebaseApi {
         awaitClose { querySnapshot.remove() }
     }
 
+
     override suspend fun fetchTaskByTaskId(taskId: String): Todo? = try {
         val docSnapshot: DocumentSnapshot = taskListRef.document(taskId).get().await()
         if (docSnapshot.exists()) docSnapshot.toObject(Todo::class.java)
@@ -99,6 +108,7 @@ class TodoRepository : FirebaseApi {
         null
     }
 
+
     override suspend fun updateTask(taskId: String, map: Map<String, Any?>): ResultData<Boolean> =
         try {
             taskListRef.document(taskId).update(map).await()
@@ -106,6 +116,7 @@ class TodoRepository : FirebaseApi {
         } catch (e: Exception) {
             ResultData.Failed(e.message)
         }
+
 
     override suspend fun deleteTask(docId: String, taskImageLink: String?): ResultData<Boolean> =
         try {
@@ -117,12 +128,14 @@ class TodoRepository : FirebaseApi {
             ResultData.Failed(e.message)
         }
 
+
     override suspend fun markTaskComplete(map: Map<String, Any?>, docId: String): Boolean = try {
         taskListRef.document(docId).update(map).await()
         true
     } catch (e: Exception) {
         false
     }
+
 
     override suspend fun isUserAvailable(email: String): ResultData<String> = try {
         val response = userListRef.whereEqualTo("email", email).get().await()
@@ -133,6 +146,7 @@ class TodoRepository : FirebaseApi {
         ResultData.Failed(e.message)
     }
 
+
     override suspend fun provideFeedback(topic: String, description: String): ResultData<String> =
         try {
             val feedbackDetails = Feedback(userDetails?.email, topic, description)
@@ -141,6 +155,7 @@ class TodoRepository : FirebaseApi {
         } catch (e: Exception) {
             ResultData.Failed(e.message)
         }
+
 
     override suspend fun uploadImage(uri: Uri, docRefId: String, imgPathRef: StorageReference?):
             ResultData<String> = try {
@@ -152,6 +167,7 @@ class TodoRepository : FirebaseApi {
     } catch (e: Exception) {
         ResultData.Failed(e.message)
     }
+
 
     // Use this for upload
     override fun uploadImageFromWorker(uri: Uri, block: ((ResultData<Uri>, Int) -> Unit)?) {

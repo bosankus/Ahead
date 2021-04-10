@@ -24,8 +24,12 @@ import javax.inject.Singleton
  * Email: ankush@androidplay.in
  */
 
-@InstallIn(SingletonComponent::class)
+/** [NetworkModule] provides dependecies through application level injections, specifically for
+ * network calls
+ * */
+
 @Module
+@InstallIn(SingletonComponent::class)
 object NetworkModule {
 
     @Provides

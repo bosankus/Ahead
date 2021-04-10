@@ -27,6 +27,11 @@ import tech.androidplay.sonali.todo.workers.TaskImageUploadWorker.Companion.UPLO
  * On: 13/Feb/2021
  * Email: ankush@androidplay.in
  */
+
+/**
+ * Creates only Image tasks in the background
+ */
+
 @ExperimentalCoroutinesApi
 @HiltWorker
 class TaskCreationWorker @AssistedInject constructor(

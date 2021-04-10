@@ -12,9 +12,7 @@ import androidx.core.net.toUri
 import androidx.core.widget.ImageViewCompat
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.resource.bitmap.CenterInside
-import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.github.dhaval2404.imagepicker.ImagePicker
 import id.zelory.compressor.Compressor
@@ -27,6 +25,11 @@ import java.io.File
  * On: 06/Oct/2020
  * Email: ankush@androidplay.in
  */
+
+/** Holds all the image related extension methods to [selectImage], [loadImage], [compressImage]
+ * & [setTint] of an image.
+ * Additionally holds [shareApp] method for global share
+ * */
 
 fun Fragment.selectImage() {
     ImagePicker.with(this)

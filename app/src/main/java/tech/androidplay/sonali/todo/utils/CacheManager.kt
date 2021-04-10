@@ -9,6 +9,8 @@ import java.io.File
  * On: 5/26/2020, 4:29 AM
  */
 
+/** Removes the unwanted caches during app close */
+
 class CacheManager {
 
     fun clearCache(context: Context) {

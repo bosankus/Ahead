@@ -17,6 +17,10 @@ import javax.inject.Inject
  * Email: ankush@androidplay.in
  */
 
+/** This class serves the purpose of receiving firebase push notifications with data
+ *  and showing them
+ *  */
+
 @SuppressLint("MissingFirebaseInstanceTokenRefresh")
 @ExperimentalCoroutinesApi
 @AndroidEntryPoint

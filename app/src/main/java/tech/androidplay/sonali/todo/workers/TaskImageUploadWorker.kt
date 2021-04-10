@@ -27,6 +27,11 @@ import kotlin.coroutines.suspendCoroutine
  * On: 13/Feb/2021
  * Email: ankush@androidplay.in
  */
+
+/**
+ * Uploads the image of image task only
+ */
+
 @ExperimentalCoroutinesApi
 class TaskImageUploadWorker(context: Context, workerParameters: WorkerParameters) :
     CoroutineWorker(context, workerParameters) {
@@ -35,11 +40,13 @@ class TaskImageUploadWorker(context: Context, workerParameters: WorkerParameters
     private val repository = TodoRepository()
     private val taskBody: String = checkNotNull(inputData.getString(TASK_BODY))
 
+
     override suspend fun doWork(): Result {
         val fileUri = inputData.getString(TASK_IMAGE_URI)?.toUri()
         fileUri?.let { return uploadImageFromUri(fileUri) }
         throw IllegalStateException("Image Uri doesn't exist")
     }
+
 
     private suspend fun uploadImageFromUri(fileUri: Uri): Result = suspendCoroutine { cont ->
         repository.uploadImageFromWorker(fileUri) { result, percentage ->
@@ -66,6 +73,7 @@ class TaskImageUploadWorker(context: Context, workerParameters: WorkerParameters
         }
     }
 
+
     private fun showProgressNotification(caption: String, percent: Int) {
         progressable(context, 100, percent) {
             contentTitle = taskBody
@@ -74,6 +82,7 @@ class TaskImageUploadWorker(context: Context, workerParameters: WorkerParameters
             notificationId = taskBody.hashCode()
         }
     }
+
 
     private fun showUploadFinishedNotification(downloadUri: Uri?) {
         dismissNotification(context, taskBody.hashCode())
@@ -97,6 +106,7 @@ class TaskImageUploadWorker(context: Context, workerParameters: WorkerParameters
             this.pendingIntent = pendingIntent
         }
     }
+
 
     companion object {
         const val UPLOADED_IMAGE_URI = "UPLOADED_IMAGE_URI"

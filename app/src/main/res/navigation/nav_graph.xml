@@ -101,6 +101,9 @@
             app:enterAnim="@anim/fade_out_animation"
             app:exitAnim="@anim/fade_in_animation"
             app:popEnterAnim="@anim/fade_out_animation" />
+        <action
+            android:id="@+id/action_taskCreateFragment_to_prioritySelectionDialog"
+            app:destination="@id/prioritySelectionDialog" />
     </fragment>
     <fragment
         android:id="@+id/feedbackFragment"
@@ -114,4 +117,16 @@
             app:popEnterAnim="@anim/fade_out_animation"
             app:popExitAnim="@anim/fade_in_animation" />
     </fragment>
+    <dialog
+        android:id="@+id/prioritySelectionDialog"
+        android:name="tech.androidplay.sonali.todo.view.dialog.PrioritySelectionDialog"
+        android:label="PrioritySelectionDialog">
+        <action
+            android:id="@+id/action_prioritySelectionDialog_to_taskCreateFragment"
+            app:destination="@id/taskCreateFragment" />
+        <argument
+            android:name="priorityId"
+            app:argType="integer"
+            android:defaultValue="-1" />
+    </dialog>
 </navigation>

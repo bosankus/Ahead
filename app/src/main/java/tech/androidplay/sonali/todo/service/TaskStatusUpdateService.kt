@@ -18,6 +18,10 @@ import javax.inject.Inject
  * Email: ankush@androidplay.in
  */
 
+/** This service class serves the purpose of notification action button click listener to mark
+ *  task as completed. Calls the 'updateTask' method from [TodoRepository]
+ * */
+
 @ExperimentalCoroutinesApi
 @AndroidEntryPoint
 class TaskStatusUpdateService : Service() {

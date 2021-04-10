@@ -36,6 +36,8 @@ import javax.inject.Singleton
  * Email: ankush@androidplay.in
  */
 
+/** [ApplicationContext] provides dependencies through application level injections */
+
 @Module
 @InstallIn(SingletonComponent::class)
 class ApplicationModule {
