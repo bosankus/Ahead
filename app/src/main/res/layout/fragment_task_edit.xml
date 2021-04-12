@@ -24,9 +24,9 @@
             android:id="@+id/layoutTaskBar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/padding_16dp"
+            android:layout_marginTop="@dimen/padding_16dp"
             android:fontFamily="@font/calibre_semi"
-            android:paddingStart="@dimen/padding_16dp"
-            android:paddingTop="@dimen/padding_16dp"
             android:text="@string/edit_task"
             android:textSize="@dimen/text_26sp"
             app:layout_constraintStart_toStartOf="parent"
@@ -51,6 +51,23 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvTaskPriority"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/padding_16dp"
+            android:background="@drawable/bg_icon_ripple"
+            android:drawablePadding="@dimen/padding_8dp"
+            android:fontFamily="@font/calibre_semi"
+            android:padding="@dimen/padding_5dp"
+            app:priority_text="@{viewmodel.initialTaskPriority}"
+            android:textColor="@color/dribblePink"
+            android:textSize="@dimen/text_16sp"
+            app:drawableStartCompat="@drawable/ic_flag"
+            app:drawableTint="@color/dribblePink"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/layoutTaskBar"/>
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/clTaskImg"
             android:layout_width="match_parent"
@@ -59,7 +76,7 @@
             android:background="@drawable/bg_rounded"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/layoutTaskBar">
+            app:layout_constraintTop_toBottomOf="@+id/tvTaskPriority">
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/tvNoTaskImg"

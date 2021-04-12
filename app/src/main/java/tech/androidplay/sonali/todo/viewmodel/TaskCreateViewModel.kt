@@ -1,11 +1,13 @@
 package tech.androidplay.sonali.todo.viewmodel
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import tech.androidplay.sonali.todo.data.repository.TodoRepository
+import tech.androidplay.sonali.todo.utils.Constants.LOW_PRIORITY
 import tech.androidplay.sonali.todo.utils.ResultData
 import tech.androidplay.sonali.todo.utils.UIHelper.getCurrentTimestamp
 import javax.inject.Inject
@@ -25,6 +27,8 @@ class TaskCreateViewModel @Inject constructor(private val taskSource: TodoReposi
     private val _currentUser = taskSource.userDetails
     val currentUser get() = _currentUser
 
+    val taskPriority = MutableLiveData(LOW_PRIORITY)
+
     fun createTask(
         todoBody: String,
         todoDesc: String,
@@ -40,7 +44,7 @@ class TaskCreateViewModel @Inject constructor(private val taskSource: TodoReposi
             "todoCreationTimeStamp" to getCurrentTimestamp(),
             "isCompleted" to false,
             "assignee" to assignee.toList(),
-            "priority" to 1,
+            "priority" to taskPriority.value,
         )
 
         return liveData {
