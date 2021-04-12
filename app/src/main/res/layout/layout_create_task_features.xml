@@ -1,62 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="horizontal">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <TextView
-        android:id="@+id/addAlarm"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@drawable/bg_icon_ripple"
-        android:drawableTop="@drawable/ic_date"
-        android:drawablePadding="@dimen/padding_8dp"
-        android:drawableTint="@color/dribblePink"
-        android:fontFamily="@font/calubre_light"
-        android:gravity="center"
-        android:text="@string/add_alarm"
-        android:textColor="@color/dribblePink"
-        android:textSize="@dimen/text_16sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/layoutSetAlarm"
-        tools:ignore="UseCompatTextViewDrawableXml" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
 
-    <TextView
-        android:id="@+id/addImage"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/padding_26dp"
-        android:background="@drawable/bg_icon_ripple"
-        android:drawableTop="@drawable/ic_attach"
-        android:drawablePadding="@dimen/padding_8dp"
-        android:drawableTint="@color/dribblePink"
-        android:fontFamily="@font/calubre_light"
-        android:gravity="center"
-        android:text="@string/add_image"
-        android:textColor="@color/dribblePink"
-        android:textSize="@dimen/text_16sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/layoutSetAlarm"
-        tools:ignore="UseCompatTextViewDrawableXml" />
+        <!--<TextView
+            android:id="@+id/addAlarm"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_icon_ripple"
+            android:drawableTop="@drawable/ic_date"
+            android:drawablePadding="@dimen/padding_8dp"
+            android:drawableTint="@color/dribblePink"
+            android:fontFamily="@font/calubre_light"
+            android:gravity="center"
+            android:text="@string/add_alarm"
+            android:textColor="@color/dribblePink"
+            android:textSize="@dimen/text_16sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/layoutSetAlarm"
+            tools:ignore="UseCompatTextViewDrawableXml" />-->
 
-    <TextView
-        android:id="@+id/addPriority"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/padding_26dp"
-        android:background="@drawable/bg_icon_ripple"
-        android:drawableTop="@drawable/ic_flag"
-        android:drawablePadding="@dimen/padding_8dp"
-        android:drawableTint="@color/dribblePink"
-        android:fontFamily="@font/calubre_light"
-        android:gravity="center"
-        android:text="@string/add_priority"
-        android:textColor="@color/dribblePink"
-        android:textSize="@dimen/text_16sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/layoutSetAlarm"
-        tools:ignore="UseCompatTextViewDrawableXml" />
+        <TextView
+            android:id="@+id/addImage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_icon_ripple"
+            android:drawableTop="@drawable/ic_attach"
+            android:drawablePadding="@dimen/padding_8dp"
+            android:drawableTint="@color/dribblePink"
+            android:fontFamily="@font/calubre_light"
+            android:gravity="center"
+            android:text="@string/add_image"
+            android:textColor="@color/dribblePink"
+            android:textSize="@dimen/text_16sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/layoutSetAlarm"
+            tools:ignore="UseCompatTextViewDrawableXml" />
 
-</LinearLayout>
+        <TextView
+            android:id="@+id/addPriority"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/padding_26dp"
+            android:background="@drawable/bg_icon_ripple"
+            android:drawableTop="@drawable/ic_flag"
+            android:drawablePadding="@dimen/padding_8dp"
+            android:drawableTint="@color/dribblePink"
+            android:fontFamily="@font/calubre_light"
+            android:gravity="center"
+            android:text="@string/add_priority"
+            android:textColor="@color/dribblePink"
+            android:textSize="@dimen/text_16sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/layoutSetAlarm"
+            tools:ignore="UseCompatTextViewDrawableXml" />
+
+    </LinearLayout>
+
+</layout>

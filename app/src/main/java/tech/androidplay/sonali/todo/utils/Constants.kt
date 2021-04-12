@@ -67,4 +67,9 @@ object Constants {
     // For opening document in EditTaskFragment
     const val TASK_DOC_ID = "TASK_DOC_ID"
 
+    // For Task Priority
+    const val TOP_PRIORITY = 1
+    const val MEDIUM_PRIORITY = 2
+    const val LOW_PRIORITY = 3
+
 }

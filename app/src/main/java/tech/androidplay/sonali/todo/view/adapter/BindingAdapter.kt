@@ -11,6 +11,9 @@ import tech.androidplay.sonali.todo.R
 import tech.androidplay.sonali.todo.utils.*
 import tech.androidplay.sonali.todo.utils.Constants.IS_AFTER
 import tech.androidplay.sonali.todo.utils.Constants.IS_BEFORE
+import tech.androidplay.sonali.todo.utils.Constants.LOW_PRIORITY
+import tech.androidplay.sonali.todo.utils.Constants.MEDIUM_PRIORITY
+import tech.androidplay.sonali.todo.utils.Constants.TOP_PRIORITY
 import tech.androidplay.sonali.todo.utils.UIHelper.removeStrikeThroughText
 import tech.androidplay.sonali.todo.utils.UIHelper.showSnack
 import tech.androidplay.sonali.todo.utils.UIHelper.strikeThroughText
@@ -41,13 +44,23 @@ fun TextView.showDayName(date: String?) {
     this.text = if (date.isNullOrEmpty()) "" else date.toLong().convertFromEpochTime()
 }
 
+@BindingAdapter("priority_text")
+fun TextView.setPriorityText(priority: Int) {
+    this.text = when (priority) {
+        LOW_PRIORITY -> "Low Priority"
+        MEDIUM_PRIORITY -> "Medium Priority"
+        TOP_PRIORITY -> "Top priority"
+        else -> "Add Priority"
+    }
+}
+
 @BindingAdapter("background_color")
 fun View.backgroundColor(priority: Int) {
     this.background = when (priority) {
-        0 -> ContextCompat.getDrawable(this.context, R.drawable.bg_card_gradient_low)
-        1 -> ContextCompat.getDrawable(this.context, R.drawable.bg_card_gradient_medium)
-        2 -> ContextCompat.getDrawable(this.context, R.drawable.bg_card_gradient_high)
-        else -> ContextCompat.getDrawable(this.context, R.drawable.bg_card_gradient_low)
+        LOW_PRIORITY -> ContextCompat.getDrawable(this.context, R.drawable.bg_card_grad_low)
+        MEDIUM_PRIORITY -> ContextCompat.getDrawable(this.context, R.drawable.bg_card_grad_medium)
+        TOP_PRIORITY -> ContextCompat.getDrawable(this.context, R.drawable.bg_card_grad_high)
+        else -> ContextCompat.getDrawable(this.context, R.drawable.bg_card_grad_low)
     }
 }
 

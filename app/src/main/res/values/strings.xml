@@ -59,6 +59,9 @@
     <string name="task_image_upload_failed">Image uploading failed. Please retry adding the task.</string>
     <string name="create_task_title_hint">Task Title</string>
     <string name="create_task_details_hint">Add task details</string>
+    <string name="self_assign_error">"⚠️Can not assign task to yourself"</string>
+    <string name="assign_user_added">" ✔️User added"</string>
+    <string name="assign_no_user">"❗No user found"</string>
     <string name="options">More options</string>
     <string name="username">Email Id</string>
     <string name="assignee">Assignee</string>

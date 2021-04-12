@@ -2,6 +2,7 @@ package tech.androidplay.sonali.todo.viewmodel
 
 import android.annotation.SuppressLint
 import android.net.Uri
+import androidx.databinding.BaseObservable
 import androidx.databinding.ObservableField
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -24,7 +25,8 @@ import javax.inject.Inject
 @SuppressLint("StaticFieldLeak")
 @ExperimentalCoroutinesApi
 @HiltViewModel
-class EditTaskViewModel @Inject constructor(private val taskSource: TodoRepository) : ViewModel() {
+class EditTaskViewModel @Inject constructor(private val taskSource: TodoRepository)
+    : ViewModel() {
 
     private var _viewState = MutableLiveData<ResultData<*>>(ResultData.Loading)
     val viewState: LiveData<ResultData<*>> get() = _viewState
@@ -43,7 +45,9 @@ class EditTaskViewModel @Inject constructor(private val taskSource: TodoReposito
     var initialTaskDesc = ObservableField("")
     var initialTaskDate = ObservableField("")
     var initialTaskImage = ObservableField("")
+    var initialTaskPriority = ObservableField<Int>()
     var initialTaskStatus = ObservableField(false)
+
 
     fun getTaskByTaskId(taskId: String?) {
         viewModelScope.launch {
@@ -54,6 +58,7 @@ class EditTaskViewModel @Inject constructor(private val taskSource: TodoReposito
                 initialTaskDesc.set(it.todoDesc.toString())
                 initialTaskDate.set(it.todoDate)
                 initialTaskImage.set(it.taskImage.toString())
+                initialTaskPriority.set(it.priority)
                 initialTaskStatus.set(it.isCompleted)
                 _viewState.postValue(ResultData.Success(it))
             } ?: run { _viewState.postValue(ResultData.Failed("Check your network!")) }
@@ -80,10 +85,12 @@ class EditTaskViewModel @Inject constructor(private val taskSource: TodoReposito
         } else _updateTaskState.postValue(ResultData.Failed("Fields can not be empty"))
     }
 
+
     fun changeTaskStatus(status: Boolean) = viewModelScope.launch {
         val statusMap = mapOf("isCompleted" to status)
         initialTaskId.get()?.let { taskSource.markTaskComplete(statusMap, it) }
     }
+
 
     fun uploadImage(uri: Uri?, taskId: String) = viewModelScope.launch {
         _imageUploadState.postValue(ResultData.Loading)
@@ -91,6 +98,7 @@ class EditTaskViewModel @Inject constructor(private val taskSource: TodoReposito
         response?.let { _imageUploadState.postValue(ResultData.Success(it)) }
             ?: run { _imageUploadState.postValue(ResultData.Failed()) }
     }
+
 
     fun deleteTask() = viewModelScope.launch {
         _deleteTaskState.postValue(ResultData.Loading)
@@ -100,8 +108,10 @@ class EditTaskViewModel @Inject constructor(private val taskSource: TodoReposito
             ?: run { _deleteTaskState.postValue(ResultData.Failed("Something went wrong!")) }
     }
 
+
     private fun checkInputs(): Boolean {
         return !(initialTaskId.get().isNullOrEmpty() || initialTaskDesc.get().isNullOrEmpty() ||
                 initialTaskDate.get().isNullOrEmpty())
     }
+
 }

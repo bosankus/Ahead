@@ -8,9 +8,12 @@ import android.net.Uri
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.work.*
 import dagger.hilt.android.AndroidEntryPoint
@@ -21,7 +24,9 @@ import tech.androidplay.sonali.todo.databinding.FragmentTaskCreateBinding
 import tech.androidplay.sonali.todo.utils.*
 import tech.androidplay.sonali.todo.utils.UIHelper.hideKeyboard
 import tech.androidplay.sonali.todo.utils.UIHelper.isEmailValid
+import tech.androidplay.sonali.todo.utils.UIHelper.logMessage
 import tech.androidplay.sonali.todo.utils.UIHelper.showSnack
+import tech.androidplay.sonali.todo.view.adapter.setPriorityText
 import tech.androidplay.sonali.todo.viewmodel.TaskCreateViewModel
 import tech.androidplay.sonali.todo.workers.TaskCreationWorker
 import tech.androidplay.sonali.todo.workers.TaskCreationWorker.Companion.TASK_ASSIGNEE
@@ -37,14 +42,15 @@ import javax.inject.Inject
  * Author: Ankush
  * On: 5/3/2020, 12:22 PM
  */
+
 @ExperimentalCoroutinesApi
 @InternalCoroutinesApi
 @AndroidEntryPoint
 class TaskCreateFragment : Fragment(R.layout.fragment_task_create) {
 
-    private val binding by viewLifecycleLazy { FragmentTaskCreateBinding.bind(requireView()) }
-    private val viewModel: TaskCreateViewModel by viewModels()
-    private lateinit var authManager: AuthManager
+    /*private val binding by viewLifecycleLazy { FragmentTaskCreateBinding.bind(requireView()) }*/
+    private var binding: FragmentTaskCreateBinding? = null
+    private val viewModel: TaskCreateViewModel by activityViewModels()
     private var taskTimeStamp: String? = null
     private var isImageAdded: Boolean = false
     private var taskImage: Uri? = null
@@ -56,86 +62,104 @@ class TaskCreateFragment : Fragment(R.layout.fragment_task_create) {
     @Inject
     lateinit var dateTimePicker: DateTimePicker
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        authManager = AuthManager(requireActivity())
-        setUpScreen()
-        setListeners()
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_task_create, container, false)
+        return binding?.root
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        setUpScreen()
+        setListeners()
+        setObservers()
+    }
+
+
     private fun setUpScreen() {
-        binding.layoutTaskInput.tvTaskInput.requestFocus()
+        binding?.layoutTaskInput?.tvTaskInput?.requestFocus()
     }
 
     private fun setListeners() {
-        binding.imgBack.setOnClickListener { findNavController().navigateUp() }
+        binding?.apply {
+            imgBack.setOnClickListener { findNavController().navigateUp() }
 
-        binding.layoutSetAlarm.tvSelectDate.setOnClickListener {
-            dateTimePicker.openDateTimePicker(requireContext())
-        }
+            layoutCreateTaskFeatures.addImage.setOnClickListener { selectImage() }
 
-        dateTimePicker.epochFormat.observe(viewLifecycleOwner, {
-            taskTimeStamp = it.toString()
-            binding.layoutSetAlarm.tvSelectDate.text =
-                taskTimeStamp?.toLocalDateTime()?.beautifyDateTime()
-        })
+            layoutSetAlarm.tvSelectDate.setOnClickListener {
+                dateTimePicker.openDateTimePicker(requireContext())
+            }
 
-        binding.layoutCreateTaskFeatures.addImage.setOnClickListener { selectImage() }
+            layoutCreateTaskFeatures.addPriority.setOnClickListener {
+                findNavController()
+                    .navigate(R.id.action_taskCreateFragment_to_prioritySelectionDialog)
+            }
 
-        binding.layoutCreateTaskFeatures.addPriority.setOnClickListener {
-            findNavController().navigate(R.id.action_taskCreateFragment_to_prioritySelectionDialog)
-        }
-
-        binding.layoutTaskImage.btnImgPhotoRemove.setOnClickListener {
-            binding.apply {
+            layoutTaskImage.btnImgPhotoRemove.setOnClickListener {
                 layoutTaskImage.imgPhoto.setImageDrawable(null)
                 layoutTaskImage.clImagePlaceHolder.visibility = View.GONE
                 isImageAdded = false
             }
-        }
 
-        binding.layoutAssigneeUser.etAssigneeUsername.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(
-                charSequence: CharSequence?, p1: Int, p2: Int, p3: Int
-            ) {
+            dateTimePicker.epochFormat.observe(viewLifecycleOwner, {
+                taskTimeStamp = it.toString()
+                layoutSetAlarm.tvSelectDate.text =
+                    taskTimeStamp?.toLocalDateTime()?.beautifyDateTime()
+            })
+
+            layoutAssigneeUser.etAssigneeUsername.addTextChangedListener(object : TextWatcher {
+                override fun beforeTextChanged(charSeq: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+                override fun afterTextChanged(p0: Editable?) {}
+                override fun onTextChanged(charSeq: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                    charSeq?.let { if (it.isEmailValid()) checkAssigneeAvailability(it.toString()) }
+                }
+            })
+
+            btCreateTask.setOnClickListener {
+                requireActivity().hideKeyboard()
+                if ((layoutTaskInput.tvTaskInput.text.length) <= 0)
+                    showSnack(requireView(), "Fields can not be empty!")
+                else if (taskTimeStamp.isNullOrEmpty())
+                    showSnack(requireView(), "Please select notification time")
+                else if (!isNetworkAvailable()) showSnack(requireView(), "No Internet!")
+                else createTask()
             }
 
-            override fun afterTextChanged(p0: Editable?) {}
-            override fun onTextChanged(charSequence: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                charSequence?.let { if (it.isEmailValid()) checkAssigneeAvailability(it.toString()) }
-            }
-        })
-
-        binding.btCreateTask.setOnClickListener {
-            requireActivity().hideKeyboard()
-            if ((binding.layoutTaskInput.tvTaskInput.text.length) <= 0)
-                showSnack(requireView(), "Fields can not be empty!")
-            else if (taskTimeStamp.isNullOrEmpty())
-                showSnack(requireView(), "Please select notification time")
-            else if (!isNetworkAvailable()) showSnack(requireView(), "No Internet!")
-            else createTask()
         }
     }
+
+
+    private fun setObservers() {
+        viewModel.taskPriority.observe(viewLifecycleOwner, { priority ->
+            binding?.layoutCreateTaskFeatures?.addPriority?.setPriorityText(priority)
+        })
+    }
+
 
     @SuppressLint("SetTextI18n")
     private fun checkAssigneeAvailability(email: String) {
         viewModel.checkAssigneeAvailability(email).observe(viewLifecycleOwner, { result ->
             result?.let {
                 when (it) {
-                    is ResultData.Loading -> binding.layoutAssigneeUser.tvAssigneeAvailability.text =
+                    is ResultData.Loading -> binding?.layoutAssigneeUser?.tvAssigneeAvailability?.text =
                         "Checking..."
                     is ResultData.Success -> {
                         if (it.data == viewModel.currentUser?.uid)
-                            binding.layoutAssigneeUser.tvAssigneeAvailability.text =
-                                "⚠️Can not assign task to yourself"
+                            binding?.layoutAssigneeUser?.tvAssigneeAvailability?.text =
+                                resources.getString(R.string.self_assign_error)
                         else {
                             assigneeId = it.data
                             requireActivity().hideKeyboard()
-                            binding.layoutAssigneeUser.tvAssigneeAvailability.text = " ✔️User added"
+                            binding?.layoutAssigneeUser?.tvAssigneeAvailability?.text =
+                                resources.getString(R.string.assign_user_added)
                         }
                     }
                     else -> {
-                        binding.layoutAssigneeUser.tvAssigneeAvailability.text = "❗No user found"
+                        binding?.layoutAssigneeUser?.tvAssigneeAvailability?.text =
+                            resources.getString(R.string.assign_no_user)
                         assigneeId = null
                     }
                 }
@@ -146,12 +170,11 @@ class TaskCreateFragment : Fragment(R.layout.fragment_task_create) {
 
     private fun createTask() {
         requireActivity().hideKeyboard()
-        val todoBody = binding.layoutTaskInput.tvTaskInput.text.toString().trim()
-        val todoDesc = binding.layoutTaskInput.tvTaskDescInput.text.toString().trim()
+        val todoBody = binding?.layoutTaskInput?.tvTaskInput?.text.toString().trim()
+        val todoDesc = binding?.layoutTaskInput?.tvTaskDescInput?.text.toString().trim()
         val todoDate = taskTimeStamp
         val assigneeList = arrayOf(assigneeId)
 
-        // creating task via viewmodel
         if (taskImage == null) {
             viewModel.createTask(todoBody, todoDesc, todoDate, assigneeList)
                 .observe(viewLifecycleOwner, { response ->
@@ -210,7 +233,7 @@ class TaskCreateFragment : Fragment(R.layout.fragment_task_create) {
         if (requestCode == 1000 && resultCode == Activity.RESULT_OK && data != null) {
             taskImage = data.data
             isImageAdded = true
-            binding.apply {
+            binding?.apply {
                 layoutTaskImage.clImagePlaceHolder.visibility = View.VISIBLE
                 layoutTaskImage.imgPhoto.loadImage(taskImage.toString())
             }
