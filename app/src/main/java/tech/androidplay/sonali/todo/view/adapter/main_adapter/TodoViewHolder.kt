@@ -1,12 +1,10 @@
 package tech.androidplay.sonali.todo.view.adapter.main_adapter
 
-import androidx.core.os.bundleOf
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
-import tech.androidplay.sonali.todo.R
 import tech.androidplay.sonali.todo.databinding.LayoutMainTaskListBinding
 import tech.androidplay.sonali.todo.model.Todo
-import tech.androidplay.sonali.todo.utils.Constants.TASK_DOC_ID
+import tech.androidplay.sonali.todo.view.fragment.TaskFragmentDirections
 
 /**
  * Created by Androidplay
@@ -23,8 +21,9 @@ class TodoViewHolder(
             todo = todoItem
             executePendingBindings()
             clItemListContainer.setOnClickListener {
-                val bundle = bundleOf(TASK_DOC_ID to todoItem.docId)
-                it?.findNavController()?.navigate(R.id.action_global_taskEditFragment, bundle)
+                val action =
+                    TaskFragmentDirections.actionTaskFragmentToTaskEditFragment(todoItem.docId)
+                it?.findNavController()?.navigate(action)
             }
         }
     }
