@@ -37,7 +37,7 @@ import javax.inject.Inject
 @InternalCoroutinesApi
 @SuppressLint("SetTextI18n")
 @AndroidEntryPoint
-class TaskEditFragment : Fragment() {
+class TaskEditFragment : Fragment(R.layout.fragment_task_edit) {
 
     private val binding by viewLifecycleLazy { FragmentTaskEditBinding.bind(requireView()) }
 
@@ -58,7 +58,6 @@ class TaskEditFragment : Fragment() {
     lateinit var dateTimePicker: DateTimePicker
 
     private val viewModel: EditTaskViewModel by viewModels()
-    private var taskId: String? = ""
     private var pickedImage: Uri? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -72,7 +71,7 @@ class TaskEditFragment : Fragment() {
             viewmodel = viewModel
             lifecycleOwner = viewLifecycleOwner
         }
-        taskIdFromArgs?.let { fetchTask(it) } ?: showSnack(requireView(), "Can't find document Id")
+        taskIdFromArgs?.let { fetchTask(it) } ?: showSnack(requireView(), "Can't find task Id")
     }
 
     private fun setListener() {
@@ -85,7 +84,7 @@ class TaskEditFragment : Fragment() {
                 if (binding.cbCompleteTask.isChecked) viewmodel?.changeTaskStatus(true)
                 else viewmodel?.changeTaskStatus(false)
             }
-            tvDeleteTask.setOnClickListener { deleteTask(taskId) }
+            tvDeleteTask.setOnClickListener { deleteTask(taskIdFromArgs) }
             btnSaveTask.setOnClickListener { updateTask() }
             tvSelectDate.setOnClickListener { selectNotificationDateTime() }
         }
@@ -131,7 +130,7 @@ class TaskEditFragment : Fragment() {
         if (isNetworkAvailable()) {
             lifecycleScope.launch {
                 val compressedImage = pickedImage?.compressImage(requireContext())
-                viewModel.uploadImage(compressedImage, taskId!!)
+                viewModel.uploadImage(compressedImage, taskIdFromArgs!!)
                 viewModel.imageUploadState.observe(viewLifecycleOwner, { response ->
                     response?.let {
                         if (it is ResultData.Success) viewModel.initialTaskImage.set("${it.data}")

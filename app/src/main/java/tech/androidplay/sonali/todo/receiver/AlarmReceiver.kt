@@ -67,6 +67,9 @@ class AlarmReceiver : HiltBroadcastReceiver() {
      * each time when multiple notifications are send. So that on action click, the pending
      * intent hits related extras.
      */
+
+    // TODO: Start JobIntentService to trigger notification
+
     private fun showNotification(
         context: Context,
         alarmText: String,

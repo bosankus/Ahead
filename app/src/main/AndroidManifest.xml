@@ -34,6 +34,7 @@
         <receiver android:name=".receiver.AlarmReceiver" />
 
         <service android:name=".service.TaskStatusUpdateService" />
+
         <service
             android:name=".service.FirebaseNotificationService"
             android:exported="false">
@@ -42,11 +43,17 @@
             </intent-filter>
         </service>
 
+        <service
+            android:name=".service.AlarmIntentService"
+            android:exported="true"
+            android:permission="android.permission.BIND_JOB_SERVICE" />
+
         <provider
             android:name="androidx.work.impl.WorkManagerInitializer"
             android:authorities="${applicationId}.workmanager-init"
             android:exported="false"
             tools:node="remove" />
+
     </application>
 
 </manifest>
