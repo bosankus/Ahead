@@ -68,7 +68,7 @@ class TaskCreationWorker @AssistedInject constructor(
         val intent = Intent(context, MainActivity::class.java)
             .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
 
-        val response: String = repository.createTaskFromWorker(taskMap)
+        val response: String = repository.createTaskUsingWorker(taskMap)
         if (response.isNotEmpty()) {
             context.startAlarmedNotification(
                 id = response,
@@ -101,6 +101,7 @@ class TaskCreationWorker @AssistedInject constructor(
     }
 
     companion object {
+        const val TASK_OBJ = "task_object"
         const val TASK_BODY = "TASK_BODY"
         const val TASK_DESC = "TASK_DESC"
         const val TASK_DATE = "TASK_DATE"

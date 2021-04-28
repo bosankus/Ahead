@@ -22,7 +22,8 @@ interface FirebaseApi {
 
     // For Firestore
     suspend fun createTask(taskMap: HashMap<*, *>): ResultData<String>
-    suspend fun createTaskFromWorker(taskMap: HashMap<*, *>): String
+    suspend fun createTasks(taskItem: Todo): ResultData<Todo>
+    suspend fun createTaskUsingWorker(taskMap: HashMap<*, *>): String
     suspend fun fetchAllUnassignedTask(): Flow<MutableList<Todo>>
     suspend fun fetchOnlyAssignedTask(): Flow<MutableList<Todo>>
     suspend fun fetchTaskByTaskId(taskId: String): Todo?

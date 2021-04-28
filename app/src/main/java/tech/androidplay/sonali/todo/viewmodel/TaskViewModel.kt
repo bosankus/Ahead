@@ -83,7 +83,7 @@ class TaskViewModel @Inject constructor(
             try {
                 taskSource.fetchAllUnassignedTask().collect { allTodoList ->
                     if (allTodoList.size != 0) {
-                        _taskListSize.value = allTodoList.filter { !it.isCompleted }.size
+                        _taskListSize.value = allTodoList.size
                         _completedTaskList.value = getCompletedTaskList(allTodoList)
                         _upcomingTaskList.value = getUpcomingTaskList(allTodoList)
                         _overdueTaskList.value = getOverDueTaskList(allTodoList)
@@ -122,7 +122,7 @@ class TaskViewModel @Inject constructor(
             viewModelScope.launch {
                 val todayQuote = quoteSource.fetchQuote()
                 _quoteText.value = "${todayQuote.text}"
-                _quoteAuthor.value = "- ${todayQuote.author}"
+                _quoteAuthor.value = "${todayQuote.author}"
                 _loadingState.value = false
             }
         }

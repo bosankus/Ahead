@@ -1,15 +1,22 @@
 package tech.androidplay.sonali.todo.viewmodel
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.liveData
+import android.text.Editable
+import android.text.TextWatcher
+import androidx.databinding.Bindable
+import androidx.databinding.Observable
+import androidx.databinding.PropertyChangeRegistry
+import androidx.lifecycle.*
+import com.google.firebase.auth.FirebaseUser
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.launch
+import tech.androidplay.sonali.todo.BR
 import tech.androidplay.sonali.todo.data.repository.TodoRepository
+import tech.androidplay.sonali.todo.model.Todo
 import tech.androidplay.sonali.todo.utils.Constants.LOW_PRIORITY
 import tech.androidplay.sonali.todo.utils.ResultData
 import tech.androidplay.sonali.todo.utils.UIHelper.getCurrentTimestamp
+import tech.androidplay.sonali.todo.utils.UIHelper.isEmailValid
 import javax.inject.Inject
 
 /**
@@ -21,40 +28,91 @@ import javax.inject.Inject
 
 @ExperimentalCoroutinesApi
 @HiltViewModel
-class TaskCreateViewModel @Inject constructor(private val taskSource: TodoRepository) :
-    ViewModel() {
+class TaskCreateViewModel @Inject constructor(
+    private val taskSource: TodoRepository
+) : ViewModel(), Observable {
 
-    private val _currentUser = taskSource.userDetails
-    val currentUser get() = _currentUser
+    private val registry = PropertyChangeRegistry()
+
+    private val _currentUser = MutableLiveData(taskSource.userDetails)
+    val currentUser: LiveData<FirebaseUser?> get() = _currentUser
+
+    private var _emailUnderCheckForAvailability = MutableLiveData<String>()
+    val emailUnderCheckForAvailability: LiveData<String> get() = _emailUnderCheckForAvailability
+
+    private var _emailAvailabilityStatus = MutableLiveData<ResultData<String>>(ResultData.DoNothing)
+    val emailAvailabilityStatus: LiveData<ResultData<String>> get() = _emailAvailabilityStatus
+
+    private val _taskCreationStatus = MutableLiveData<ResultData<*>>(ResultData.DoNothing)
+    val taskCreationStatus: LiveData<ResultData<*>> get() = _taskCreationStatus
 
     val taskPriority = MutableLiveData(LOW_PRIORITY)
 
-    fun createTask(
-        todoBody: String,
-        todoDesc: String,
-        todoDate: String?,
-        assignee: Array<String?>,
-    ): LiveData<ResultData<String>> {
+    @get: Bindable
+    var todo = Todo()
+        set(value) {
+            if (value != field) field = value
+            registry.notifyChange(this, BR.todo)
+        }
 
-        val taskMap = hashMapOf(
-            "creator" to _currentUser?.uid,
-            "todoBody" to todoBody,
-            "todoDesc" to todoDesc,
-            "todoDate" to todoDate,
-            "todoCreationTimeStamp" to getCurrentTimestamp(),
-            "isCompleted" to false,
-            "assignee" to assignee.toList(),
-            "priority" to taskPriority.value,
-        )
 
-        return liveData {
-            emit(ResultData.Loading)
-            emit(taskSource.createTask(taskMap))
+    @get: Bindable
+    val todoAssigneeEmailWatcher = object : TextWatcher {
+        override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
+        override fun afterTextChanged(s: Editable) {}
+        override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
+            s.let { if (it.isEmailValid()) checkEmailAvailability(it.toString()) }
         }
     }
 
-    fun checkAssigneeAvailability(email: String) = liveData {
-        emit(ResultData.Loading)
-        emit(taskSource.isUserAvailable(email))
+
+    private fun checkEmailAvailability(email: String) {
+        viewModelScope.launch {
+            val response = taskSource.isUserAvailable(email)
+            _emailAvailabilityStatus.postValue(response)
+            _emailUnderCheckForAvailability.postValue(email)
+            if (response is ResultData.Success) {
+                todo.assigneeList = arrayListOf(response.data).toList()
+            } else todo.assigneeList = null
+        }
+    }
+
+
+    fun createTaskModified(item: Todo?) {
+        viewModelScope.launch {
+            _taskCreationStatus.postValue(ResultData.Loading)
+            item?.let {
+                it.creator = _currentUser.value?.uid.toString()
+                it.priority = taskPriority.value
+                it.todoCreationTimeStamp = getCurrentTimestamp()
+                when {
+                    it.todoBody.isEmpty() ->
+                        _taskCreationStatus.postValue(ResultData.Failed("Body can't be empty"))
+                    it.todoDate?.isEmpty() == true -> _taskCreationStatus.postValue(
+                        ResultData.Failed("Task date can't be empty")
+                    )
+                    it.taskImage?.isEmpty() == true -> {
+                        val response = taskSource.createTasks(it)
+                        _taskCreationStatus.postValue(response)
+                    }
+                    else -> createTaskWithImage(it)
+                }
+            }
+        }
+    }
+
+
+    private fun createTaskWithImage(item: Todo?) {
+
+    }
+
+
+    override fun addOnPropertyChangedCallback(callback: Observable.OnPropertyChangedCallback?) {
+        registry.add(callback)
+    }
+
+
+    override fun removeOnPropertyChangedCallback(callback: Observable.OnPropertyChangedCallback?) {
+        registry.remove(callback)
     }
 }

@@ -1,7 +1,9 @@
 package tech.androidplay.sonali.todo.view.adapter
 
 import android.annotation.SuppressLint
+import android.text.TextWatcher
 import android.view.View
+import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.widget.AppCompatCheckBox
@@ -130,12 +132,12 @@ fun ImageView.makeTint(url: String?) {
 @SuppressLint("SetTextI18n")
 @BindingAdapter("isImageUploading")
 fun View.isImageUploading(responseState: ResultData<*>) {
-    if (responseState is ResultData.Loading)
-        showSnack(this, "Uploading...")
-    else if (responseState is ResultData.Success)
-        showSnack(this, "Great! image uploaded")
-    else if (responseState is ResultData.Failed)
-        showSnack(this, "Check your connection")
+    when (responseState) {
+        is ResultData.Loading -> showSnack(this, "Uploading...")
+        is ResultData.Success -> showSnack(this, "Great! image uploaded")
+        is ResultData.Failed -> showSnack(this, "Check your connection")
+        else -> showSnack(this, "Image uploading failed. Please retry.")
+    }
 }
 
 @SuppressLint("SetTextI18n")
@@ -167,3 +169,30 @@ fun AppCompatCheckBox.checkBoxText(status: Boolean) {
     else "Mark as complete"
 }
 
+
+// Create Task Fragment
+
+@BindingAdapter("textChangedListener")
+fun EditText.bindTextWatcher(textWatcher: TextWatcher) {
+    this.addTextChangedListener(textWatcher)
+}
+
+@BindingAdapter("emailAvailabilityStatus", "currentUserEmail", "emailUnderCheck")
+fun TextView.showAvailability(
+    responseState: ResultData<*>,
+    currentUserEmail: String,
+    emailUnderCheck: String?
+) {
+    text = if (!emailUnderCheck.isNullOrEmpty() && currentUserEmail.isNotEmpty()) {
+        when (responseState) {
+            is ResultData.Loading -> context.resources.getString(R.string.Checking)
+            is ResultData.Success -> {
+                if (currentUserEmail == emailUnderCheck)
+                    context.resources.getString(R.string.self_assign_error)
+                else context.resources.getString(R.string.assign_user_added)
+            }
+            else -> context.resources.getString(R.string.assign_no_user)
+        }
+    } else if (emailUnderCheck?.isEmpty() == true) "Assignee"
+    else "Assignee"
+}

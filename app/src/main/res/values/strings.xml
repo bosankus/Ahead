@@ -55,26 +55,29 @@
     <string name="ring_alarm_for_this_task">Alarm will ring for the task</string>
     <string name="task_progress_uploading">Uploading Image…</string>
     <string name="task_added_failure">Failed to add task</string>
-    <string name="task_added_success">Task added success successfully 👍</string>
+    <string name="task_added_success">Task added success successfully👍</string>
     <string name="task_image_upload_failed">Image uploading failed. Please retry adding the task.</string>
     <string name="create_task_title_hint">Task Title</string>
     <string name="create_task_details_hint">Add task details</string>
-    <string name="self_assign_error">"⚠️Can not assign task to yourself"</string>
-    <string name="assign_user_added">" ✔️User added"</string>
-    <string name="assign_no_user">"❗No user found"</string>
+    <string name="self_assign_error">"Self assign not possible!"</string>
+    <string name="assign_user_added">"User added✔"</string>
+    <string name="assign_no_user">"No user found"</string>
     <string name="options">More options</string>
     <string name="username">Email Id</string>
+    <string name="add_assignee_email">Add email</string>
     <string name="assignee">Assignee</string>
     <string name="add_image">Add Image</string>
     <string name="add_alarm">Add alarm</string>
     <string name="add_priority">Add Priority</string>
     <string name="remove">Remove</string>
+    <string name="Checking">Checking…</string>
 
     <!--Task Editing-->
     <string name="edit_task">Task Details</string>
     <string name="no_task_id">No Task ID found</string>
     <string name="save_task">Save</string>
     <string name="delete_task">Delete Task</string>
+    <string name="show_comments">Show comments</string>
     <string name="prompt_past_no_notification">Alarm won\'t ring for time which has passed %1$s</string>
     <string name="prompt_past_notification">You were notified on %1$s. Tap here to change.</string>
     <string name="prompt_future_notification">You will be notified on %1$s. Tap here to change.</string>
