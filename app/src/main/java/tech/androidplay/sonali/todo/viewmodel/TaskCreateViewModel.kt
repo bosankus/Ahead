@@ -1,11 +1,16 @@
 package tech.androidplay.sonali.todo.viewmodel
 
+import android.app.Application
 import android.text.Editable
 import android.text.TextWatcher
 import androidx.databinding.Bindable
 import androidx.databinding.Observable
 import androidx.databinding.PropertyChangeRegistry
-import androidx.lifecycle.*
+import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
+import androidx.work.*
 import com.google.firebase.auth.FirebaseUser
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -17,6 +22,16 @@ import tech.androidplay.sonali.todo.utils.Constants.LOW_PRIORITY
 import tech.androidplay.sonali.todo.utils.ResultData
 import tech.androidplay.sonali.todo.utils.UIHelper.getCurrentTimestamp
 import tech.androidplay.sonali.todo.utils.UIHelper.isEmailValid
+import tech.androidplay.sonali.todo.workers.TaskCreationWorker
+import tech.androidplay.sonali.todo.workers.TaskCreationWorker.Companion.TASK_ASSIGNEE
+import tech.androidplay.sonali.todo.workers.TaskCreationWorker.Companion.TASK_BODY
+import tech.androidplay.sonali.todo.workers.TaskCreationWorker.Companion.TASK_CREATION_WORKER_TAG
+import tech.androidplay.sonali.todo.workers.TaskCreationWorker.Companion.TASK_DATE
+import tech.androidplay.sonali.todo.workers.TaskCreationWorker.Companion.TASK_DESC
+import tech.androidplay.sonali.todo.workers.TaskCreationWorker.Companion.TASK_IMAGE_URI
+import tech.androidplay.sonali.todo.workers.TaskCreationWorker.Companion.TASK_PRIORITY
+import tech.androidplay.sonali.todo.workers.TaskImageUploadWorker
+import tech.androidplay.sonali.todo.workers.TaskImageUploadWorker.Companion.IMAGE_UPLOAD_WORKER_TAG
 import javax.inject.Inject
 
 /**
@@ -29,8 +44,10 @@ import javax.inject.Inject
 @ExperimentalCoroutinesApi
 @HiltViewModel
 class TaskCreateViewModel @Inject constructor(
-    private val taskSource: TodoRepository
-) : ViewModel(), Observable {
+    application: Application,
+    private val taskSource: TodoRepository,
+    private val workManager: WorkManager
+) : AndroidViewModel(application), Observable {
 
     private val registry = PropertyChangeRegistry()
 
@@ -72,7 +89,7 @@ class TaskCreateViewModel @Inject constructor(
             _emailAvailabilityStatus.postValue(response)
             _emailUnderCheckForAvailability.postValue(email)
             if (response is ResultData.Success) {
-                todo.assigneeList = arrayListOf(response.data).toList()
+                todo.assigneeList = arrayOf(response.data).toList()
             } else todo.assigneeList = null
         }
     }
@@ -92,7 +109,7 @@ class TaskCreateViewModel @Inject constructor(
                         ResultData.Failed("Task date can't be empty")
                     )
                     it.taskImage?.isEmpty() == true -> {
-                        val response = taskSource.createTasks(it)
+                        val response = taskSource.createTask(it)
                         _taskCreationStatus.postValue(response)
                     }
                     else -> createTaskWithImage(it)
@@ -102,7 +119,36 @@ class TaskCreateViewModel @Inject constructor(
     }
 
 
-    private fun createTaskWithImage(item: Todo?) {
+    private fun createTaskWithImage(item: Todo) {
+        val constraints = Constraints.Builder()
+            .setRequiredNetworkType(NetworkType.CONNECTED)
+            .build()
+
+        val inputData = workDataOf(
+            TASK_BODY to item.todoBody,
+            TASK_DESC to item.todoDesc,
+            TASK_DATE to item.todoDate,
+            TASK_PRIORITY to item.priority,
+            TASK_ASSIGNEE to arrayOf(item.assigneeList?.get(0) as String?),
+            TASK_IMAGE_URI to item.taskImage.toString()
+        )
+
+        val taskImageUploadWorker =
+            OneTimeWorkRequestBuilder<TaskImageUploadWorker>()
+                .setConstraints(constraints)
+                .setInputData(inputData)
+                .addTag(IMAGE_UPLOAD_WORKER_TAG)
+                .build()
+
+        val taskCreationWorker =
+            OneTimeWorkRequestBuilder<TaskCreationWorker>()
+                .setConstraints(constraints)
+                .addTag(TASK_CREATION_WORKER_TAG)
+                .build()
+
+        workManager.beginWith(taskImageUploadWorker)
+            .then(taskCreationWorker)
+            .enqueue()
 
     }
 

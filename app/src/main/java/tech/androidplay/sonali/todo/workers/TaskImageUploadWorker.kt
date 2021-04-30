@@ -69,6 +69,8 @@ class TaskImageUploadWorker(context: Context, workerParameters: WorkerParameters
                     showUploadFinishedNotification(null)
                     cont.resume(Result.failure())
                 }
+                else -> {
+                }
             }
         }
     }
@@ -110,5 +112,6 @@ class TaskImageUploadWorker(context: Context, workerParameters: WorkerParameters
 
     companion object {
         const val UPLOADED_IMAGE_URI = "UPLOADED_IMAGE_URI"
+        const val IMAGE_UPLOAD_WORKER_TAG = "image_upload_worker"
     }
 }

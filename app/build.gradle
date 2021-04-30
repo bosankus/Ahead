@@ -71,6 +71,9 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
     androidTestImplementation "com.google.truth:truth:1.1"*/
 
+    // CanaryLeak
+    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.7'
+
     // Crashlytics
     implementation platform("com.google.firebase:firebase-bom:$firebase_bom_version")
     implementation 'com.google.firebase:firebase-crashlytics-ktx'

@@ -21,8 +21,7 @@ interface FirebaseApi {
     suspend fun saveUser(user: FirebaseUser)
 
     // For Firestore
-    suspend fun createTask(taskMap: HashMap<*, *>): ResultData<String>
-    suspend fun createTasks(taskItem: Todo): ResultData<Todo>
+    suspend fun createTask(taskItem: Todo): ResultData<Todo>
     suspend fun createTaskUsingWorker(taskMap: HashMap<*, *>): String
     suspend fun fetchAllUnassignedTask(): Flow<MutableList<Todo>>
     suspend fun fetchOnlyAssignedTask(): Flow<MutableList<Todo>>

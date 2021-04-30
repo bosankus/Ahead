@@ -66,14 +66,7 @@ class TodoRepository : FirebaseApi {
     }
 
 
-    override suspend fun createTask(taskMap: HashMap<*, *>): ResultData<String> =
-        suspendCoroutine { cont ->
-            taskListRef.add(taskMap)
-                .addOnSuccessListener { cont.resume(ResultData.Success(it.id)) }
-                .addOnFailureListener { cont.resume(ResultData.Failed(it.message)) }
-        }
-
-    override suspend fun createTasks(taskItem: Todo): ResultData<Todo> =
+    override suspend fun createTask(taskItem: Todo): ResultData<Todo> =
         suspendCoroutine { cont ->
             taskListRef.add(taskItem)
                 .addOnSuccessListener { cont.resume(ResultData.Success(taskItem)) }

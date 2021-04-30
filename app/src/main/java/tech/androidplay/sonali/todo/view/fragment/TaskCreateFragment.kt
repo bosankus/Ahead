@@ -3,16 +3,16 @@ package tech.androidplay.sonali.todo.view.fragment
 import android.app.Activity
 import android.app.AlarmManager
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import androidx.work.*
+import androidx.work.WorkInfo
+import androidx.work.WorkManager
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.InternalCoroutinesApi
@@ -20,17 +20,11 @@ import tech.androidplay.sonali.todo.R
 import tech.androidplay.sonali.todo.databinding.FragmentTaskCreateBinding
 import tech.androidplay.sonali.todo.model.Todo
 import tech.androidplay.sonali.todo.utils.*
-import tech.androidplay.sonali.todo.utils.UIHelper.hideKeyboard
 import tech.androidplay.sonali.todo.utils.UIHelper.showSnack
 import tech.androidplay.sonali.todo.view.adapter.setPriorityText
 import tech.androidplay.sonali.todo.viewmodel.TaskCreateViewModel
-import tech.androidplay.sonali.todo.workers.TaskCreationWorker
-import tech.androidplay.sonali.todo.workers.TaskCreationWorker.Companion.TASK_ASSIGNEE
-import tech.androidplay.sonali.todo.workers.TaskCreationWorker.Companion.TASK_BODY
-import tech.androidplay.sonali.todo.workers.TaskCreationWorker.Companion.TASK_DATE
-import tech.androidplay.sonali.todo.workers.TaskCreationWorker.Companion.TASK_DESC
-import tech.androidplay.sonali.todo.workers.TaskCreationWorker.Companion.TASK_IMAGE_URI
-import tech.androidplay.sonali.todo.workers.TaskImageUploadWorker
+import tech.androidplay.sonali.todo.workers.TaskCreationWorker.Companion.TASK_CREATION_WORKER_TAG
+import tech.androidplay.sonali.todo.workers.TaskImageUploadWorker.Companion.IMAGE_UPLOAD_WORKER_TAG
 import javax.inject.Inject
 
 /**
@@ -44,17 +38,18 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class TaskCreateFragment : Fragment(R.layout.fragment_task_create) {
 
-    private var binding: FragmentTaskCreateBinding? = null
-    private val viewModel: TaskCreateViewModel by activityViewModels()
-    private var taskTimeStamp: String? = null
-    private var taskImage: Uri? = null
-    private var assigneeId: String? = null
-
     @Inject
     lateinit var alarmManager: AlarmManager
 
     @Inject
     lateinit var dateTimePicker: DateTimePicker
+
+    @Inject
+    lateinit var workManager: WorkManager
+
+    private var binding: FragmentTaskCreateBinding? = null
+
+    private val viewModel: TaskCreateViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -70,15 +65,11 @@ class TaskCreateFragment : Fragment(R.layout.fragment_task_create) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setUpScreen()
+        binding?.layoutTaskInput?.tvTaskInput?.requestFocus()
         setListeners()
         setObservers()
     }
 
-
-    private fun setUpScreen() {
-        binding?.layoutTaskInput?.tvTaskInput?.requestFocus()
-    }
 
     private fun setListeners() {
         binding?.apply {
@@ -98,91 +89,78 @@ class TaskCreateFragment : Fragment(R.layout.fragment_task_create) {
             layoutTaskImage.btnImgPhotoRemove.setOnClickListener {
                 layoutTaskImage.imgPhoto.setImageDrawable(null)
                 layoutTaskImage.clImagePlaceHolder.visibility = View.GONE
+                viewModel.todo.taskImage = null
             }
         }
     }
 
 
     private fun setObservers() {
-        binding?.apply {
-            dateTimePicker.epochFormat.observe(viewLifecycleOwner, {
-                layoutSetAlarm.tvSelectDate.text =
-                    taskTimeStamp?.toLocalDateTime()?.beautifyDateTime()
-                viewModel.todo.todoDate = it.toString()
-            })
+        dateTimePicker.epochFormat.observe(viewLifecycleOwner, { epochLong ->
+            viewModel.todo.todoDate = epochLong.toString()
+            binding?.layoutSetAlarm?.tvSelectDate?.text =
+                epochLong.toString().toLocalDateTime()?.beautifyDateTime()
+        })
 
-            viewModel.taskPriority.observe(viewLifecycleOwner, { priority ->
-                layoutCreateTaskFeatures.addPriority.setPriorityText(priority)
-            })
+        viewModel.taskPriority.observe(viewLifecycleOwner, { priority ->
+            binding?.layoutCreateTaskFeatures?.addPriority?.setPriorityText(priority)
+        })
 
-            viewModel.taskCreationStatus.observe(viewLifecycleOwner, { status ->
-                when (status) {
-                    is ResultData.Loading -> showSnack(requireView(), "Creating")
-                    is ResultData.Failed -> showSnack(requireView(), status.message.toString())
-                    is ResultData.Success -> {
-                        val taskItem = status.data as Todo
-                        taskItem.todoDate?.let {
-                            requireContext().startAlarmedNotification(
-                                taskItem.docId,
-                                taskItem.todoBody,
-                                taskItem.todoDesc.toString(),
-                                it.toLong(),
-                                alarmManager
-                            )
-                        }.also {
-                            showSnack(requireView(), "Task Created")
-                            findNavController().navigateUp()
+        viewModel.taskCreationStatus.observe(viewLifecycleOwner, { status ->
+            when (status) {
+                is ResultData.Loading -> showSnack(requireView(), "Creating")
+                is ResultData.Failed -> showSnack(requireView(), status.message.toString())
+                is ResultData.Success -> {
+                    val taskItem = status.data as Todo
+                    taskItem.todoDate?.let {
+                        requireContext().startAlarmedNotification(
+                            taskItem.docId,
+                            taskItem.todoBody,
+                            taskItem.todoDesc.toString(),
+                            it.toLong(),
+                            alarmManager
+                        )
+                    }.also {
+                        showSnack(requireView(), "Task Created")
+                        findNavController().navigateUp()
+                    }
+                }
+                else -> {
+                }
+            }
+        })
+
+        workManager.getWorkInfosByTagLiveData(IMAGE_UPLOAD_WORKER_TAG).observe(viewLifecycleOwner,
+            { workInfoList ->
+                if (workInfoList.size != 0 && workInfoList != null) {
+                    val workInfo = workInfoList[0]
+                    when (workInfo.state) {
+                        WorkInfo.State.SUCCEEDED -> showSnack(requireView(), "Image Uploaded")
+                        WorkInfo.State.FAILED -> showSnack(requireView(), "Upload failed!")
+                        else -> {
                         }
                     }
-                    else -> {}
                 }
             })
-        }
+
+        workManager.getWorkInfosByTagLiveData(TASK_CREATION_WORKER_TAG).observe(viewLifecycleOwner,
+            { workInfoList ->
+                if (workInfoList.size != 0 && workInfoList != null) {
+                    val workInfo = workInfoList[0]
+                    when (workInfo.state) {
+                        WorkInfo.State.SUCCEEDED -> {
+                            showSnack(requireView(), "Task Created")
+                            workManager.pruneWork()
+                            findNavController().navigateUp()
+                        }
+                        WorkInfo.State.FAILED -> showSnack(requireView(), "Task creation failed!")
+                        else -> {
+                        }
+                    }
+                }
+            })
     }
 
-
-    private fun createTask() {
-        requireActivity().hideKeyboard()
-        val todoBody = binding?.layoutTaskInput?.tvTaskInput?.text.toString().trim()
-        val todoDesc = binding?.layoutTaskInput?.tvTaskDescInput?.text.toString().trim()
-        val todoDate = taskTimeStamp
-        val assigneeList = arrayOf(assigneeId)
-
-        if (taskImage == null) {
-        } else {
-            // creating task via work manager
-            val constraints = Constraints.Builder()
-                .setRequiredNetworkType(NetworkType.CONNECTED)
-                .build()
-
-            val inputData = workDataOf(
-                TASK_BODY to todoBody,
-                TASK_DESC to todoDesc,
-                TASK_DATE to todoDate,
-                TASK_ASSIGNEE to assigneeList,
-                TASK_IMAGE_URI to taskImage.toString()
-            )
-
-            val taskImageUploadWorker =
-                OneTimeWorkRequestBuilder<TaskImageUploadWorker>()
-                    .setConstraints(constraints)
-                    .setInputData(inputData)
-                    .build()
-
-            val taskCreationWorker =
-                OneTimeWorkRequestBuilder<TaskCreationWorker>()
-                    .setConstraints(constraints)
-                    .build()
-
-            WorkManager.getInstance(requireContext()).let { manager ->
-                manager.beginWith(taskImageUploadWorker)
-                    .then(taskCreationWorker)
-                    .enqueue()
-                taskImage = null
-                findNavController().navigateUp()
-            }
-        }
-    }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == 1000 && resultCode == Activity.RESULT_OK && data != null) {
@@ -192,5 +170,11 @@ class TaskCreateFragment : Fragment(R.layout.fragment_task_create) {
                 layoutTaskImage.imgPhoto.loadImage(data.dataString)
             }
         }
+    }
+
+
+    override fun onDestroy() {
+        super.onDestroy()
+        binding = null
     }
 }

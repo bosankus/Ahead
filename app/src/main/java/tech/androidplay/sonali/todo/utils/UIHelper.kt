@@ -1,6 +1,5 @@
 package tech.androidplay.sonali.todo.utils
 
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.text.SpannableString
@@ -37,7 +36,7 @@ object UIHelper {
     }
 
     fun showSnack(view: View, message: String) {
-        Snackbar.make(view, message, Snackbar.LENGTH_LONG).show()
+        Snackbar.make(view, message, Snackbar.LENGTH_SHORT).show()
     }
 
     fun viewAnimation(view: View, animation: Animation?, visibility: Boolean) {
