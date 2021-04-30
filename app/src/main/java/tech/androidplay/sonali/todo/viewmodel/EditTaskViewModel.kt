@@ -2,7 +2,6 @@ package tech.androidplay.sonali.todo.viewmodel
 
 import android.annotation.SuppressLint
 import android.net.Uri
-import androidx.databinding.BaseObservable
 import androidx.databinding.ObservableField
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -12,6 +11,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
 import tech.androidplay.sonali.todo.data.repository.TodoRepository
+import tech.androidplay.sonali.todo.model.Todo
 import tech.androidplay.sonali.todo.utils.ResultData
 import javax.inject.Inject
 
@@ -25,11 +25,13 @@ import javax.inject.Inject
 @SuppressLint("StaticFieldLeak")
 @ExperimentalCoroutinesApi
 @HiltViewModel
-class EditTaskViewModel @Inject constructor(private val taskSource: TodoRepository)
-    : ViewModel() {
+class EditTaskViewModel @Inject constructor(private val taskSource: TodoRepository) : ViewModel() {
 
     private var _viewState = MutableLiveData<ResultData<*>>(ResultData.Loading)
     val viewState: LiveData<ResultData<*>> get() = _viewState
+
+    private var _taskById = MutableLiveData<Todo>()
+    val taskById get(): LiveData<Todo> = _taskById
 
     private var _imageUploadState = MutableLiveData<ResultData<*>>(ResultData.DoNothing)
     val imageUploadState: LiveData<ResultData<*>> get() = _imageUploadState
@@ -45,7 +47,6 @@ class EditTaskViewModel @Inject constructor(private val taskSource: TodoReposito
     var initialTaskDesc = ObservableField("")
     var initialTaskDate = ObservableField("")
     var initialTaskImage = ObservableField("")
-    var initialTaskPriority = ObservableField<Int>()
     var initialTaskStatus = ObservableField(false)
 
 
@@ -53,12 +54,12 @@ class EditTaskViewModel @Inject constructor(private val taskSource: TodoReposito
         viewModelScope.launch {
             val response = taskId?.let { taskSource.fetchTaskByTaskId(it) }
             response?.let {
+                _taskById.value = it
                 initialTaskId.set(it.docId)
-                initialTaskBody.set(it.todoBody.toString())
+                initialTaskBody.set(it.todoBody)
                 initialTaskDesc.set(it.todoDesc.toString())
                 initialTaskDate.set(it.todoDate)
                 initialTaskImage.set(it.taskImage.toString())
-                initialTaskPriority.set(it.priority)
                 initialTaskStatus.set(it.isCompleted)
                 _viewState.postValue(ResultData.Success(it))
             } ?: run { _viewState.postValue(ResultData.Failed("Check your network!")) }

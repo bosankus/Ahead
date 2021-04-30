@@ -60,19 +60,23 @@ class TaskEditFragment : Fragment(R.layout.fragment_task_edit) {
     private val viewModel: EditTaskViewModel by viewModels()
     private var pickedImage: Uri? = null
 
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setUpScreen()
         setListener()
     }
 
+
     private fun setUpScreen() {
         binding.apply {
             viewmodel = viewModel
+            task = viewModel.taskById.value
             lifecycleOwner = viewLifecycleOwner
         }
         taskIdFromArgs?.let { fetchTask(it) } ?: showSnack(requireView(), "Can't find task Id")
     }
+
 
     private fun setListener() {
         binding.apply {
@@ -90,12 +94,14 @@ class TaskEditFragment : Fragment(R.layout.fragment_task_edit) {
         }
     }
 
+
     private fun selectNotificationDateTime() {
         dateTimePicker.openDateTimePicker(requireContext())
         dateTimePicker.epochFormat.observe(viewLifecycleOwner, { epoch ->
             epoch?.let { dateTime -> viewModel.initialTaskDate.set("$dateTime") }
         })
     }
+
 
     private fun fetchTask(taskId: String) {
         if (isNetworkAvailable()) {
@@ -105,6 +111,7 @@ class TaskEditFragment : Fragment(R.layout.fragment_task_edit) {
             })
         } else showSnack(requireView(), "Check internet connection.")
     }
+
 
     private fun updateTask() {
         if (isNetworkAvailable()) {
@@ -126,6 +133,7 @@ class TaskEditFragment : Fragment(R.layout.fragment_task_edit) {
         } else showSnack(requireView(), "Check internet connection.")
     }
 
+
     private fun changeImage(pickedImage: Uri?) {
         if (isNetworkAvailable()) {
             lifecycleScope.launch {
@@ -139,6 +147,7 @@ class TaskEditFragment : Fragment(R.layout.fragment_task_edit) {
             }
         } else showSnack(requireView(), "Check internet connection.")
     }
+
 
     private fun deleteTask(docId: String?) {
         if (isNetworkAvailable()) {
@@ -155,6 +164,7 @@ class TaskEditFragment : Fragment(R.layout.fragment_task_edit) {
             }.create().show()
         } else showSnack(requireView(), "Check internet connection.")
     }
+
 
     @SuppressLint("SetTextI18n")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

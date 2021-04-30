@@ -3,6 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <data>
+
+        <variable
+            name="viewmodel"
+            type="tech.androidplay.sonali.todo.viewmodel.TaskCreateViewModel" />
+    </data>
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -46,6 +53,7 @@
                     android:background="@drawable/bg_icon_ripple"
                     android:drawablePadding="@dimen/padding_8dp"
                     android:fontFamily="@font/calibre_semi"
+                    android:onClick="@{() -> viewmodel.createTaskModified(viewmodel.todo)}"
                     android:padding="@dimen/padding_5dp"
                     android:text="@string/create_task"
                     android:textColor="@color/dribblePink"
@@ -63,7 +71,8 @@
                 android:layout_marginEnd="@dimen/padding_18dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/layoutCreateTaskBar" />
+                app:layout_constraintTop_toBottomOf="@+id/layoutCreateTaskBar"
+                app:task="@{viewmodel.todo}" />
 
             <include
                 android:id="@+id/layoutSetAlarm"
@@ -83,7 +92,8 @@
                 android:layout_margin="@dimen/padding_16dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/layoutSetAlarm" />
+                app:layout_constraintTop_toBottomOf="@+id/layoutSetAlarm"
+                app:viewmodel="@{viewmodel}" />
 
             <TextView
                 android:id="@+id/tvAttachmentHeader"

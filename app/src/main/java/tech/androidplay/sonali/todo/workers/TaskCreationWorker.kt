@@ -45,7 +45,7 @@ class TaskCreationWorker @AssistedInject constructor(
     private val repository = TodoRepository()
     private val currentUser = repository.userDetails
 
-    override suspend fun doWork(): Result = withContext(Dispatchers.IO){
+    override suspend fun doWork(): Result = withContext(Dispatchers.IO) {
         val taskCreator = checkNotNull(currentUser?.uid)
         val taskBody = checkNotNull(inputData.getString(TASK_BODY))
         val taskDesc = checkNotNull(inputData.getString(TASK_DESC))
@@ -68,7 +68,7 @@ class TaskCreationWorker @AssistedInject constructor(
         val intent = Intent(context, MainActivity::class.java)
             .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
 
-        val response: String = repository.createTaskFromWorker(taskMap)
+        val response: String = repository.createTaskUsingWorker(taskMap)
         if (response.isNotEmpty()) {
             context.startAlarmedNotification(
                 id = response,
@@ -104,7 +104,9 @@ class TaskCreationWorker @AssistedInject constructor(
         const val TASK_BODY = "TASK_BODY"
         const val TASK_DESC = "TASK_DESC"
         const val TASK_DATE = "TASK_DATE"
+        const val TASK_PRIORITY = "TASK_PRIORITY"
         const val TASK_ASSIGNEE = "TASK_ASSIGNEE"
         const val TASK_IMAGE_URI = "TASK_IMAGE_URI"
+        const val TASK_CREATION_WORKER_TAG = "task_creation_worker"
     }
 }

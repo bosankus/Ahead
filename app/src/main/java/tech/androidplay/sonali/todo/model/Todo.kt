@@ -1,5 +1,8 @@
 package tech.androidplay.sonali.todo.model
 
+import androidx.databinding.BaseObservable
+import androidx.databinding.Bindable
+import androidx.databinding.library.baseAdapters.BR
 import com.google.firebase.firestore.DocumentId
 import com.google.gson.annotations.SerializedName
 import java.io.Serializable
@@ -15,23 +18,23 @@ import java.io.Serializable
 data class Todo(
     @DocumentId
     var docId: String = "",
-    @SerializedName("creator")
     var creator: String = "",
-    @SerializedName("todoBody")
-    var todoBody: String? = "",
-    @SerializedName("todoDesc")
+    var todoBody: String = "",
     var todoDesc: String? = "",
-    @SerializedName("todoDate")
     var todoDate: String? = "",
-    @SerializedName("todoCreationTimeStamp")
     var todoCreationTimeStamp: String = "",
     @JvmField
-    @SerializedName("isCompleted")
     var isCompleted: Boolean = false,
-    @SerializedName("taskImage")
     var taskImage: String? = "",
     @SerializedName("assignee")
     var assigneeList: List<*>? = null,
-    @SerializedName("priority")
     var priority: Int? = 0,
-) : Serializable
+) : Serializable, BaseObservable() {
+
+    /*@get: Bindable
+    var todoBody: String = ""
+        set(value) {
+            field = value
+
+        }*/
+}

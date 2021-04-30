@@ -66,15 +66,14 @@ class TodoRepository : FirebaseApi {
     }
 
 
-    override suspend fun createTask(taskMap: HashMap<*, *>): ResultData<String> =
+    override suspend fun createTask(taskItem: Todo): ResultData<Todo> =
         suspendCoroutine { cont ->
-            taskListRef.add(taskMap)
-                .addOnSuccessListener { cont.resume(ResultData.Success(it.id)) }
+            taskListRef.add(taskItem)
+                .addOnSuccessListener { cont.resume(ResultData.Success(taskItem)) }
                 .addOnFailureListener { cont.resume(ResultData.Failed(it.message)) }
         }
 
-
-    override suspend fun createTaskFromWorker(taskMap: HashMap<*, *>): String {
+    override suspend fun createTaskUsingWorker(taskMap: HashMap<*, *>): String {
         val document = taskListRef.add(taskMap).await()
         return document.id
     }
@@ -138,6 +137,7 @@ class TodoRepository : FirebaseApi {
 
 
     override suspend fun isUserAvailable(email: String): ResultData<String> = try {
+        ResultData.Loading
         val response = userListRef.whereEqualTo("email", email).get().await()
         val userId = response.toObjects(User::class.java)[0].uid
         if (userId.isNotEmpty()) ResultData.Success(userId)

@@ -60,13 +60,13 @@
             android:drawablePadding="@dimen/padding_8dp"
             android:fontFamily="@font/calibre_semi"
             android:padding="@dimen/padding_5dp"
-            app:priority_text="@{viewmodel.initialTaskPriority}"
             android:textColor="@color/dribblePink"
             android:textSize="@dimen/text_16sp"
             app:drawableStartCompat="@drawable/ic_flag"
             app:drawableTint="@color/dribblePink"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/layoutTaskBar"/>
+            app:layout_constraintTop_toBottomOf="@id/layoutTaskBar"
+            app:priority_text="@{task.priority}" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/clTaskImg"
@@ -174,7 +174,7 @@
                 android:hint="@string/task"
                 android:inputType="text"
                 android:maxLines="1"
-                android:text="@={viewmodel.initialTaskBody}"
+                android:text="@={task.todoBody}"
                 android:textColor="@color/grey3"
                 android:textSize="@dimen/text_18sp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -214,6 +214,25 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvComments"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/text_16sp"
+            android:background="?attr/selectableItemBackground"
+            android:drawablePadding="@dimen/padding_10dp"
+            android:fontFamily="@font/calibre"
+            android:padding="@dimen/padding_5dp"
+            android:text="@string/show_comments"
+            android:textColor="@color/dribblePink"
+            android:textSize="@dimen/text_18sp"
+            app:drawableStartCompat="@drawable/ic_comment"
+            app:drawableTint="@color/dribblePink"
+            app:isDeleting="@{viewmodel.deleteTaskState}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/clTaskInput" />
+
         <androidx.appcompat.widget.AppCompatCheckBox
             android:id="@+id/cbCompleteTask"
             checkBoxText="@{viewmodel.initialTaskStatus}"
@@ -227,16 +246,15 @@
             android:textSize="@dimen/text_18sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/clTaskInput" />
+            app:layout_constraintTop_toBottomOf="@+id/tvComments" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tvDeleteTask"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/padding_16dp"
+            android:layout_marginBottom="@dimen/padding_26dp"
             android:alpha="0.7"
             android:background="?attr/selectableItemBackground"
-            android:drawablePadding="@dimen/padding_10dp"
             android:fontFamily="@font/calibre"
             android:padding="@dimen/padding_5dp"
             android:text="@string/delete_task"
@@ -245,8 +263,9 @@
             app:drawableStartCompat="@drawable/ic_delete"
             app:drawableTint="@android:color/holo_red_light"
             app:isDeleting="@{viewmodel.deleteTaskState}"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/cbCompleteTask" />
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
         <include
             android:id="@+id/layoutError"
