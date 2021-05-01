@@ -2,7 +2,10 @@ package tech.androidplay.sonali.todo.viewmodel
 
 import android.annotation.SuppressLint
 import android.net.Uri
+import androidx.databinding.Bindable
+import androidx.databinding.Observable
 import androidx.databinding.ObservableField
+import androidx.databinding.PropertyChangeRegistry
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -10,8 +13,10 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
+import tech.androidplay.sonali.todo.BR
 import tech.androidplay.sonali.todo.data.repository.TodoRepository
 import tech.androidplay.sonali.todo.model.Todo
+import tech.androidplay.sonali.todo.model.User
 import tech.androidplay.sonali.todo.utils.ResultData
 import javax.inject.Inject
 
@@ -25,13 +30,19 @@ import javax.inject.Inject
 @SuppressLint("StaticFieldLeak")
 @ExperimentalCoroutinesApi
 @HiltViewModel
-class EditTaskViewModel @Inject constructor(private val taskSource: TodoRepository) : ViewModel() {
+class EditTaskViewModel @Inject constructor(private val taskSource: TodoRepository) : ViewModel(),
+    Observable {
+
+    private val registry = PropertyChangeRegistry()
 
     private var _viewState = MutableLiveData<ResultData<*>>(ResultData.Loading)
     val viewState: LiveData<ResultData<*>> get() = _viewState
 
     private var _taskById = MutableLiveData<Todo>()
     val taskById get(): LiveData<Todo> = _taskById
+
+    private var _checkAssigneeStatus = MutableLiveData<ResultData<User>>(ResultData.DoNothing)
+    val checkAssigneeStatus get(): LiveData<ResultData<User>> = _checkAssigneeStatus
 
     private var _imageUploadState = MutableLiveData<ResultData<*>>(ResultData.DoNothing)
     val imageUploadState: LiveData<ResultData<*>> get() = _imageUploadState
@@ -41,6 +52,13 @@ class EditTaskViewModel @Inject constructor(private val taskSource: TodoReposito
 
     private var _updateTaskState = MutableLiveData<ResultData<*>>(ResultData.DoNothing)
     val updateTaskState: LiveData<ResultData<*>> get() = _updateTaskState
+
+    @get: Bindable
+    var todo = Todo()
+        set(value) {
+            if (value != field) field = value
+            registry.notifyChange(this, BR.todo)
+        }
 
     var initialTaskId = ObservableField("")
     var initialTaskBody = ObservableField("")
@@ -53,6 +71,9 @@ class EditTaskViewModel @Inject constructor(private val taskSource: TodoReposito
     fun getTaskByTaskId(taskId: String?) {
         viewModelScope.launch {
             val response = taskId?.let { taskSource.fetchTaskByTaskId(it) }
+            if (response != null) todo = response
+            if (response?.creator != taskSource.userDetails?.uid) fetchTaskCreatorDetails(response?.creator)
+
             response?.let {
                 _taskById.value = it
                 initialTaskId.set(it.docId)
@@ -110,9 +131,24 @@ class EditTaskViewModel @Inject constructor(private val taskSource: TodoReposito
     }
 
 
+    private fun fetchTaskCreatorDetails(creatorId: String?) = viewModelScope.launch {
+        val response = creatorId?.let { taskSource.fetchTaskCreatorDetails(it) }
+        response?.let { _checkAssigneeStatus.postValue(it) }
+    }
+
+
     private fun checkInputs(): Boolean {
         return !(initialTaskId.get().isNullOrEmpty() || initialTaskDesc.get().isNullOrEmpty() ||
                 initialTaskDate.get().isNullOrEmpty())
     }
 
+
+    override fun addOnPropertyChangedCallback(callback: Observable.OnPropertyChangedCallback?) {
+        registry.add(callback)
+    }
+
+
+    override fun removeOnPropertyChangedCallback(callback: Observable.OnPropertyChangedCallback?) {
+        registry.remove(callback)
+    }
 }

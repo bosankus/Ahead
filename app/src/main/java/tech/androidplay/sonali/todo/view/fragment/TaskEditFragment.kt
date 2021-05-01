@@ -23,6 +23,7 @@ import tech.androidplay.sonali.todo.model.Todo
 import tech.androidplay.sonali.todo.utils.*
 import tech.androidplay.sonali.todo.utils.UIHelper.showSnack
 import tech.androidplay.sonali.todo.utils.UIHelper.showToast
+import tech.androidplay.sonali.todo.view.adapter.setNotificationDateTime
 import tech.androidplay.sonali.todo.viewmodel.EditTaskViewModel
 import javax.inject.Inject
 
@@ -98,7 +99,10 @@ class TaskEditFragment : Fragment(R.layout.fragment_task_edit) {
     private fun selectNotificationDateTime() {
         dateTimePicker.openDateTimePicker(requireContext())
         dateTimePicker.epochFormat.observe(viewLifecycleOwner, { epoch ->
-            epoch?.let { dateTime -> viewModel.initialTaskDate.set("$dateTime") }
+            epoch?.let { dateTime ->
+                binding.tvSelectDate.setNotificationDateTime(dateTime.toString())
+                viewModel.todo.todoDate = dateTime.toString()
+            }
         })
     }
 
@@ -173,5 +177,10 @@ class TaskEditFragment : Fragment(R.layout.fragment_task_edit) {
             if (isNetworkAvailable()) changeImage(pickedImage)
             else showSnack(requireView(), "Connection lost!")
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+
     }
 }

@@ -147,6 +147,17 @@ class TodoRepository : FirebaseApi {
     }
 
 
+    override suspend fun fetchTaskCreatorDetails(userId: String): ResultData<User>? = try {
+        ResultData.Loading
+        val response = userListRef.whereEqualTo("uid", userId).get().await()
+        val userObj = response.toObjects(User::class.java)
+        if (userId.isNotEmpty()) ResultData.Success(userObj[0])
+        else ResultData.Failed()
+    } catch (e: Exception) {
+        ResultData.Failed(e.message)
+    }
+
+
     override suspend fun provideFeedback(topic: String, description: String): ResultData<String> =
         try {
             val feedbackDetails = Feedback(userDetails?.email, topic, description)

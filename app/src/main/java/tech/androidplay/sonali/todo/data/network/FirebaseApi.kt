@@ -5,6 +5,7 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.storage.StorageReference
 import kotlinx.coroutines.flow.Flow
 import tech.androidplay.sonali.todo.model.Todo
+import tech.androidplay.sonali.todo.model.User
 import tech.androidplay.sonali.todo.utils.ResultData
 
 /**
@@ -32,6 +33,7 @@ interface FirebaseApi {
 
     // For user related
     suspend fun isUserAvailable(email: String): ResultData<String>
+    suspend fun fetchTaskCreatorDetails(userId: String): ResultData<User>?
 
     // For Feedback
     suspend fun provideFeedback(topic: String, description: String): ResultData<String>
