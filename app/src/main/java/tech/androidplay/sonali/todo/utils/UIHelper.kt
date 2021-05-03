@@ -10,6 +10,7 @@ import android.view.animation.Animation
 import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 import com.google.android.material.snackbar.Snackbar
 import tech.androidplay.sonali.todo.utils.Constants.GLOBAL_TAG
 import java.time.Instant
@@ -50,6 +51,14 @@ object UIHelper {
             this.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
         var view: View? = this.currentFocus
         if (view == null) view = View(this)
+        inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
+    }
+
+    fun Fragment.hideKeyboard() {
+        val inputMethodManager: InputMethodManager =
+            requireActivity().getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+        var view: View? = requireActivity().currentFocus
+        if (view == null) view = View(requireActivity())
         inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
     }
 

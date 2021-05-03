@@ -89,8 +89,8 @@ class TaskCreateViewModel @Inject constructor(
             _emailAvailabilityStatus.postValue(response)
             _emailUnderCheckForAvailability.postValue(email)
             if (response is ResultData.Success) {
-                todo.assigneeList = arrayOf(response.data).toList()
-            } else todo.assigneeList = null
+                todo.assignee = arrayOf(response.data).toList()
+            } else todo.assignee = null
         }
     }
 
@@ -129,7 +129,7 @@ class TaskCreateViewModel @Inject constructor(
             TASK_DESC to item.todoDesc,
             TASK_DATE to item.todoDate,
             TASK_PRIORITY to item.priority,
-            TASK_ASSIGNEE to arrayOf(item.assigneeList?.get(0) as String?),
+            TASK_ASSIGNEE to arrayOf(item.assignee?.get(0) as String?),
             TASK_IMAGE_URI to item.taskImage.toString()
         )
 
@@ -149,6 +149,11 @@ class TaskCreateViewModel @Inject constructor(
         workManager.beginWith(taskImageUploadWorker)
             .then(taskCreationWorker)
             .enqueue()
+
+    }
+
+
+    fun changeTaskPriority(level: String) {
 
     }
 

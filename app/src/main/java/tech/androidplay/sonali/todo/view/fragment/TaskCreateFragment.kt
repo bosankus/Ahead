@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.work.WorkInfo
@@ -49,7 +50,7 @@ class TaskCreateFragment : Fragment(R.layout.fragment_task_create) {
 
     private var binding: FragmentTaskCreateBinding? = null
 
-    private val viewModel: TaskCreateViewModel by viewModels()
+    private val viewModel: TaskCreateViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,

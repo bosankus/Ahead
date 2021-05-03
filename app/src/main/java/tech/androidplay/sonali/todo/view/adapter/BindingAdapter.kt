@@ -19,6 +19,7 @@ import tech.androidplay.sonali.todo.utils.Constants.MEDIUM_PRIORITY
 import tech.androidplay.sonali.todo.utils.Constants.TOP_PRIORITY
 import tech.androidplay.sonali.todo.utils.UIHelper.removeStrikeThroughText
 import tech.androidplay.sonali.todo.utils.UIHelper.showSnack
+import tech.androidplay.sonali.todo.utils.UIHelper.showToast
 import tech.androidplay.sonali.todo.utils.UIHelper.strikeThroughText
 
 
@@ -137,7 +138,7 @@ fun View.isImageUploading(responseState: ResultData<*>) {
         is ResultData.Loading -> showSnack(this, "Uploading...")
         is ResultData.Success -> showSnack(this, "Great! image uploaded")
         is ResultData.Failed -> showSnack(this, "Check your connection")
-        else -> {
+        is ResultData.DoNothing -> {
         }
     }
 }
@@ -157,7 +158,10 @@ fun TextView.isUpdating(responseState: ResultData<*>) {
         is ResultData.DoNothing -> "Save"
         is ResultData.Loading -> "Saving..."
         is ResultData.Failed -> "Try again!"
-        is ResultData.Success -> "Save"
+        is ResultData.Success -> {
+            showSnack(this.rootView, "Task updated")
+            "Save"
+        }
     }
 }
 

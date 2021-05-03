@@ -1,8 +1,6 @@
 package tech.androidplay.sonali.todo.model
 
 import com.google.firebase.firestore.DocumentId
-import com.google.gson.annotations.SerializedName
-import java.io.Serializable
 
 /**
  * Created by Androidplay
@@ -23,7 +21,6 @@ data class Todo(
     @JvmField
     var isCompleted: Boolean = false,
     var taskImage: String? = "",
-    @SerializedName("assignee")
-    var assigneeList: List<*>? = null,
+    var assignee: List<*>? = null,
     var priority: Int? = 0,
-) : Serializable
+)

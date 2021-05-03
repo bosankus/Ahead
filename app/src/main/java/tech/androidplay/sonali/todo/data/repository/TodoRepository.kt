@@ -50,10 +50,11 @@ class TodoRepository : FirebaseApi {
     private val userListRef = db.collection(USER_COLLECTION)
     private val feedbackListRef = db.collection(FEEDBACK_COLLECTION)
 
-    // query to fireStore table
+    // query to task table
     private val query: Query = taskListRef
         .whereEqualTo("creator", userDetails?.uid)
         .orderBy("todoCreationTimeStamp", Query.Direction.ASCENDING)
+
     private val assignedTaskQuery: Query = taskListRef
         .whereArrayContains("assignee", userDetails?.uid!!)
         .orderBy("todoCreationTimeStamp", Query.Direction.ASCENDING)
