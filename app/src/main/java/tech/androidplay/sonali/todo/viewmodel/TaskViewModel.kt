@@ -68,14 +68,12 @@ class TaskViewModel @Inject constructor(
     }
 
     private fun getUserFirstName() {
-        viewModelScope.launch {
-            val firstName = taskSource.userDetails?.displayName
-                ?.split(" ")
-                ?.toMutableList()
-                ?.firstOrNull()
-            _firstName.value = "${greetingMessage()}, $firstName"
-            getAllTasks()
-        }
+        val firstName = taskSource.userDetails?.displayName
+            ?.split(" ")
+            ?.toMutableList()
+            ?.firstOrNull()
+        _firstName.value = "${greetingMessage()}, $firstName"
+        getAllTasks()
     }
 
     private fun getAllTasks() {

@@ -1,15 +1,20 @@
 package tech.androidplay.sonali.todo.viewmodel
 
 import android.annotation.SuppressLint
+import android.app.Application
 import android.net.Uri
+import androidx.databinding.Bindable
+import androidx.databinding.Observable
 import androidx.databinding.ObservableField
+import androidx.databinding.PropertyChangeRegistry
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
+import tech.androidplay.sonali.todo.BR
 import tech.androidplay.sonali.todo.data.repository.TodoRepository
 import tech.androidplay.sonali.todo.model.Todo
 import tech.androidplay.sonali.todo.utils.ResultData
@@ -25,7 +30,12 @@ import javax.inject.Inject
 @SuppressLint("StaticFieldLeak")
 @ExperimentalCoroutinesApi
 @HiltViewModel
-class EditTaskViewModel @Inject constructor(private val taskSource: TodoRepository) : ViewModel() {
+class EditTaskViewModel @Inject constructor(
+    application: Application,
+    private val taskSource: TodoRepository
+) : AndroidViewModel(application), Observable {
+
+    private val registry = PropertyChangeRegistry()
 
     private var _viewState = MutableLiveData<ResultData<*>>(ResultData.Loading)
     val viewState: LiveData<ResultData<*>> get() = _viewState
@@ -42,6 +52,13 @@ class EditTaskViewModel @Inject constructor(private val taskSource: TodoReposito
     private var _updateTaskState = MutableLiveData<ResultData<*>>(ResultData.DoNothing)
     val updateTaskState: LiveData<ResultData<*>> get() = _updateTaskState
 
+    @get: Bindable
+    var todo = Todo()
+        set(value) {
+            if (value != field) field = value
+            registry.notifyChange(this, BR.todo)
+        }
+
     var initialTaskId = ObservableField("")
     var initialTaskBody = ObservableField("")
     var initialTaskDesc = ObservableField("")
@@ -53,6 +70,8 @@ class EditTaskViewModel @Inject constructor(private val taskSource: TodoReposito
     fun getTaskByTaskId(taskId: String?) {
         viewModelScope.launch {
             val response = taskId?.let { taskSource.fetchTaskByTaskId(it) }
+            if (response != null) todo = response
+
             response?.let {
                 _taskById.value = it
                 initialTaskId.set(it.docId)
@@ -67,23 +86,27 @@ class EditTaskViewModel @Inject constructor(private val taskSource: TodoReposito
     }
 
 
-    fun updateTask() {
-        if (checkInputs()) {
+    fun updateTask(item: Todo?) {
+        item?.let { taskItem ->
             _updateTaskState.postValue(ResultData.Loading)
-            val taskId = checkNotNull(initialTaskId.get())
-            val taskBody = checkNotNull(initialTaskBody.get())
-            val taskDesc = checkNotNull(initialTaskDesc.get())
-            val taskDate = checkNotNull(initialTaskDate.get())
-            val map: Map<String, Any?> = mapOf(
-                "todoBody" to taskBody,
-                "todoDesc" to taskDesc,
-                "todoDate" to taskDate,
-            )
-            viewModelScope.launch {
-                val response = taskSource.updateTask(taskId, map)
-                response.let { _updateTaskState.postValue(ResultData.Success(it)) }
+            when {
+                taskItem.todoBody.isEmpty() ->
+                    _updateTaskState.postValue(ResultData.Failed("Body can't be empty"))
+                taskItem.todoDate.isNullOrEmpty() ->
+                    _updateTaskState.postValue(ResultData.Failed("Date & Time can't be empty"))
+                else -> {
+                    val taskMap: Map<String, Any?> = mapOf(
+                        "todoBody" to taskItem.todoBody,
+                        "todoDesc" to taskItem.todoDesc,
+                        "todoDate" to taskItem.todoDate,
+                    )
+                    viewModelScope.launch {
+                        val response = taskSource.updateTask(taskItem.docId, taskMap)
+                        response.let { _updateTaskState.postValue(ResultData.Success(it)) }
+                    }
+                }
             }
-        } else _updateTaskState.postValue(ResultData.Failed("Fields can not be empty"))
+        }
     }
 
 
@@ -115,4 +138,13 @@ class EditTaskViewModel @Inject constructor(private val taskSource: TodoReposito
                 initialTaskDate.get().isNullOrEmpty())
     }
 
+
+    override fun addOnPropertyChangedCallback(callback: Observable.OnPropertyChangedCallback?) {
+        registry.add(callback)
+    }
+
+
+    override fun removeOnPropertyChangedCallback(callback: Observable.OnPropertyChangedCallback?) {
+        registry.remove(callback)
+    }
 }

@@ -50,10 +50,11 @@ class TodoRepository : FirebaseApi {
     private val userListRef = db.collection(USER_COLLECTION)
     private val feedbackListRef = db.collection(FEEDBACK_COLLECTION)
 
-    // query to fireStore table
+    // query to task table
     private val query: Query = taskListRef
         .whereEqualTo("creator", userDetails?.uid)
         .orderBy("todoCreationTimeStamp", Query.Direction.ASCENDING)
+
     private val assignedTaskQuery: Query = taskListRef
         .whereArrayContains("assignee", userDetails?.uid!!)
         .orderBy("todoCreationTimeStamp", Query.Direction.ASCENDING)
@@ -141,6 +142,17 @@ class TodoRepository : FirebaseApi {
         val response = userListRef.whereEqualTo("email", email).get().await()
         val userId = response.toObjects(User::class.java)[0].uid
         if (userId.isNotEmpty()) ResultData.Success(userId)
+        else ResultData.Failed()
+    } catch (e: Exception) {
+        ResultData.Failed(e.message)
+    }
+
+
+    override suspend fun fetchTaskCreatorDetails(userId: String): ResultData<User>? = try {
+        ResultData.Loading
+        val response = userListRef.whereEqualTo("uid", userId).get().await()
+        val userObj = response.toObjects(User::class.java)
+        if (userId.isNotEmpty()) ResultData.Success(userObj[0])
         else ResultData.Failed()
     } catch (e: Exception) {
         ResultData.Failed(e.message)

@@ -10,6 +10,7 @@ import androidx.appcompat.widget.AppCompatCheckBox
 import androidx.core.content.ContextCompat
 import androidx.databinding.BindingAdapter
 import tech.androidplay.sonali.todo.R
+import tech.androidplay.sonali.todo.model.User
 import tech.androidplay.sonali.todo.utils.*
 import tech.androidplay.sonali.todo.utils.Constants.IS_AFTER
 import tech.androidplay.sonali.todo.utils.Constants.IS_BEFORE
@@ -18,6 +19,7 @@ import tech.androidplay.sonali.todo.utils.Constants.MEDIUM_PRIORITY
 import tech.androidplay.sonali.todo.utils.Constants.TOP_PRIORITY
 import tech.androidplay.sonali.todo.utils.UIHelper.removeStrikeThroughText
 import tech.androidplay.sonali.todo.utils.UIHelper.showSnack
+import tech.androidplay.sonali.todo.utils.UIHelper.showToast
 import tech.androidplay.sonali.todo.utils.UIHelper.strikeThroughText
 
 
@@ -136,7 +138,8 @@ fun View.isImageUploading(responseState: ResultData<*>) {
         is ResultData.Loading -> showSnack(this, "Uploading...")
         is ResultData.Success -> showSnack(this, "Great! image uploaded")
         is ResultData.Failed -> showSnack(this, "Check your connection")
-        else -> showSnack(this, "Image uploading failed. Please retry.")
+        is ResultData.DoNothing -> {
+        }
     }
 }
 
@@ -149,7 +152,6 @@ fun TextView.isDeleting(responseState: ResultData<*>) {
         showSnack(this.rootView, "Deleted")
 }
 
-@SuppressLint("SetTextI18n")
 @BindingAdapter("isUpdating")
 fun TextView.isUpdating(responseState: ResultData<*>) {
     text = when (responseState) {
@@ -157,8 +159,19 @@ fun TextView.isUpdating(responseState: ResultData<*>) {
         is ResultData.Loading -> "Saving..."
         is ResultData.Failed -> "Try again!"
         is ResultData.Success -> {
+            showSnack(this.rootView, "Task updated")
             "Save"
         }
+    }
+}
+
+@BindingAdapter("assigneeName")
+fun TextView.assigneeName(responseState: ResultData<User>) {
+    text = when (responseState) {
+        is ResultData.DoNothing -> ""
+        is ResultData.Loading -> "Searching..."
+        is ResultData.Failed -> "Unable to fetch assignee"
+        is ResultData.Success -> "Created by ${responseState.data?.email}"
     }
 }
 

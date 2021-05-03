@@ -21,8 +21,9 @@ import tech.androidplay.sonali.todo.R
 import tech.androidplay.sonali.todo.databinding.FragmentTaskEditBinding
 import tech.androidplay.sonali.todo.model.Todo
 import tech.androidplay.sonali.todo.utils.*
+import tech.androidplay.sonali.todo.utils.UIHelper.hideKeyboard
 import tech.androidplay.sonali.todo.utils.UIHelper.showSnack
-import tech.androidplay.sonali.todo.utils.UIHelper.showToast
+import tech.androidplay.sonali.todo.view.adapter.setNotificationDateTime
 import tech.androidplay.sonali.todo.viewmodel.EditTaskViewModel
 import javax.inject.Inject
 
@@ -65,14 +66,15 @@ class TaskEditFragment : Fragment(R.layout.fragment_task_edit) {
         super.onViewCreated(view, savedInstanceState)
         setUpScreen()
         setListener()
+        setObservers()
     }
 
 
     private fun setUpScreen() {
         binding.apply {
+            lifecycleOwner = viewLifecycleOwner
             viewmodel = viewModel
             task = viewModel.taskById.value
-            lifecycleOwner = viewLifecycleOwner
         }
         taskIdFromArgs?.let { fetchTask(it) } ?: showSnack(requireView(), "Can't find task Id")
     }
@@ -89,48 +91,35 @@ class TaskEditFragment : Fragment(R.layout.fragment_task_edit) {
                 else viewmodel?.changeTaskStatus(false)
             }
             tvDeleteTask.setOnClickListener { deleteTask(taskIdFromArgs) }
-            btnSaveTask.setOnClickListener { updateTask() }
             tvSelectDate.setOnClickListener { selectNotificationDateTime() }
         }
     }
 
 
-    private fun selectNotificationDateTime() {
-        dateTimePicker.openDateTimePicker(requireContext())
+    private fun setObservers() {
         dateTimePicker.epochFormat.observe(viewLifecycleOwner, { epoch ->
-            epoch?.let { dateTime -> viewModel.initialTaskDate.set("$dateTime") }
+            epoch?.let { dateTime ->
+                binding.tvSelectDate.setNotificationDateTime(dateTime.toString())
+                viewModel.todo.todoDate = dateTime.toString()
+            }
+        })
+        viewModel.updateTaskState.observe(viewLifecycleOwner, { state ->
+            state?.let { if (it is ResultData.Loading) hideKeyboard() }
+        })
+        viewModel.viewState.observe(viewLifecycleOwner, { state ->
+            state?.let { if (it is ResultData.Success) binding.task = it.data as Todo }
         })
     }
 
 
-    private fun fetchTask(taskId: String) {
-        if (isNetworkAvailable()) {
-            viewModel.getTaskByTaskId(taskId)
-            viewModel.viewState.observe(viewLifecycleOwner, { response ->
-                response?.let { if (it is ResultData.Success) binding.task = it.data as Todo }
-            })
-        } else showSnack(requireView(), "Check internet connection.")
+    private fun selectNotificationDateTime() {
+        dateTimePicker.openDateTimePicker(requireContext())
     }
 
 
-    private fun updateTask() {
-        if (isNetworkAvailable()) {
-            viewModel.updateTask()
-            viewModel.updateTaskState.observe(viewLifecycleOwner, { response ->
-                response?.let {
-                    if (it is ResultData.Success) {
-                        requireContext().startAlarmedNotification(
-                            viewModel.initialTaskId.get()!!,
-                            viewModel.initialTaskBody.get()!!,
-                            viewModel.initialTaskDesc.get()!!,
-                            viewModel.initialTaskDate.get()?.toLong()!!,
-                            alarmManager
-                        )
-                        showToast(requireContext(), "Task Saved")
-                    }
-                }
-            })
-        } else showSnack(requireView(), "Check internet connection.")
+    private fun fetchTask(taskId: String) {
+        if (isNetworkAvailable()) viewModel.getTaskByTaskId(taskId)
+        else showSnack(requireView(), "Check internet connection.")
     }
 
 
