@@ -98,6 +98,9 @@
             android:name="taskId"
             app:argType="string"
             app:nullable="true" />
+        <action
+            android:id="@+id/action_taskEditFragment_to_prioritySelectionDialog"
+            app:destination="@id/prioritySelectionDialog" />
     </fragment>
     <fragment
         android:id="@+id/taskCreateFragment"
@@ -132,12 +135,9 @@
         android:name="tech.androidplay.sonali.todo.view.dialog.PrioritySelectionDialog"
         android:label="PrioritySelectionDialog"
         tools:layout="@layout/layout_priority_selection_dialog">
-        <action
-            android:id="@+id/action_prioritySelectionDialog_to_taskCreateFragment"
-            app:destination="@id/taskCreateFragment" />
         <argument
             android:name="priorityId"
-            app:argType="integer"
-            android:defaultValue="-1" />
+            android:defaultValue="-1"
+            app:argType="integer" />
     </dialog>
 </navigation>

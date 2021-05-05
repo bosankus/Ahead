@@ -53,7 +53,7 @@
                     android:background="@drawable/bg_icon_ripple"
                     android:drawablePadding="@dimen/padding_8dp"
                     android:fontFamily="@font/calibre_semi"
-                    android:onClick="@{() -> viewmodel.createTaskModified(viewmodel.todo)}"
+                    android:onClick="@{() -> viewmodel.createTask(viewmodel.todo)}"
                     android:padding="@dimen/padding_5dp"
                     android:text="@string/create_task"
                     android:textColor="@color/dribblePink"

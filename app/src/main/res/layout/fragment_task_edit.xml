@@ -41,7 +41,7 @@
             android:background="@drawable/bg_icon_ripple"
             android:drawablePadding="@dimen/padding_8dp"
             android:fontFamily="@font/calibre_semi"
-            android:onClick="@{() -> viewmodel.updateTask(task)}"
+            android:onClick="@{() -> viewmodel.updateTask(viewmodel.todo)}"
             android:padding="@dimen/padding_5dp"
             android:text="@string/save_task"
             android:textColor="@color/dribblePink"
@@ -89,7 +89,7 @@
                 android:text="@string/upload_img_txt"
                 android:textColor="@color/grey3"
                 android:textSize="@dimen/text_16sp"
-                app:isNoImageTextVisible="@{task.taskImage}"
+                app:isNoImageTextVisible="@{viewmodel.todo.taskImage}"
                 app:layout_constraintEnd_toStartOf="@+id/imgUploadTaskImg"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -115,7 +115,7 @@
                 android:src="@drawable/ic_add_image"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:makeTint="@{viewmodel.initialTaskImage}"
+                app:makeTint="@{viewmodel.todo.taskImage}"
                 app:tint="@color/dribblePink"
                 tools:ignore="ContentDescription" />
 
@@ -243,6 +243,7 @@
             android:layout_margin="@dimen/padding_16dp"
             android:checked="@={viewmodel.todo.isCompleted}"
             android:fontFamily="@font/calibre_semi"
+            android:onClick="@{() -> viewmodel.changeTaskStatus()}"
             android:padding="@dimen/padding_10dp"
             android:textColor="@color/grey2"
             android:textSize="@dimen/text_18sp"

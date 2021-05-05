@@ -40,9 +40,6 @@ class EditTaskViewModel @Inject constructor(
     private var _viewState = MutableLiveData<ResultData<*>>(ResultData.Loading)
     val viewState: LiveData<ResultData<*>> get() = _viewState
 
-    private var _taskById = MutableLiveData<Todo>()
-    val taskById get(): LiveData<Todo> = _taskById
-
     private var _imageUploadState = MutableLiveData<ResultData<*>>(ResultData.DoNothing)
     val imageUploadState: LiveData<ResultData<*>> get() = _imageUploadState
 
@@ -59,29 +56,14 @@ class EditTaskViewModel @Inject constructor(
             registry.notifyChange(this, BR.todo)
         }
 
-    var initialTaskId = ObservableField("")
-    var initialTaskBody = ObservableField("")
-    var initialTaskDesc = ObservableField("")
-    var initialTaskDate = ObservableField("")
-    var initialTaskImage = ObservableField("")
-    var initialTaskStatus = ObservableField(false)
-
 
     fun getTaskByTaskId(taskId: String?) {
         viewModelScope.launch {
             val response = taskId?.let { taskSource.fetchTaskByTaskId(it) }
-            if (response != null) todo = response
-
-            response?.let {
-                _taskById.value = it
-                initialTaskId.set(it.docId)
-                initialTaskBody.set(it.todoBody)
-                initialTaskDesc.set(it.todoDesc.toString())
-                initialTaskDate.set(it.todoDate)
-                initialTaskImage.set(it.taskImage.toString())
-                initialTaskStatus.set(it.isCompleted)
-                _viewState.postValue(ResultData.Success(it))
-            } ?: run { _viewState.postValue(ResultData.Failed("Check your network!")) }
+            if (response != null) {
+                todo = response
+                _viewState.postValue(ResultData.Success(response))
+            } else _viewState.postValue(ResultData.Failed("Check your network!"))
         }
     }
 
@@ -99,6 +81,7 @@ class EditTaskViewModel @Inject constructor(
                         "todoBody" to taskItem.todoBody,
                         "todoDesc" to taskItem.todoDesc,
                         "todoDate" to taskItem.todoDate,
+                        "priority" to taskItem.priority
                     )
                     viewModelScope.launch {
                         val response = taskSource.updateTask(taskItem.docId, taskMap)
@@ -110,9 +93,11 @@ class EditTaskViewModel @Inject constructor(
     }
 
 
-    fun changeTaskStatus(status: Boolean) = viewModelScope.launch {
-        val statusMap = mapOf("isCompleted" to status)
-        initialTaskId.get()?.let { taskSource.markTaskComplete(statusMap, it) }
+    fun changeTaskStatus() = viewModelScope.launch {
+        val map =
+            if (todo.isCompleted) mapOf("isCompleted" to false)
+            else mapOf("isCompleted" to true)
+        todo.docId.let { taskSource.markTaskComplete(map, it) }
     }
 
 
@@ -126,16 +111,10 @@ class EditTaskViewModel @Inject constructor(
 
     fun deleteTask() = viewModelScope.launch {
         _deleteTaskState.postValue(ResultData.Loading)
-        val response =
-            initialTaskId.get()?.let { taskSource.deleteTask(it, initialTaskImage.get()) }
-        response?.let { _deleteTaskState.postValue(ResultData.Success(it)) }
-            ?: run { _deleteTaskState.postValue(ResultData.Failed("Something went wrong!")) }
-    }
-
-
-    private fun checkInputs(): Boolean {
-        return !(initialTaskId.get().isNullOrEmpty() || initialTaskDesc.get().isNullOrEmpty() ||
-                initialTaskDate.get().isNullOrEmpty())
+        val response = todo.docId.let { taskSource.deleteTask(it, todo.taskImage) }
+        if (response is ResultData.Success && response.data == true)
+            _deleteTaskState.postValue(ResultData.Success(true))
+        else _deleteTaskState.postValue(ResultData.Failed("Unable to delete. Please retry."))
     }
 
 
