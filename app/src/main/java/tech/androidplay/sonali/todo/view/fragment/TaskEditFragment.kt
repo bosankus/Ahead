@@ -11,6 +11,8 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
@@ -22,8 +24,10 @@ import tech.androidplay.sonali.todo.databinding.FragmentTaskEditBinding
 import tech.androidplay.sonali.todo.model.Todo
 import tech.androidplay.sonali.todo.utils.*
 import tech.androidplay.sonali.todo.utils.UIHelper.hideKeyboard
+import tech.androidplay.sonali.todo.utils.UIHelper.logMessage
 import tech.androidplay.sonali.todo.utils.UIHelper.showSnack
 import tech.androidplay.sonali.todo.view.adapter.setNotificationDateTime
+import tech.androidplay.sonali.todo.view.adapter.setPriorityText
 import tech.androidplay.sonali.todo.viewmodel.EditTaskViewModel
 import javax.inject.Inject
 
@@ -66,7 +70,28 @@ class TaskEditFragment : Fragment(R.layout.fragment_task_edit) {
         super.onViewCreated(view, savedInstanceState)
         setUpScreen()
         setListener()
+        handleBackStackEntry()
         setObservers()
+    }
+
+    private fun handleBackStackEntry() {
+        val navBackStackEntry = findNavController().getBackStackEntry(R.id.taskEditFragment)
+        val observer = LifecycleEventObserver { _, event ->
+            if (event == Lifecycle.Event.ON_RESUME && navBackStackEntry.savedStateHandle.contains("PRIORITY")) {
+                val result = navBackStackEntry.savedStateHandle.get<Int>("PRIORITY")
+                result?.let {
+                    binding.tvTaskPriority.setPriorityText(it)
+                    viewModel.todo.priority = it
+                }
+            }
+        }
+        navBackStackEntry.lifecycle.addObserver(observer)
+
+        viewLifecycleOwner.lifecycle.addObserver(LifecycleEventObserver { _, event ->
+            if (event == Lifecycle.Event.ON_DESTROY) {
+                navBackStackEntry.lifecycle.removeObserver(observer)
+            }
+        })
     }
 
 
@@ -74,7 +99,6 @@ class TaskEditFragment : Fragment(R.layout.fragment_task_edit) {
         binding.apply {
             lifecycleOwner = viewLifecycleOwner
             viewmodel = viewModel
-            task = viewModel.taskById.value
         }
         taskIdFromArgs?.let { fetchTask(it) } ?: showSnack(requireView(), "Can't find task Id")
     }
@@ -86,12 +110,11 @@ class TaskEditFragment : Fragment(R.layout.fragment_task_edit) {
                 if (isNetworkAvailable()) selectImage()
                 else showSnack(requireView(), "Check Internet!")
             }
-            cbCompleteTask.setOnClickListener {
-                if (binding.cbCompleteTask.isChecked) viewmodel?.changeTaskStatus(true)
-                else viewmodel?.changeTaskStatus(false)
+            tvTaskPriority.setOnClickListener {
+                findNavController().navigate(R.id.action_taskEditFragment_to_prioritySelectionDialog)
             }
             tvDeleteTask.setOnClickListener { deleteTask(taskIdFromArgs) }
-            tvSelectDate.setOnClickListener { selectNotificationDateTime() }
+            tvSelectDate.setOnClickListener { dateTimePicker.openDateTimePicker(requireContext()) }
         }
     }
 
@@ -112,11 +135,6 @@ class TaskEditFragment : Fragment(R.layout.fragment_task_edit) {
     }
 
 
-    private fun selectNotificationDateTime() {
-        dateTimePicker.openDateTimePicker(requireContext())
-    }
-
-
     private fun fetchTask(taskId: String) {
         if (isNetworkAvailable()) viewModel.getTaskByTaskId(taskId)
         else showSnack(requireView(), "Check internet connection.")
@@ -130,7 +148,10 @@ class TaskEditFragment : Fragment(R.layout.fragment_task_edit) {
                 viewModel.uploadImage(compressedImage, taskIdFromArgs!!)
                 viewModel.imageUploadState.observe(viewLifecycleOwner, { response ->
                     response?.let {
-                        if (it is ResultData.Success) viewModel.initialTaskImage.set("${it.data}")
+                        if (it is ResultData.Success) {
+                            logMessage("${it.data}")
+                            viewModel.todo.taskImage = "${it.data}"
+                        }
                     }
                 })
             }

@@ -1,14 +1,13 @@
 package tech.androidplay.sonali.todo.viewmodel
 
-import android.app.Application
 import android.text.Editable
 import android.text.TextWatcher
 import androidx.databinding.Bindable
 import androidx.databinding.Observable
 import androidx.databinding.PropertyChangeRegistry
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.work.*
 import com.google.firebase.auth.FirebaseUser
@@ -18,7 +17,6 @@ import kotlinx.coroutines.launch
 import tech.androidplay.sonali.todo.BR
 import tech.androidplay.sonali.todo.data.repository.TodoRepository
 import tech.androidplay.sonali.todo.model.Todo
-import tech.androidplay.sonali.todo.utils.Constants.LOW_PRIORITY
 import tech.androidplay.sonali.todo.utils.ResultData
 import tech.androidplay.sonali.todo.utils.UIHelper.getCurrentTimestamp
 import tech.androidplay.sonali.todo.utils.UIHelper.isEmailValid
@@ -44,10 +42,9 @@ import javax.inject.Inject
 @ExperimentalCoroutinesApi
 @HiltViewModel
 class TaskCreateViewModel @Inject constructor(
-    application: Application,
     private val taskSource: TodoRepository,
     private val workManager: WorkManager
-) : AndroidViewModel(application), Observable {
+) : ViewModel(), Observable {
 
     private val registry = PropertyChangeRegistry()
 
@@ -62,8 +59,7 @@ class TaskCreateViewModel @Inject constructor(
 
     private val _taskCreationStatus = MutableLiveData<ResultData<*>>(ResultData.DoNothing)
     val taskCreationStatus: LiveData<ResultData<*>> get() = _taskCreationStatus
-
-    val taskPriority = MutableLiveData(LOW_PRIORITY)
+    
 
     @get: Bindable
     var todo = Todo()
@@ -95,12 +91,11 @@ class TaskCreateViewModel @Inject constructor(
     }
 
 
-    fun createTaskModified(item: Todo?) {
+    fun createTask(item: Todo?) {
         viewModelScope.launch {
             _taskCreationStatus.postValue(ResultData.Loading)
             item?.let {
                 it.creator = _currentUser.value?.uid.toString()
-                it.priority = taskPriority.value
                 it.todoCreationTimeStamp = getCurrentTimestamp()
                 when {
                     it.todoBody.isEmpty() ->
@@ -149,11 +144,6 @@ class TaskCreateViewModel @Inject constructor(
         workManager.beginWith(taskImageUploadWorker)
             .then(taskCreationWorker)
             .enqueue()
-
-    }
-
-
-    fun changeTaskPriority(level: String) {
 
     }
 

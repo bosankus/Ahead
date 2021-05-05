@@ -9,8 +9,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
 import androidx.navigation.fragment.findNavController
 import androidx.work.WorkInfo
 import androidx.work.WorkManager
@@ -50,7 +51,8 @@ class TaskCreateFragment : Fragment(R.layout.fragment_task_create) {
 
     private var binding: FragmentTaskCreateBinding? = null
 
-    private val viewModel: TaskCreateViewModel by activityViewModels()
+    private val viewModel: TaskCreateViewModel by viewModels()
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -67,8 +69,29 @@ class TaskCreateFragment : Fragment(R.layout.fragment_task_create) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding?.layoutTaskInput?.tvTaskInput?.requestFocus()
+        handleBackStackEntry()
         setListeners()
         setObservers()
+    }
+
+    private fun handleBackStackEntry() {
+        val navBackStackEntry = findNavController().getBackStackEntry(R.id.taskCreateFragment)
+        val observer = LifecycleEventObserver { _, event ->
+            if (event == Lifecycle.Event.ON_RESUME && navBackStackEntry.savedStateHandle.contains("PRIORITY")) {
+                val result = navBackStackEntry.savedStateHandle.get<Int>("PRIORITY")
+                result?.let {
+                    binding?.layoutCreateTaskFeatures?.addPriority?.setPriorityText(it)
+                    viewModel.todo.priority = it
+                }
+            }
+        }
+        navBackStackEntry.lifecycle.addObserver(observer)
+
+        viewLifecycleOwner.lifecycle.addObserver(LifecycleEventObserver { _, event ->
+            if (event == Lifecycle.Event.ON_DESTROY) {
+                navBackStackEntry.lifecycle.removeObserver(observer)
+            }
+        })
     }
 
 
@@ -101,10 +124,6 @@ class TaskCreateFragment : Fragment(R.layout.fragment_task_create) {
             viewModel.todo.todoDate = epochLong.toString()
             binding?.layoutSetAlarm?.tvSelectDate?.text =
                 epochLong.toString().toLocalDateTime()?.beautifyDateTime()
-        })
-
-        viewModel.taskPriority.observe(viewLifecycleOwner, { priority ->
-            binding?.layoutCreateTaskFeatures?.addPriority?.setPriorityText(priority)
         })
 
         viewModel.taskCreationStatus.observe(viewLifecycleOwner, { status ->
