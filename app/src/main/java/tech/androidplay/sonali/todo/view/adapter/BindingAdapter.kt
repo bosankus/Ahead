@@ -38,15 +38,18 @@ fun TextView.strikeText(status: Boolean) {
     else this.removeStrikeThroughText()
 }
 
+
 @BindingAdapter("show")
 fun View.visibility(status: Boolean) {
     if (status) this.visibility = View.VISIBLE else this.visibility = View.GONE
 }
 
+
 @BindingAdapter("day_name")
 fun TextView.showDayName(date: String?) {
     this.text = if (date.isNullOrEmpty()) "" else date.toLong().convertFromEpochTime()
 }
+
 
 @BindingAdapter("priority_text")
 fun TextView.setPriorityText(priority: Int) {
@@ -57,6 +60,7 @@ fun TextView.setPriorityText(priority: Int) {
         else -> "Add Priority"
     }
 }
+
 
 @BindingAdapter("background_color")
 fun View.backgroundColor(priority: Int) {
@@ -77,17 +81,20 @@ fun View.isProgressVisible(responseState: ResultData<*>) {
     else View.GONE
 }
 
+
 @BindingAdapter("isErrorVisible")
 fun View.isErrorVisible(responseState: ResultData<*>) {
     visibility = if (responseState is ResultData.Failed) View.VISIBLE
     else View.GONE
 }
 
+
 @BindingAdapter("isResponseReceived")
 fun View.isResponseReceived(responseState: ResultData<*>) {
     visibility = if (responseState is ResultData.Success<*>) View.VISIBLE
     else View.GONE
 }
+
 
 @BindingAdapter("setNotificationDateTime")
 fun TextView.setNotificationDateTime(data: String?) {
@@ -110,10 +117,12 @@ fun TextView.setNotificationDateTime(data: String?) {
     }
 }
 
+
 @BindingAdapter("isNoImageTextVisible")
 fun TextView.isNoImageTextVisible(url: String?) {
     visibility = if (url?.isNotEmpty() == true) View.GONE else View.VISIBLE
 }
+
 
 @BindingAdapter("showImage")
 fun ImageView.showImage(url: String?) {
@@ -125,11 +134,13 @@ fun ImageView.showImage(url: String?) {
     } else this.visibility = View.GONE
 }
 
+
 @BindingAdapter("makeTint")
 fun ImageView.makeTint(url: String?) {
     if (url?.isNotEmpty() == true) this.setTint(R.color.white)
     else this.setTint(R.color.dribblePink)
 }
+
 
 @SuppressLint("SetTextI18n")
 @BindingAdapter("isImageUploading")
@@ -143,6 +154,7 @@ fun View.isImageUploading(responseState: ResultData<*>) {
     }
 }
 
+
 @SuppressLint("SetTextI18n")
 @BindingAdapter("isDeleting")
 fun TextView.isDeleting(responseState: ResultData<*>) {
@@ -151,6 +163,7 @@ fun TextView.isDeleting(responseState: ResultData<*>) {
     else if (responseState is ResultData.Failed)
         showSnack(this.rootView, "Deleted")
 }
+
 
 @BindingAdapter("isUpdating")
 fun TextView.isUpdating(responseState: ResultData<*>) {
@@ -165,6 +178,7 @@ fun TextView.isUpdating(responseState: ResultData<*>) {
     }
 }
 
+
 @BindingAdapter("assigneeName")
 fun TextView.assigneeName(responseState: ResultData<User>) {
     text = when (responseState) {
@@ -174,6 +188,7 @@ fun TextView.assigneeName(responseState: ResultData<User>) {
         is ResultData.Success -> "Created by ${responseState.data?.email}"
     }
 }
+
 
 @SuppressLint("SetTextI18n")
 @BindingAdapter("checkBoxText")
@@ -189,6 +204,7 @@ fun AppCompatCheckBox.checkBoxText(status: Boolean) {
 fun EditText.bindTextWatcher(textWatcher: TextWatcher) {
     this.addTextChangedListener(textWatcher)
 }
+
 
 @BindingAdapter("emailAvailabilityStatus", "currentUserEmail", "emailUnderCheck")
 fun TextView.showAvailability(

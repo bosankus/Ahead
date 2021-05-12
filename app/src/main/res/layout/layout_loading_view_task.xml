@@ -11,10 +11,10 @@
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/clTaskLoading"
+        android:id="@+id/fragment_view_task_loading"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/white"
+        android:background="@color/dribblePink"
         app:isProgressVisible="@{loadingState}">
 
         <com.facebook.shimmer.ShimmerFrameLayout
@@ -26,7 +26,7 @@
             app:shimmer_auto_start="true">
 
             <include
-                layout="@layout/layout_shimmer_edit_task"
+                layout="@layout/layout_shimmer_view_task"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
         </com.facebook.shimmer.ShimmerFrameLayout>

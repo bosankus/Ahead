@@ -64,7 +64,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="start"
             android:layout_marginTop="@dimen/padding_16dp"
-            android:background="@drawable/bg_rounded_btn"
+            android:background="@drawable/bg_rounded_10dp"
             android:backgroundTint="@color/dribblePink"
             android:fontFamily="@font/jost"
             android:minHeight="@dimen/padding_0dp"

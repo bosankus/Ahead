@@ -89,4 +89,7 @@
     <string name="low_priority">Low Priority</string>
     <string name="select_task_priority">Select Task Priority</string>
 
+    <!--Task View-->
+    <string name="priority_header">Priority</string>
+
 </resources>

@@ -14,8 +14,7 @@ class ViewPagerViewHolder(private val binding: LayoutAssignedCardListBinding) :
         binding.executePendingBindings()
 
         binding.llAssignedCardItemList.setOnClickListener {
-            val action =
-                TaskFragmentDirections.actionTaskFragmentToTaskEditFragment(todoItem.docId)
+            val action = TaskFragmentDirections.actionTaskFragmentToTaskViewFragment(todoItem.docId)
             it?.findNavController()?.navigate(action)
         }
     }

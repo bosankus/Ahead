@@ -37,7 +37,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/padding_20dp"
-            android:background="@drawable/bg_rounded"
+            android:background="@drawable/bg_rounded_10dp"
             android:fontFamily="@font/calibre"
             android:gravity="top"
             android:hint="@string/create_task_details_hint"

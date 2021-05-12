@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/fragment_task_view_img_back"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_margin="@dimen/padding_16dp"
+        android:background="@drawable/bg_icon_ripple"
+        android:src="@drawable/ic_back"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="@color/white"
+        tools:ignore="ContentDescription" />
+
+    <ImageView
+        android:id="@+id/fragment_task_view_img_comments"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_margin="@dimen/padding_16dp"
+        android:background="@drawable/bg_icon_ripple"
+        android:padding="@dimen/padding_8dp"
+        android:src="@drawable/ic_comment"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="@color/white"
+        tools:ignore="ContentDescription" />
+
+
+    <TextView
+        android:id="@+id/fragment_task_view_tv_creator"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/padding_16dp"
+        android:layout_marginTop="@dimen/text_28sp"
+        android:background="@color/shimmerColor"
+        app:layout_constraintEnd_toStartOf="@+id/fragment_task_view_img_comments"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/fragment_task_view_img_back"
+        tools:ignore="RelativeOverlap" />
+
+    <TextView
+        android:id="@+id/fragment_task_view_tv_body"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/padding_26dp"
+        android:layout_marginStart="@dimen/padding_16dp"
+        android:layout_marginTop="@dimen/padding_18dp"
+        android:background="@color/shimmerColor"
+        app:layout_constraintEnd_toStartOf="@+id/fragment_task_view_img_comments"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/fragment_task_view_tv_creator"
+        tools:ignore="RelativeOverlap" />
+
+    <TextView
+        android:id="@+id/fragment_task_view_tv_desc"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/padding_16dp"
+        android:background="@color/shimmerColor"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/fragment_task_view_tv_body"
+        tools:ignore="RelativeOverlap" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

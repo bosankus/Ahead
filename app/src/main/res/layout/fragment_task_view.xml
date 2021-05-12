@@ -7,7 +7,7 @@
 
         <variable
             name="viewmodel"
-            type="tech.androidplay.sonali.todo.viewmodel.EditTaskViewModel" />
+            type="tech.androidplay.sonali.todo.viewmodel.ViewTaskViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -17,8 +17,8 @@
 
         <ImageView
             android:id="@+id/fragment_task_view_img_back"
-            android:layout_width="@dimen/padding_26dp"
-            android:layout_height="@dimen/padding_26dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
             android:layout_margin="@dimen/padding_16dp"
             android:background="@drawable/bg_icon_ripple"
@@ -30,11 +30,12 @@
 
         <ImageView
             android:id="@+id/fragment_task_view_img_comments"
-            android:layout_width="@dimen/padding_26dp"
-            android:layout_height="@dimen/padding_26dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
             android:layout_margin="@dimen/padding_16dp"
             android:background="@drawable/bg_icon_ripple"
+            android:padding="@dimen/padding_8dp"
             android:src="@drawable/ic_comment"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -48,29 +49,31 @@
             android:layout_marginStart="@dimen/padding_16dp"
             android:layout_marginTop="@dimen/text_28sp"
             android:ellipsize="end"
-            android:fontFamily="@font/calubre_light"
+            android:fontFamily="@font/calibre_light"
             android:minLines="1"
+            android:text="@{viewmodel.creatorDetails}"
             android:textColor="@color/white"
             android:textSize="@dimen/text_16sp"
             app:layout_constraintEnd_toStartOf="@+id/fragment_task_view_img_comments"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/fragment_task_view_img_back"
             tools:ignore="RelativeOverlap" />
 
         <TextView
             android:id="@+id/fragment_task_view_tv_body"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/padding_16dp"
-            android:layout_marginTop="@dimen/padding_16dp"
+            android:layout_margin="@dimen/padding_16dp"
             android:alpha="0.9"
             android:ellipsize="end"
             android:fontFamily="@font/calibre_semi"
             android:maxLines="2"
             android:minLines="1"
+            android:text="@{viewmodel.taskDetails.todoBody}"
             android:textColor="@color/white"
             android:textSize="@dimen/text_28sp"
-            app:layout_constraintEnd_toStartOf="@+id/fragment_task_view_img_comments"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/fragment_task_view_tv_creator"
             tools:ignore="RelativeOverlap" />
@@ -81,8 +84,9 @@
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/padding_16dp"
             android:alpha="0.7"
-            android:fontFamily="@font/calubre_light"
+            android:fontFamily="@font/calibre_light"
             android:minLines="1"
+            android:text="@{viewmodel.taskDetails.todoDesc}"
             android:textColor="@color/white"
             android:textSize="@dimen/text_20sp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -92,5 +96,117 @@
 
         <!--Next layout will contain rest of the task details as per new UI designed-->
 
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/fragment_view_bottom_layout"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="@dimen/padding_35dp"
+            android:background="@drawable/bg_rounded_half_20dp"
+            android:elevation="@dimen/padding_10dp"
+            app:isResponseReceived="@{viewmodel.viewState}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/fragment_task_view_tv_desc">
+
+            <ImageView
+                android:id="@+id/fragment_task_view_img_calendar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/padding_16dp"
+                android:layout_marginTop="@dimen/padding_35dp"
+                android:background="@drawable/bg_icon_ripple"
+                android:src="@drawable/ic_view_calender"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="ContentDescription" />
+
+            <TextView
+                android:id="@+id/fragment_task_view_tv_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/padding_16dp"
+                android:background="@drawable/bg_icon_ripple"
+                android:fontFamily="@font/calibre_light"
+                android:text="Wednesday 22, February"
+                android:textColor="@color/grey2"
+                android:textSize="@dimen/text_14sp"
+                app:layout_constraintStart_toEndOf="@id/fragment_task_view_img_calendar"
+                app:layout_constraintTop_toTopOf="@+id/fragment_task_view_img_calendar"
+                tools:ignore="RelativeOverlap" />
+
+            <TextView
+                android:id="@+id/fragment_task_view_tv_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/padding_16dp"
+                android:fontFamily="@font/calibre_light"
+                android:text="10:55 PM"
+                android:textColor="@color/grey3"
+                android:textSize="@dimen/text_20sp"
+                app:layout_constraintBottom_toBottomOf="@+id/fragment_task_view_img_calendar"
+                app:layout_constraintStart_toEndOf="@id/fragment_task_view_img_calendar"
+                app:layout_constraintTop_toBottomOf="@+id/fragment_task_view_tv_date"
+                tools:ignore="RelativeOverlap" />
+
+            <ImageView
+                android:id="@+id/fragment_task_view_img_priority"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/padding_16dp"
+                android:layout_marginTop="@dimen/padding_35dp"
+                android:background="@drawable/bg_icon_ripple"
+                android:src="@drawable/ic_view_priority"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/fragment_task_view_img_calendar"
+                tools:ignore="ContentDescription" />
+
+            <TextView
+                android:id="@+id/fragment_task_view_tv_priority_header"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/padding_16dp"
+                android:fontFamily="@font/calibre_light"
+                android:text="@string/priority_header"
+                android:textColor="@color/grey2"
+                android:textSize="@dimen/text_14sp"
+                app:layout_constraintStart_toEndOf="@id/fragment_task_view_img_priority"
+                app:layout_constraintTop_toTopOf="@+id/fragment_task_view_img_priority"
+                tools:ignore="RelativeOverlap" />
+
+            <TextView
+                android:id="@+id/fragment_task_view_tv_priority"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/padding_16dp"
+                android:fontFamily="@font/calibre_light"
+                android:textColor="@color/grey3"
+                android:textSize="@dimen/text_20sp"
+                app:layout_constraintBottom_toBottomOf="@+id/fragment_task_view_img_priority"
+                app:layout_constraintStart_toEndOf="@id/fragment_task_view_img_priority"
+                app:layout_constraintTop_toBottomOf="@+id/fragment_task_view_tv_priority_header"
+                app:priority_text="@{viewmodel.taskDetails.priority}"
+                tools:ignore="RelativeOverlap" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <include
+            android:id="@+id/fragment_view_error"
+            layout="@layout/layout_error"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone"
+            app:state="@{viewmodel.viewState}" />
+
+        <include
+            android:id="@+id/layoutLoading"
+            layout="@layout/layout_loading_view_task"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone"
+            app:loadingState="@{viewmodel.viewState}" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
+
 </layout>

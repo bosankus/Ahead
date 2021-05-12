@@ -46,6 +46,8 @@ class TaskEditFragment : Fragment(R.layout.fragment_task_edit) {
 
     private val binding by viewLifecycleLazy { FragmentTaskEditBinding.bind(requireView()) }
 
+    private val viewModel: EditTaskViewModel by viewModels()
+
     private val taskIdFromArgs by lazy {
         TaskEditFragmentArgs.fromBundle(requireArguments()).taskId
     }
@@ -62,7 +64,6 @@ class TaskEditFragment : Fragment(R.layout.fragment_task_edit) {
     @Inject
     lateinit var dateTimePicker: DateTimePicker
 
-    private val viewModel: EditTaskViewModel by viewModels()
     private var pickedImage: Uri? = null
 
 

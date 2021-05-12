@@ -33,7 +33,7 @@ interface FirebaseApi {
 
     // For user related
     suspend fun isUserAvailable(email: String): ResultData<String>
-    suspend fun fetchTaskCreatorDetails(userId: String): ResultData<User>?
+    suspend fun fetchTaskCreatorDetails(userId: String): User?
 
     // For Feedback
     suspend fun provideFeedback(topic: String, description: String): ResultData<String>
