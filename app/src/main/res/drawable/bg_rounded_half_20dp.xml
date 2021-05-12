@@ -3,7 +3,11 @@
     <item android:id="@android:id/background">
         <shape android:shape="rectangle">
             <solid android:color="@color/bg_off_white" />
-            <corners android:radius="10dp" />
+            <corners
+                android:bottomLeftRadius="@dimen/padding_0dp"
+                android:bottomRightRadius="@dimen/padding_0dp"
+                android:topLeftRadius="@dimen/padding_20dp"
+                android:topRightRadius="@dimen/padding_20dp" />
         </shape>
     </item>
 </ripple>

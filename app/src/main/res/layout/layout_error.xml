@@ -5,8 +5,8 @@
     <data>
 
         <variable
-            name="viewmodel"
-            type="tech.androidplay.sonali.todo.viewmodel.EditTaskViewModel" />
+            name="state"
+            type="tech.androidplay.sonali.todo.utils.ResultData" />
     </data>
 
     <LinearLayout
@@ -15,7 +15,7 @@
         android:background="@color/white"
         android:gravity="center"
         android:orientation="vertical"
-        app:isErrorVisible="@{viewmodel.viewState}">
+        app:isErrorVisible="@{state}">
 
         <androidx.appcompat.widget.AppCompatImageView
             android:layout_width="@dimen/padding_90dp"

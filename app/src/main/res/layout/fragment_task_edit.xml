@@ -74,7 +74,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/padding_16dp"
-            android:background="@drawable/bg_rounded"
+            android:background="@drawable/bg_rounded_10dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tvTaskPriority">
@@ -126,7 +126,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/padding_16dp"
-            android:background="@drawable/bg_rounded"
+            android:background="@drawable/bg_rounded_10dp"
             android:drawablePadding="@dimen/padding_5dp"
             android:fontFamily="@font/calibre"
             android:padding="@dimen/padding_16dp"
@@ -146,7 +146,7 @@
             android:layout_marginStart="@dimen/padding_16dp"
             android:layout_marginTop="@dimen/padding_16dp"
             android:layout_marginEnd="@dimen/padding_16dp"
-            android:background="@drawable/bg_rounded"
+            android:background="@drawable/bg_rounded_10dp"
             android:paddingBottom="@dimen/padding_16dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -277,7 +277,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:visibility="gone"
-            app:viewmodel="@{viewmodel}" />
+            app:state="@{viewmodel.viewState}" />
 
         <include
             android:id="@+id/layoutLoading"
@@ -285,7 +285,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:visibility="gone"
-            app:loadingState="@{viewmodel}" />
+            app:loadingState="@{viewmodel.viewState}" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

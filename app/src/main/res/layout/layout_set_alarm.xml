@@ -4,7 +4,7 @@
     android:id="@+id/clAlarm"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/bg_rounded"
+    android:background="@drawable/bg_rounded_10dp"
     android:paddingBottom="@dimen/padding_8dp"
     android:visibility="visible">
 

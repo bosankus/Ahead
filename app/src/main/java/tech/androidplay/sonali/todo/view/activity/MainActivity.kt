@@ -55,7 +55,7 @@ class MainActivity : AppCompatActivity() {
 
 
     // TODO: Find work around
-    @SuppressLint("ResourceAsColor")
+    @SuppressLint("ResourceAsColor", "SourceLockedOrientationActivity")
     private fun setScreenUI() {
         // To support portrait view in API 26
         if (DEVICE_ANDROID_VERSION != ANDROID_OREO) {
@@ -85,6 +85,5 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
-
 }
 

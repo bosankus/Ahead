@@ -8,8 +8,6 @@ apply plugin: "androidx.navigation.safeargs.kotlin"
 
 android {
     compileSdkVersion 30
-    buildToolsVersion "29.0.3"
-
     defaultConfig {
         applicationId "tech.androidplay.sonali.todo"
         minSdkVersion 26
@@ -140,7 +138,7 @@ dependencies {
     // DI - Hilt
     implementation "androidx.hilt:hilt-lifecycle-viewmodel:$hilt_jetpack_version"
     implementation "com.google.dagger:hilt-android:$hilt_version"
-    implementation "androidx.hilt:hilt-work:$hilt_jetpack_version"
+    implementation "androidx.hilt:hilt-work:$hilt_work_version"
     kapt "androidx.hilt:hilt-compiler:$hilt_jetpack_version"
     kapt "com.google.dagger:hilt-android-compiler:$hilt_version"
     kapt "androidx.hilt:hilt-compiler:$hilt_jetpack_version"
@@ -167,3 +165,4 @@ dependencies {
     implementation "com.github.dhaval2404:imagepicker:$picker_version"
 
 }
+apply plugin: 'com.google.gms.google-services'
