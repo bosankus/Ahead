@@ -1,6 +1,6 @@
 # Ahead [![GitHub Issues](https://img.shields.io/github/issues/bosankus/Ahead.svg?style=flat&label=Issues&maxAge=2592000)](https://www.github.com/bosankus/Ahead/issues) [![GitHub Forks](https://img.shields.io/github/forks/bosankus/Ahead.svg?style=social&label=Fork&maxAge=2592000)](https://www.github.com/bosankus/Ahead/fork)
 ## _A minimal way to manage task_
-Ahead is a minimal way to manage task on the go with collaborative manner.
+Ahead is a minimal way to manage task on the go with collaborative manner. [Download App](https://play.google.com/store/apps/details?id=tech.androidplay.sonali.todo)
 
 ## Description
 In the app you can:
