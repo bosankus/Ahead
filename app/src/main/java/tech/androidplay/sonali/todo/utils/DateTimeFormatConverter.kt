@@ -40,10 +40,24 @@ fun String.toLocalDateTime(): LocalDateTime? {
         .toLocalDateTime()
 }
 
+
 fun LocalDateTime.beautifyDateTime(): String {
     val dateTime = DateTimeFormatter.ofPattern("dd MMM yyyy hh:mm a")
     return this.format(dateTime)
 }
+
+
+fun LocalDateTime.showDayDateAndMonth(): String? {
+    val dayDateMonth = DateTimeFormatter.ofPattern("EEEE dd, MMM")
+    return this.format(dayDateMonth)
+}
+
+
+fun LocalDateTime.showTime(): String? {
+    val dateTime = DateTimeFormatter.ofPattern("hh:mm a")
+    return this.format(dateTime)
+}
+
 
 @SuppressLint("SimpleDateFormat")
 fun Long.convertFromEpochTime(): String {

@@ -16,6 +16,7 @@
     <dimen name="padding_50dp">50dp</dimen>
     <dimen name="padding_60dp">60dp</dimen>
     <dimen name="padding_90dp">90dp</dimen>
+    <dimen name="padding_100dp">100dp</dimen>
     <dimen name="padding_120dp">120dp</dimen>
     <dimen name="padding_150dp">150dp</dimen>
     <dimen name="padding_200dp">200dp</dimen>

@@ -91,5 +91,6 @@
 
     <!--Task View-->
     <string name="priority_header">Priority</string>
+    <string name="attachment">Attachment</string>
 
 </resources>

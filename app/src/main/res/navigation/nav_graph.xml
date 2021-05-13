@@ -63,7 +63,11 @@
             app:popExitAnim="@anim/fade_in_animation" />
         <action
             android:id="@+id/action_taskFragment_to_taskViewFragment"
-            app:destination="@id/taskViewFragment" />
+            app:destination="@id/taskViewFragment"
+            app:enterAnim="@anim/fade_out_animation"
+            app:exitAnim="@anim/fade_in_animation"
+            app:popEnterAnim="@anim/fade_out_animation"
+            app:popExitAnim="@anim/fade_in_animation"/>
     </fragment>
     <fragment
         android:id="@+id/splashFragment"
@@ -153,7 +157,11 @@
             app:destination="@id/prioritySelectionDialog" />
         <action
             android:id="@+id/action_taskViewFragment_to_taskFragment"
-            app:destination="@id/taskFragment" />
+            app:destination="@id/taskFragment"
+            app:enterAnim="@anim/fade_out_animation"
+            app:exitAnim="@anim/fade_in_animation"
+            app:popEnterAnim="@anim/fade_out_animation"
+            app:popExitAnim="@anim/fade_in_animation"/>
         <argument android:name="taskId"
             app:argType="string"
             app:nullable="true" />
