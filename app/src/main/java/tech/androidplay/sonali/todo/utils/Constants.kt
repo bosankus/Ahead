@@ -13,6 +13,9 @@ import android.os.Build
 
 object Constants {
 
+    // In-App Update
+    const val APP_UPDATE_REQ_CODE = 111
+
     // For default log tag
     const val QUOTE_API = "https://quotes-inspirational-quotes-motivational-quotes.p.rapidapi.com/"
 
