@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.InternalCoroutinesApi
 import tech.androidplay.sonali.todo.R
 import tech.androidplay.sonali.todo.databinding.ActivityMainBinding
 import tech.androidplay.sonali.todo.utils.AuthManager
@@ -17,6 +18,7 @@ import tech.androidplay.sonali.todo.utils.Constants.ACTION_SHOW_TASK_FRAGMENT
 import tech.androidplay.sonali.todo.utils.Constants.ANDROID_OREO
 import tech.androidplay.sonali.todo.utils.Constants.DEVICE_ANDROID_VERSION
 import tech.androidplay.sonali.todo.utils.UIHelper.showSnack
+import tech.androidplay.sonali.todo.utils.startInAppUpdate
 import tech.androidplay.sonali.todo.viewmodel.AuthViewModel
 import javax.inject.Inject
 
@@ -36,9 +38,18 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        startInAppUpdate(this)
+
         authManager = AuthManager(this)
         navigateToGlobalFragment(intent)
         setScreenUI()
+    }
+
+
+    override fun onResume() {
+        super.onResume()
+        startInAppUpdate(this)
     }
 
     override fun onNewIntent(intent: Intent?) {
