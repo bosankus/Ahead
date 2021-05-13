@@ -20,6 +20,7 @@ The application is made using MVVM pattern, and have used following tech stacks 
 - Coroutines - For asynchronous tasks & network calls.
 - Dagger-Hilt - For dependency Injection
 - Glide - Image loading library
+- Retrofit - To consume [Quote API](https://rapidapi.com/ipworld/api/quotes-inspirational-quotes-motivational-quotes/details)
 
 ## Setup
 
@@ -27,6 +28,7 @@ The application is made using MVVM pattern, and have used following tech stacks 
 - This app runs off a Firebase backend. You will need to generate your firebase backend. To do this, navigate to https://firebase.google.com/ and sign up. Create a project called "Ahead" (or what ever you want to call it).
 
 ## Contribution
-The application is not ready for open source contribution yet. However do fork the repo and raise a pull request if you want to join & make the application better.
+The application is not ready for open source contribution yet. However do fork the repo and raise a pull request if you want to join to make the application better.
 
 Show some ❤️ by starring /forking some of the repositories!
+
