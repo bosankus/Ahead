@@ -62,7 +62,9 @@ class TaskFragment : Fragment(R.layout.fragment_task) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         sharedPreferences.edit().putBoolean(IS_FIRST_TIME, false).apply()
+
         authManager = AuthManager(requireActivity())
 
         setUpScreen()

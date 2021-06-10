@@ -1,5 +1,6 @@
 package tech.androidplay.sonali.todo.utils
 
+import android.app.Activity
 import android.content.IntentSender
 import com.google.android.play.core.appupdate.AppUpdateManagerFactory
 import com.google.android.play.core.install.model.AppUpdateType
@@ -14,23 +15,17 @@ Author: Ankush Bose
 Date: 13,May,2021
  **/
 
-
 @ExperimentalCoroutinesApi
-fun startInAppUpdate(activity: MainActivity) {
+fun startInAppUpdate(activity: Activity) {
 
     val appUpdateManager = AppUpdateManagerFactory.create(activity)
 
-    // Returns an intent object that you use to check for an update.
     val appUpdateInfoTask = appUpdateManager.appUpdateInfo
 
-    // Checks that the platform will allow the specified type of update.
     appUpdateInfoTask.addOnSuccessListener { appUpdateInfo ->
         if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE
-            // This example applies an immediate update. To apply a flexible update
-            // instead, pass in AppUpdateType.FLEXIBLE
             && appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.IMMEDIATE)
         ) {
-            // Request the update.
             try {
                 appUpdateManager.startUpdateFlowForResult(
                     appUpdateInfo,

@@ -32,7 +32,7 @@ class TaskStatusUpdateService : Service() {
     @Inject
     lateinit var notificationManager: NotificationManager
 
-    private val job = SupervisorJob()
+    private val job = Job()
     private val scope = CoroutineScope(Dispatchers.Main + job)
 
     private var taskId = ""

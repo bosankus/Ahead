@@ -25,7 +25,8 @@ object Constants {
     const val QUOTE_WORKER_TAG = "quote_worker"
     const val QUOTE_WORKER_ID = 1001
 
-    const val PLAY_STORE_LINK = "https://androidplay.in/29hQ"
+    const val PLAY_STORE_LINK =
+        "https://play.google.com/store/apps/details?id=tech.androidplay.sonali.todo"
     const val GLOBAL_TAG = "Androidplay"
 
     // For firestore collection - Production
