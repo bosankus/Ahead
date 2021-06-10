@@ -50,11 +50,11 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation 'androidx.appcompat:appcompat:1.2.0'
-    implementation 'androidx.core:core-ktx:1.3.2'
-    implementation "androidx.fragment:fragment-ktx:1.3.3"
+    implementation 'androidx.appcompat:appcompat:1.3.0'
+    implementation 'androidx.core:core-ktx:1.5.0'
+    implementation "androidx.fragment:fragment-ktx:1.3.4"
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
-    implementation "androidx.recyclerview:recyclerview:1.2.0"
+    implementation "androidx.recyclerview:recyclerview:1.2.1"
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation "androidx.multidex:multidex:2.0.1"
     implementation 'com.google.android.play:core-ktx:1.8.1'
@@ -120,13 +120,13 @@ dependencies {
     implementation "io.reactivex.rxjava2:rxandroid:$rxjava_android"
 
     // Firebase
-    implementation 'com.google.firebase:firebase-analytics:18.0.3'
-    implementation 'com.google.firebase:firebase-auth:20.0.4'
+    implementation 'com.google.firebase:firebase-analytics:19.0.0'
+    implementation 'com.google.firebase:firebase-auth:21.0.1'
     implementation 'com.firebaseui:firebase-ui-auth:6.4.0'
     implementation 'com.google.android.gms:play-services-auth:19.0.0'
-    implementation 'com.google.firebase:firebase-firestore-ktx:22.1.2'
+    implementation 'com.google.firebase:firebase-firestore-ktx:23.0.1'
     implementation 'com.firebaseui:firebase-ui-firestore:6.2.0'
-    implementation 'com.google.firebase:firebase-storage-ktx:19.2.2'
+    implementation 'com.google.firebase:firebase-storage-ktx:20.0.0'
     implementation 'com.google.firebase:firebase-messaging'
 
     // Navigation Component
@@ -161,9 +161,11 @@ dependencies {
     // GLIDE - Image Loader
     implementation "com.github.bumptech.glide:glide:$glide_version"
 
-
     // Image Picker
     implementation "com.github.dhaval2404:imagepicker:$picker_version"
+
+    // Synth - CRED
+    implementation 'club.cred.android:synth:1.0.0'
 
 }
 apply plugin: 'com.google.gms.google-services'

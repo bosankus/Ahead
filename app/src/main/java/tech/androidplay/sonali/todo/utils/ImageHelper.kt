@@ -5,8 +5,6 @@ package tech.androidplay.sonali.todo.utils
 import android.content.Context
 import android.content.Intent
 import android.content.res.ColorStateList
-import android.graphics.Bitmap
-import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.widget.ImageView
 import androidx.core.content.ContextCompat
@@ -14,13 +12,11 @@ import androidx.core.net.toUri
 import androidx.core.widget.ImageViewCompat
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.resource.bitmap.CenterInside
-import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
-import com.bumptech.glide.request.target.CustomTarget
-import com.bumptech.glide.request.transition.Transition
+import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.github.dhaval2404.imagepicker.ImagePicker
 import id.zelory.compressor.Compressor
 import id.zelory.compressor.constraint.quality
+import tech.androidplay.sonali.todo.R
 import java.io.File
 
 /**
@@ -48,23 +44,9 @@ fun ImageView.loadImage(url: String?) {
     url.let {
         Glide.with(imagePlaceHolder.context)
             .load(url)
-            .transition(DrawableTransitionOptions.withCrossFade())
-            .transform(CenterInside())
+            .placeholder(R.drawable.ic_image_loading)
+            .transform(CenterCrop())
             .into(imagePlaceHolder)
-
-        /*Glide.with(imagePlaceHolder.context)
-            .asBitmap()
-            .load(url)
-            .centerCrop()
-            .into(object : CustomTarget<Bitmap>() {
-                override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
-                    imagePlaceHolder.setImageBitmap(resource)
-                }
-
-                override fun onLoadCleared(placeholder: Drawable?) {
-                    TODO("Not yet implemented")
-                }
-            })*/
     }
 }
 
@@ -85,8 +67,8 @@ fun ImageView.setTint(colorId: Int) {
 fun Fragment.shareApp() {
     val sharingIntent = Intent(Intent.ACTION_SEND)
     val shareText =
-        "Manage projects and personal tasks on the go. Download now ${Constants.PLAY_STORE_LINK}"
-    val shareSubText = "Think Ahead - a better way"
+        "Manage projects and personal tasks on the go with peers. Get it now ${Constants.PLAY_STORE_LINK}"
+    val shareSubText = "Ahead - choose cleaner way"
     sharingIntent.apply {
         type = "text/plain"
         putExtra(Intent.EXTRA_SUBJECT, shareSubText)

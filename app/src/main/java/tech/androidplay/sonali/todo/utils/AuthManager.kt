@@ -75,6 +75,7 @@ class AuthManager(
     }
 
     fun signOut(): LiveData<ResultData<Boolean>> = liveData { emit(startSignOut()) }
+
     private suspend fun startSignOut(): ResultData<Boolean> = try {
         AuthUI.getInstance().signOut(activity).await()
         ResultData.Success(true)

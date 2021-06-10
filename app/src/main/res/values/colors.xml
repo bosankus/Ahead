@@ -25,4 +25,6 @@
     <color name="top_priority">#e53935</color>
     <color name="medium_priority">#F2994A</color>
     <color name="low_priority">#38ef7d</color>
+
+    <color name="synth_color">#212426</color>
 </resources>

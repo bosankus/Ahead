@@ -24,6 +24,7 @@
         <item name="android:navigationBarColor">@android:color/transparent</item>
         <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="android:windowLightStatusBar">true</item>
+        <item name="neuFlatButtonAppearance">@style/button_platform_appearance</item>
     </style>
 
     <style name="scrollbar_shape_style">
@@ -91,4 +92,15 @@
         <item name="android:background">@drawable/bg_rounded_200dp</item>
         <item name="android:backgroundTint">@color/dribblePink</item>
     </style>
+
+    <style name="button_platform_appearance">
+        <item name="neuButtonStartColor">#FF426bb6</item>
+        <item name="neuButtonEndColor">#FF26458c</item>
+        <item name="neuButtonBorder1StartColor">#FF5679c4</item>
+        <item name="neuButtonBorder1EndColor">#FF1b2d5b</item>
+        <item name="neuButtonBorder2StartColor">#FF366BD1</item>
+        <item name="neuButtonBorder2EndColor">#FF18263E</item>
+        <item name="neuButtonPressedDarkShadowColor">#80000000</item>
+    </style>
+
 </resources>

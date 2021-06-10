@@ -5,9 +5,12 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import androidx.core.net.toUri
+import androidx.hilt.work.HiltWorker
 import androidx.work.CoroutineWorker
 import androidx.work.Data
 import androidx.work.WorkerParameters
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedInject
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import tech.androidplay.sonali.todo.R
 import tech.androidplay.sonali.todo.data.repository.TodoRepository
@@ -33,7 +36,11 @@ import kotlin.coroutines.suspendCoroutine
  */
 
 @ExperimentalCoroutinesApi
-class TaskImageUploadWorker(context: Context, workerParameters: WorkerParameters) :
+@HiltWorker
+class TaskImageUploadWorker @AssistedInject constructor(
+    @Assisted context: Context,
+    @Assisted workerParameters: WorkerParameters
+) :
     CoroutineWorker(context, workerParameters) {
 
     private val context = applicationContext

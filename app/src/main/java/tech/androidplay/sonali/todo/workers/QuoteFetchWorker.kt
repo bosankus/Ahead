@@ -34,7 +34,8 @@ class QuoteFetchWorker @AssistedInject constructor(
     @Assisted workerParameters: WorkerParameters,
     private val preferences: SharedPreferences,
     private val repository: QuoteRepository
-) : CoroutineWorker(context, workerParameters) {
+) :
+    CoroutineWorker(context, workerParameters) {
 
     private val context = applicationContext
 

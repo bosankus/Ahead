@@ -46,9 +46,8 @@ class ViewTaskViewModel @Inject constructor(private val taskSource: TodoReposito
     private fun fetchTaskCreator(creator: String?) {
         viewModelScope.launch {
             val response: User? = creator?.let { taskSource.fetchTaskCreatorDetails(it) }
-            response?.email?.let {
-                _creatorDetails.postValue("Assigned by: $it")
-            } ?: _creatorDetails.postValue("Creator not found!")
+            response?.email?.let { _creatorDetails.postValue("Assigned by: $it") }
+                ?: _creatorDetails.postValue("Assigned by: Anonymous")
             _viewState.postValue(ResultData.Success(null))
         }
 
