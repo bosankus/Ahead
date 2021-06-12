@@ -69,7 +69,6 @@
                 layout="@layout/layout_task_empty"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:visibility="gone"
                 app:allListSize="@{data.taskListSize}"
                 app:assignedListSize="@{data.assignedTaskList.size()}"
                 app:author="@{data.author}"

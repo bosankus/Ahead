@@ -74,7 +74,7 @@
 
     <!--Task Editing-->
     <string name="edit_task">Task Details</string>
-    <string name="no_task_id">No Task ID found</string>
+    <string name="no_task_id">No such Task found, or task is deleted.</string>
     <string name="save_task">Save</string>
     <string name="delete_task">Delete Task</string>
     <string name="show_comments">Show comments</string>

@@ -9,28 +9,38 @@
             type="tech.androidplay.sonali.todo.utils.ResultData" />
     </data>
 
-    <LinearLayout
+    <androidx.constraintlayout.motion.widget.MotionLayout
+        android:id="@+id/constraintLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@android:color/transparent"
         android:gravity="center"
         android:orientation="vertical"
-        app:isErrorVisible="@{state}">
+        app:isErrorVisible="@{state}"
+        app:layoutDescription="@xml/layout_error_xml_constraintlayout_scene">
 
         <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/layout_error_img"
             android:layout_width="@dimen/padding_90dp"
             android:layout_height="@dimen/padding_90dp"
-            android:src="@drawable/ic_bug" />
+            android:src="@drawable/ic_bug"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
+            android:id="@+id/layout_error_txt"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/padding_16dp"
             android:fontFamily="@font/calibre_semi"
             android:text="@string/no_task_id"
             android:textAlignment="center"
-            android:textSize="@dimen/text_20sp" />
+            android:textSize="@dimen/text_20sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/layout_error_img" />
 
-
-    </LinearLayout>
+    </androidx.constraintlayout.motion.widget.MotionLayout>
 </layout>
