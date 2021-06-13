@@ -9,6 +9,23 @@ Author: Ankush Bose
 Date: 13,June,2021
  **/
 
+enum class TrackingEvents {
+    FIRST_VISIT,
+    FIRST_LOGIN,
+    FIRST_TASK,
+    SECOND_VISIT,
+    SECOND_TASK,
+    FEEDBACK_STARTED,
+    FEEDBACK_PROVIDED,
+    APP_SHARED,
+    UNINSTALLED_AFTER_FIRST_TASK,
+    UNINSTALLED_AFTER_SECOND_TASK,
+    UNINSTALLED_BEFORE_TASK_CREATION,
+    UNINSTALLED_WITHIN_7DAYS,
+    UNINSTALLED_WITHIN_15DAYS,
+    UNINSTALLED_WITHIN_30DAYS,
+}
+
 class AppEventTracking @Inject constructor(
     private val context: Context,
     private val appsFlyerLib: AppsFlyerLib,
