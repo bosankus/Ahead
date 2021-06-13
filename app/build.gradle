@@ -1,10 +1,13 @@
-apply plugin: 'com.android.application'
-apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-kapt'
-apply plugin: 'dagger.hilt.android.plugin'
-apply plugin: 'com.google.gms.google-services'
-apply plugin: 'com.google.firebase.crashlytics'
-apply plugin: "androidx.navigation.safeargs.kotlin"
+plugins {
+    id 'com.android.application'
+    id 'kotlin-android'
+    id 'kotlin-kapt'
+    id 'dagger.hilt.android.plugin'
+    id 'com.google.gms.google-services'
+    id 'com.google.firebase.crashlytics'
+    id 'androidx.navigation.safeargs.kotlin'
+    id 'com.google.secrets_gradle_plugin' version '0.6'
+}
 
 android {
     compileSdkVersion 30
@@ -72,6 +75,10 @@ dependencies {
 
     // CanaryLeak
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.7'
+
+    // AppsFlyer
+    implementation 'com.appsflyer:af-android-sdk:6.2.3'
+    implementation 'com.android.installreferrer:installreferrer:2.2'
 
     // Crashlytics
     implementation platform("com.google.firebase:firebase-bom:$firebase_bom_version")

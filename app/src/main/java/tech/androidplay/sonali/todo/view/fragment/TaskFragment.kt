@@ -42,6 +42,9 @@ class TaskFragment : Fragment(R.layout.fragment_task) {
     private var binding: FragmentTaskBinding? = null
 
     @Inject
+    lateinit var appEventTracking: AppEventTracking
+
+    @Inject
     lateinit var dialog: AlertDialog.Builder
 
     @Inject
@@ -141,18 +144,22 @@ class TaskFragment : Fragment(R.layout.fragment_task) {
             when (it.itemId) {
                 R.id.menu_logout -> logOutUser()
                 R.id.menu_share_app -> shareApp()
-                R.id.menu_feedback ->
+                R.id.menu_feedback -> {
+                    appEventTracking.trackFeedbackIntention()
                     findNavController().navigate(R.id.action_taskFragment_to_feedbackFragment)
+                }
             }
             true
         }
     }
+
 
     private fun goToCreateTaskFragment() {
         if (isNetworkAvailable())
             findNavController().navigate(R.id.action_taskFragment_to_taskCreateFragment)
         else showSnack(requireView(), "Check Internet!")
     }
+
 
     @SuppressLint("CommitPrefEdits")
     private fun logOutUser() {

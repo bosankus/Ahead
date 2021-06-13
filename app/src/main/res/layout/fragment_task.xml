@@ -45,7 +45,6 @@
                 layout="@layout/layout_main_task_holder"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginTop="@dimen/padding_16dp"
                 app:data="@{viewmodel}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"

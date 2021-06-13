@@ -10,12 +10,14 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.InternalCoroutinesApi
 import tech.androidplay.sonali.todo.R
 import tech.androidplay.sonali.todo.databinding.FragmentFeedbackBinding
+import tech.androidplay.sonali.todo.utils.AppEventTracking
 import tech.androidplay.sonali.todo.utils.ResultData
 import tech.androidplay.sonali.todo.utils.UIHelper.hideKeyboard
 import tech.androidplay.sonali.todo.utils.UIHelper.showSnack
 import tech.androidplay.sonali.todo.utils.UIHelper.viewAnimation
 import tech.androidplay.sonali.todo.utils.viewLifecycleLazy
 import tech.androidplay.sonali.todo.viewmodel.FeedbackViewModel
+import javax.inject.Inject
 
 /**
  * Created by Androidplay
@@ -29,6 +31,8 @@ import tech.androidplay.sonali.todo.viewmodel.FeedbackViewModel
 @AndroidEntryPoint
 class FeedbackFragment : Fragment(R.layout.fragment_feedback) {
 
+    @Inject
+    lateinit var appEventTracking: AppEventTracking
     private val binding by viewLifecycleLazy { FragmentFeedbackBinding.bind(requireView()) }
     private val viewModel: FeedbackViewModel by viewModels()
     private val animFadeIn by lazy {
@@ -38,10 +42,12 @@ class FeedbackFragment : Fragment(R.layout.fragment_feedback) {
         AnimationUtils.loadAnimation(requireContext(), R.anim.fade_out_animation)
     }
 
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setListener()
     }
+
 
     private fun setListener() {
         binding.btnProvideFeedback.setOnClickListener {
@@ -55,12 +61,14 @@ class FeedbackFragment : Fragment(R.layout.fragment_feedback) {
         }
     }
 
+
     private fun sendFeedback(topic: String, description: String) {
         viewModel.provideFeedback(topic, description).observe(viewLifecycleOwner, { result ->
             result?.let {
                 when (it) {
                     is ResultData.Loading -> showLoading()
                     is ResultData.Success -> {
+                        appEventTracking.trackFeedbackProvidedEvent()
                         binding.etFeedbackTopic.text = null
                         binding.etFeedbackDescription.text = null
                         hideLoading("Feedback submitted successfully")
@@ -71,10 +79,12 @@ class FeedbackFragment : Fragment(R.layout.fragment_feedback) {
         })
     }
 
+
     private fun showLoading() {
         viewAnimation(binding.btnProvideFeedback, animFadeIn, false)
         viewAnimation(binding.lottieFeedbackLoading, null, true)
     }
+
 
     private fun hideLoading(message: String = "") {
         showSnack(requireView(), message)

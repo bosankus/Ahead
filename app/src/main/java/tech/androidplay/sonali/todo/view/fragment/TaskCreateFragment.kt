@@ -23,6 +23,7 @@ import tech.androidplay.sonali.todo.databinding.FragmentTaskCreateBinding
 import tech.androidplay.sonali.todo.model.Todo
 import tech.androidplay.sonali.todo.utils.*
 import tech.androidplay.sonali.todo.utils.UIHelper.showSnack
+import tech.androidplay.sonali.todo.utils.UIHelper.showToast
 import tech.androidplay.sonali.todo.view.adapter.setPriorityText
 import tech.androidplay.sonali.todo.viewmodel.TaskCreateViewModel
 import tech.androidplay.sonali.todo.workers.TaskCreationWorker.Companion.TASK_CREATION_WORKER_TAG
@@ -128,8 +129,8 @@ class TaskCreateFragment : Fragment(R.layout.fragment_task_create) {
 
         viewModel.taskCreationStatus.observe(viewLifecycleOwner, { status ->
             when (status) {
-                is ResultData.Loading -> showSnack(requireView(), "Creating")
-                is ResultData.Failed -> showSnack(requireView(), status.message.toString())
+                is ResultData.Loading -> showToast(requireContext(), "Creating")
+                is ResultData.Failed -> showToast(requireContext(), status.message.toString())
                 is ResultData.Success -> {
                     val taskItem = status.data as Todo
                     taskItem.todoDate?.let {
@@ -141,7 +142,7 @@ class TaskCreateFragment : Fragment(R.layout.fragment_task_create) {
                             alarmManager
                         )
                     }.also {
-                        showSnack(requireView(), "Task Created")
+                        showToast(requireContext(), "Task Created")
                         findNavController().navigateUp()
                     }
                 }

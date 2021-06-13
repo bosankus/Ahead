@@ -9,15 +9,14 @@
             type="tech.androidplay.sonali.todo.utils.ResultData" />
     </data>
 
-    <androidx.constraintlayout.motion.widget.MotionLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@android:color/transparent"
         android:gravity="center"
         android:orientation="vertical"
-        app:isErrorVisible="@{state}"
-        app:layoutDescription="@xml/layout_error_xml_constraintlayout_scene">
+        app:isErrorVisible="@{state}">
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/layout_error_img"
@@ -42,5 +41,5 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/layout_error_img" />
 
-    </androidx.constraintlayout.motion.widget.MotionLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
