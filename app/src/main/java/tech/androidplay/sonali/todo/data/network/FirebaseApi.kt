@@ -36,7 +36,7 @@ interface FirebaseApi {
     suspend fun fetchTaskCreatorDetails(userId: String): User?
 
     // For Feedback
-    suspend fun provideFeedback(topic: String, description: String): ResultData<String>
+    suspend fun provideFeedback(topic: String, description: String): ResultData<Boolean>
 
     // For Firebase storage
     suspend fun uploadImage(uri: Uri, docRefId: String, imgPathRef: StorageReference?):

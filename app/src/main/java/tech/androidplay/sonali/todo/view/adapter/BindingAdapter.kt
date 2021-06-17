@@ -6,6 +6,7 @@ import android.view.View
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.appcompat.widget.AppCompatButton
 import androidx.appcompat.widget.AppCompatCheckBox
 import androidx.core.content.ContextCompat
 import androidx.databinding.BindingAdapter
@@ -145,7 +146,7 @@ fun ImageView.makeTint(url: String?) {
 fun View.isImageUploading(responseState: ResultData<*>) {
     when (responseState) {
         is ResultData.Loading -> showSnack(this, "Uploading...")
-        is ResultData.Success -> showSnack(this, "Great! image uploaded")
+        is ResultData.Success -> showSnack(this, "Great! It's done.")
         is ResultData.Failed -> showSnack(this, "Check your connection")
         is ResultData.DoNothing -> {
         }
@@ -226,3 +227,17 @@ fun TextView.showDayDateMonth(epoch: String?) {
 fun TextView.showTime(epoch: String?) {
     epoch?.let { text = it.toLocalDateTime()?.showTime() }
 }
+
+
+// Feedback Fragment
+@BindingAdapter("isLoading")
+fun AppCompatButton.isLoading(responseState: ResultData<*>) {
+    visibility = if (responseState is ResultData.Loading) View.GONE
+    else View.VISIBLE
+}
+
+@BindingAdapter("showFeedbackUploadError")
+fun View.showFeedbackUploadError(responseState: ResultData<*>) {
+    if (responseState is ResultData.Failed) showSnack(this, responseState.message.toString())
+}
+

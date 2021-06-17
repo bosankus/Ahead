@@ -158,11 +158,12 @@ class TodoRepository : FirebaseApi {
     }
 
 
-    override suspend fun provideFeedback(topic: String, description: String): ResultData<String> =
+    override suspend fun provideFeedback(topic: String, description: String): ResultData<Boolean> =
         try {
             val feedbackDetails = Feedback(userDetails?.email, topic, description)
             val response = feedbackListRef.add(feedbackDetails).await()
-            ResultData.Success(response.id)
+            if (response.id.isNotEmpty()) ResultData.Success(true)
+            else ResultData.Success(false)
         } catch (e: Exception) {
             ResultData.Failed(e.message)
         }
