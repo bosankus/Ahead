@@ -7,12 +7,15 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.InternalCoroutinesApi
 import tech.androidplay.sonali.todo.R
 import tech.androidplay.sonali.todo.databinding.FragmentFeedbackBinding
 import tech.androidplay.sonali.todo.utils.AppEventTracking
+import tech.androidplay.sonali.todo.utils.ResultData
+import tech.androidplay.sonali.todo.utils.UIHelper.hideKeyboard
 import tech.androidplay.sonali.todo.viewmodel.FeedbackViewModel
 import javax.inject.Inject
 
@@ -43,5 +46,21 @@ class FeedbackFragment : Fragment(R.layout.fragment_feedback) {
             lifecycleOwner = viewLifecycleOwner
             viewmodel = viewModel
         }?.root
+    }
+
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        binding?.btnBack?.setOnClickListener { findNavController().navigateUp() }
+
+        viewModel.feedbackLiveResponse.observe(viewLifecycleOwner, { resultData ->
+            if (resultData != ResultData.DoNothing) hideKeyboard()
+            if (resultData is ResultData.Success) {
+                binding?.etFeedbackDescription?.setText("")
+                binding?.etFeedbackTopic?.setText("")
+                findNavController().navigateUp()
+            }
+        })
     }
 }

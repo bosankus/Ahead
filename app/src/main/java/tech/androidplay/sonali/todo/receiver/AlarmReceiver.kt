@@ -48,9 +48,25 @@ class AlarmReceiver : HiltBroadcastReceiver() {
     private var alarmDescription = ""
     private var taskId = ""
 
+    /**
+     * if device reboots then the intent extras will be null at that time, so we cant
+     * start alarm with null values. In that case we need to fetch the data from a permanent source,
+     * i.e SQL DB that means Room DB.
+     * Execution: Start an alarm > save the alarm details in Room DB > when device reboots, again
+     * set the alarm with the details from DB > may be we can use a work manager for that when
+     * device reboots./ or a foreground service.
+     * while setting the alarm always check if the alarm time is ahead of current time.
+     *
+     * As per SOLID - Create a dedicated class for setting alarm/ cancelling alarm
+     */
+
+
     override fun onReceive(context: Context?, intent: Intent?) {
         super.onReceive(context, intent)
-        if (intent?.action == ALARM_INTENT_ACTION && context != null) {
+        if ((intent?.action == ALARM_INTENT_ACTION
+                    || intent?.action == "android.intent.action.BOOT_COMPLETED")
+            && context != null
+        ) {
             alarmText = "${intent.extras?.get(ALARM_TEXT)}"
             alarmDescription = "${intent.extras?.get(ALARM_DESCRIPTION)}"
             taskId = "${intent.extras?.get(ALARM_ID)}"

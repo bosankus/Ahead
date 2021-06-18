@@ -1,8 +1,10 @@
 package tech.androidplay.sonali.todo.view.activity
 
 import android.annotation.SuppressLint
+import android.content.ComponentName
 import android.content.Intent
 import android.content.pm.ActivityInfo
+import android.content.pm.PackageManager
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -12,6 +14,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import tech.androidplay.sonali.todo.R
 import tech.androidplay.sonali.todo.databinding.ActivityMainBinding
+import tech.androidplay.sonali.todo.receiver.AlarmReceiver
 import tech.androidplay.sonali.todo.utils.AuthManager
 import tech.androidplay.sonali.todo.utils.CacheManager
 import tech.androidplay.sonali.todo.utils.Constants.ACTION_SHOW_TASK_FRAGMENT
@@ -46,6 +49,9 @@ class MainActivity : AppCompatActivity() {
         startInAppUpdate(this)
 
         authManager = AuthManager(this)
+
+        managePendingAlarm()
+
         navigateToGlobalFragment(intent)
         setScreenUI()
     }
@@ -78,10 +84,24 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+
+    // Enables the AlarmReceiver
+    private fun managePendingAlarm() {
+        val receiver = ComponentName(applicationContext, AlarmReceiver::class.java)
+
+        applicationContext.packageManager?.setComponentEnabledSetting(
+            receiver,
+            PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
+            PackageManager.DONT_KILL_APP
+        )
+    }
+
+
     private fun navigateToGlobalFragment(intent: Intent) {
         if (intent.action == ACTION_SHOW_TASK_FRAGMENT)
             findNavController(R.id.navHostFragment).navigate(R.id.action_global_taskFragment)
     }
+
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)

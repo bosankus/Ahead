@@ -131,11 +131,7 @@
         tools:layout="@layout/fragment_feedback">
         <action
             android:id="@+id/action_feedbackFragment_to_taskFragment"
-            app:destination="@id/taskFragment"
-            app:enterAnim="@anim/fade_out_animation"
-            app:exitAnim="@anim/fade_in_animation"
-            app:popEnterAnim="@anim/fade_out_animation"
-            app:popExitAnim="@anim/fade_in_animation" />
+            app:destination="@id/taskFragment" />
     </fragment>
     <dialog
         android:id="@+id/prioritySelectionDialog"

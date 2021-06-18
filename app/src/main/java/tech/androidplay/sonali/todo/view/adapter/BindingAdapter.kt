@@ -19,6 +19,7 @@ import tech.androidplay.sonali.todo.utils.Constants.MEDIUM_PRIORITY
 import tech.androidplay.sonali.todo.utils.Constants.TOP_PRIORITY
 import tech.androidplay.sonali.todo.utils.UIHelper.removeStrikeThroughText
 import tech.androidplay.sonali.todo.utils.UIHelper.showSnack
+import tech.androidplay.sonali.todo.utils.UIHelper.showToast
 import tech.androidplay.sonali.todo.utils.UIHelper.strikeThroughText
 
 
@@ -230,14 +231,24 @@ fun TextView.showTime(epoch: String?) {
 
 
 // Feedback Fragment
-@BindingAdapter("isLoading")
-fun AppCompatButton.isLoading(responseState: ResultData<*>) {
-    visibility = if (responseState is ResultData.Loading) View.GONE
-    else View.VISIBLE
+
+@BindingAdapter("isShowing")
+fun AppCompatButton.isShowing(responseState: ResultData<*>) {
+    visibility =
+        if (responseState is ResultData.Loading || responseState is ResultData.Success)
+            View.GONE
+        else View.VISIBLE
 }
 
-@BindingAdapter("showFeedbackUploadError")
-fun View.showFeedbackUploadError(responseState: ResultData<*>) {
-    if (responseState is ResultData.Failed) showSnack(this, responseState.message.toString())
+@BindingAdapter("showFeedbackUploadResponse")
+fun View.showFeedbackUploadResponse(responseState: ResultData<*>) {
+    if (responseState is ResultData.Failed) showToast(
+        this.context,
+        responseState.message.toString()
+    )
+    if (responseState is ResultData.Success) showToast(
+        this.context,
+        "Thanks for the feedback \uD83D\uDC4D"
+    )
 }
 

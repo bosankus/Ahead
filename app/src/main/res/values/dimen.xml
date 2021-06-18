@@ -31,4 +31,5 @@
     <dimen name="text_26sp">26sp</dimen>
     <dimen name="text_28sp">28sp</dimen>
     <dimen name="text_32sp">32sp</dimen>
+    <dimen name="text_60sp">60sp</dimen>
 </resources>
