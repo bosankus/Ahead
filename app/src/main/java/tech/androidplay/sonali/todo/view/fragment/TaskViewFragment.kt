@@ -10,7 +10,6 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import tech.androidplay.sonali.todo.R
 import tech.androidplay.sonali.todo.databinding.FragmentTaskViewBinding
-import tech.androidplay.sonali.todo.model.Todo
 import tech.androidplay.sonali.todo.utils.ResultData
 import tech.androidplay.sonali.todo.utils.UIHelper.showSnack
 import tech.androidplay.sonali.todo.utils.isNetworkAvailable
@@ -31,7 +30,7 @@ class TaskViewFragment : Fragment(R.layout.fragment_task_view) {
     private val viewModel: ViewTaskViewModel by viewModels()
 
     private val animation by lazy {
-        AnimationUtils.loadAnimation(requireContext(), R.anim.slide_in_bottom)
+        AnimationUtils.loadAnimation(requireContext(), R.anim.slide_to_top)
     }
 
     private val taskIdFromArgs by lazy {

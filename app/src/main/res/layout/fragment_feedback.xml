@@ -5,92 +5,107 @@
 
     <data>
 
+        <variable
+            name="viewmodel"
+            type="tech.androidplay.sonali.todo.viewmodel.FeedbackViewModel" />
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/white">
-
-        <TextView
-            android:id="@+id/tvFeedbackHeader"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/padding_16dp"
-            android:fontFamily="@font/calibre"
-            android:text="@string/feedback"
-            android:textColor="@color/grey2"
-            android:textSize="@dimen/text_18sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <View
-            android:id="@+id/tvFeedbackHeaderView"
-            android:layout_width="match_parent"
-            android:layout_height="0.7dp"
-            android:layout_marginTop="@dimen/padding_8dp"
-            android:background="@color/grey1"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvFeedbackHeader" />
-
-        <TextView
-            android:id="@+id/tvFeedbackSubHeader"
-            android:layout_width="@dimen/padding_0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/padding_16dp"
-            android:layout_marginTop="@dimen/padding_26dp"
-            android:layout_marginEnd="@dimen/padding_16dp"
-            android:fontFamily="@font/calibre"
-            android:text="@string/feedback_story"
-            android:textColor="@color/grey2"
-            android:textSize="@dimen/text_18sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvFeedbackHeaderView" />
+        android:background="@color/white"
+        app:showFeedbackUploadResponse="@{viewmodel.feedbackLiveResponse}">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/clFeedbackInput"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/padding_16dp"
-            android:background="@drawable/bg_rounded_10dp"
-            android:paddingBottom="@dimen/padding_16dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvFeedbackSubHeader">
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/btnBack"
+                android:layout_width="@dimen/padding_35dp"
+                android:layout_height="@dimen/padding_35dp"
+                android:layout_margin="@dimen/padding_16dp"
+                android:background="@drawable/bg_icon_ripple"
+                android:src="@drawable/ic_back"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="ContentDescription" />
+
+            <TextView
+                android:id="@+id/tvFeedbackHeader"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/padding_16dp"
+                android:layout_marginTop="@dimen/padding_100dp"
+                android:fontFamily="@font/calibre"
+                android:text="@string/feedback"
+                android:textColor="@color/grey3"
+                android:textSize="@dimen/text_60sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tvFeedbackSubHeader"
+                android:layout_width="@dimen/padding_0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/padding_16dp"
+                android:fontFamily="@font/calibre"
+                android:text="@string/feedback_story"
+                android:textColor="@color/grey2"
+                android:textSize="@dimen/text_18sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvFeedbackHeader" />
 
             <EditText
                 android:id="@+id/etFeedbackTopic"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/padding_16dp"
-                android:autofillHints=""
+                android:background="@drawable/bg_rounded_10dp"
                 android:fontFamily="@font/calibre"
                 android:hint="@string/topic_hint"
+                android:importantForAutofill="no"
                 android:inputType="text"
                 android:maxLines="1"
+                android:padding="@dimen/padding_16dp"
+                android:text="@={viewmodel.feedback.topic}"
                 android:textColor="@color/grey3"
                 android:textSize="@dimen/text_18sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toBottomOf="@+id/tvFeedbackSubHeader" />
 
             <EditText
                 android:id="@+id/etFeedbackDescription"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/padding_16dp"
+                android:background="@drawable/bg_rounded_10dp"
                 android:fontFamily="@font/calibre"
                 android:hint="@string/description_hint"
+                android:importantForAutofill="no"
                 android:inputType="textMultiLine"
+                android:padding="@dimen/padding_16dp"
+                android:text="@={viewmodel.feedback.description}"
                 android:textColor="@color/grey3"
                 android:textSize="@dimen/text_18sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/etFeedbackTopic"
-                tools:ignore="Autofill" />
+                app:layout_constraintTop_toBottomOf="@+id/etFeedbackTopic" />
+
+            <com.airbnb.lottie.LottieAnimationView
+                android:id="@+id/lottieFeedbackLoading"
+                android:layout_width="@dimen/padding_100dp"
+                android:layout_height="@dimen/padding_100dp"
+                android:layout_marginTop="@dimen/padding_16dp"
+                app:isProgressVisible="@{viewmodel.feedbackLiveResponse}"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/etFeedbackDescription"
+                app:lottie_autoPlay="true"
+                app:lottie_fileName="lottie_auth.json"
+                app:lottie_loop="true" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -99,32 +114,18 @@
             style="?android:attr/borderlessButtonStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/padding_18dp"
+            android:layout_gravity="bottom"
+            android:layout_margin="@dimen/padding_16dp"
             android:background="@drawable/bg_rounded_6dp"
             android:backgroundTint="@color/dribblePink"
             android:fontFamily="@font/calibre_semi"
+            android:onClick="@{() -> viewmodel.sendFeedback()}"
             android:text="@string/suggest_the_developers"
             android:textAllCaps="false"
             android:textColor="@color/white"
             android:textSize="@dimen/text_18sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/clFeedbackInput" />
+            app:isShowing="@{viewmodel.feedbackLiveResponse}" />
 
-        <com.airbnb.lottie.LottieAnimationView
-            android:id="@+id/lottieFeedbackLoading"
-            android:layout_width="@dimen/padding_90dp"
-            android:layout_height="@dimen/padding_90dp"
-            android:layout_marginTop="@dimen/padding_16dp"
-            android:visibility="invisible"
-            app:layout_constraintBottom_toBottomOf="@+id/btnProvideFeedback"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/btnProvideFeedback"
-            app:lottie_autoPlay="true"
-            app:lottie_fileName="lottie_auth.json"
-            app:lottie_loop="true" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 </layout>

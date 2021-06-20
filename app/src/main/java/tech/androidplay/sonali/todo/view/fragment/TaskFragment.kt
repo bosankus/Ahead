@@ -4,9 +4,12 @@ import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.PopupMenu
 import androidx.activity.addCallback
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -36,7 +39,10 @@ import javax.inject.Inject
 @SuppressLint("SetTextI18n")
 class TaskFragment : Fragment(R.layout.fragment_task) {
 
-    private val binding by viewLifecycleLazy { FragmentTaskBinding.bind(requireView()) }
+    private var binding: FragmentTaskBinding? = null
+
+    @Inject
+    lateinit var appEventTracking: AppEventTracking
 
     @Inject
     lateinit var dialog: AlertDialog.Builder
@@ -60,6 +66,20 @@ class TaskFragment : Fragment(R.layout.fragment_task) {
 
     private val viewModel: TaskViewModel by viewModels()
 
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_task, container, false)
+        return binding?.apply {
+            viewmodel = viewModel
+            lifecycleOwner = viewLifecycleOwner
+        }?.root
+    }
+
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -77,9 +97,7 @@ class TaskFragment : Fragment(R.layout.fragment_task) {
     }
 
     private fun setUpScreen() {
-        binding.apply {
-            viewmodel = viewModel
-            lifecycleOwner = viewLifecycleOwner
+        binding?.apply {
             layoutTaskHolder.layoutUpcomingTask.rvUpcomingTaskList.adapter = upcomingAdapter
             layoutTaskHolder.layoutOverdueTask.rvOverdueTaskList.adapter = overdueAdapter
             layoutTaskHolder.layoutCompletedTask.rvCompletedTaskList.adapter = completedAdapter
@@ -92,8 +110,8 @@ class TaskFragment : Fragment(R.layout.fragment_task) {
     }
 
     private fun setListeners() {
-        binding.apply {
-            layoutTaskBar.imgMenu.setOnClickListener { showPopupMenu(binding.layoutTaskBar.imgMenu) }
+        binding?.apply {
+            layoutTaskBar.imgMenu.setOnClickListener { showPopupMenu(binding?.layoutTaskBar!!.imgMenu) }
             layoutTaskHolder.layoutNoTask.btnAddTask.setOnClickListener { goToCreateTaskFragment() }
             btnCreateTask.setOnClickListener { goToCreateTaskFragment() }
         }
@@ -126,18 +144,22 @@ class TaskFragment : Fragment(R.layout.fragment_task) {
             when (it.itemId) {
                 R.id.menu_logout -> logOutUser()
                 R.id.menu_share_app -> shareApp()
-                R.id.menu_feedback ->
+                R.id.menu_feedback -> {
+                    appEventTracking.trackFeedbackIntention()
                     findNavController().navigate(R.id.action_taskFragment_to_feedbackFragment)
+                }
             }
             true
         }
     }
+
 
     private fun goToCreateTaskFragment() {
         if (isNetworkAvailable())
             findNavController().navigate(R.id.action_taskFragment_to_taskCreateFragment)
         else showSnack(requireView(), "Check Internet!")
     }
+
 
     @SuppressLint("CommitPrefEdits")
     private fun logOutUser() {
@@ -153,4 +175,9 @@ class TaskFragment : Fragment(R.layout.fragment_task) {
             }.create().show()
     }
 
+
+    override fun onDestroy() {
+        super.onDestroy()
+        binding = null
+    }
 }

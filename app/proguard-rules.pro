@@ -30,3 +30,4 @@
     public static *** v(...);
 }
 -keep public class tech.androidplay.sonali.todo.model.Quote {*;}
+-keep public class com.android.installreferrer.** { *; }

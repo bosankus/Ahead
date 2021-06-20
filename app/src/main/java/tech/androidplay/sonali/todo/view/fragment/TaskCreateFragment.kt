@@ -23,6 +23,7 @@ import tech.androidplay.sonali.todo.databinding.FragmentTaskCreateBinding
 import tech.androidplay.sonali.todo.model.Todo
 import tech.androidplay.sonali.todo.utils.*
 import tech.androidplay.sonali.todo.utils.UIHelper.showSnack
+import tech.androidplay.sonali.todo.utils.UIHelper.showToast
 import tech.androidplay.sonali.todo.view.adapter.setPriorityText
 import tech.androidplay.sonali.todo.viewmodel.TaskCreateViewModel
 import tech.androidplay.sonali.todo.workers.TaskCreationWorker.Companion.TASK_CREATION_WORKER_TAG
@@ -128,22 +129,13 @@ class TaskCreateFragment : Fragment(R.layout.fragment_task_create) {
 
         viewModel.taskCreationStatus.observe(viewLifecycleOwner, { status ->
             when (status) {
-                is ResultData.Loading -> showSnack(requireView(), "Creating")
-                is ResultData.Failed -> showSnack(requireView(), status.message.toString())
+                is ResultData.Loading -> showToast(requireContext(), "Creating")
+                is ResultData.Failed -> showToast(requireContext(), status.message.toString())
                 is ResultData.Success -> {
                     val taskItem = status.data as Todo
-                    taskItem.todoDate?.let {
-                        requireContext().startAlarmedNotification(
-                            taskItem.docId,
-                            taskItem.todoBody,
-                            taskItem.todoDesc.toString(),
-                            it.toLong(),
-                            alarmManager
-                        )
-                    }.also {
-                        showSnack(requireView(), "Task Created")
-                        findNavController().navigateUp()
-                    }
+                    setTaskAlarm(taskItem)
+                    showToast(requireContext(), "Task Created")
+                    findNavController().navigateUp()
                 }
                 else -> {
                 }
@@ -179,6 +171,17 @@ class TaskCreateFragment : Fragment(R.layout.fragment_task_create) {
                     }
                 }
             })
+    }
+
+
+    private fun setTaskAlarm(todo: Todo) {
+        requireContext().startAlarmedNotification(
+            todo.docId,
+            todo.todoBody,
+            todo.todoDesc.toString(),
+            todo.todoDate?.toLong()!!,
+            alarmManager
+        )
     }
 
 

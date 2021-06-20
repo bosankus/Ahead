@@ -17,6 +17,7 @@ import com.github.dhaval2404.imagepicker.ImagePicker
 import id.zelory.compressor.Compressor
 import id.zelory.compressor.constraint.quality
 import tech.androidplay.sonali.todo.R
+import tech.androidplay.sonali.todo.utils.Constants.PLAY_STORE_LINK
 import java.io.File
 
 /**
@@ -28,7 +29,6 @@ import java.io.File
 
 /** Holds all the image related extension methods to [selectImage], [loadImage], [compressImage]
  * & [setTint] of an image.
- * Additionally holds [shareApp] method for global share
  * */
 
 fun Fragment.selectImage() {
@@ -62,17 +62,4 @@ fun ImageView.setTint(colorId: Int) {
             ContextCompat.getColor(this.context, colorId)
         )
     )
-}
-
-fun Fragment.shareApp() {
-    val sharingIntent = Intent(Intent.ACTION_SEND)
-    val shareText =
-        "Manage projects and personal tasks on the go with peers. Get it now ${Constants.PLAY_STORE_LINK}"
-    val shareSubText = "Ahead - choose cleaner way"
-    sharingIntent.apply {
-        type = "text/plain"
-        putExtra(Intent.EXTRA_SUBJECT, shareSubText)
-        putExtra(Intent.EXTRA_TEXT, shareText)
-        startActivity(Intent.createChooser(this, "Share via"))
-    }
 }

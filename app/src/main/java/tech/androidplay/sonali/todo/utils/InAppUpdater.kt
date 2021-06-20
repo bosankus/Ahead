@@ -15,6 +15,12 @@ Author: Ankush Bose
 Date: 13,May,2021
  **/
 
+/**
+ * [startInAppUpdate] method on this object is used to make IMMEDIATE app update when a higher
+ * version is automatically detected in the play store.
+ * */
+
+
 @ExperimentalCoroutinesApi
 fun startInAppUpdate(activity: Activity) {
 

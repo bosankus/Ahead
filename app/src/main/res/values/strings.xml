@@ -23,10 +23,10 @@
     <string name="add_alarm_time">Add alarm time</string>
     <string name="logout">Logout</string>
     <string name="share">Share</string>
-    <string name="feedback">Provide Feedback</string>
+    <string name="feedback">Feedback</string>
     <string name="topic_hint">What change you want to see?</string>
     <string name="description_hint">Describe to make us understand</string>
-    <string name="feedback_story">We are on a journey to think<font color="#3068DE"> ahead</font> to make your experience better. Please share with us how you felt while using the app.</string>
+    <string name="feedback_story">We are on a journey to think<font color="#3068DE"> ahead</font> &amp; make your experience better. Please share with us how you felt while using the app.</string>
     <string name="suggest_the_developers">Suggest</string>
     <string name="past">Overdue</string>
     <string name="upload_img_txt">Upload your task image</string>
@@ -74,7 +74,7 @@
 
     <!--Task Editing-->
     <string name="edit_task">Task Details</string>
-    <string name="no_task_id">No Task ID found</string>
+    <string name="no_task_id">No such Task found, or task is deleted.</string>
     <string name="save_task">Save</string>
     <string name="delete_task">Delete Task</string>
     <string name="show_comments">Show comments</string>

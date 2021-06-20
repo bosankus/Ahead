@@ -25,8 +25,7 @@ object Constants {
     const val QUOTE_WORKER_TAG = "quote_worker"
     const val QUOTE_WORKER_ID = 1001
 
-    const val PLAY_STORE_LINK =
-        "https://play.google.com/store/apps/details?id=tech.androidplay.sonali.todo"
+    const val PLAY_STORE_LINK = "https://app.androidplay.in/ahead/android"
     const val GLOBAL_TAG = "Androidplay"
 
     // For firestore collection - Production
@@ -62,7 +61,7 @@ object Constants {
     // For notification channel
     const val NOTIFICATION_CHANNEL_ID = "think_channel"
     const val NOTIFICATION_CHANNEL_NAME = "think"
-    const val NOTIFICATION_ID = "NOTIFICATION_ID"
+    const val NOTIFICATION_ID = "AHEAD"
 
     // For Android version check
     val DEVICE_ANDROID_VERSION = Build.VERSION.SDK_INT

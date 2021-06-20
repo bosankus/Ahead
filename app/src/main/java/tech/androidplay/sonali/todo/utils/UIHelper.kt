@@ -40,12 +40,6 @@ object UIHelper {
         Snackbar.make(view, message, Snackbar.LENGTH_SHORT).show()
     }
 
-    fun viewAnimation(view: View, animation: Animation?, visibility: Boolean) {
-        if (animation != null) view.startAnimation(animation)
-        if (visibility) view.visibility = View.VISIBLE
-        else view.visibility = View.INVISIBLE
-    }
-
     fun Activity.hideKeyboard() {
         val inputMethodManager: InputMethodManager =
             this.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager

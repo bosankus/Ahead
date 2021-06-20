@@ -6,6 +6,7 @@ import android.view.View
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.appcompat.widget.AppCompatButton
 import androidx.appcompat.widget.AppCompatCheckBox
 import androidx.core.content.ContextCompat
 import androidx.databinding.BindingAdapter
@@ -18,6 +19,7 @@ import tech.androidplay.sonali.todo.utils.Constants.MEDIUM_PRIORITY
 import tech.androidplay.sonali.todo.utils.Constants.TOP_PRIORITY
 import tech.androidplay.sonali.todo.utils.UIHelper.removeStrikeThroughText
 import tech.androidplay.sonali.todo.utils.UIHelper.showSnack
+import tech.androidplay.sonali.todo.utils.UIHelper.showToast
 import tech.androidplay.sonali.todo.utils.UIHelper.strikeThroughText
 
 
@@ -145,7 +147,7 @@ fun ImageView.makeTint(url: String?) {
 fun View.isImageUploading(responseState: ResultData<*>) {
     when (responseState) {
         is ResultData.Loading -> showSnack(this, "Uploading...")
-        is ResultData.Success -> showSnack(this, "Great! image uploaded")
+        is ResultData.Success -> showSnack(this, "Great! It's done.")
         is ResultData.Failed -> showSnack(this, "Check your connection")
         is ResultData.DoNothing -> {
         }
@@ -226,3 +228,27 @@ fun TextView.showDayDateMonth(epoch: String?) {
 fun TextView.showTime(epoch: String?) {
     epoch?.let { text = it.toLocalDateTime()?.showTime() }
 }
+
+
+// Feedback Fragment
+
+@BindingAdapter("isShowing")
+fun AppCompatButton.isShowing(responseState: ResultData<*>) {
+    visibility =
+        if (responseState is ResultData.Loading || responseState is ResultData.Success)
+            View.GONE
+        else View.VISIBLE
+}
+
+@BindingAdapter("showFeedbackUploadResponse")
+fun View.showFeedbackUploadResponse(responseState: ResultData<*>) {
+    if (responseState is ResultData.Failed) showToast(
+        this.context,
+        responseState.message.toString()
+    )
+    if (responseState is ResultData.Success) showToast(
+        this.context,
+        "Thanks for the feedback \uD83D\uDC4D"
+    )
+}
+
