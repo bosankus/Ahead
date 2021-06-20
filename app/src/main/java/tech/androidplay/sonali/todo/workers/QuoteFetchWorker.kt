@@ -14,8 +14,8 @@ import tech.androidplay.sonali.todo.data.repository.QuoteRepository
 import tech.androidplay.sonali.todo.utils.Constants.QUOTE
 import tech.androidplay.sonali.todo.utils.Constants.QUOTE_AUTHOR
 import tech.androidplay.sonali.todo.utils.Constants.QUOTE_WORKER_ID
-import tech.androidplay.sonali.todo.utils.Notifier.dismissNotification
-import tech.androidplay.sonali.todo.utils.Notifier.show
+import tech.androidplay.sonali.todo.utils.Notify
+import javax.inject.Inject
 
 /**
  * Created by Androidplay
@@ -37,6 +37,8 @@ class QuoteFetchWorker @AssistedInject constructor(
 ) :
     CoroutineWorker(context, workerParameters) {
 
+    @Inject
+    lateinit var notify: Notify
     private val context = applicationContext
 
     override suspend fun doWork(): Result = withContext(Dispatchers.IO) {
@@ -48,7 +50,6 @@ class QuoteFetchWorker @AssistedInject constructor(
                 putString(QUOTE_AUTHOR, "${response.author}")
                 apply()
             }
-            dismissNotification(context, QUOTE_WORKER_ID)
             Result.success()
         } else {
             showErrorNotification()
@@ -58,18 +59,18 @@ class QuoteFetchWorker @AssistedInject constructor(
     }
 
     private fun showNotification() {
-        show(context) {
-            contentTitle = "Syncing..."
-            contentText = "Managing your tasks on your behalf"
+        notify.showNotification(context) {
             notificationId = QUOTE_WORKER_ID
+            notificationTitle = "Syncing..."
+            notificationBody = "Managing your tasks on your behalf"
         }
     }
 
     private fun showErrorNotification() {
-        show(context) {
-            contentTitle = "Syncing Failed"
-            contentText = "Ehh! something stopped me."
+        notify.showNotification(context) {
             notificationId = QUOTE_WORKER_ID
+            notificationTitle = "Syncing Failed"
+            notificationBody = "Ehh! something stopped the process."
         }
     }
 }

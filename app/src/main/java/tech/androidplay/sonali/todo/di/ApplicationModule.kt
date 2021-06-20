@@ -27,6 +27,7 @@ import tech.androidplay.sonali.todo.utils.CacheManager
 import tech.androidplay.sonali.todo.utils.Constants.ACTION_SHOW_TASK_FRAGMENT
 import tech.androidplay.sonali.todo.utils.Constants.NOTIFICATION_CHANNEL_ID
 import tech.androidplay.sonali.todo.utils.Constants.SHARED_PREFERENCE_NAME
+import tech.androidplay.sonali.todo.utils.Notify
 import tech.androidplay.sonali.todo.view.activity.MainActivity
 import java.util.*
 import javax.inject.Singleton
@@ -118,6 +119,12 @@ class ApplicationModule {
     @Provides
     fun providesNotificationManager(@ApplicationContext context: Context) =
         context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+
+    @Provides
+    fun providesNotify(
+        notificationManager: NotificationManager,
+        notificationBuilder: NotificationCompat.Builder
+    ) = Notify(notificationManager, notificationBuilder)
 
     @Singleton
     @Provides

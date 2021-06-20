@@ -133,18 +133,9 @@ class TaskCreateFragment : Fragment(R.layout.fragment_task_create) {
                 is ResultData.Failed -> showToast(requireContext(), status.message.toString())
                 is ResultData.Success -> {
                     val taskItem = status.data as Todo
-                    taskItem.todoDate?.let {
-                        requireContext().startAlarmedNotification(
-                            taskItem.docId,
-                            taskItem.todoBody,
-                            taskItem.todoDesc.toString(),
-                            it.toLong(),
-                            alarmManager
-                        )
-                    }.also {
-                        showToast(requireContext(), "Task Created")
-                        findNavController().navigateUp()
-                    }
+                    setTaskAlarm(taskItem)
+                    showToast(requireContext(), "Task Created")
+                    findNavController().navigateUp()
                 }
                 else -> {
                 }
@@ -180,6 +171,17 @@ class TaskCreateFragment : Fragment(R.layout.fragment_task_create) {
                     }
                 }
             })
+    }
+
+
+    private fun setTaskAlarm(todo: Todo) {
+        requireContext().startAlarmedNotification(
+            todo.docId,
+            todo.todoBody,
+            todo.todoDesc.toString(),
+            todo.todoDate?.toLong()!!,
+            alarmManager
+        )
     }
 
 

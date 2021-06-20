@@ -62,7 +62,7 @@ class TodoRepository : FirebaseApi {
 
     override suspend fun saveUser(user: FirebaseUser) {
         val deviceToken = messaging.token.await()
-        val userDetails = User(user.uid, user.email, deviceToken, user.displayName)
+        val userDetails = User(user.uid, user.email, user.displayName, deviceToken)
         userListRef.document(user.uid).set(userDetails, SetOptions.merge()).await()
     }
 

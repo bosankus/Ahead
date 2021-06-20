@@ -61,7 +61,7 @@ object Constants {
     // For notification channel
     const val NOTIFICATION_CHANNEL_ID = "think_channel"
     const val NOTIFICATION_CHANNEL_NAME = "think"
-    const val NOTIFICATION_ID = "NOTIFICATION_ID"
+    const val NOTIFICATION_ID = "AHEAD"
 
     // For Android version check
     val DEVICE_ANDROID_VERSION = Build.VERSION.SDK_INT

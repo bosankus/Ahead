@@ -1,13 +1,12 @@
 package tech.androidplay.sonali.todo.service
 
 import android.annotation.SuppressLint
-import android.app.NotificationManager
-import androidx.core.app.NotificationCompat
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import tech.androidplay.sonali.todo.utils.Notifier.show
+import tech.androidplay.sonali.todo.utils.Notify
+import tech.androidplay.sonali.todo.utils.UIHelper.logMessage
 import javax.inject.Inject
 
 /**
@@ -27,10 +26,7 @@ import javax.inject.Inject
 class FirebaseNotificationService : FirebaseMessagingService() {
 
     @Inject
-    lateinit var notificationManager: NotificationManager
-
-    @Inject
-    lateinit var baseNotificationBuilder: NotificationCompat.Builder
+    lateinit var notify: Notify
 
     override fun onMessageReceived(message: RemoteMessage) {
         super.onMessageReceived(message)
@@ -40,11 +36,12 @@ class FirebaseNotificationService : FirebaseMessagingService() {
             val body = checkNotNull(it.data["message"].toString())
             val docId = checkNotNull(it.data["document"].toString())
 
-            // sending the notification
-            show(applicationContext) {
+            logMessage(message.data.toString())
+
+            notify.showNotification(applicationContext) {
                 notificationId = docId.hashCode()
-                contentTitle = title
-                contentText = body
+                notificationTitle = title
+                notificationBody = body
             }
         }
     }

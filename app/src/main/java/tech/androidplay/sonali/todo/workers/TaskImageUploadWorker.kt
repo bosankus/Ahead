@@ -14,13 +14,12 @@ import dagger.assisted.AssistedInject
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import tech.androidplay.sonali.todo.R
 import tech.androidplay.sonali.todo.data.repository.TodoRepository
-import tech.androidplay.sonali.todo.utils.Notifier.dismissNotification
-import tech.androidplay.sonali.todo.utils.Notifier.progressable
-import tech.androidplay.sonali.todo.utils.Notifier.show
+import tech.androidplay.sonali.todo.utils.Notify
 import tech.androidplay.sonali.todo.utils.ResultData
 import tech.androidplay.sonali.todo.view.activity.MainActivity
 import tech.androidplay.sonali.todo.workers.TaskCreationWorker.Companion.TASK_BODY
 import tech.androidplay.sonali.todo.workers.TaskCreationWorker.Companion.TASK_IMAGE_URI
+import javax.inject.Inject
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
@@ -43,6 +42,8 @@ class TaskImageUploadWorker @AssistedInject constructor(
 ) :
     CoroutineWorker(context, workerParameters) {
 
+    @Inject
+    lateinit var notify: Notify
     private val context = applicationContext
     private val repository = TodoRepository()
     private val taskBody: String = checkNotNull(inputData.getString(TASK_BODY))
@@ -59,9 +60,7 @@ class TaskImageUploadWorker @AssistedInject constructor(
         repository.uploadImageFromWorker(fileUri) { result, percentage ->
             when (result) {
                 is ResultData.Loading -> {
-                    showProgressNotification(
-                        context.getString(R.string.task_progress_uploading), percentage
-                    )
+                    showProgressNotification(percentage)
                 }
                 is ResultData.Success -> {
                     showUploadFinishedNotification(result.data)
@@ -83,19 +82,14 @@ class TaskImageUploadWorker @AssistedInject constructor(
     }
 
 
-    private fun showProgressNotification(caption: String, percent: Int) {
-        progressable(context, 100, percent) {
-            contentTitle = taskBody
-            contentText = caption
-            smallIcon = R.drawable.ic_notification
+    private fun showProgressNotification(percent: Int) {
+        notify.showProgressNotification(context, 100, percent) {
             notificationId = taskBody.hashCode()
         }
     }
 
 
     private fun showUploadFinishedNotification(downloadUri: Uri?) {
-        dismissNotification(context, taskBody.hashCode())
-
         if (downloadUri != null) return
 
         val caption = context.getString(R.string.task_image_upload_failed)
@@ -108,10 +102,10 @@ class TaskImageUploadWorker @AssistedInject constructor(
             PendingIntent.FLAG_UPDATE_CURRENT
         )
 
-        show(context) {
-            contentTitle = taskBody
-            contentText = caption
+        notify.showNotification(context) {
             notificationId = taskBody.hashCode()
+            notificationTitle = taskBody
+            notificationBody = caption
             this.pendingIntent = pendingIntent
         }
     }

@@ -14,12 +14,12 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.withContext
 import tech.androidplay.sonali.todo.R
 import tech.androidplay.sonali.todo.data.repository.TodoRepository
-import tech.androidplay.sonali.todo.utils.Notifier.dismissNotification
-import tech.androidplay.sonali.todo.utils.Notifier.show
+import tech.androidplay.sonali.todo.utils.Notify
 import tech.androidplay.sonali.todo.utils.UIHelper.getCurrentTimestamp
 import tech.androidplay.sonali.todo.utils.startAlarmedNotification
 import tech.androidplay.sonali.todo.view.activity.MainActivity
 import tech.androidplay.sonali.todo.workers.TaskImageUploadWorker.Companion.UPLOADED_IMAGE_URI
+import javax.inject.Inject
 
 /**
  * Created by Androidplay
@@ -41,6 +41,8 @@ class TaskCreationWorker @AssistedInject constructor(
 ) :
     CoroutineWorker(context, workerParameters) {
 
+    @Inject
+    lateinit var notify: Notify
     private val context = applicationContext
     private val repository = TodoRepository()
     private val currentUser = repository.userDetails
@@ -86,17 +88,15 @@ class TaskCreationWorker @AssistedInject constructor(
     }
 
     private fun showNotification(title: String, caption: String, intent: Intent) {
-        dismissNotification(context, title.hashCode())
-
         val pendingIntent = PendingIntent.getActivity(
             context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT
         )
 
-        show(context) {
-            contentTitle = title
-            contentText = caption
-            this.pendingIntent = pendingIntent
+        notify.showNotification(context) {
             notificationId = title.hashCode()
+            notificationTitle = title
+            notificationBody = caption
+            this.pendingIntent = pendingIntent
         }
     }
 
