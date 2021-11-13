@@ -1,5 +1,6 @@
 package tech.androidplay.sonali.todo.workers
 
+import android.annotation.*
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
@@ -99,7 +100,7 @@ class TaskImageUploadWorker @AssistedInject constructor(
 
         val pendingIntent = PendingIntent.getActivity(
             applicationContext, 0 /* requestCode */, intent,
-            PendingIntent.FLAG_UPDATE_CURRENT
+            PendingIntent.FLAG_IMMUTABLE
         )
 
         notify.showNotification(context) {

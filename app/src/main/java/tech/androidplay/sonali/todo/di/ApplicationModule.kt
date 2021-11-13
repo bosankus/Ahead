@@ -104,7 +104,7 @@ class ApplicationModule {
         Intent(context, MainActivity::class.java).also {
             it.action = ACTION_SHOW_TASK_FRAGMENT
         },
-        PendingIntent.FLAG_UPDATE_CURRENT
+        PendingIntent.FLAG_IMMUTABLE
     )
 
     @Provides

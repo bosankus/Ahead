@@ -76,4 +76,5 @@ class TaskViewFragment : Fragment(R.layout.fragment_task_view) {
         if (isNetworkAvailable()) viewModel.getTaskByTaskId(taskId)
         else showSnack(requireView(), "Check internet connection.")
     }
+
 }

@@ -145,8 +145,7 @@ class TaskEditFragment : Fragment(R.layout.fragment_task_edit) {
     private fun changeImage(pickedImage: Uri?) {
         if (isNetworkAvailable()) {
             lifecycleScope.launch {
-                val compressedImage = pickedImage?.compressImage(requireContext())
-                viewModel.uploadImage(compressedImage, taskIdFromArgs!!)
+                viewModel.uploadImage(pickedImage, taskIdFromArgs!!)
                 viewModel.imageUploadState.observe(viewLifecycleOwner, { response ->
                     response?.let {
                         if (it is ResultData.Success) {

@@ -176,8 +176,8 @@ class TaskFragment : Fragment(R.layout.fragment_task) {
     }
 
 
-    override fun onDestroy() {
-        super.onDestroy()
+    override fun onDestroyView() {
         binding = null
+        super.onDestroyView()
     }
 }
