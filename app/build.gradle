@@ -10,11 +10,11 @@ plugins {
 }
 
 android {
-    compileSdkVersion 30
+    compileSdkVersion 31
     defaultConfig {
         applicationId "tech.androidplay.sonali.todo"
         minSdkVersion 26
-        targetSdkVersion 30
+        targetSdkVersion 31
         versionCode 14
         versionName "1.4"
         buildConfigField "String", "QUOTE_API_KEY", "\"API-KEY\""
@@ -52,26 +52,25 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation 'androidx.appcompat:appcompat:1.3.0'
-    implementation 'androidx.core:core-ktx:1.5.0'
-    implementation "androidx.fragment:fragment-ktx:1.3.4"
-    implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
+    implementation 'androidx.appcompat:appcompat:1.3.1'
+    implementation 'androidx.core:core-ktx:1.7.0'
+    implementation "androidx.fragment:fragment-ktx:1.3.6"
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.1'
     implementation "androidx.recyclerview:recyclerview:1.2.1"
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation "androidx.multidex:multidex:2.0.1"
     implementation 'com.google.android.play:core-ktx:1.8.1'
 
-    /*// Test
-    testImplementation 'junit:junit:4.13.1'
+    // Test
+    testImplementation 'junit:junit:4.13.2'
     testImplementation "com.google.truth:truth:1.1"
-    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.0"
     testImplementation "android.arch.core:core-testing:1.1.1"
     androidTestImplementation "androidx.arch.core:core-testing:2.1.0"
-    androidTestImplementation 'org.jetbrains.kotlinx:kotlinx-coroutines-test:1.4.1'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.2'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
-    androidTestImplementation "com.google.truth:truth:1.1"*/
+    androidTestImplementation 'org.jetbrains.kotlinx:kotlinx-coroutines-test:1.5.0'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.3'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
+    androidTestImplementation "com.google.truth:truth:1.1"
 
     // CanaryLeak
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.7'
@@ -80,16 +79,8 @@ dependencies {
     implementation 'com.appsflyer:af-android-sdk:6.2.3'
     implementation 'com.android.installreferrer:installreferrer:2.2'
 
-    // Crashlytics
-    implementation platform("com.google.firebase:firebase-bom:$firebase_bom_version")
-    implementation 'com.google.firebase:firebase-crashlytics-ktx'
-    implementation 'com.google.firebase:firebase-analytics-ktx'
-
     // Material Library
-    implementation 'com.google.android.material:material:1.3.0'
-
-    // Kotlin
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation 'com.google.android.material:material:1.4.0'
 
     // Room
     implementation "androidx.room:room-runtime:$room_version"
@@ -123,17 +114,15 @@ dependencies {
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutine_version"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-play-services:$coroutine_play_version"
 
-    implementation "io.reactivex.rxjava2:rxjava:$rxjava_core"
-    implementation "io.reactivex.rxjava2:rxandroid:$rxjava_android"
-
     // Firebase
-    implementation 'com.google.firebase:firebase-analytics:19.0.0'
-    implementation 'com.google.firebase:firebase-auth:21.0.1'
-    implementation 'com.firebaseui:firebase-ui-auth:6.4.0'
-    implementation 'com.google.android.gms:play-services-auth:19.0.0'
-    implementation 'com.google.firebase:firebase-firestore-ktx:23.0.1'
-    implementation 'com.firebaseui:firebase-ui-firestore:6.2.0'
-    implementation 'com.google.firebase:firebase-storage-ktx:20.0.0'
+    implementation platform("com.google.firebase:firebase-bom:$firebase_bom_version")
+    implementation 'com.firebaseui:firebase-ui-auth:7.2.0' // not included in bom version
+    implementation 'com.google.firebase:firebase-crashlytics-ktx'
+    implementation 'com.google.firebase:firebase-analytics-ktx'
+    implementation 'com.google.firebase:firebase-auth'
+    implementation 'com.google.android.gms:play-services-auth'
+    implementation 'com.google.firebase:firebase-firestore-ktx'
+    implementation 'com.google.firebase:firebase-storage-ktx'
     implementation 'com.google.firebase:firebase-messaging'
 
     // Navigation Component
@@ -153,12 +142,6 @@ dependencies {
 
     /*UI Libraries*/
 
-    // Circular indicator
-    implementation "me.relex:circleindicator:$circular_indicator_version"
-
-    // photo compressor
-    implementation "id.zelory:compressor:$zelory_version"
-
     // Lottie Animation
     implementation "com.airbnb.android:lottie:$lottie_version"
 
@@ -170,9 +153,6 @@ dependencies {
 
     // Image Picker
     implementation "com.github.dhaval2404:imagepicker:$picker_version"
-
-    // Synth - CRED
-    implementation 'club.cred.android:synth:1.0.0'
 
 }
 apply plugin: 'com.google.gms.google-services'

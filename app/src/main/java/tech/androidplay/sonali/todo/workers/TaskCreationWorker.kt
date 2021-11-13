@@ -89,7 +89,7 @@ class TaskCreationWorker @AssistedInject constructor(
 
     private fun showNotification(title: String, caption: String, intent: Intent) {
         val pendingIntent = PendingIntent.getActivity(
-            context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT
+            context, 0, intent, PendingIntent.FLAG_IMMUTABLE
         )
 
         notify.showNotification(context) {

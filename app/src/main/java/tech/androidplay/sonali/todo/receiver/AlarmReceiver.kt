@@ -93,7 +93,7 @@ class AlarmReceiver : HiltBroadcastReceiver() {
 
         val actionIntent = PendingIntent.getService(
             context, uniqueNotificationId, intent,
-            PendingIntent.FLAG_UPDATE_CURRENT
+            PendingIntent.FLAG_IMMUTABLE
         )
 
         val contentArgs = TaskEditFragmentArgs(taskId).toBundle()

@@ -196,8 +196,8 @@ class TaskCreateFragment : Fragment(R.layout.fragment_task_create) {
     }
 
 
-    override fun onDestroy() {
-        super.onDestroy()
+    override fun onDestroyView() {
         binding = null
+        super.onDestroyView()
     }
 }

@@ -69,7 +69,7 @@ class Notify @Inject constructor(
             createNotification(context, notificationManager)
 
         notificationBuilder.apply {
-            setContentTitle("Machine running..")
+            setContentTitle("Uploading...")
             setProgress(max, progress, isIndeterminate)
             setOngoing(true)
             setAutoCancel(false)

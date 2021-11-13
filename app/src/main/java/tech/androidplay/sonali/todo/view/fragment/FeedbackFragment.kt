@@ -63,4 +63,9 @@ class FeedbackFragment : Fragment(R.layout.fragment_feedback) {
             }
         })
     }
+
+    override fun onDestroyView() {
+        binding = null
+        super.onDestroyView()
+    }
 }

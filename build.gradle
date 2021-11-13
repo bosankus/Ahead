@@ -6,36 +6,31 @@ buildscript {
     ext.google_services = "4.3.4"
     ext.lifecycle_version = "2.2.0"
     ext.viewpager_version = "1.0.0"
-    ext.lifecycle_java8_version = "2.3.1"
-    ext.work_version = "2.5.0"
+    ext.lifecycle_java8_version = "2.4.0"
+    ext.work_version = "2.7.0"
     ext.nav_version = "2.3.5"
-    ext.hilt_version = "2.35.1"
+    ext.hilt_version = "2.39"
     ext.hilt_work_version = "1.0.0"
     ext.hilt_jetpack_version = "1.0.0-alpha03"
     ext.room_version = "2.3.0"
     ext.retrofit_version = "2.9.0"
-    ext.interceptor_version = "4.8.1"
-    ext.lottie_version = "3.4.1"
+    ext.interceptor_version = "5.0.0-alpha.2"
+    ext.lottie_version = "4.1.0"
     ext.shimmer_version = "0.5.0"
     ext.picker_version = "1.7.1"
-    ext.glide_version = "4.11.0"
+    ext.glide_version = "4.12.0"
     ext.coroutine_version = "1.4.1"
     ext.coroutine_play_version = "1.1.1"
-    ext.rxjava_core = "2.2.9"
-    ext.rxjava_android = "2.1.1"
-    ext.zelory_version = "3.0.0"
     ext.crashlytics_version = "2.4.1"
     ext.firebase_bom_version = "26.2.0"
     ext.circular_indicator_version = "2.1.4"
     repositories {
         google()
-        jcenter()
         mavenCentral()
         maven { url "https://jitpack.io" }
     }
     dependencies {
         classpath "com.android.tools.build:gradle:${gradle_version}"
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath "com.google.gms:google-services:$google_services"
         classpath "androidx.navigation:navigation-safe-args-gradle-plugin:$nav_version"
         classpath "com.google.dagger:hilt-android-gradle-plugin:$hilt_version"
@@ -48,7 +43,6 @@ buildscript {
 allprojects {
     repositories {
         google()
-        jcenter ()
         mavenCentral()
         maven { url "https://jitpack.io" }
     }
