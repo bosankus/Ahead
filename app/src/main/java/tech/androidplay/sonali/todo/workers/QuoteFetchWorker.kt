@@ -33,16 +33,14 @@ class QuoteFetchWorker @AssistedInject constructor(
     @Assisted context: Context,
     @Assisted workerParameters: WorkerParameters,
     private val preferences: SharedPreferences,
-    private val repository: QuoteRepository
+    private val repository: QuoteRepository,
+    private val notify: Notify
 ) :
     CoroutineWorker(context, workerParameters) {
 
-    @Inject
-    lateinit var notify: Notify
     private val context = applicationContext
 
     override suspend fun doWork(): Result = withContext(Dispatchers.IO) {
-        showNotification()
         val response = repository.fetchQuote()
         if (response.text?.isNotEmpty() == true) {
             preferences.edit {
@@ -58,19 +56,11 @@ class QuoteFetchWorker @AssistedInject constructor(
         Result.failure()
     }
 
-    private fun showNotification() {
-        notify.showNotification(context) {
-            notificationId = QUOTE_WORKER_ID
-            notificationTitle = "Syncing..."
-            notificationBody = "Managing your tasks on your behalf"
-        }
-    }
-
     private fun showErrorNotification() {
         notify.showNotification(context) {
             notificationId = QUOTE_WORKER_ID
-            notificationTitle = "Syncing Failed"
-            notificationBody = "Ehh! something stopped the process."
+            notificationTitle = "Ehh! Syncing Failed"
+            notificationBody = "Something stopped the process."
         }
     }
 }

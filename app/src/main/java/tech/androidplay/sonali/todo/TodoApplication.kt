@@ -83,6 +83,7 @@ class TodoApplication : Application(), Configuration.Provider {
             .build()
 
         val quoteFetchWorker = PeriodicWorkRequestBuilder<QuoteFetchWorker>(24, TimeUnit.HOURS)
+            .setExpedited(OutOfQuotaPolicy.RUN_AS_NON_EXPEDITED_WORK_REQUEST)
             .setConstraints(constraints)
             .build()
 

@@ -39,12 +39,11 @@ import kotlin.coroutines.suspendCoroutine
 @HiltWorker
 class TaskImageUploadWorker @AssistedInject constructor(
     @Assisted context: Context,
-    @Assisted workerParameters: WorkerParameters
+    @Assisted workerParameters: WorkerParameters,
+    private val notify: Notify
 ) :
     CoroutineWorker(context, workerParameters) {
 
-    @Inject
-    lateinit var notify: Notify
     private val context = applicationContext
     private val repository = TodoRepository()
     private val taskBody: String = checkNotNull(inputData.getString(TASK_BODY))

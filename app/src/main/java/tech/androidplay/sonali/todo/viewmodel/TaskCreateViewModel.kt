@@ -130,6 +130,7 @@ class TaskCreateViewModel @Inject constructor(
 
         val taskImageUploadWorker =
             OneTimeWorkRequestBuilder<TaskImageUploadWorker>()
+                .setExpedited(OutOfQuotaPolicy.RUN_AS_NON_EXPEDITED_WORK_REQUEST)
                 .setConstraints(constraints)
                 .setInputData(inputData)
                 .addTag(IMAGE_UPLOAD_WORKER_TAG)
