@@ -68,6 +68,9 @@
             app:exitAnim="@anim/fade_in_animation"
             app:popEnterAnim="@anim/fade_out_animation"
             app:popExitAnim="@anim/fade_in_animation"/>
+        <action
+            android:id="@+id/action_taskFragment_to_feedbackComposableFragment"
+            app:destination="@id/feedbackComposableFragment" />
     </fragment>
     <fragment
         android:id="@+id/splashFragment"
@@ -161,5 +164,13 @@
         <argument android:name="taskId"
             app:argType="string"
             app:nullable="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/feedbackComposableFragment"
+        android:name="tech.androidplay.sonali.todo.view.feedback.FeedbackComposableFragment"
+        android:label="FeedbackComposableFragment">
+        <action
+            android:id="@+id/action_feedbackComposableFragment_to_taskFragment"
+            app:destination="@id/taskFragment" />
     </fragment>
 </navigation>

@@ -1,30 +1,27 @@
 package tech.androidplay.sonali.todo.view.fragment
 
-import android.annotation.SuppressLint
-import android.app.AlertDialog
-import android.content.SharedPreferences
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.widget.PopupMenu
-import androidx.activity.addCallback
-import androidx.databinding.DataBindingUtil
+import android.annotation.*
+import android.app.*
+import android.content.*
+import android.os.*
+import android.view.*
+import android.widget.*
+import androidx.activity.*
+import androidx.databinding.*
+import androidx.fragment.app.*
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.findNavController
-import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.InternalCoroutinesApi
+import androidx.navigation.fragment.*
+import dagger.hilt.android.*
+import kotlinx.coroutines.*
 import tech.androidplay.sonali.todo.R
-import tech.androidplay.sonali.todo.databinding.FragmentTaskBinding
+import tech.androidplay.sonali.todo.databinding.*
 import tech.androidplay.sonali.todo.utils.*
 import tech.androidplay.sonali.todo.utils.Constants.IS_FIRST_TIME
 import tech.androidplay.sonali.todo.utils.UIHelper.showSnack
-import tech.androidplay.sonali.todo.view.adapter.main_adapter.TodoAdapter
-import tech.androidplay.sonali.todo.view.adapter.viewpager_adapter.ViewPagerAdapter
-import tech.androidplay.sonali.todo.viewmodel.TaskViewModel
-import javax.inject.Inject
+import tech.androidplay.sonali.todo.view.adapter.main_adapter.*
+import tech.androidplay.sonali.todo.view.adapter.viewpager_adapter.*
+import tech.androidplay.sonali.todo.viewmodel.*
+import javax.inject.*
 
 /**
  * Created by Androidplay
@@ -40,9 +37,6 @@ import javax.inject.Inject
 class TaskFragment : Fragment(R.layout.fragment_task) {
 
     private var binding: FragmentTaskBinding? = null
-
-    @Inject
-    lateinit var appEventTracking: AppEventTracking
 
     @Inject
     lateinit var dialog: AlertDialog.Builder
@@ -144,10 +138,8 @@ class TaskFragment : Fragment(R.layout.fragment_task) {
             when (it.itemId) {
                 R.id.menu_logout -> logOutUser()
                 R.id.menu_share_app -> shareApp()
-                R.id.menu_feedback -> {
-                    appEventTracking.trackFeedbackIntention()
-                    findNavController().navigate(R.id.action_taskFragment_to_feedbackFragment)
-                }
+                R.id.menu_feedback ->
+                    findNavController().navigate(R.id.action_taskFragment_to_feedbackComposableFragment)
             }
             true
         }
