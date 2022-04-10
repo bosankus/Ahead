@@ -83,8 +83,8 @@ class TodoRepository : FirebaseApi {
     override suspend fun fetchAllUnassignedTask(): Flow<MutableList<Todo>> = callbackFlow {
         val querySnapshot = query.addSnapshotListener { value, error ->
             if (error != null) return@addSnapshotListener
-            else value?.let { offer(it.toObjects(Todo::class.java)) }
-                ?: offer(mutableListOf<Todo>())
+            else value?.let { trySend(it.toObjects(Todo::class.java)) }
+                ?: trySend(mutableListOf<Todo>())
         }
         awaitClose { querySnapshot.remove() }
     }
@@ -93,8 +93,8 @@ class TodoRepository : FirebaseApi {
     override suspend fun fetchOnlyAssignedTask(): Flow<MutableList<Todo>> = callbackFlow {
         val querySnapshot = assignedTaskQuery.addSnapshotListener { value, error ->
             if (error != null) return@addSnapshotListener
-            else value?.let { offer(it.toObjects(Todo::class.java)) }
-                ?: offer(mutableListOf<Todo>())
+            else value?.let { trySend(it.toObjects(Todo::class.java)) }
+                ?: trySend(mutableListOf<Todo>())
         }
         awaitClose { querySnapshot.remove() }
     }

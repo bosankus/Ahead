@@ -44,7 +44,7 @@ class TodoApplication : Application(), Configuration.Provider {
         super.onCreate()
 
         // set up work manager
-        delayedInit()
+        /*delayedInit()*/
 
         // setup AppsFlyer tracking
         initiateTracking()
