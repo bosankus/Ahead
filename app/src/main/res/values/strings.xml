@@ -26,7 +26,7 @@
     <string name="feedback">Feedback</string>
     <string name="topic_hint">What change you want to see?</string>
     <string name="description_hint">Describe to make us understand</string>
-    <string name="feedback_story">We are on a journey to think<font color="#3068DE"> ahead</font> &amp; make your experience better. Please share with us how you felt while using the app.</string>
+    <string name="feedback_story">We take feedback anonymously to measure liking statistics. Your feedback will help us to make your experience more better.</string>
     <string name="suggest_the_developers">Suggest</string>
     <string name="past">Overdue</string>
     <string name="upload_img_txt">Upload your task image</string>
@@ -92,5 +92,6 @@
     <!--Task View-->
     <string name="priority_header">Priority</string>
     <string name="attachment">Attachment</string>
+    <string name="title_activity_feedback">FeedbackActivity</string>
 
 </resources>

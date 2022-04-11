@@ -20,6 +20,9 @@ android {
         buildConfigField "String", "QUOTE_API_KEY", "\"API-KEY\""
         multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        vectorDrawables {
+            useSupportLibrary true
+        }
     }
 
     buildTypes {
@@ -32,6 +35,7 @@ android {
     buildFeatures {
         dataBinding true
         viewBinding true
+        compose true
     }
 
     compileOptions {
@@ -40,26 +44,31 @@ android {
     }
 
     composeOptions {
-        kotlinCompilerExtensionVersion '1.0.5'
+        kotlinCompilerExtensionVersion compose_version
+        kotlinCompilerVersion kotlin_version
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
+        useIR = true
     }
 
-    kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_11.toString()
-    }
 
     packagingOptions {
         exclude 'META-INF/AL2.0'
         exclude 'META-INF/LGPL2.1'
         exclude 'META-INF/atomicfu.kotlin_module'
+        resources {
+            excludes += '/META-INF/{AL2.0,LGPL2.1}'
+        }
     }
 }
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation 'androidx.appcompat:appcompat:1.3.1'
+    implementation 'androidx.appcompat:appcompat:1.4.1'
     implementation 'androidx.core:core-ktx:1.7.0'
-    implementation "androidx.fragment:fragment-ktx:1.3.6"
-    implementation 'androidx.constraintlayout:constraintlayout:2.1.1'
+    implementation "androidx.fragment:fragment-ktx:1.4.1"
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.3'
     implementation "androidx.recyclerview:recyclerview:1.2.1"
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation "androidx.multidex:multidex:2.0.1"
@@ -67,24 +76,25 @@ dependencies {
 
     // Test
     testImplementation 'junit:junit:4.13.2'
-    testImplementation "com.google.truth:truth:1.1"
-    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.0"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.1"
     testImplementation "android.arch.core:core-testing:1.1.1"
+    testImplementation "com.google.truth:truth:1.1.3"
+    androidTestImplementation "com.google.truth:truth:1.1.3"
     androidTestImplementation "androidx.arch.core:core-testing:2.1.0"
-    androidTestImplementation 'org.jetbrains.kotlinx:kotlinx-coroutines-test:1.5.0'
+    androidTestImplementation 'org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.0-native-mt'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
-    androidTestImplementation "com.google.truth:truth:1.1"
+    androidTestImplementation "androidx.compose.ui:ui-test-junit4:$compose_version"
 
     // CanaryLeak
-    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.7'
+    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.8.1'
 
     // AppsFlyer
     implementation 'com.appsflyer:af-android-sdk:6.2.3'
     implementation 'com.android.installreferrer:installreferrer:2.2'
 
     // Material Library
-    implementation 'com.google.android.material:material:1.4.0'
+    implementation 'com.google.android.material:material:1.5.0'
 
     // Room
     implementation "androidx.room:room-runtime:$room_version"
@@ -133,11 +143,7 @@ dependencies {
     implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
     implementation "androidx.navigation:navigation-ui-ktx:$nav_version"
 
-    /*// Paging Library
-    implementation "androidx.paging:paging-runtime-ktx:2.1.2"*/
-
     // DI - Hilt
-    implementation "androidx.hilt:hilt-lifecycle-viewmodel:$hilt_jetpack_version"
     implementation "com.google.dagger:hilt-android:$hilt_version"
     implementation "androidx.hilt:hilt-work:$hilt_work_version"
     kapt "androidx.hilt:hilt-compiler:$hilt_jetpack_version"
@@ -148,6 +154,8 @@ dependencies {
 
     // Lottie Animation
     implementation "com.airbnb.android:lottie:$lottie_version"
+    // Lottie for compose
+    implementation "com.airbnb.android:lottie-compose:$lottie_version"
 
     // Shimmer effect
     implementation "com.facebook.shimmer:shimmer:$shimmer_version"
@@ -157,6 +165,25 @@ dependencies {
 
     // Image Picker
     implementation "com.github.dhaval2404:imagepicker:$picker_version"
+
+
+    /*JETPACK COMPOSE DEPENDENCIES*/
+    implementation "androidx.compose.ui:ui:$compose_version"
+    // Compose compiler
+    implementation "androidx.compose.compiler:compiler:1.2.0-alpha07"
+    // Integration with activities
+    implementation 'androidx.activity:activity-compose:1.4.0'
+    // Compose Material Design
+    implementation 'androidx.compose.material:material:1.1.1'
+    // Animations
+    implementation 'androidx.compose.animation:animation:1.1.1'
+    // Tooling support (Previews, etc.)
+    implementation "androidx.compose.ui:ui-tooling-preview:1.1.1"
+    implementation 'androidx.compose.ui:ui-tooling:1.1.1'
+    // Integration with ViewModels
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-compose:2.4.1'
+    // When using a AppCompat theme - Reuse existing view theme
+    implementation "com.google.accompanist:accompanist-appcompat-theme:0.16.0"
 
 }
 apply plugin: 'com.google.gms.google-services'
