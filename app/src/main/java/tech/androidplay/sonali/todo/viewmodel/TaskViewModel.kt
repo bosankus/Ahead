@@ -7,7 +7,6 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.InternalCoroutinesApi
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import tech.androidplay.sonali.todo.data.repository.QuoteRepository
 import tech.androidplay.sonali.todo.data.repository.TodoRepository
@@ -63,8 +62,10 @@ class TaskViewModel @Inject constructor(
     val author get() = _quoteAuthor
 
     init {
-        _loadingState.value = true
+        setLoadingState(true)
         getUserFirstName()
+        getAllUnassignedTask()
+        getAllAssignedTasks()
     }
 
     private fun getUserFirstName() {
@@ -73,10 +74,9 @@ class TaskViewModel @Inject constructor(
             ?.toMutableList()
             ?.firstOrNull()
         _firstName.value = "${greetingMessage()}, $firstName"
-        getAllTasks()
     }
 
-    private fun getAllTasks() {
+    private fun getAllUnassignedTask() {
         viewModelScope.launch {
             try {
                 taskSource.fetchAllUnassignedTask().collect { allTodoList ->
@@ -86,10 +86,10 @@ class TaskViewModel @Inject constructor(
                         _upcomingTaskList.value = getUpcomingTaskList(allTodoList)
                         _overdueTaskList.value = getOverDueTaskList(allTodoList)
                     }
-                    getAllAssignedTasks()
+                    else return@collect
                 }
             } catch (e: Exception) {
-                _loadingState.value = false
+                setLoadingState(false)
             }
         }
     }
@@ -101,11 +101,11 @@ class TaskViewModel @Inject constructor(
                     assignedTaskList.value = assignedTask
                     if (assignedTask.size != 0) {
                         getAssignedTaskList(assignedTask)
-                        _loadingState.value = false
+                        setLoadingState(false)
                     } else getQuote()
                 }
             } catch (e: Exception) {
-                _loadingState.value = false
+                setLoadingState(false)
             }
         }
     }
@@ -121,24 +121,28 @@ class TaskViewModel @Inject constructor(
                 val todayQuote = quoteSource.fetchQuote()
                 _quoteText.value = "${todayQuote.text}"
                 _quoteAuthor.value = "${todayQuote.author}"
-                _loadingState.value = false
+                setLoadingState(false)
             }
         }
     }
 
     private fun getCompletedTaskList(list: List<Todo>) = list.filter { it.isCompleted }
-        .sortedWith(compareByDescending(nullsLast(), { it.todoDate }))
+        .sortedWith(compareByDescending(nullsLast()) { it.todoDate })
 
     private fun getUpcomingTaskList(list: List<Todo>) =
         list.filter { it.todoDate?.compareWithToday() == IS_AFTER && !it.isCompleted }
-            .sortedWith(compareByDescending(nullsLast(), { it.todoDate }))
+            .sortedWith(compareByDescending(nullsLast()) { it.todoDate })
 
 
     private fun getOverDueTaskList(list: List<Todo>) =
         list.filter { it.todoDate?.compareWithToday() == IS_BEFORE && !it.isCompleted }
-            .sortedWith(compareByDescending(nullsLast(), { it.todoDate }))
+            .sortedWith(compareByDescending(nullsLast()) { it.todoDate })
 
     private fun getAssignedTaskList(list: List<Todo>) =
-        list.sortedWith(compareByDescending(nullsLast(), { it.todoDate }))
+        list.sortedWith(compareByDescending(nullsLast()) { it.todoDate })
+
+    private fun setLoadingState(state: Boolean) {
+        _loadingState.value = state
+    }
 
 }

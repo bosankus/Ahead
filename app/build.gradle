@@ -10,11 +10,11 @@ plugins {
 }
 
 android {
-    compileSdkVersion 31
+    compileSdkVersion 33
     defaultConfig {
         applicationId "tech.androidplay.sonali.todo"
         minSdkVersion 26
-        targetSdkVersion 31
+        targetSdkVersion 33
         versionCode 14
         versionName "1.4"
         buildConfigField "String", "QUOTE_API_KEY", "\"API-KEY\""
@@ -35,7 +35,6 @@ android {
     buildFeatures {
         dataBinding true
         viewBinding true
-        compose true
     }
 
     compileOptions {
@@ -43,32 +42,23 @@ android {
         targetCompatibility JavaVersion.VERSION_11
     }
 
-    composeOptions {
-        kotlinCompilerExtensionVersion compose_version
-        kotlinCompilerVersion kotlin_version
-    }
     kotlinOptions {
         jvmTarget = '1.8'
         useIR = true
     }
-
-
     packagingOptions {
-        exclude 'META-INF/AL2.0'
-        exclude 'META-INF/LGPL2.1'
-        exclude 'META-INF/atomicfu.kotlin_module'
         resources {
-            excludes += '/META-INF/{AL2.0,LGPL2.1}'
+            excludes += ['/META-INF/{AL2.0,LGPL2.1}', 'META-INF/AL2.0', 'META-INF/LGPL2.1', 'META-INF/atomicfu.kotlin_module']
         }
     }
 }
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation 'androidx.appcompat:appcompat:1.4.1'
-    implementation 'androidx.core:core-ktx:1.7.0'
-    implementation "androidx.fragment:fragment-ktx:1.4.1"
-    implementation 'androidx.constraintlayout:constraintlayout:2.1.3'
+    implementation 'androidx.appcompat:appcompat:1.6.0'
+    implementation 'androidx.core:core-ktx:1.9.0'
+    implementation "androidx.fragment:fragment-ktx:1.5.5"
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     implementation "androidx.recyclerview:recyclerview:1.2.1"
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation "androidx.multidex:multidex:2.0.1"
@@ -76,25 +66,23 @@ dependencies {
 
     // Test
     testImplementation 'junit:junit:4.13.2'
-    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.1"
     testImplementation "android.arch.core:core-testing:1.1.1"
     testImplementation "com.google.truth:truth:1.1.3"
     androidTestImplementation "com.google.truth:truth:1.1.3"
     androidTestImplementation "androidx.arch.core:core-testing:2.1.0"
-    androidTestImplementation 'org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.0-native-mt'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.3'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
-    androidTestImplementation "androidx.compose.ui:ui-test-junit4:$compose_version"
+    androidTestImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutine_play_version"
+    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
 
     // CanaryLeak
-    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.8.1'
+    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.10'
 
     // AppsFlyer
     implementation 'com.appsflyer:af-android-sdk:6.2.3'
     implementation 'com.android.installreferrer:installreferrer:2.2'
 
     // Material Library
-    implementation 'com.google.android.material:material:1.5.0'
+    implementation 'com.google.android.material:material:1.7.0'
 
     // Room
     implementation "androidx.room:room-runtime:$room_version"
@@ -106,6 +94,9 @@ dependencies {
 
     // Work Manager
     implementation "androidx.work:work-runtime-ktx:$work_version"
+    // Hilt for Work Manager
+    implementation "androidx.hilt:hilt-work:$hilt_work_version"
+    kapt "androidx.hilt:hilt-compiler:$hilt_work_version"
 
     // Retrofit
     implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
@@ -134,10 +125,10 @@ dependencies {
     implementation 'com.google.firebase:firebase-crashlytics-ktx'
     implementation 'com.google.firebase:firebase-analytics-ktx'
     implementation 'com.google.firebase:firebase-auth'
-    implementation 'com.google.android.gms:play-services-auth'
+    implementation 'com.google.android.gms:play-services-auth:20.4.1' // not included in bom version
     implementation 'com.google.firebase:firebase-firestore-ktx'
     implementation 'com.google.firebase:firebase-storage-ktx'
-    implementation 'com.google.firebase:firebase-messaging'
+    implementation 'com.google.firebase:firebase-messaging-ktx'
 
     // Navigation Component
     implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
@@ -145,17 +136,12 @@ dependencies {
 
     // DI - Hilt
     implementation "com.google.dagger:hilt-android:$hilt_version"
-    implementation "androidx.hilt:hilt-work:$hilt_work_version"
-    kapt "androidx.hilt:hilt-compiler:$hilt_jetpack_version"
     kapt "com.google.dagger:hilt-android-compiler:$hilt_version"
-    kapt "androidx.hilt:hilt-compiler:$hilt_jetpack_version"
 
     /*UI Libraries*/
 
     // Lottie Animation
     implementation "com.airbnb.android:lottie:$lottie_version"
-    // Lottie for compose
-    implementation "com.airbnb.android:lottie-compose:$lottie_version"
 
     // Shimmer effect
     implementation "com.facebook.shimmer:shimmer:$shimmer_version"
@@ -165,25 +151,5 @@ dependencies {
 
     // Image Picker
     implementation "com.github.dhaval2404:imagepicker:$picker_version"
-
-
-    /*JETPACK COMPOSE DEPENDENCIES*/
-    implementation "androidx.compose.ui:ui:$compose_version"
-    // Compose compiler
-    implementation "androidx.compose.compiler:compiler:1.2.0-alpha07"
-    // Integration with activities
-    implementation 'androidx.activity:activity-compose:1.4.0'
-    // Compose Material Design
-    implementation 'androidx.compose.material:material:1.1.1'
-    // Animations
-    implementation 'androidx.compose.animation:animation:1.1.1'
-    // Tooling support (Previews, etc.)
-    implementation "androidx.compose.ui:ui-tooling-preview:1.1.1"
-    implementation 'androidx.compose.ui:ui-tooling:1.1.1'
-    // Integration with ViewModels
-    implementation 'androidx.lifecycle:lifecycle-viewmodel-compose:2.4.1'
-    // When using a AppCompat theme - Reuse existing view theme
-    implementation "com.google.accompanist:accompanist-appcompat-theme:0.16.0"
-
 }
 apply plugin: 'com.google.gms.google-services'

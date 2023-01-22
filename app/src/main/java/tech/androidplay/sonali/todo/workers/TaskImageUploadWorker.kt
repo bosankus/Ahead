@@ -1,6 +1,5 @@
 package tech.androidplay.sonali.todo.workers
 
-import android.annotation.*
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
@@ -20,7 +19,6 @@ import tech.androidplay.sonali.todo.utils.ResultData
 import tech.androidplay.sonali.todo.view.activity.MainActivity
 import tech.androidplay.sonali.todo.workers.TaskCreationWorker.Companion.TASK_BODY
 import tech.androidplay.sonali.todo.workers.TaskCreationWorker.Companion.TASK_IMAGE_URI
-import javax.inject.Inject
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
@@ -41,8 +39,7 @@ class TaskImageUploadWorker @AssistedInject constructor(
     @Assisted context: Context,
     @Assisted workerParameters: WorkerParameters,
     private val notify: Notify
-) :
-    CoroutineWorker(context, workerParameters) {
+) : CoroutineWorker(context, workerParameters) {
 
     private val context = applicationContext
     private val repository = TodoRepository()
@@ -65,8 +62,7 @@ class TaskImageUploadWorker @AssistedInject constructor(
                 is ResultData.Success -> {
                     showUploadFinishedNotification(result.data)
 
-                    val data = Data.Builder()
-                        .putAll(inputData)
+                    val data = Data.Builder().putAll(inputData)
                         .putString(UPLOADED_IMAGE_URI, result.data.toString())
 
                     cont.resume(Result.success(data.build()))
@@ -94,12 +90,13 @@ class TaskImageUploadWorker @AssistedInject constructor(
 
         val caption = context.getString(R.string.task_image_upload_failed)
 
-        val intent = Intent(applicationContext, MainActivity::class.java)
-            .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
+        val intent = Intent(
+            applicationContext,
+            MainActivity::class.java
+        ).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
 
         val pendingIntent = PendingIntent.getActivity(
-            applicationContext, 0 /* requestCode */, intent,
-            PendingIntent.FLAG_IMMUTABLE
+            applicationContext, 0, intent, PendingIntent.FLAG_IMMUTABLE
         )
 
         notify.showNotification(context) {

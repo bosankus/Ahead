@@ -121,13 +121,13 @@ class TaskCreateFragment : Fragment(R.layout.fragment_task_create) {
 
 
     private fun setObservers() {
-        dateTimePicker.epochFormat.observe(viewLifecycleOwner, { epochLong ->
+        dateTimePicker.epochFormat.observe(viewLifecycleOwner) { epochLong ->
             viewModel.todo.todoDate = epochLong.toString()
             binding?.layoutSetAlarm?.tvSelectDate?.text =
                 epochLong.toString().toLocalDateTime()?.beautifyDateTime()
-        })
+        }
 
-        viewModel.taskCreationStatus.observe(viewLifecycleOwner, { status ->
+        viewModel.taskCreationStatus.observe(viewLifecycleOwner) { status ->
             when (status) {
                 is ResultData.Loading -> showToast(requireContext(), "Creating")
                 is ResultData.Failed -> showToast(requireContext(), status.message.toString())
@@ -140,37 +140,39 @@ class TaskCreateFragment : Fragment(R.layout.fragment_task_create) {
                 else -> {
                 }
             }
-        })
+        }
 
-        workManager.getWorkInfosByTagLiveData(IMAGE_UPLOAD_WORKER_TAG).observe(viewLifecycleOwner,
-            { workInfoList ->
-                if (workInfoList.size != 0 && workInfoList != null) {
-                    val workInfo = workInfoList[0]
-                    when (workInfo.state) {
-                        WorkInfo.State.SUCCEEDED -> showSnack(requireView(), "Image Uploaded")
-                        WorkInfo.State.FAILED -> showSnack(requireView(), "Upload failed!")
-                        else -> {
-                        }
+        workManager.getWorkInfosByTagLiveData(IMAGE_UPLOAD_WORKER_TAG).observe(
+            viewLifecycleOwner
+        ) { workInfoList ->
+            if (workInfoList.size != 0 && workInfoList != null) {
+                val workInfo = workInfoList[0]
+                when (workInfo.state) {
+                    WorkInfo.State.SUCCEEDED -> showSnack(requireView(), "Image Uploaded")
+                    WorkInfo.State.FAILED -> showSnack(requireView(), "Upload failed!")
+                    else -> {
                     }
                 }
-            })
+            }
+        }
 
-        workManager.getWorkInfosByTagLiveData(TASK_CREATION_WORKER_TAG).observe(viewLifecycleOwner,
-            { workInfoList ->
-                if (workInfoList.size != 0 && workInfoList != null) {
-                    val workInfo = workInfoList[0]
-                    when (workInfo.state) {
-                        WorkInfo.State.SUCCEEDED -> {
-                            showSnack(requireView(), "Task Created")
-                            workManager.pruneWork()
-                            findNavController().navigateUp()
-                        }
-                        WorkInfo.State.FAILED -> showSnack(requireView(), "Task creation failed!")
-                        else -> {
-                        }
+        workManager.getWorkInfosByTagLiveData(TASK_CREATION_WORKER_TAG).observe(
+            viewLifecycleOwner
+        ) { workInfoList ->
+            if (workInfoList.size != 0 && workInfoList != null) {
+                val workInfo = workInfoList[0]
+                when (workInfo.state) {
+                    WorkInfo.State.SUCCEEDED -> {
+                        showSnack(requireView(), "Task Created")
+                        workManager.pruneWork()
+                        findNavController().navigateUp()
+                    }
+                    WorkInfo.State.FAILED -> showSnack(requireView(), "Task creation failed!")
+                    else -> {
                     }
                 }
-            })
+            }
+        }
     }
 
 

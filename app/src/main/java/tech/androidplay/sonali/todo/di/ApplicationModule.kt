@@ -98,14 +98,14 @@ class ApplicationModule {
     @Provides
     fun providesPendingIntent(
         @ApplicationContext context: Context
-    ): PendingIntent = PendingIntent.getActivity(
-        context,
-        0,
-        Intent(context, MainActivity::class.java).also {
+    ): PendingIntent {
+        val intent = Intent(context, MainActivity::class.java).also {
             it.action = ACTION_SHOW_TASK_FRAGMENT
-        },
-        PendingIntent.FLAG_IMMUTABLE
-    )
+        }
+        return PendingIntent.getActivity(
+            context, 0, intent, PendingIntent.FLAG_IMMUTABLE
+        )
+    }
 
     @Provides
     fun provideBaseNotificationBuilder(

@@ -67,9 +67,9 @@ class AlarmReceiver : HiltBroadcastReceiver() {
                     || intent?.action == "android.intent.action.BOOT_COMPLETED")
             && context != null
         ) {
-            alarmText = "${intent.extras?.get(ALARM_TEXT)}"
-            alarmDescription = "${intent.extras?.get(ALARM_DESCRIPTION)}"
-            taskId = "${intent.extras?.get(ALARM_ID)}"
+            alarmText = "${intent.extras?.getString(ALARM_TEXT)}"
+            alarmDescription = "${intent.extras?.getString(ALARM_DESCRIPTION)}"
+            taskId = "${intent.extras?.getString(ALARM_ID)}"
 
             showNotification(context, alarmText, alarmDescription, taskId)
         } else return
@@ -91,7 +91,7 @@ class AlarmReceiver : HiltBroadcastReceiver() {
             it.putExtra(NOTIFICATION_ID, uniqueNotificationId)
         }
 
-        val actionIntent = PendingIntent.getService(
+        val actionIntent = PendingIntent.getActivity(
             context, uniqueNotificationId, intent,
             PendingIntent.FLAG_IMMUTABLE
         )

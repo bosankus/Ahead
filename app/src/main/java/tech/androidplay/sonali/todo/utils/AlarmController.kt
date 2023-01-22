@@ -36,7 +36,8 @@ fun Context.startAlarmedNotification(
         this.putExtra(ALARM_ID, id)
     }
 
-    val pendingIntent = PendingIntent.getBroadcast(this, id.hashCode(), intent, 0)
+    val pendingIntent =
+        PendingIntent.getBroadcast(this, id.hashCode(), intent, PendingIntent.FLAG_IMMUTABLE)
 
     alarmManager.setExactAndAllowWhileIdle(RTC_WAKEUP, dateTime, pendingIntent)
 }
@@ -49,7 +50,7 @@ fun Context.cancelAlarmedNotification(requestCode: String) {
             this,
             requestCode.hashCode(),
             intent,
-            0
+            PendingIntent.FLAG_IMMUTABLE
         )
     pendingIntent.cancel()
 }

@@ -163,14 +163,14 @@ class TaskEditFragment : Fragment(R.layout.fragment_task_edit) {
         if (isNetworkAvailable()) {
             dialog.setPositiveButton("Yes") { dialogInterface, _ ->
                 viewModel.deleteTask()
-                viewModel.deleteTaskState.observe(viewLifecycleOwner, { response ->
+                viewModel.deleteTaskState.observe(viewLifecycleOwner) { response ->
                     if (response is ResultData.Success<*>) {
                         requireContext().cancelAlarmedNotification(docId!!)
                         findNavController().navigate(R.id.action_taskEditFragment_to_taskFragment)
                         dialogInterface.dismiss()
                         showSnack(requireView(), "Task deleted")
                     }
-                })
+                }
             }.create().show()
         } else showSnack(requireView(), "Check internet connection.")
     }

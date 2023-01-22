@@ -112,21 +112,21 @@ class TaskFragment : Fragment(R.layout.fragment_task) {
     }
 
     private fun setObservers() {
-        viewModel.assignedTaskList.observe(viewLifecycleOwner, { list ->
+        viewModel.assignedTaskList.observe(viewLifecycleOwner) { list ->
             list?.let { assignedTaskAdapter.submitList(it) }
-        })
+        }
 
-        viewModel.overdueTaskList.observe(viewLifecycleOwner, { list ->
+        viewModel.overdueTaskList.observe(viewLifecycleOwner) { list ->
             list?.let { overdueAdapter.submitList(it) }
-        })
+        }
 
-        viewModel.upcomingTaskList.observe(viewLifecycleOwner, { list ->
+        viewModel.upcomingTaskList.observe(viewLifecycleOwner) { list ->
             list?.let { upcomingAdapter.submitList(it) }
-        })
+        }
 
-        viewModel.completedTaskList.observe(viewLifecycleOwner, { list ->
+        viewModel.completedTaskList.observe(viewLifecycleOwner) { list ->
             list?.let { completedAdapter.submitList(it) }
-        })
+        }
     }
 
     private fun showPopupMenu(view: View) {
@@ -139,7 +139,7 @@ class TaskFragment : Fragment(R.layout.fragment_task) {
                 R.id.menu_logout -> logOutUser()
                 R.id.menu_share_app -> shareApp()
                 R.id.menu_feedback ->
-                    findNavController().navigate(R.id.action_taskFragment_to_feedbackComposableFragment)
+                    findNavController().navigate(R.id.action_taskFragment_to_feedbackFragment)
             }
             true
         }
@@ -157,13 +157,13 @@ class TaskFragment : Fragment(R.layout.fragment_task) {
     private fun logOutUser() {
         dialog.setMessage("Are you sure you want to logout?")
             .setPositiveButton("Yes") { dialogInterface, _ ->
-                authManager.signOut().observe(viewLifecycleOwner, {
+                authManager.signOut().observe(viewLifecycleOwner) {
                     if (it is ResultData.Success) {
                         sharedPreferences.edit().putBoolean(IS_FIRST_TIME, true).apply()
                         dialogInterface.dismiss()
                         findNavController().navigate(R.id.action_taskFragment_to_splashFragment)
                     } else if (it is ResultData.Failed) showSnack(requireView(), "Logout failed!")
-                })
+                }
             }.create().show()
     }
 

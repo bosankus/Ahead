@@ -54,14 +54,14 @@ class FeedbackFragment : Fragment(R.layout.fragment_feedback) {
 
         binding?.btnBack?.setOnClickListener { findNavController().navigateUp() }
 
-        viewModel.feedbackLiveResponse.observe(viewLifecycleOwner, { resultData ->
+        viewModel.feedbackLiveResponse.observe(viewLifecycleOwner) { resultData ->
             if (resultData != ResultData.DoNothing) hideKeyboard()
             if (resultData is ResultData.Success) {
                 binding?.etFeedbackDescription?.setText("")
                 binding?.etFeedbackTopic?.setText("")
                 findNavController().navigateUp()
             }
-        })
+        }
     }
 
     override fun onDestroyView() {
