@@ -22,6 +22,7 @@ import tech.androidplay.sonali.todo.R
 import tech.androidplay.sonali.todo.databinding.FragmentTaskCreateBinding
 import tech.androidplay.sonali.todo.model.Todo
 import tech.androidplay.sonali.todo.utils.*
+import tech.androidplay.sonali.todo.utils.DocIdGenerator.generateDocId
 import tech.androidplay.sonali.todo.utils.UIHelper.showSnack
 import tech.androidplay.sonali.todo.utils.UIHelper.showToast
 import tech.androidplay.sonali.todo.view.adapter.setPriorityText
@@ -132,7 +133,7 @@ class TaskCreateFragment : Fragment(R.layout.fragment_task_create) {
                 is ResultData.Loading -> showToast(requireContext(), "Creating")
                 is ResultData.Failed -> showToast(requireContext(), status.message.toString())
                 is ResultData.Success -> {
-                    val taskItem = status.data as Todo
+                    val taskItem = (status.data as Todo).apply { this.docId = generateDocId() }
                     setTaskAlarm(taskItem)
                     showToast(requireContext(), "Task Created")
                     findNavController().navigateUp()
