@@ -63,12 +63,12 @@ class TaskViewFragment : Fragment(R.layout.fragment_task_view) {
 
 
     private fun setObservers() {
-        viewModel.viewState.observe(viewLifecycleOwner, { response ->
+        viewModel.viewState.observe(viewLifecycleOwner) { response ->
             response?.let {
                 if (it is ResultData.Success)
                     binding.fragmentViewBottomLayout.startAnimation(animation)
             }
-        })
+        }
     }
 
 

@@ -121,18 +121,18 @@ class TaskEditFragment : Fragment(R.layout.fragment_task_edit) {
 
 
     private fun setObservers() {
-        dateTimePicker.epochFormat.observe(viewLifecycleOwner, { epoch ->
+        dateTimePicker.epochFormat.observe(viewLifecycleOwner) { epoch ->
             epoch?.let { dateTime ->
                 binding.tvSelectDate.setNotificationDateTime(dateTime.toString())
                 viewModel.todo.todoDate = dateTime.toString()
             }
-        })
-        viewModel.updateTaskState.observe(viewLifecycleOwner, { state ->
+        }
+        viewModel.updateTaskState.observe(viewLifecycleOwner) { state ->
             state?.let { if (it is ResultData.Loading) hideKeyboard() }
-        })
-        viewModel.viewState.observe(viewLifecycleOwner, { state ->
+        }
+        viewModel.viewState.observe(viewLifecycleOwner) { state ->
             state?.let { if (it is ResultData.Success) binding.task = it.data as Todo }
-        })
+        }
     }
 
 
@@ -146,14 +146,14 @@ class TaskEditFragment : Fragment(R.layout.fragment_task_edit) {
         if (isNetworkAvailable()) {
             lifecycleScope.launch {
                 viewModel.uploadImage(pickedImage, taskIdFromArgs!!)
-                viewModel.imageUploadState.observe(viewLifecycleOwner, { response ->
+                viewModel.imageUploadState.observe(viewLifecycleOwner) { response ->
                     response?.let {
                         if (it is ResultData.Success) {
                             logMessage("${it.data}")
                             viewModel.todo.taskImage = "${it.data}"
                         }
                     }
-                })
+                }
             }
         } else showSnack(requireView(), "Check internet connection.")
     }
