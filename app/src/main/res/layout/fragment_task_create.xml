@@ -33,7 +33,7 @@
                 app:layout_constraintTop_toTopOf="parent">
 
                 <RelativeLayout
-                    android:id="@+id/layoutCreateTaskBar"
+                    android:id="@+id/layoutCreateTaskToolbar"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -61,7 +61,7 @@
                     android:layout_marginEnd="@dimen/padding_18dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/layoutCreateTaskBar"
+                    app:layout_constraintTop_toBottomOf="@+id/layoutCreateTaskToolbar"
                     app:task="@{viewmodel.todo}" />
 
                 <include
