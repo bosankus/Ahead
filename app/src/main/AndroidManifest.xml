@@ -7,7 +7,7 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="com.android.alarm.permission.SET_ALARM" />
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED " />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
     <uses-permission
         android:name="android.permission.READ_EXTERNAL_STORAGE"
@@ -24,11 +24,6 @@
         android:theme="@style/MaterialTheme"
         android:windowSoftInputMode="adjustPan|stateHidden"
         tools:ignore="AllowBackup,UnusedAttribute">
-        <activity
-            android:name=".view.feedback.FeedbackActivity"
-            android:exported="false"
-            android:label="@string/title_activity_feedback"
-            android:theme="@style/MaterialTheme.NoActionBar" />
         <activity
             android:name=".view.activity.MainActivity"
             android:exported="true">
@@ -63,7 +58,7 @@
         <provider
             android:name="androidx.startup.InitializationProvider"
             android:authorities="${applicationId}.androidx-startup"
-            tools:node="remove"></provider>
+            tools:node="remove"/>
     </application>
 
 </manifest>
