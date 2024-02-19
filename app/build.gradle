@@ -10,11 +10,11 @@ plugins {
 }
 
 android {
-    compileSdkVersion 33
+    compileSdk 34
     defaultConfig {
         applicationId "tech.androidplay.sonali.todo"
         minSdkVersion 26
-        targetSdkVersion 33
+        targetSdk 34
         versionCode 14
         versionName "1.4"
         buildConfigField "String", "QUOTE_API_KEY", "\"API-KEY\""
@@ -75,7 +75,7 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
 
     // CanaryLeak
-    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.10'
+    // debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.10'
 
     // AppsFlyer
     implementation 'com.appsflyer:af-android-sdk:6.2.3'
@@ -125,7 +125,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-crashlytics-ktx'
     implementation 'com.google.firebase:firebase-analytics-ktx'
     implementation 'com.google.firebase:firebase-auth'
-    implementation 'com.google.android.gms:play-services-auth:20.4.1' // not included in bom version
+    implementation 'com.google.android.gms:play-services-auth:20.7.0' // not included in bom version
     implementation 'com.google.firebase:firebase-firestore-ktx'
     implementation 'com.google.firebase:firebase-storage-ktx'
     implementation 'com.google.firebase:firebase-messaging-ktx'

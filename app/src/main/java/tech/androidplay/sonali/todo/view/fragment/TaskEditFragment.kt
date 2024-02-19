@@ -22,10 +22,15 @@ import kotlinx.coroutines.launch
 import tech.androidplay.sonali.todo.R
 import tech.androidplay.sonali.todo.databinding.FragmentTaskEditBinding
 import tech.androidplay.sonali.todo.model.Todo
-import tech.androidplay.sonali.todo.utils.*
+import tech.androidplay.sonali.todo.utils.DateTimePicker
+import tech.androidplay.sonali.todo.utils.ResultData
 import tech.androidplay.sonali.todo.utils.UIHelper.hideKeyboard
 import tech.androidplay.sonali.todo.utils.UIHelper.logMessage
 import tech.androidplay.sonali.todo.utils.UIHelper.showSnack
+import tech.androidplay.sonali.todo.utils.cancelAlarmedNotification
+import tech.androidplay.sonali.todo.utils.isNetworkAvailable
+import tech.androidplay.sonali.todo.utils.selectImage
+import tech.androidplay.sonali.todo.utils.viewLifecycleLazy
 import tech.androidplay.sonali.todo.view.adapter.setNotificationDateTime
 import tech.androidplay.sonali.todo.view.adapter.setPriorityText
 import tech.androidplay.sonali.todo.viewmodel.EditTaskViewModel
@@ -161,7 +166,10 @@ class TaskEditFragment : Fragment(R.layout.fragment_task_edit) {
 
     private fun deleteTask(docId: String?) {
         if (isNetworkAvailable()) {
-            dialog.setPositiveButton("Yes") { dialogInterface, _ ->
+            dialog
+                .setMessage("Do you want to delete the task")
+                .setCancelable(true)
+                .setPositiveButton("Yes") { dialogInterface, _ ->
                 viewModel.deleteTask()
                 viewModel.deleteTaskState.observe(viewLifecycleOwner) { response ->
                     if (response is ResultData.Success<*>) {

@@ -13,7 +13,7 @@ buildscript {
     ext.hilt_work_version = "1.0.0"
     ext.room_version = "2.5.0"
     ext.retrofit_version = "2.9.0"
-    ext.interceptor_version = "4.9.0"
+    ext.interceptor_version = "4.9.3"
     ext.lottie_version = "5.2.0"
     ext.shimmer_version = "0.5.0"
     ext.picker_version = "1.7.1"

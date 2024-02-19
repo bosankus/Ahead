@@ -56,11 +56,7 @@ class AlarmReceiver : HiltBroadcastReceiver() {
      * set the alarm with the details from DB > may be we can use a work manager for that when
      * device reboots./ or a foreground service.
      * while setting the alarm always check if the alarm time is ahead of current time.
-     *
-     * As per SOLID - Create a dedicated class for setting alarm/ cancelling alarm
      */
-
-
     override fun onReceive(context: Context?, intent: Intent?) {
         super.onReceive(context, intent)
         if ((intent?.action == ALARM_INTENT_ACTION

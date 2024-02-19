@@ -51,9 +51,6 @@ class ActivityModule {
 
     @Provides
     fun providesAlertDialog(@ActivityContext context: Context): AlertDialog.Builder {
-        val alertDialog = AlertDialog.Builder(context)
-        alertDialog.setMessage("Do you want to delete the task")
-        alertDialog.setCancelable(true)
-        return alertDialog
+        return AlertDialog.Builder(context)
     }
 }
