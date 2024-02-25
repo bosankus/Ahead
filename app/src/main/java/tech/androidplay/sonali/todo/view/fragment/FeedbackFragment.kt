@@ -13,11 +13,9 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.InternalCoroutinesApi
 import tech.androidplay.sonali.todo.R
 import tech.androidplay.sonali.todo.databinding.FragmentFeedbackBinding
-import tech.androidplay.sonali.todo.utils.AppEventTracking
 import tech.androidplay.sonali.todo.utils.ResultData
 import tech.androidplay.sonali.todo.utils.UIHelper.hideKeyboard
 import tech.androidplay.sonali.todo.viewmodel.FeedbackViewModel
-import javax.inject.Inject
 
 /**
  * Created by Androidplay
@@ -31,8 +29,6 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class FeedbackFragment : Fragment(R.layout.fragment_feedback) {
 
-    @Inject
-    lateinit var appEventTracking: AppEventTracking
     private val viewModel: FeedbackViewModel by viewModels()
     private var binding: FragmentFeedbackBinding? = null
 

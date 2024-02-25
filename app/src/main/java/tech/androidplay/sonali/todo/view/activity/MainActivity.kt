@@ -6,37 +6,28 @@ import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.content.pm.PackageManager
 import android.os.Bundle
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
-import com.appsflyer.AppsFlyerLib
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import tech.androidplay.sonali.todo.R
 import tech.androidplay.sonali.todo.databinding.ActivityMainBinding
 import tech.androidplay.sonali.todo.receiver.AlarmReceiver
-import tech.androidplay.sonali.todo.utils.AuthManager
 import tech.androidplay.sonali.todo.utils.CacheManager
 import tech.androidplay.sonali.todo.utils.Constants.ACTION_SHOW_TASK_FRAGMENT
 import tech.androidplay.sonali.todo.utils.Constants.ANDROID_OREO
 import tech.androidplay.sonali.todo.utils.Constants.DEVICE_ANDROID_VERSION
-import tech.androidplay.sonali.todo.utils.UIHelper.showSnack
 import tech.androidplay.sonali.todo.utils.startInAppUpdate
-import tech.androidplay.sonali.todo.viewmodel.AuthViewModel
 import javax.inject.Inject
 
 @ExperimentalCoroutinesApi
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
-    @Inject
-    lateinit var appsFlyerLib: AppsFlyerLib
     private lateinit var binding: ActivityMainBinding
 
     @Inject
     lateinit var cache: CacheManager
-    private lateinit var authManager: AuthManager
-    private val viewModel: AuthViewModel by viewModels()
 
     @SuppressLint("SimpleDateFormat")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -44,11 +35,7 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        appsFlyerLib.start(this)
-
         startInAppUpdate(this)
-
-        authManager = AuthManager(this)
 
         managePendingAlarm()
 
@@ -101,24 +88,4 @@ class MainActivity : AppCompatActivity() {
         if (intent.action == ACTION_SHOW_TASK_FRAGMENT)
             findNavController(R.id.navHostFragment).navigate(R.id.action_global_taskFragment)
     }
-
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (resultCode == RESULT_OK && data != null) {
-            authManager.handleAuth(requestCode, resultCode, data) { isSuccessful, error ->
-                if (isSuccessful) {
-                    val userDetails = authManager.userDetails
-                    userDetails?.let { viewModel.saveUserData(it) }
-                    findNavController(R.id.navHostFragment).navigate(R.id.action_global_taskFragment)
-                } else showSnack(
-                    findViewById(R.id.activityMain), getString(
-                        R.string.prompt_failed_to_login,
-                        error?.localizedMessage ?: "Unknown Error"
-                    )
-                )
-            }
-        }
-    }
 }
-

@@ -1,15 +1,16 @@
 package tech.androidplay.sonali.todo.utils
 
-import android.app.Activity
+import android.content.Context
 import android.content.Intent
+import androidx.activity.result.ActivityResultLauncher
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.liveData
 import com.firebase.ui.auth.AuthUI
-import com.firebase.ui.auth.IdpResponse
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import kotlinx.coroutines.tasks.await
 import tech.androidplay.sonali.todo.R
+import javax.inject.Inject
 
 /**
  * Created by Androidplay
@@ -20,10 +21,7 @@ import tech.androidplay.sonali.todo.R
 
 /** This class helps to authenticate user through [AuthUI.IdpConfig.EmailBuilder] signin */
 
-class AuthManager(
-    private val activity: Activity,
-    private val auth: FirebaseAuth = FirebaseAuth.getInstance()
-) {
+class AuthManager @Inject constructor(private val auth: FirebaseAuth) {
 
     val isUserLoggedIn: Boolean
         get() {
@@ -49,41 +47,27 @@ class AuthManager(
         AuthUI.IdpConfig.EmailBuilder().build()
     )
 
-    fun authUser() = activity.startActivityForResult(
-        // intent
-        AuthUI.getInstance()
+    fun initiateAuthentication(authLauncher: ActivityResultLauncher<Intent>) {
+        val signInIntent: Intent = AuthUI.getInstance()
             .createSignInIntentBuilder()
             .setAvailableProviders(providers)
             .setTheme(R.style.AuthStyle)
-            .build(),
-        // request code
-        RC_SIGN_IN
-    )
-
-    fun handleAuth(
-        requestCode: Int,
-        resultCode: Int,
-        data: Intent?,
-        action: (isSuccessful: Boolean, exception: Exception?) -> Unit
-    ) {
-        if (requestCode == RC_SIGN_IN) {
-            val response = IdpResponse.fromResultIntent(data)
-            if (resultCode == Activity.RESULT_OK) action.invoke(true, null)
-            else response?.error?.let { action.invoke(false, it) }
-        }
-
+            .setTosAndPrivacyPolicyUrls(
+                "https://example.com/terms.html",
+                "https://example.com/privacy.html",
+            )
+            .setLogo(R.drawable.ic_intro_logo)
+            .build()
+        authLauncher.launch(signInIntent)
     }
 
-    fun signOut(): LiveData<ResultData<Boolean>> = liveData { emit(startSignOut()) }
+    fun signOut(context: Context): LiveData<ResultData<Boolean>> =
+        liveData { emit(startSignOut(context)) }
 
-    private suspend fun startSignOut(): ResultData<Boolean> = try {
-        AuthUI.getInstance().signOut(activity).await()
+    private suspend fun startSignOut(context: Context): ResultData<Boolean> = try {
+        AuthUI.getInstance().signOut(context).await()
         ResultData.Success(true)
     } catch (e: Exception) {
         ResultData.Failed(e.message)
-    }
-
-    companion object {
-        const val RC_SIGN_IN = 123
     }
 }

@@ -66,6 +66,8 @@ object Constants {
     // For Android version check
     val DEVICE_ANDROID_VERSION = Build.VERSION.SDK_INT
     const val ANDROID_OREO = Build.VERSION_CODES.O
+    const val ANDROID_S = Build.VERSION_CODES.S
+    const val ANDROID_T = Build.VERSION_CODES.TIRAMISU
 
     // For opening document in EditTaskFragment
     const val TASK_DOC_ID = "TASK_DOC_ID"
