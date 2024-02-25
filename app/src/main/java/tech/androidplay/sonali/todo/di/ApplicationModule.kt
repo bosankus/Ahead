@@ -6,7 +6,6 @@ import android.content.Context
 import android.content.SharedPreferences
 import androidx.core.app.NotificationCompat
 import androidx.work.WorkManager
-import com.appsflyer.AppsFlyerLib
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.firestore.FirebaseFirestore
@@ -39,10 +38,6 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 class ApplicationModule {
-
-    @Singleton
-    @Provides
-    fun provideAppsFlyerLib(): AppsFlyerLib = AppsFlyerLib.getInstance()
 
     @Provides
     fun providesApplication(): TodoApplication = TodoApplication()
