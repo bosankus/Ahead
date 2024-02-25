@@ -49,6 +49,10 @@
             android:name=".service.TaskStatusUpdateService"
             android:exported="false" />
         <service
+            android:name=".service.AlarmForegroundService"
+            android:foregroundServiceType="dataSync"
+            android:exported="false" />
+        <service
             android:name=".service.FirebaseNotificationService"
             android:exported="false">
             <intent-filter>

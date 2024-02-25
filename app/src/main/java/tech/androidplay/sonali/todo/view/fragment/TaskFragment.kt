@@ -56,7 +56,8 @@ class TaskFragment : Fragment(R.layout.fragment_task) {
     @Inject
     lateinit var sharedPreferences: SharedPreferences
 
-    private lateinit var authManager: AuthManager
+    @Inject
+    lateinit var authManager: AuthManager
 
     private val viewModel: TaskViewModel by viewModels()
 
@@ -78,8 +79,6 @@ class TaskFragment : Fragment(R.layout.fragment_task) {
         super.onViewCreated(view, savedInstanceState)
 
         sharedPreferences.edit().putBoolean(IS_FIRST_TIME, false).apply()
-
-        authManager = AuthManager(requireActivity())
 
         setUpScreen()
         setListeners()
@@ -157,7 +156,7 @@ class TaskFragment : Fragment(R.layout.fragment_task) {
     private fun logOutUser() {
         dialog.setMessage("Are you sure you want to logout?")
             .setPositiveButton("Yes") { dialogInterface, _ ->
-                authManager.signOut().observe(viewLifecycleOwner) {
+                authManager.signOut(requireContext()).observe(viewLifecycleOwner) {
                     if (it is ResultData.Success) {
                         sharedPreferences.edit().putBoolean(IS_FIRST_TIME, true).apply()
                         dialogInterface.dismiss()
