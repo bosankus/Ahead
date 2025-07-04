@@ -9,7 +9,12 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.work.*
+import androidx.work.Constraints
+import androidx.work.NetworkType
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.OutOfQuotaPolicy
+import androidx.work.WorkManager
+import androidx.work.workDataOf
 import com.google.firebase.auth.FirebaseUser
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -59,7 +64,12 @@ class TaskCreateViewModel @Inject constructor(
 
     private val _taskCreationStatus = MutableLiveData<ResultData<*>>(ResultData.DoNothing)
     val taskCreationStatus: LiveData<ResultData<*>> get() = _taskCreationStatus
-    
+
+    private val _notificationPermissionStatus = MutableLiveData(false)
+    val notificationPermissionStatus: LiveData<Boolean> get() = _notificationPermissionStatus
+
+    private val _scheduleAlarmPermissionStatus = MutableLiveData(false)
+    val scheduleAlarmPermissionStatus: LiveData<Boolean> get() = _scheduleAlarmPermissionStatus
 
     @get: Bindable
     var todo = Todo()
@@ -113,7 +123,6 @@ class TaskCreateViewModel @Inject constructor(
         }
     }
 
-
     private fun createTaskWithImage(item: Todo) {
         val constraints = Constraints.Builder()
             .setRequiredNetworkType(NetworkType.CONNECTED)
@@ -148,11 +157,17 @@ class TaskCreateViewModel @Inject constructor(
 
     }
 
+    fun updateNotificationPermissionStatus(status: Boolean) {
+        _notificationPermissionStatus.postValue(status)
+    }
+
+    fun updateScheduleAlarmPermissionStatus(status: Boolean) {
+        _scheduleAlarmPermissionStatus.postValue(status)
+    }
 
     override fun addOnPropertyChangedCallback(callback: Observable.OnPropertyChangedCallback?) {
         registry.add(callback)
     }
-
 
     override fun removeOnPropertyChangedCallback(callback: Observable.OnPropertyChangedCallback?) {
         registry.remove(callback)

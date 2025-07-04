@@ -2,13 +2,10 @@ package tech.androidplay.sonali.todo.di
 
 import android.app.AlarmManager
 import android.app.NotificationManager
-import android.app.PendingIntent
 import android.content.Context
-import android.content.Intent
 import android.content.SharedPreferences
 import androidx.core.app.NotificationCompat
 import androidx.work.WorkManager
-import com.appsflyer.AppsFlyerLib
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.firestore.FirebaseFirestore
@@ -20,16 +17,13 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import tech.androidplay.sonali.todo.R
 import tech.androidplay.sonali.todo.TodoApplication
 import tech.androidplay.sonali.todo.utils.CacheManager
-import tech.androidplay.sonali.todo.utils.Constants.ACTION_SHOW_TASK_FRAGMENT
 import tech.androidplay.sonali.todo.utils.Constants.NOTIFICATION_CHANNEL_ID
 import tech.androidplay.sonali.todo.utils.Constants.SHARED_PREFERENCE_NAME
 import tech.androidplay.sonali.todo.utils.Notify
-import tech.androidplay.sonali.todo.view.activity.MainActivity
-import java.util.*
+import java.util.Calendar
 import javax.inject.Singleton
 
 /**
@@ -44,10 +38,6 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 class ApplicationModule {
-
-    @Singleton
-    @Provides
-    fun provideAppsFlyerLib(): AppsFlyerLib = AppsFlyerLib.getInstance()
 
     @Provides
     fun providesApplication(): TodoApplication = TodoApplication()
@@ -67,6 +57,10 @@ class ApplicationModule {
     @Singleton
     @Provides
     fun providesFirebaseMessaging() = FirebaseMessaging.getInstance()
+    /*
+        @Singleton
+        @Provides
+        fun provideAuthManager(): AuthManager = AuthManager()*/
 
     @Singleton
     @Provides
@@ -94,27 +88,12 @@ class ApplicationModule {
         return context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
     }
 
-    @ExperimentalCoroutinesApi
-    @Provides
-    fun providesPendingIntent(
-        @ApplicationContext context: Context
-    ): PendingIntent {
-        val intent = Intent(context, MainActivity::class.java).also {
-            it.action = ACTION_SHOW_TASK_FRAGMENT
-        }
-        return PendingIntent.getActivity(
-            context, 0, intent, PendingIntent.FLAG_IMMUTABLE
-        )
-    }
-
     @Provides
     fun provideBaseNotificationBuilder(
         @ApplicationContext context: Context,
-        pendingIntent: PendingIntent
     ): NotificationCompat.Builder = NotificationCompat.Builder(context, NOTIFICATION_CHANNEL_ID)
         .setAutoCancel(true)
         .setSmallIcon(R.drawable.ic_notification)
-        .setContentIntent(pendingIntent)
 
     @Provides
     fun providesNotificationManager(@ApplicationContext context: Context) =

@@ -1,5 +1,6 @@
 package tech.androidplay.sonali.todo.utils
 
+import android.annotation.SuppressLint
 import android.app.AlarmManager
 import android.app.AlarmManager.RTC_WAKEUP
 import android.app.PendingIntent
@@ -21,6 +22,7 @@ import tech.androidplay.sonali.todo.utils.Constants.ALARM_TEXT
 
 /** Holds the extension methods for starting & cancelling alarm from Activity/Fragment  */
 
+@SuppressLint("ScheduleExactAlarm")
 @ExperimentalCoroutinesApi
 fun Context.startAlarmedNotification(
     id: String,
@@ -39,6 +41,10 @@ fun Context.startAlarmedNotification(
     val pendingIntent =
         PendingIntent.getBroadcast(this, id.hashCode(), intent, PendingIntent.FLAG_IMMUTABLE)
 
+    /*@SuppressLint("NewApi")
+    if (alarmManager.canScheduleExactAlarms()) {
+        alarmManager.setExactAndAllowWhileIdle(RTC_WAKEUP, dateTime, pendingIntent)
+    }*/
     alarmManager.setExactAndAllowWhileIdle(RTC_WAKEUP, dateTime, pendingIntent)
 }
 

@@ -5,11 +5,16 @@ import android.app.Service
 import android.content.Intent
 import android.os.IBinder
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 import tech.androidplay.sonali.todo.data.repository.TodoRepository
 import tech.androidplay.sonali.todo.utils.Constants.ALARM_ID
 import tech.androidplay.sonali.todo.utils.Constants.NOTIFICATION_ID
 import javax.inject.Inject
+import kotlin.properties.Delegates
 
 /**
  * Created by Androidplay
@@ -35,8 +40,8 @@ class TaskStatusUpdateService : Service() {
     private val job = Job()
     private val scope = CoroutineScope(Dispatchers.Main + job)
 
-    private var taskId = ""
-    private var notificationId = 0
+    private lateinit var taskId: String
+    private var notificationId by Delegates.notNull<Int>()
 
     override fun onBind(p0: Intent?): IBinder? = null
 
@@ -53,7 +58,6 @@ class TaskStatusUpdateService : Service() {
     private fun changeTaskStatus(taskId: String) {
         val map: Map<String, Boolean> = mapOf("isCompleted" to true)
         scope.launch { repository.updateTask(taskId, map) }
-
     }
 
     override fun onDestroy() {

@@ -4,7 +4,6 @@ package tech.androidplay.sonali.todo.di
 
 import android.app.AlertDialog
 import android.content.Context
-import com.appsflyer.AppsFlyerLib
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -12,11 +11,10 @@ import dagger.hilt.android.components.ActivityComponent
 import dagger.hilt.android.qualifiers.ActivityContext
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.InternalCoroutinesApi
-import tech.androidplay.sonali.todo.utils.AppEventTracking
 import tech.androidplay.sonali.todo.utils.DateTimePicker
 import tech.androidplay.sonali.todo.view.adapter.main_adapter.TodoAdapter
 import tech.androidplay.sonali.todo.view.adapter.viewpager_adapter.ViewPagerAdapter
-import java.util.*
+import java.util.Calendar
 
 /**
  * Created by Androidplay
@@ -34,10 +32,6 @@ import java.util.*
 class ActivityModule {
 
     @Provides
-    fun provideAppEventTracking(@ActivityContext context: Context, appsFlyerLib: AppsFlyerLib) =
-        AppEventTracking(context, appsFlyerLib)
-
-    @Provides
     fun provideDatetimePicker(calendar: Calendar) =
         DateTimePicker(calendar)
 
@@ -51,9 +45,6 @@ class ActivityModule {
 
     @Provides
     fun providesAlertDialog(@ActivityContext context: Context): AlertDialog.Builder {
-        val alertDialog = AlertDialog.Builder(context)
-        alertDialog.setMessage("Do you want to delete the task")
-        alertDialog.setCancelable(true)
-        return alertDialog
+        return AlertDialog.Builder(context)
     }
 }
